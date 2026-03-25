@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 
 # AlterLab GameForge -- Hypothesis-Driven Prototyping
 
-Prototypes are experiments, not demos. Every prototype exists to answer one question: "Is this worth building?" The moment you start polishing a prototype, you have stopped prototyping and started building -- and you may be building the wrong thing. This workflow enforces a rigorous scientific approach to game prototyping: define a hypothesis, build the minimum viable test, observe real players, and make a binary kill-or-promote decision based on evidence.
+Prototypes are experiments, not demos. Every prototype exists to answer one question: "Is this worth building?" The moment you start polishing a prototype, you have stopped prototyping and started building -- and you may be building the wrong thing. Undertale's original demo was rough, ugly, and proved exactly one thing: the bullet-hell-meets-RPG mechanic was worth a full game. Hollow Knight started as a game jam prototype that validated tight combat in an atmospheric 2D world. Celeste began as a PICO-8 prototype that proved a single idea: precise air-dash platforming feels incredible at 8x8 pixel resolution. This workflow enforces that same discipline: define a hypothesis, build the minimum viable test, observe real players, make a binary kill-or-promote decision based on evidence.
 
 ### Purpose & Triggers
 
@@ -31,10 +31,10 @@ Prototypes are experiments, not demos. Every prototype exists to answer one ques
 
 1. **One hypothesis per prototype.** If you are testing two things, you have two prototypes. Combining hypotheses contaminates your results -- when it fails, you will not know which part failed.
 2. **Time-box or die.** Every prototype gets a strict time limit: 1-3 days maximum. If the hypothesis cannot be tested in that window, the scope is too large. Decompose it further.
-3. **Prototype code is biohazard.** It does not graduate to production. Ever. It served its purpose. When a hypothesis is validated, the real implementation starts from scratch with proper architecture. Letting prototype code leak into production is how technical debt is born.
-4. **Ugly is correct.** Colored rectangles for characters. Placeholder sounds. Programmer art. Comic Sans labels. If anyone comments on the visual quality of a prototype, they have misunderstood its purpose.
+3. **Prototype code is biohazard.** It does not graduate to production. Ever. When a hypothesis is validated, the real implementation starts from scratch with proper architecture. Letting prototype code leak into production is how technical debt is born. Celeste's PICO-8 prototype shared zero code with the final game -- it proved the feel, then the real build started clean.
+4. **Ugly is correct.** Colored rectangles for characters. Placeholder sounds. Programmer art. Comic Sans labels. If anyone comments on the visual quality of a prototype, they have misunderstood its purpose. The Hollow Knight game jam prototype used simple silhouettes -- the atmosphere came later, the feel came first.
 5. **Observe behavior, not opinions.** Players will tell you what they think you want to hear. Watch what they DO. A player who says "yeah it was fine" but leaned forward and played for 20 minutes straight is giving you different data than their words suggest.
-6. **Kill without sentiment.** If the evidence says the hypothesis is false, the prototype dies. It does not matter how clever the idea was, how much you personally like it, or how much time you spent building it. Attachment to disproven ideas is the most expensive emotion in game development.
+6. **Kill without sentiment.** If the evidence says the hypothesis is false, the prototype dies. It does not matter how clever the idea was, how much you personally like it, or how much time you spent building it. Supergiant kills prototypes constantly -- their GDC talks reveal dozens of dead mechanics that never made it past the test phase because the team trusts evidence over attachment.
 7. **Always reference `docs/game-design-theory.md`** for shared theoretical frameworks (MDA, Flow Theory, SDT) when formulating hypotheses about player experience.
 
 ### Workflow
@@ -88,7 +88,7 @@ This is the only time in your career when bad code is the correct code.
 - One script file if you can manage it. No architecture. No separation of concerns. No design patterns.
 - Copy-paste instead of abstracting. You are writing code that will be deleted in 72 hours.
 - Use the fastest path to playable, even if that means ignoring every best practice you know.
-- If your engine has a visual scripting system (Blueprints, Bolt, VisualScript), consider using it -- faster iteration for throwaway logic.
+- If your engine has a visual scripting system (Blueprints, Bolt, VisualScript), use it -- faster iteration for throwaway logic.
 - Commit nothing to the main repository. Prototype code lives in a throwaway branch or a separate folder that will be deleted after the decision.
 
 The build phase should consume no more than 60% of your time budget. If you are spending 2 of your 3 days building, you have 0.5 days for testing and 0.5 days for analysis. That is not enough. Target a 40/30/30 split: 40% build, 30% test, 30% analyze.

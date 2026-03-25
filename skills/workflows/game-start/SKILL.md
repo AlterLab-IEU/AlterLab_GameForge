@@ -10,14 +10,9 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 
 # AlterLab GameForge -- Project Onboarding Workflow
 
-Every game project has a beginning, but not every beginning looks the same. You might be
-standing in front of an empty folder with nothing but ambition. You might have a thick design
-document but zero lines of code. You might be stepping into a codebase someone else started
-six months ago. This workflow detects where you are and gets you moving in the right direction
-without wasting time on steps you have already completed.
+Every game project has a beginning, but not every beginning looks the same. You might be standing in front of an empty folder with nothing but ambition. You might have a thick design document but zero lines of code. You might be stepping into a codebase someone else started six months ago. This workflow detects where you are and gets you moving without wasting time on steps you have already completed.
 
-The core philosophy: meet the project where it lives. Do not prescribe a rigid path. Diagnose
-the current state, fill in the gaps, and point toward the next meaningful action.
+The core philosophy: meet the project where it lives. Diagnose the current state, fill in the gaps, point toward the next meaningful action. Hollow Knight started as a game jam sketch. Stardew Valley started as a learning exercise. Undertale started as an EarthBound-inspired demo. None followed a textbook "correct" beginning -- but each had a moment where scattered ambition became structured execution. This workflow is that moment.
 
 ### Purpose & Triggers
 
@@ -46,12 +41,9 @@ Problems this solves:
 3. **Engine-agnostic until confirmed.** If no engine is detected from project files, ask.
    Do not guess. The wrong engine assumption wastes enormous time.
 
-4. **Documents are not optional.** Every project needs at minimum: a concept document, a
-   technical architecture note, and a task tracking system. These are not bureaucracy. They
-   are the memory your future self will desperately need.
+4. **Documents are not optional.** Every project needs at minimum: a concept document, a technical architecture note, and a task tracking system. These are not bureaucracy -- they are the memory your future self will desperately need. ConcernedApe kept a running design doc throughout Stardew Valley's development, even as a solo dev. That document prevented drift across four years of work.
 
-5. **Scope honesty from minute one.** If someone describes a 200-hour project and says they
-   have 3 weekends, flag it immediately. Kindly, but immediately.
+5. **Scope honesty from minute one.** If someone describes a 200-hour project and says they have 3 weekends, flag it immediately. Kindly, but immediately. The graveyard of abandoned indie games is filled with projects that were "almost done" for two years.
 
 6. **Reference shared standards.** All structural decisions should align with the conventions
    documented in `docs/collaboration-protocol.md`. All design terminology should follow
@@ -93,11 +85,11 @@ The blank canvas. This is where most solo devs and small teams start.
 
 Step 1.1 -- Choose your engine (if not already decided):
 - Present tradeoffs honestly, not engine fanboyism
-- Consider: team familiarity, target platform, game genre, performance needs
-- For 2D pixel art: Godot is lightweight and fast to prototype
-- For 3D with asset store needs: Unity has the broadest ecosystem
+- For 2D pixel art: Godot is lightweight and fast to prototype -- Cassette Beasts and Dome Keeper prove it ships commercial-quality games
+- For 3D with asset store needs: Unity has the broadest ecosystem and the largest pool of learning resources
 - For AAA-quality visuals: Unreal delivers but demands more hardware and expertise
 - For web distribution: Phaser, PixiJS, or PlayCanvas
+- The best engine is the one your team already knows. Switching engines mid-project kills more games than bad engine choices do
 - Route to the appropriate engine specialist skill after selection
 
 Step 1.2 -- Define the concept (route to `game-brainstorm` if needed):

@@ -11,22 +11,11 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Reverse Documentation Workflow
 
-Most game projects start with passion, not paperwork. A developer prototypes, iterates, and
-builds. Weeks or months later, the codebase works but nobody -- including the original author
--- can explain its architecture without reading every file. There is no design document because
-the design emerged from code, not from a document. There is no architecture decision record
-because decisions were made in the moment and never written down.
+Most game projects start with passion, not paperwork. A developer prototypes, iterates, and builds. Weeks later, the codebase works but nobody -- including the original author -- can explain its architecture without reading every file. There is no design document because the design emerged from code. There is no architecture decision record because decisions were made in the moment and never written down. This is the normal state of indie development, and pretending otherwise is dishonest.
 
-This workflow reverses the traditional documentation flow. Instead of document-then-build,
-it reads existing code and produces the documentation that should have existed from the start.
-The output is not auto-generated API docs. It is human-readable design documentation that
-captures intent, architecture, and game systems in the language of game development, not
-the language of code.
+This workflow reverses the traditional documentation flow. Instead of document-then-build, it reads existing code and produces the documentation that should have existed from the start. The output is not auto-generated API docs -- it is human-readable design documentation that captures intent, architecture, and game systems in the language of game development, not the language of code.
 
-Reverse documentation serves three critical needs: onboarding (a new team member can
-understand the project without a month of code archaeology), preservation (the original
-developer's decisions are captured before they forget why they made them), and diagnosis
-(inconsistencies between systems become visible when documented side by side).
+Reverse documentation serves three critical needs: onboarding (a new team member understands the project in hours, not weeks of code archaeology), preservation (the original developer's decisions are captured before they forget why), and diagnosis (inconsistencies between systems become visible when documented side by side).
 
 ### Purpose & Triggers
 
@@ -53,22 +42,13 @@ Problems this solves:
    codebase first. Every claim in the output must trace back to a specific file or code
    pattern. Include file paths and line references.
 
-2. **Intent over implementation.** The documentation should capture WHY the code does
-   something, not just WHAT it does. A function that applies gravity is not just
-   "applies downward force" -- it is "enforces the game's movement constraint that
-   prevents infinite jumping."
+2. **Intent over implementation.** Capture WHY the code does something, not just WHAT it does. A function that applies gravity is not "applies downward force" -- it is "enforces the movement constraint that prevents infinite jumping." Celeste's codebase is full of intent-documenting comments like "coyote time: player can still jump for 6 frames after leaving a ledge." That level of intent documentation is the target.
 
-3. **Flag uncertainty.** When the code's intent is ambiguous, say so. Mark sections with
-   `[UNVERIFIED]` and ask the developer to clarify. Guessing intent and documenting
-   the guess as fact is worse than leaving a gap.
+3. **Flag uncertainty.** When the code's intent is ambiguous, say so. Mark sections with `[UNVERIFIED]` and ask the developer to clarify. Guessing intent and documenting the guess as fact is worse than leaving a gap.
 
-4. **Systems, not files.** Organize documentation around game systems (movement, combat,
-   inventory, UI), not around file structure. A movement system might span 5 files across
-   3 directories. The documentation should describe the system, then list the files.
+4. **Systems, not files.** Organize documentation around game systems (movement, combat, inventory, UI), not around file structure. A movement system might span 5 files across 3 directories. The documentation describes the system, then lists the files. Dead Cells' internal documentation organized everything by game system -- combat, biomes, progression, enemies -- because that is how designers think about the game, not how the file tree is structured.
 
-5. **Detect, don't ignore, inconsistencies.** If the movement code assumes tile-based
-   movement but the collision code assumes continuous movement, that is a documentation
-   finding, not something to paper over. Flag it.
+5. **Detect, do not ignore, inconsistencies.** If the movement code assumes tile-based movement but the collision code assumes continuous movement, that is a documentation finding, not something to paper over. Flag it. Factorio's codebase is a model of internal consistency -- every system agrees on what a "tick" means, what a "belt" can carry, and how entities interact. When your documentation reveals that two systems disagree on fundamentals, you have found the bug before it ships.
 
 6. **Three modes, one pipeline.** The code analysis pipeline is shared across all three
    modes. The output format changes, not the analysis depth.

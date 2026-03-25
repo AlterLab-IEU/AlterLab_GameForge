@@ -1,235 +1,288 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "alterlab-gameforge",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "displayName": "AlterLab GameForge",
-  "description": "25 production-grade Claude AI skills for indie game development — 9 studio agents, 13 workflow skills, 3 engine specialists",
+  "description": "29 production-grade Claude AI skills for indie game development — 11 studio agents, 15 workflow skills, 3 engine specialists",
   "author": {
     "name": "Cem Ipek",
     "email": "cem.ipek@ieu.edu.tr",
     "url": "https://github.com/AlterLab-IEU"
   },
   "license": "MIT",
-  "repository": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+  "repository": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
   "categories": ["game-development", "creative", "productivity"],
   "skills": [
     {
       "name": "game-creative-director",
       "path": "skills/agents/game-creative-director/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["game-design", "creative-direction", "vision", "pillars"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-technical-director",
       "path": "skills/agents/game-technical-director/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["architecture", "performance", "tech-stack", "optimization"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-producer",
       "path": "skills/agents/game-producer/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["project-management", "scheduling", "scope", "milestones"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-designer",
       "path": "skills/agents/game-designer/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["mechanics", "systems-design", "balance", "progression"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-narrative-director",
       "path": "skills/agents/game-narrative-director/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["story", "dialogue", "lore", "worldbuilding"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-art-director",
       "path": "skills/agents/game-art-director/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["visual-style", "asset-pipeline", "ui-art", "art-direction"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-audio-director",
       "path": "skills/agents/game-audio-director/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["music", "sound-effects", "adaptive-audio", "mixing"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-qa-lead",
       "path": "skills/agents/game-qa-lead/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["testing", "bug-tracking", "quality-gates", "regression"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-ux-designer",
       "path": "skills/agents/game-ux-designer/SKILL.md",
       "category": "agents",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["player-experience", "accessibility", "usability", "ux"],
-      "version": "1.1.0"
+      "version": "1.2.0"
+    },
+    {
+      "name": "game-economy-designer",
+      "path": "skills/agents/game-economy-designer/SKILL.md",
+      "category": "agents",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": ["economy", "monetization", "currency", "virtual-economy"],
+      "version": "1.2.0"
+    },
+    {
+      "name": "game-accessibility-specialist",
+      "path": "skills/agents/game-accessibility-specialist/SKILL.md",
+      "category": "agents",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": [
+        "accessibility",
+        "inclusive-design",
+        "motor",
+        "visual",
+        "auditory",
+        "cognitive"
+      ],
+      "version": "1.2.0"
     },
     {
       "name": "game-start",
       "path": "skills/workflows/game-start/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["project-setup", "initialization", "new-game", "kickoff"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-brainstorm",
       "path": "skills/workflows/game-brainstorm/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
-      "keywords": ["ideation", "brainstorming", "concept", "exploration"],
-      "version": "1.1.0"
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": [
+        "ideation",
+        "brainstorming",
+        "concept",
+        "exploration",
+        "market-validation"
+      ],
+      "version": "1.2.0"
     },
     {
       "name": "game-design-review",
       "path": "skills/workflows/game-design-review/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["design-review", "gdd", "feedback", "evaluation"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-code-review",
       "path": "skills/workflows/game-code-review/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["code-review", "architecture", "quality", "refactoring"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-sprint-plan",
       "path": "skills/workflows/game-sprint-plan/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["sprint-planning", "agile", "backlog", "estimation"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-prototype",
       "path": "skills/workflows/game-prototype/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["prototyping", "rapid-iteration", "proof-of-concept", "mvp"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-playtest",
       "path": "skills/workflows/game-playtest/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["playtesting", "user-testing", "feedback", "observation"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-balance-check",
       "path": "skills/workflows/game-balance-check/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
-      "keywords": ["balance", "tuning", "difficulty", "economy"],
-      "version": "1.1.0"
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": ["balance", "tuning", "difficulty", "economy", "statistics"],
+      "version": "1.2.0"
     },
     {
       "name": "game-launch",
       "path": "skills/workflows/game-launch/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": [
         "release",
         "store-submission",
         "launch-checklist",
-        "publishing"
+        "publishing",
+        "post-launch"
       ],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-team-orchestrator",
       "path": "skills/workflows/game-team-orchestrator/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": [
         "coordination",
         "multi-agent",
         "orchestration",
         "delegation"
       ],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-scope-check",
       "description": "Evaluate project scope against timeline and resources. Triggers when users mention scope creep, feature lists growing, timeline pressure, or resource constraints.",
       "path": "skills/workflows/game-scope-check/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["scope", "project-management", "feature-creep", "timeline"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-retrospective",
-      "description": "Run a structured retrospective after a sprint, milestone, or project completion. Triggers for retrospective, post-mortem, lessons learned.",
+      "description": "Run a structured game dev post-mortem after a sprint, milestone, or project completion. GDC-format methodology with kill list review and single-lesson forcing function.",
       "path": "skills/workflows/game-retrospective/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
-      "keywords": ["retrospective", "post-mortem", "lessons-learned", "agile"],
-      "version": "1.1.0"
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": ["retrospective", "post-mortem", "lessons-learned", "gdc"],
+      "version": "1.2.0"
     },
     {
       "name": "game-reverse-document",
       "description": "Generate documentation from existing code or prototypes. Triggers when users have working code but no design docs.",
       "path": "skills/workflows/game-reverse-document/SKILL.md",
       "category": "workflows",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": [
         "documentation",
         "reverse-engineering",
         "code-analysis",
         "onboarding"
       ],
-      "version": "1.1.0"
+      "version": "1.2.0"
+    },
+    {
+      "name": "game-localization-manager",
+      "description": "Manage translation pipelines, string extraction, and cultural adaptation. Triggers for localization, translation, internationalization, i18n.",
+      "path": "skills/workflows/game-localization-manager/SKILL.md",
+      "category": "workflows",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": [
+        "localization",
+        "translation",
+        "i18n",
+        "cultural-adaptation"
+      ],
+      "version": "1.2.0"
+    },
+    {
+      "name": "game-analytics-setup",
+      "description": "Integrate telemetry, define KPIs, and build analytics dashboards. Triggers for analytics, metrics, telemetry, KPIs, data-driven design.",
+      "path": "skills/workflows/game-analytics-setup/SKILL.md",
+      "category": "workflows",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+      "keywords": ["analytics", "telemetry", "kpi", "metrics", "data-driven"],
+      "version": "1.2.0"
     },
     {
       "name": "game-godot-specialist",
       "path": "skills/engine-specialists/game-godot-specialist/SKILL.md",
       "category": "engine-specialists",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["godot", "gdscript", "godot-engine", "2d-3d"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-unity-specialist",
       "path": "skills/engine-specialists/game-unity-specialist/SKILL.md",
       "category": "engine-specialists",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["unity", "csharp", "unity-engine", "game-engine"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "game-unreal-specialist",
       "path": "skills/engine-specialists/game-unreal-specialist/SKILL.md",
       "category": "engine-specialists",
-      "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+      "source": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
       "keywords": ["unreal", "cpp", "blueprints", "unreal-engine"],
-      "version": "1.1.0"
+      "version": "1.2.0"
     }
   ],
   "hooks": [
@@ -287,7 +340,16 @@
     { "name": "game-pillars", "path": "templates/game-pillars.md" },
     { "name": "systems-index", "path": "templates/systems-index.md" },
     { "name": "ai-content-policy", "path": "templates/ai-content-policy.md" },
-    { "name": "post-mortem", "path": "templates/post-mortem.md" }
+    { "name": "post-mortem", "path": "templates/post-mortem.md" },
+    { "name": "playtester-survey", "path": "templates/playtester-survey.md" },
+    {
+      "name": "competitive-analysis",
+      "path": "templates/competitive-analysis.md"
+    },
+    {
+      "name": "accessibility-audit",
+      "path": "templates/accessibility-audit.md"
+    }
   ],
   "docs": [
     {
@@ -298,6 +360,8 @@
     { "name": "coordination-rules", "path": "docs/coordination-rules.md" },
     { "name": "agent-hierarchy", "path": "docs/agent-hierarchy.md" },
     { "name": "coding-standards", "path": "docs/coding-standards.md" },
-    { "name": "workflow-guide", "path": "docs/workflow-guide.md" }
+    { "name": "workflow-guide", "path": "docs/workflow-guide.md" },
+    { "name": "monetization-ethics", "path": "docs/monetization-ethics.md" },
+    { "name": "engine-comparison", "path": "docs/engine-comparison.md" }
   ]
 }

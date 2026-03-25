@@ -10,17 +10,9 @@ allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
 
 # AlterLab GameForge -- Game Code Review Workflow
 
-Game code has failure modes that web code does not. A web app that allocates memory in
-a request handler costs you some latency. A game that allocates memory in an update loop
-costs you frame drops that players feel in their hands. A web app with a state management
-bug shows stale data. A game with a state management bug lets the player walk through
-walls or fire invisible bullets.
+Game code has failure modes that web code does not. A web app that allocates memory in a request handler costs you some latency. A game that allocates memory in an update loop costs you frame drops that players feel in their hands. A web app with a state management bug shows stale data. A game with a state management bug lets the player walk through walls or fire invisible bullets. Celeste's codebase is legendary precisely because Maddy Thorson and Noel Berry treated frame-perfect input handling as a first-class engineering concern -- and the result is the tightest platformer ever shipped.
 
-This workflow reviews game code through two lenses simultaneously: standard software
-quality (naming, structure, testing, documentation) and game-specific correctness (frame
-independence, hot path performance, state machine integrity, resource lifecycle). Both
-lenses matter. Ignoring either produces code that is either well-structured but broken
-at runtime, or high-performing but unmaintainable.
+This workflow reviews game code through two lenses simultaneously: standard software quality (naming, structure, testing, documentation) and game-specific correctness (frame independence, hot path performance, state machine integrity, resource lifecycle). Both lenses matter. Factorio maintains a million-entity simulation at 60fps because Wube Software treats architecture as a gameplay feature. Ignoring either lens produces code that is either well-structured but broken at runtime, or high-performing but unmaintainable.
 
 ### Purpose & Triggers
 
@@ -56,19 +48,11 @@ Problems this solves:
    If something looks expensive, note it as "potential concern -- profile before optimizing."
    Premature optimization is real. So is premature optimization anxiety.
 
-4. **Engine idioms matter.** Each engine has conventions. Godot signals are not Unity events
-   are not Unreal delegates. Review code against the conventions of its engine, not against
-   abstract ideals. Reference the appropriate engine specialist skill for engine-specific
-   standards.
+4. **Engine idioms matter.** Each engine has conventions. Godot signals are not Unity events are not Unreal delegates. Review code against the conventions of its engine, not against abstract ideals. Noita's pixel physics system works because Nolla Games wrote to the engine's strengths rather than fighting its architecture. Reference the appropriate engine specialist skill for engine-specific standards.
 
-5. **Gameplay values in data, not code.** Any numeric value that a designer might want to
-   tweak (damage, speed, cooldown, spawn rate, drop chance) must live in a config file or
-   data table, not as a constant in source code. This is not a suggestion; it is a
-   fundamental game architecture requirement documented in `docs/collaboration-protocol.md`.
+5. **Gameplay values in data, not code.** Any numeric value that a designer might want to tweak (damage, speed, cooldown, spawn rate, drop chance) must live in a config file or data table, not as a constant in source code. This is non-negotiable -- it is a fundamental game architecture requirement documented in `docs/collaboration-protocol.md`.
 
-6. **Test the untestable.** Game systems are notoriously hard to unit test. Acknowledge this
-   but still push for testable architecture. If a system cannot be tested because it is
-   tightly coupled to the engine, that coupling is a design smell worth flagging.
+6. **Test the untestable.** Game systems are notoriously hard to unit test. Push for testable architecture anyway. If a system cannot be tested because it is tightly coupled to the engine, that coupling is a design smell worth flagging. Factorio's developers maintain comprehensive automated tests for their simulation layer by keeping game logic separate from rendering -- that separation is why they ship with confidence.
 
 ### Workflow
 

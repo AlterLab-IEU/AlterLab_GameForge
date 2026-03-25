@@ -10,22 +10,11 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Structured Ideation Workflow
 
-Most game ideas die not from lack of creativity but from lack of structure. A notebook full
-of "what if" scribbles does not become a buildable game without deliberate shaping. This
-workflow takes raw creative energy and runs it through six phases of increasingly focused
-refinement, transforming vague excitement into a concrete, scope-aware game concept that a
-team can actually execute.
+Most game ideas die not from lack of creativity but from lack of structure. A notebook of "what if" scribbles never becomes a shipped game without deliberate shaping. This workflow takes raw creative energy through seven phases of increasingly focused refinement, transforming vague excitement into a concrete, market-validated, scope-aware game concept a team can execute.
 
-This is not a brainstorming template you fill out in silence. It is an interactive process.
-Every phase involves questions directed at you, the designer. The answers you give steer the
-direction. There are no wrong answers in the early phases, but by the end, every answer must
-defend itself against feasibility, player psychology, and honest scope assessment.
+This is not a template you fill out in silence. It is an interactive process -- every phase involves direct questions to you, the designer. Your answers steer the direction. Early phases have no wrong answers. By the end, every answer defends itself against market reality, player psychology, and honest scope assessment.
 
-The six phases are designed to alternate between divergent thinking (expand possibilities)
-and convergent thinking (narrow to decisions). Skipping phases causes predictable failures:
-skip Discovery and you build something you do not actually care about; skip Core Loop Design
-and you have a concept that sounds cool but plays like nothing; skip Scope and you announce
-a game you cannot finish.
+The seven phases alternate between divergent thinking (expand possibilities) and convergent thinking (narrow to decisions). Skipping phases causes predictable failures: skip Discovery and you build something you do not care about. Skip Market Validation and you build something nobody will buy -- Baba Is You succeeded because Arvi Teikari validated that puzzle fans were starving for constraint-based innovation, not because he got lucky. Skip Core Loop Design and you have a concept that sounds cool but plays like nothing. Skip Scope and you announce a game you cannot finish.
 
 ### Purpose & Triggers
 
@@ -37,10 +26,10 @@ Use this workflow when:
 - Anyone is stuck in idea-paralysis, cycling through concepts without committing
 - A developer wants to pivot an existing concept and needs fresh ideation
 
-Problems this solves:
+Problems this kills:
 - The "infinite possibility" paralysis of starting from zero
 - Ideas that sound exciting but have no playable core
-- Concepts that are technically impossible for the team's skill level
+- Concepts that ignore market reality -- building a game nobody asked for in a genre nobody buys
 - Games designed for nobody in particular (no target player type)
 - Scope blindness -- designing a 5-year project on a 5-month timeline
 - Derivative designs that accidentally clone existing games without knowing it
@@ -56,22 +45,26 @@ Problems this solves:
    Features are servants of experience, never the other way around.
 
 3. **Constraints are creative fuel.** A solo dev with 3 months and a free engine is not
-   limited -- they are focused. Frame every constraint as a creative advantage. The best
-   games in history were born from severe constraints.
+   limited -- they are focused. ConcernedApe built Stardew Valley alone. Toby Fox made
+   Undertale with almost nothing. The best games in history were born from severe constraints.
 
 4. **The 30-second loop is sacred.** If the core 30-second gameplay loop is not intrinsically
    fun without any progression, unlocks, story, or rewards layered on top, the concept is
-   structurally flawed. This is the single hardest test and the most important one.
+   structurally flawed. Vampire Survivors proves this -- the 30-second loop of dodging and
+   auto-attacking is hypnotic before a single upgrade enters the picture.
 
 5. **No precious ideas.** Every concept generated in Phase 2 must survive scrutiny in
-   Phases 3-6. If it cannot, discard it without sentimentality. Better to kill a concept
-   in a brainstorm than after six months of development.
+   Phases 3-7. If it cannot, discard it without sentimentality. Kill concepts in brainstorms,
+   not after six months of development.
 
-6. **Honest scope from the start.** Do not let ambition outrun capacity. If the concept
-   requires 20 unique enemy types and the team has one artist working part-time, say so.
-   Scope honesty is kindness to your future self.
+6. **Market awareness is not selling out.** Passion projects still need players. Outer Wilds
+   was deeply personal AND found its audience because Mobius understood the "curious explorer"
+   market existed. Validate that real humans want what you are building.
 
-7. **Reference the theory.** All frameworks referenced here (MDA, SDT, Bartle, Flow) are
+7. **Honest scope from the start.** If the concept requires 20 unique enemy types and the
+   team has one artist working part-time, say so. Scope honesty is kindness to your future self.
+
+8. **Reference the theory.** All frameworks referenced here (MDA, SDT, Bartle, Flow) are
    defined in `docs/game-design-theory.md`. Do not reinvent the definitions. Point there.
 
 ### Workflow
@@ -294,7 +287,102 @@ scores 3/5 across the board. Discuss tradeoffs explicitly.
 
 ---
 
-**PHASE 3: Core Loop Design**
+**PHASE 3: Market Validation**
+
+*Goal: Verify that real players exist for this concept and the market can sustain it.*
+
+Passion without market awareness is how talented developers spend two years building a game that sells 47 copies. Vampire Survivors succeeded because poncle identified the underserved "casual bullet hell" niche -- players who wanted the dopamine of screen-filling chaos without the execution barrier of traditional shmups. Balatro found the "poker roguelike" gap nobody knew existed. Outer Wilds created an entirely new market for "knowledge-as-progression." None of these were accidents. Each creator understood the landscape before building.
+
+**Exercise 3.1 -- Market Sizing**
+
+Estimate the addressable market for your concept using comparable titles:
+
+```
+MARKET SIZING
+-------------------------------------------------
+Step 1: Identify 3-5 comparable games (same genre, similar scope, similar audience)
+  Comparable       | Est. Revenue (SteamSpy/VGInsights) | Peak Players
+  [game 1]         | [$X]                                | [N]
+  [game 2]         | [$X]                                | [N]
+  [game 3]         | [$X]                                | [N]
+
+Step 2: Assess genre health
+  Is the genre growing, stable, or declining?
+  (Check Steam tag trends, itch.io tag volume, genre-specific subreddit growth)
+
+  Growing genres (2024-2025 signal): roguelikes, cozy sims, extraction shooters
+  Oversaturated: battle royales, zombie survival, generic pixel platformers
+  Underserved (opportunity): asymmetric co-op, deduction games, tactile
+  physics puzzlers, single-player narrative FPS
+
+Step 3: Calculate realistic floor and ceiling
+  Floor: Worst-performing comparable * 0.5 (assume you are less known)
+  Ceiling: Best-performing comparable * 0.3 (unless you have a marketing edge)
+  Realistic estimate: Median of comparables * 0.7
+
+  If the realistic estimate does not cover development costs, the concept
+  needs either a smaller scope or a more commercial angle. Do not ignore this.
+-------------------------------------------------
+```
+
+**Exercise 3.2 -- Competitive Analysis**
+
+Your game is not launching into a vacuum. Map the competitive landscape:
+
+```
+COMPETITIVE ANALYSIS
+-------------------------------------------------
+Direct competitors (same genre + similar hook):
+  [Game]  | Strength         | Weakness         | Your differentiation
+  [game1] | [what it nails]  | [where it fails] | [how you exploit that gap]
+  [game2] | [what it nails]  | [where it fails] | [how you exploit that gap]
+
+Indirect competitors (different genre, same player motivation):
+  [Game]  | Why players might choose it over yours
+  [game1] | [reason]
+  [game2] | [reason]
+
+The gap: What does your concept offer that NO existing game provides?
+  [Specific answer -- "more accessible X" or "Y mechanic in Z context"]
+
+If you cannot articulate the gap in one sentence, your concept is not
+differentiated enough. Return to Phase 2 and sharpen the hook.
+-------------------------------------------------
+```
+
+Obra Dinn did not just make a deduction game -- it identified that the deduction genre had been abandoned by studios while player appetite for it was growing through tabletop games. That gap was the market thesis.
+
+**Exercise 3.3 -- Concept Validation Gates**
+
+Run your top concept through three binary gates:
+
+```
+VALIDATION GATES
+-------------------------------------------------
+Gate 1: The Wishlist Test
+  "If you saw this game's Steam page right now, would you wishlist it?"
+  Ask 5 people who are NOT on your team and NOT your friends.
+  If fewer than 3 say yes, the concept is not commercially compelling
+  enough in its current form.
+
+Gate 2: The Elevator Test
+  Describe the concept in two sentences to someone unfamiliar with games.
+  Do their eyes light up, or do they politely nod?
+  Light up = hook works. Polite nod = hook is too niche or too generic.
+
+Gate 3: The Comparison Test
+  "What is this game competing against for the player's $15 and 20 hours?"
+  If the answer includes a free-to-play juggernaut or an established franchise
+  with a sequel coming, reassess your positioning. Compete where the giants
+  are not looking.
+-------------------------------------------------
+```
+
+Do not proceed past this phase if the concept fails two or more gates. Return to Phase 2 and generate new concepts, or sharpen the existing one until it passes. Ideas are cheap. Development time is not.
+
+---
+
+**PHASE 4: Core Loop Design**
 
 *Goal: Design the heartbeat of the game across four timescales.*
 
@@ -389,7 +477,7 @@ is a linear sequence, not a gameplay loop.
 
 ---
 
-**PHASE 4: Pillars and Boundaries**
+**PHASE 5: Pillars and Boundaries**
 
 *Goal: Define what the game IS and what it IS NOT.*
 
@@ -400,7 +488,7 @@ it is either an orphan that should be cut or evidence that you are missing a pil
 Reference `docs/game-design-theory.md` for the full pillar methodology and use
 `@templates/game-pillars.md` to document the pillars formally.
 
-**Exercise 4.1 -- Define 3-5 Pillars**
+**Exercise 5.1 -- Define 3-5 Pillars**
 
 Each pillar must be:
 - **Falsifiable**: You can clearly say whether a feature supports it or violates it
@@ -428,7 +516,7 @@ Good pillar examples:
 - "Failure teaches, never punishes" -- directly shapes difficulty tuning
 - "Every resource has two uses" -- creates tension in every spending decision
 
-**Exercise 4.2 -- Define Anti-Pillars**
+**Exercise 5.2 -- Define Anti-Pillars**
 
 What this game explicitly refuses to be:
 
@@ -445,7 +533,7 @@ Implication     | No XP bars, no level-gated content, no repetitive farming
 Anti-pillars prevent scope creep by giving you permission to say no. When someone suggests
 a feature, check it against anti-pillars first. Rejection is faster than evaluation.
 
-**Exercise 4.3 -- The Bar Test**
+**Exercise 5.3 -- The Bar Test**
 
 Can you describe this game compellingly in two sentences to a stranger at a bar who does
 not play games? If not, the concept is either too complex or too derivative to explain
@@ -468,14 +556,14 @@ If the bar test produces a flat response, the concept needs a sharper hook.
 
 ---
 
-**PHASE 5: Player Type Validation**
+**PHASE 6: Player Type Validation**
 
 *Goal: Verify that the concept serves identifiable player motivations.*
 
 A game designed for everyone appeals to no one. Identify your primary audience by their
 psychological motivations, not their demographics.
 
-**Exercise 5.1 -- Bartle Type Mapping**
+**Exercise 6.1 -- Bartle Type Mapping**
 
 Map the concept against the four Bartle types (reference `docs/game-design-theory.md`):
 
@@ -491,7 +579,7 @@ Killers     | [specific systems]            | [Primary/Secondary/Not served]
 -------------------------------------------------
 ```
 
-**Exercise 5.2 -- Self-Determination Theory Check**
+**Exercise 6.2 -- Self-Determination Theory Check**
 
 Does the concept satisfy the three basic psychological needs?
 
@@ -509,7 +597,7 @@ Relatedness  | [connection, shared experience]    | [Strong/Moderate/Weak]
 A concept does not need to be strong in all three, but it needs to be strong in at least
 one and should not actively undermine any of them.
 
-**Exercise 5.3 -- Explicit Exclusions**
+**Exercise 6.3 -- Explicit Exclusions**
 
 Who are you NOT designing for? Name them and accept the tradeoff.
 
@@ -526,14 +614,14 @@ PvP players AND relaxing sandbox players will satisfy neither.
 
 ---
 
-**PHASE 6: Scope and Feasibility**
+**PHASE 7: Scope and Feasibility**
 
 *Goal: Ground the concept in reality. What can actually be built?*
 
 This is where enthusiasm meets arithmetic. The concept from Phases 1-5 must survive
 contact with the team's actual capacity, timeline, and technical skill level.
 
-**Exercise 6.1 -- Vertical Slice Definition**
+**Exercise 7.1 -- Vertical Slice Definition**
 
 The vertical slice is the minimum playable proof of concept that demonstrates the core
 loop works. It is not a demo. It is not a polished product. It is evidence that the
@@ -559,7 +647,7 @@ Must NOT include:
 -------------------------------------------------
 ```
 
-**Exercise 6.2 -- Feature Tiering**
+**Exercise 7.2 -- Feature Tiering**
 
 Categorize every identified feature into four tiers using the MoSCoW method:
 
@@ -584,7 +672,7 @@ WON'T-HAVE (explicitly deferred -- do not build these in v1, no matter what)
 The Won't-Have list is as important as the Must-Have list. It gives the team permission to
 say "we already decided not to do that" when scope creep shows up wearing a clever disguise.
 
-**Exercise 6.3 -- Timeline Estimation**
+**Exercise 7.3 -- Timeline Estimation**
 
 Rough timeline based on team capacity:
 
@@ -607,7 +695,7 @@ Apply reality checks:
 - Part-time team: convert to calendar time using actual available hours
 ```
 
-**Exercise 6.4 -- Risk Identification**
+**Exercise 7.4 -- Risk Identification**
 
 Name the top 5 risks and how you will handle each:
 
@@ -652,26 +740,29 @@ Reference `templates/game-concept.md` for the full template.
 ## Emotional Foundation
 [Themes and feelings from Phase 1, with references]
 
+## Market Validation
+[Market sizing, competitive analysis, and validation gate results from Phase 3]
+
 ## Core Loop
-[All four timescales from Phase 3, with cycle diagrams]
+[All four timescales from Phase 4, with cycle diagrams]
 
 ## Design Pillars
-[3-5 pillars with support/violate examples from Phase 4]
+[3-5 pillars with support/violate examples from Phase 5]
 
 ## Anti-Pillars
 [What the game refuses to be]
 
 ## Target Aesthetics (MDA)
-[Primary and secondary aesthetics from Phase 2/5]
+[Primary and secondary aesthetics from Phase 2/6]
 
 ## Player Type Alignment
-[Bartle mapping and SDT validation from Phase 5]
+[Bartle mapping and SDT validation from Phase 6]
 
 ## Feature Tiers
-[MoSCoW breakdown from Phase 6]
+[MoSCoW breakdown from Phase 7]
 
 ## Vertical Slice Plan
-[Scope and definition from Phase 6]
+[Scope and definition from Phase 7]
 
 ## Risk Register
 [Top 5 risks with mitigation plans]
@@ -686,6 +777,7 @@ A successful brainstorm session meets all of these:
 - The user drove the creative decisions, not the assistant
 - At least 3 distinct concepts were generated before selecting one
 - The 30-second loop passes the "fun without progression" test
+- Market validation is complete -- comparable games identified, gap articulated, validation gates passed
 - Pillars are falsifiable and genuinely guide design decisions
 - The scope estimate is honest, with explicit Won't-Have items
 - The concept can be explained in 2 sentences (bar test passes)
@@ -704,7 +796,7 @@ A successful brainstorm session meets all of these:
 
 2. **"I have an idea for a puzzle game with gravity mechanics."**
    Skip to Phase 2 to generate variations on the concept, then proceed through
-   Phases 3-6 to stress-test and scope the strongest variant.
+   Phases 3-7 to stress-test, validate, and scope the strongest variant.
 
 3. **"My team wants to brainstorm our next project together."**
    Run the full 6-phase process, using the Constraint Mapping to ground the session
@@ -712,7 +804,7 @@ A successful brainstorm session meets all of these:
    group decision-making without opinion-shouting.
 
 4. **"I keep starting projects and abandoning them. Help me commit."**
-   Emphasize Phase 4 (Pillars create commitment through clarity) and Phase 6 (Scope
+   Emphasize Phase 5 (Pillars create commitment through clarity) and Phase 7 (Scope
    honesty prevents the overwhelm that triggers abandonment). The vertical slice
    definition gives a finishable first milestone.
 

@@ -4,9 +4,9 @@
 
 <br>
 
-<a href="skills/"><img src="https://img.shields.io/badge/Skills-25-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
-<a href="skills/agents/"><img src="https://img.shields.io/badge/Agents-9-2563EB?style=for-the-badge&logo=databricks&logoColor=white" alt="Agents"></a>
-<a href="skills/workflows/"><img src="https://img.shields.io/badge/Workflows-13-0D9488?style=for-the-badge&logo=databricks&logoColor=white" alt="Workflows"></a>
+<a href="skills/"><img src="https://img.shields.io/badge/Skills-29-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
+<a href="skills/agents/"><img src="https://img.shields.io/badge/Agents-11-2563EB?style=for-the-badge&logo=databricks&logoColor=white" alt="Agents"></a>
+<a href="skills/workflows/"><img src="https://img.shields.io/badge/Workflows-15-0D9488?style=for-the-badge&logo=databricks&logoColor=white" alt="Workflows"></a>
 <a href="skills/engine-specialists/"><img src="https://img.shields.io/badge/Engines-Godot%20%7C%20Unity%20%7C%20Unreal-E11D48?style=for-the-badge&logo=godotengine&logoColor=white" alt="Engines"></a>
 <a href="https://www.anthropic.com"><img src="https://img.shields.io/badge/Claude-AI%20Powered-F97316?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="MIT License"></a>
@@ -17,7 +17,7 @@
 
 <br><br>
 
-<h3>🎮 25 Production-Grade Claude AI Skills for Indie Game Development</h3>
+<h3>29 Production-Grade Claude AI Skills for Indie Game Development</h3>
 
 <p><em>From concept to launch — studio agents, dev workflows, and engine specialists in one toolkit</em></p>
 
@@ -32,6 +32,8 @@
   <a href="#-full-skill-catalog">Skill Catalog</a> ·
   <a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/issues">Report Bug</a>
 </p>
+
+</div>
 
 <br>
 
@@ -104,7 +106,7 @@
 
 ## 🎮 What Is This?
 
-A curated collection of **25 production-grade Claude AI skills** that give you a full indie game studio inside your terminal. Each skill is a deep instruction set that transforms Claude into a **specialized game development expert** — from creative direction and narrative design to engine-specific coding and launch preparation.
+A curated collection of **29 production-grade Claude AI skills** that give you a full indie game studio inside your terminal. Each skill is a deep instruction set that transforms Claude into a **specialized game development expert** — from creative direction and narrative design to engine-specific coding and launch preparation.
 
 Whether you are a solo developer building your first game or a small team shipping your tenth, GameForge gives you access to **expert-level guidance** across every discipline of game development.
 
@@ -122,8 +124,8 @@ These aren't chatbot personas. They're **autonomous agents** that produce real d
 | 🤖 | **Agentic Execution** | Each skill is a fully realized agent persona with deep domain knowledge, structured output templates, and explicit collaboration protocols |
 | 🎯 | **Game Design Theory** | Every decision references MDA Framework, Self-Determination Theory, Flow Theory, and Bartle's Player Types |
 | 🎬 | **Cinematic Thinking** | Creative Director and Art Director skills incorporate film, theater, and visual storytelling principles |
-| ♿ | **Accessibility Built-In** | UX Designer skill builds WCAG compliance, colorblind modes, and input remapping into core design |
-| 💰 | **Ethical Monetization** | Game Designer and Producer skills include fair-to-player monetization frameworks — no dark patterns |
+| ♿ | **Accessibility Built-In** | UX Designer and Accessibility Specialist skills build WCAG compliance, EAA readiness, and inclusive design into core process |
+| 💰 | **Ethical Monetization** | Economy Designer and Producer skills include fair-to-player monetization frameworks — no dark patterns |
 | 📄 | **No Stubs** | Every skill is 150–300+ lines of substantive content with concrete output templates and real examples |
 
 <br>
@@ -132,8 +134,8 @@ These aren't chatbot personas. They're **autonomous agents** that produce real d
 
 | | Category | Skills | Focus Areas |
 |:---:|:---|:---:|:---|
-| 🎭 | **Studio Agents** | **9** | Creative direction, technical architecture, production, design, narrative, art, audio, QA, UX |
-| 🔄 | **Workflow Skills** | **13** | Project bootstrap, brainstorming, design review, code review, sprints, prototyping, playtesting, balance, launch |
+| 🎭 | **Studio Agents** | **11** | Creative direction, technical architecture, production, design, narrative, art, audio, QA, UX, economy, accessibility |
+| 🔄 | **Workflow Skills** | **15** | Project bootstrap, brainstorming, design review, code review, sprints, prototyping, playtesting, balance, launch, localization, analytics |
 | ⚙️ | **Engine Specialists** | **3** | Godot 4 (GDScript/C#), Unity (C#/ECS), Unreal Engine (C++/Blueprints) |
 
 <br>
@@ -170,7 +172,7 @@ claude> /game-godot-specialist
 
 ## 📋 Full Skill Catalog
 
-### 🎭 Studio Agents — Your Virtual Game Studio Team (9 Skills)
+### 🎭 Studio Agents — Your Virtual Game Studio Team (11 Skills)
 
 <details>
 <summary><b>Click to expand full Studio Agents list</b></summary>
@@ -188,10 +190,12 @@ claude> /game-godot-specialist
 | 7 | **Audio Director** | GameAudioDirector | Designs music direction, SFX libraries, adaptive audio, and mixing strategies |
 | 8 | **QA Lead** | GameQALead | Builds test plans, bug taxonomies, regression suites, and quality gates |
 | 9 | **UX Designer** | GameUXDesigner | Designs onboarding, accessibility, HUD, and usability testing |
+| 10 | **Economy Designer** | GameEconomyDesigner | Designs virtual economies — currency flows, sink/source modeling, monetization ethics |
+| 11 | **Accessibility Specialist** | GameAccessibilitySpecialist | Drives inclusive design — motor, visual, auditory, cognitive accommodations, EAA compliance |
 
 </details>
 
-### 🔄 Workflow Skills — Structured Processes for Game Dev (13 Skills)
+### 🔄 Workflow Skills — Structured Processes for Game Dev (15 Skills)
 
 <details>
 <summary><b>Click to expand full Workflow Skills list</b></summary>
@@ -201,18 +205,20 @@ claude> /game-godot-specialist
 | # | Skill | Agent | What It Does |
 |:---:|:---|:---|:---|
 | 1 | **Game Start** | GameStart | Bootstraps a new project with GDD skeleton, tech stack selection, and milestone plan |
-| 2 | **Brainstorm** | GameBrainstorm | Runs structured ideation with diverge/converge phases and concept scoring |
+| 2 | **Brainstorm** | GameBrainstorm | Runs structured ideation with diverge/converge phases, concept scoring, and market validation |
 | 3 | **Design Review** | GameDesignReview | Reviews a GDD for completeness, consistency, and feasibility |
 | 4 | **Code Review** | GameCodeReview | Reviews game code for architecture, performance, and engine best practices |
 | 5 | **Sprint Plan** | GameSprintPlan | Plans a dev sprint with task breakdown, dependencies, and risk flags |
 | 6 | **Prototype** | GamePrototype | Guides rapid prototyping — scope the core loop, build minimal playable, evaluate |
 | 7 | **Playtest** | GamePlaytest | Structures playtest sessions — goals, metrics, observer guides, feedback synthesis |
-| 8 | **Balance Check** | GameBalanceCheck | Analyzes economy, difficulty curves, progression pacing, and edge cases |
-| 9 | **Launch** | GameLaunch | Prepares release — store pages, build checklists, marketing beats, day-one patches |
-| 10 | **Team Orchestrator** | GameTeamOrchestrator | Coordinates multiple agents, managing handoffs and resolving conflicts |
+| 8 | **Balance Check** | GameBalanceCheck | Analyzes game balance with statistical validation — Monte Carlo, distribution analysis, EV calculations |
+| 9 | **Launch** | GameLaunch | Prepares release and post-launch ops — store pages, patch cadence, community management, metrics |
+| 10 | **Team Orchestrator** | GameTeamOrchestrator | Coordinates multiple agents with spawn recipes for combat, narrative, UI, performance, and launch |
 | 11 | **Scope Check** | GameScopeCheck | Evaluates scope against timeline, team size, and budget — flags cuts and risks |
-| 12 | **Retrospective** | GameRetrospective | Runs structured sprint/milestone retrospectives with actionable takeaways |
+| 12 | **Retrospective** | GameRetrospective | Runs GDC-format post-mortems with kill list review and single-lesson forcing function |
 | 13 | **Reverse Document** | GameReverseDocument | Generates design docs from existing game code — reverse-engineers the GDD |
+| 14 | **Localization Manager** | GameLocalizationManager | Manages translation pipelines, string extraction, and cultural adaptation for global markets |
+| 15 | **Analytics Setup** | GameAnalyticsSetup | Integrates telemetry, defines KPIs, builds dashboards, and sets up privacy-first analytics |
 
 </details>
 
@@ -267,8 +273,10 @@ Skills activate automatically based on user intent:
 | *"Plan my next two-week sprint"* | `game-sprint-plan` |
 | *"Prepare my Steam store page for launch"* | `game-launch` |
 | *"Run a structured playtest session for my prototype"* | `game-playtest` |
-| *"Audit my game's economy balance"* | `game-balance-check` |
+| *"Audit my game's economy balance"* | `game-balance-check` + `game-economy-designer` |
 | *"Generate design docs from my existing codebase"* | `game-reverse-document` |
+| *"Set up analytics and KPIs for my game"* | `game-analytics-setup` |
+| *"Localize my game for the Japanese market"* | `game-localization-manager` |
 
 <br>
 
@@ -287,7 +295,7 @@ GameForge is designed as an interconnected skill system:
 |              |              |
 +--------+--+ +-------+---+ +-------+--------+
 | Agents   | | Workflows | | Engine         |
-|   (9)    | |   (13)    | | Specialists    |
+|  (11)    | |   (15)    | | Specialists    |
 +----------+ +-----------+ |     (3)        |
      |            |        +----------------+
 +--------------+  |
@@ -299,6 +307,9 @@ GameForge is designed as an interconnected skill system:
 | coordination-rules.md
 | agent-hierarchy.md
 | coding-standards.md
+| workflow-guide.md
+| monetization-ethics.md
+| engine-comparison.md
 +---------------+
          |
 +------------+------------+
@@ -315,7 +326,7 @@ GameForge is designed as an interconnected skill system:
 ```
 AlterLab_GameForge/
 ├── 📁 skills/
-│   ├── 🎭 agents/                    # Studio team (9)
+│   ├── 🎭 agents/                    # Studio team (11)
 │   │   ├── game-creative-director/
 │   │   │   └── SKILL.md
 │   │   ├── game-technical-director/
@@ -325,8 +336,10 @@ AlterLab_GameForge/
 │   │   ├── game-art-director/
 │   │   ├── game-audio-director/
 │   │   ├── game-qa-lead/
-│   │   └── game-ux-designer/
-│   ├── 🔄 workflows/                 # Dev processes (13)
+│   │   ├── game-ux-designer/
+│   │   ├── game-economy-designer/
+│   │   └── game-accessibility-specialist/
+│   ├── 🔄 workflows/                 # Dev processes (15)
 │   │   ├── game-start/
 │   │   ├── game-brainstorm/
 │   │   ├── game-design-review/
@@ -339,7 +352,9 @@ AlterLab_GameForge/
 │   │   ├── game-team-orchestrator/
 │   │   ├── game-scope-check/
 │   │   ├── game-retrospective/
-│   │   └── game-reverse-document/
+│   │   ├── game-reverse-document/
+│   │   ├── game-localization-manager/
+│   │   └── game-analytics-setup/
 │   └── ⚙️ engine-specialists/        # Engine experts (3)
 │       ├── game-godot-specialist/
 │       ├── game-unity-specialist/
@@ -350,7 +365,9 @@ AlterLab_GameForge/
 │   ├── coordination-rules.md
 │   ├── agent-hierarchy.md
 │   ├── coding-standards.md
-│   └── workflow-guide.md
+│   ├── workflow-guide.md
+│   ├── monetization-ethics.md
+│   └── engine-comparison.md
 ├── 📁 hooks/
 │   ├── session-start.sh
 │   ├── session-stop.sh
@@ -372,7 +389,10 @@ AlterLab_GameForge/
 │   ├── release-checklist.md
 │   ├── systems-index.md
 │   ├── ai-content-policy.md
-│   └── post-mortem.md
+│   ├── post-mortem.md
+│   ├── playtester-survey.md
+│   ├── competitive-analysis.md
+│   └── accessibility-audit.md
 ├── 📁 scripts/
 │   └── validate.js
 ├── 📄 CLAUDE.md                       # Project-level Claude config
@@ -425,7 +445,7 @@ MIT — Free to use, modify, and distribute.
 
 <br><br>
 
-<b>25 skills · 3 categories · 1 prompt away from expert-level game development</b>
+<b>29 skills · 3 categories · 1 prompt away from expert-level game development</b>
 
 <br><br>
 

@@ -11,21 +11,11 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Scope Check Workflow
 
-Scope creep is the number one killer of indie games. Not lack of talent, not bad ideas, not
-engine limitations. Games die because they grow past the team's capacity to finish them. It
-happens one "small" addition at a time, each individually reasonable, collectively fatal.
-The danger is that scope creep feels like progress. Adding a feature feels productive. Cutting
-a feature feels like failure. This workflow exists to invert that psychology: cutting is the
-skill, and a tight scope is the achievement.
+Scope creep is the number one killer of indie games. Not lack of talent, not bad ideas, not engine limitations. Games die because they grow past the team's capacity to finish them. It happens one "small" addition at a time, each individually reasonable, collectively fatal. The danger is that scope creep feels like progress -- adding a feature feels productive, cutting feels like failure. This workflow exists to invert that psychology: cutting is the skill, and a tight scope is the achievement.
 
-This is not a bureaucratic gatekeeping process. It is an honest accounting exercise. You list
-what you want to build, measure it against the time and people you actually have, and make
-hard decisions before the calendar makes them for you. Every feature that survives this
-workflow earns its place. Every feature that gets cut saves days or weeks of work that can
-go toward making the surviving features excellent.
+Team Cherry shipped Hollow Knight with 3 people. ConcernedApe shipped Stardew Valley alone. Neither project was small in ambition -- they were ruthlessly disciplined about what to include and what to cut. The games that ship are not the ones with the longest feature lists. They are the ones where every feature earned its place through honest scope accounting.
 
-The core principle is simple: **a finished game with 8 great features beats an abandoned
-game with 20 half-built ones.** This workflow enforces that principle with concrete tools.
+The core principle: **a finished game with 8 great features beats an abandoned game with 20 half-built ones.** This workflow enforces that principle with concrete tools, not wishful thinking.
 
 ### Purpose & Triggers
 
@@ -48,10 +38,7 @@ Problems this solves:
 
 ### Critical Rules
 
-1. **One In, One Out.** Adding a feature requires cutting a feature of equivalent effort.
-   No exceptions. No "we'll work harder." No "we'll figure it out." The budget is fixed.
-   Moving a feature from Won't Have to Should Have means moving something from Should Have
-   to Won't Have. This is non-negotiable.
+1. **One In, One Out.** Adding a feature requires cutting a feature of equivalent effort. No exceptions. No "we'll work harder." No "we'll figure it out." The budget is fixed. Moving a feature from Won't Have to Should Have means moving something from Should Have to Won't Have. Team Cherry cut entire areas from Hollow Knight to ship on time -- and the game is better for it because every surviving area is polished to a mirror shine.
 
 2. **Percentages are law.** MoSCoW allocation must hold: Must Have occupies 60% of total
    effort, Should Have 25%, Could Have 15%. If Must Have exceeds 60%, the project is at
@@ -392,15 +379,10 @@ A successful scope check meets all of these:
 
 Scope checks fail when they exhibit these patterns:
 
-- **The Rubber Stamp:** Everything passes because nobody wants conflict. If the check
-  does not cut at least one feature, it was not rigorous enough.
-- **The Hostage Feature:** "We already started this so we can't cut it." Sunk cost is
-  not a reason to continue. If the remaining work exceeds the feature's value, cut it.
-- **The Stealth Add:** Features sneak in without going through MoSCoW classification.
-  Every feature, no matter how small, goes through the matrix.
-- **The Infinite Must Have:** All features are "Must Have" because the team conflates
-  "I want this" with "the game needs this." Force-rank ruthlessly.
-- **The Missing Buffer:** "We don't need buffer, we'll just work harder." Buffer is not
-  laziness insurance. It is reality insurance. Keep it.
+- **The Rubber Stamp:** Everything passes because nobody wants conflict. If the check does not cut at least one feature, it was not rigorous enough.
+- **The Hostage Feature:** "We already started this so we can't cut it." Sunk cost is not a reason to continue. If the remaining work exceeds the feature's value, cut it. Supergiant killed the original shield mechanic in Hades mid-development and replaced it with the cast system. The shield had months of work behind it. The cast made the game better.
+- **The Stealth Add:** Features sneak in without going through MoSCoW classification. Every feature, no matter how small, goes through the matrix.
+- **The Infinite Must Have:** All features are "Must Have" because the team conflates "I want this" with "the game needs this." Force-rank ruthlessly.
+- **The Missing Buffer:** "We don't need buffer, we'll just work harder." Buffer is not laziness insurance. It is reality insurance. ConcernedApe's multi-year Stardew Valley development timeline included massive buffer -- and he used every hour of it.
 
 Part of the AlterLab GameForge -- Indie Game Development Skills suite.

@@ -10,17 +10,9 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Sprint Planning Workflow
 
-Game development sprints fail for different reasons than software sprints. A SaaS team
-struggles with unclear requirements and shifting priorities. A game team struggles with
-cross-discipline dependencies and the fundamental unpredictability of "fun." You can spec
-out an inventory system perfectly, build it to spec, and discover in playtest that it
-makes the game worse. Sprint planning for games must account for this reality by building
-in structured discovery time, explicit scope tiers that can flex without chaos, and a
-dependency model that respects the sequential nature of art-to-integration pipelines.
+Game development sprints fail for different reasons than software sprints. A SaaS team struggles with unclear requirements and shifting priorities. A game team struggles with cross-discipline dependencies and the fundamental unpredictability of "fun." You can spec out an inventory system perfectly, build it to spec, and discover in playtest that it makes the game worse. Supergiant's sprint model (documented in their GDC talks) accounts for this by reserving explicit "discovery time" in every sprint -- time allocated to test whether what they built actually feels good, not just whether it works.
 
-This workflow walks through a complete sprint planning process, from goal definition through
-task breakdown, capacity calculation, risk assessment, and the production of a concrete
-sprint plan document that the team can execute against.
+Sprint planning for games must build in structured discovery time, explicit scope tiers that flex without chaos, and a dependency model that respects the sequential nature of art-to-integration pipelines. This workflow produces a concrete sprint plan document a team can execute against.
 
 ### Purpose & Triggers
 
@@ -43,15 +35,9 @@ Problems this solves:
 
 ### Critical Rules
 
-1. **One goal per sprint.** The sprint goal is a single sentence that defines success. If
-   the sprint achieves this goal and nothing else, it was a successful sprint. If the sprint
-   ships everything on the task list but misses the goal, it failed. This clarity prevents
-   the "we did a lot of stuff but nothing feels finished" anti-pattern.
+1. **One goal per sprint.** The sprint goal is a single sentence that defines success. If the sprint achieves this goal and nothing else, it was a successful sprint. If the sprint ships everything on the task list but misses the goal, it failed. Hades' sprint goals during Early Access were experience-focused: "players feel the narrative progressing even when they die." That clarity prevents the "we did a lot of stuff but nothing feels finished" anti-pattern.
 
-2. **Tasks max 1 day.** Any task estimated at more than 1 day must be decomposed further.
-   Large tasks hide complexity and create false confidence in estimates. If a task seems
-   irreducible at more than 1 day, it is either too vague or the developer does not yet
-   understand the work well enough (which is itself a discovery task).
+2. **Tasks max 1 day.** Any task estimated at more than 1 day must be decomposed further. Large tasks hide complexity and create false confidence in estimates. If a task seems irreducible at more than 1 day, it is either too vague or the developer does not yet understand the work well enough (which is itself a discovery task). Dead Cells' development at Motion Twin used day-sized tasks for everything -- even major features like new biomes were decomposed into dozens of single-day tasks with clear done criteria.
 
 3. **The 20% buffer is non-negotiable.** After calculating raw capacity, subtract 20%. This
    covers meetings, code reviews, unexpected bugs, build issues, hardware problems, and the
@@ -69,15 +55,9 @@ Problems this solves:
    Cutting a Could-Have on Wednesday is healthy scope management. Cutting a Must-Have on
    Friday is a crisis.
 
-6. **Velocity honesty over velocity aspirations.** If the team has completed an average of
-   30 story points in each of the last 3 sprints, planning 45 points this sprint is not
-   ambition -- it is delusion. Use actual historical velocity, not hoped-for velocity.
+6. **Velocity honesty over velocity aspirations.** If the team has completed an average of 30 story points in each of the last 3 sprints, planning 45 points this sprint is not ambition -- it is delusion. Use actual historical velocity, not hoped-for velocity. Larian's milestone-based development for BG3 worked because they tracked velocity obsessively and adjusted scope accordingly -- not because they crunched harder.
 
-7. **Align with pillars.** Every sprint goal should trace to a design pillar. If a sprint
-   goal does not serve any pillar, the team is either working on infrastructure (acceptable
-   but should be called out) or drifting from the vision (flag for discussion). Reference
-   `docs/game-design-theory.md` for pillar methodology and `docs/collaboration-protocol.md`
-   for cross-discipline coordination rules.
+7. **Align with pillars.** Every sprint goal traces to a design pillar. If a sprint goal does not serve any pillar, the team is either working on infrastructure (acceptable but call it out) or drifting from the vision (flag for discussion). Supergiant's sprint goals are always framed as player experience statements, not feature lists -- "players feel the weight of their weapon choices" not "implement weapon system." Reference `docs/game-design-theory.md` for pillar methodology and `docs/collaboration-protocol.md` for cross-discipline coordination rules.
 
 ### Workflow
 

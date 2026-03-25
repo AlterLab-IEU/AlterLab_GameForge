@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Structured Playtest Analysis
 
-Playtesting is not asking players if they had fun. It is the disciplined observation of player behavior to identify where the design succeeds and where it fails. The player's mouth lies -- their hands do not. This workflow provides a rigorous behavioral observation framework that transforms raw playtest sessions into actionable design insights, complete with prioritized findings and specific recommendations.
+Playtesting is not asking players if they had fun. It is the disciplined observation of player behavior to identify where the design succeeds and where it fails. The player's mouth lies -- their hands do not. Nintendo has known this for decades: Miyamoto famously watches players silently, trusting their confusion over their compliments. Larian ran thousands of community playtests during BG3's Early Access, and every major system change traced back to behavioral data, not forum polls. This workflow provides a rigorous behavioral observation framework that transforms raw playtest sessions into actionable design insights.
 
 ### Purpose & Triggers
 
@@ -30,11 +30,11 @@ Playtesting is not asking players if they had fun. It is the disciplined observa
 
 ### Critical Rules
 
-1. **Define questions before inviting testers.** Every playtest answers specific questions. "Is it fun?" is not a question -- it is a prayer. "Can players complete the first dungeon without dying more than twice?" is a question.
+1. **Define questions before inviting testers.** Every playtest answers specific questions. "Is it fun?" is not a question -- it is a prayer. "Can players complete the first dungeon without dying more than twice?" is a question. Celeste's playtests asked "can players learn the dash mechanic within the first three screens?" -- specific, observable, actionable.
 2. **The facilitator does not play.** You observe. You take notes. You do not help, explain, suggest, or react. Your poker face is a scientific instrument.
 3. **Minimum 5 testers per session.** Fewer than 5 and you are collecting anecdotes, not data. Individual player quirks dominate small samples. At 5+ testers, patterns emerge.
-4. **Never test with the development team.** They know too much. Their muscle memory, mental models, and context make them incapable of experiencing the game as a new player. They are blind to every onboarding problem.
-5. **Behavioral data outranks verbal data.** If a player says "the controls feel fine" but you observed them pressing the wrong button 11 times in a 10-minute session, the behavioral data wins. Always.
+4. **Never test with the development team.** They know too much. Their muscle memory, mental models, and context make them incapable of experiencing the game as a new player. Nintendo's internal playtesting teams are deliberately kept away from development discussions so they approach each session cold. Your developers are blind to every onboarding problem they have already internalized.
+5. **Behavioral data outranks verbal data.** If a player says "the controls feel fine" but you observed them pressing the wrong button 11 times in a 10-minute session, the behavioral data wins. Always. Larian tracked BG3 playtester behavior at the input level -- they knew which dialogue options players hovered over before choosing, and that hesitation data informed their rewrite of Act 1.
 6. **Separate observation from interpretation.** During the session, record what happened. After the session, interpret what it means. Mixing the two in real-time creates confirmation bias.
 7. **Reference `docs/game-design-theory.md`** for Flow Theory and MDA Framework when analyzing player engagement and emotional responses.
 
@@ -118,7 +118,7 @@ This is where discipline matters most. You are a scientist. Your personal feelin
 - **Frustration indicators**: sighing, leaning back, crossing arms, clicking more aggressively, muttering, eye-rolling
 - **Engagement indicators**: losing track of time, ignoring phone notifications, asking "can I keep playing?" at the end
 - **Disengagement indicators**: checking phone, looking around the room, playing with reduced attention, asking "how much longer?"
-- **Flow state indicators**: quiet focus, rhythmic input patterns, surprise when told time is up, difficulty recalling specific moments (they were "in it")
+- **Flow state indicators**: quiet focus, rhythmic input patterns, surprise when told time is up, difficulty recalling specific moments (they were "in it"). Hades playtests reportedly showed players losing 30+ minutes without checking the clock -- the gold standard for flow state confirmation
 
 Map emotional responses to specific game moments. This creates an emotional heatmap of the play session -- where are the peaks and valleys? Compare this to your intended emotional arc from the design document.
 

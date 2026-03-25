@@ -11,7 +11,9 @@ disable-model-invocation: true
 
 # AlterLab GameForge -- Pre-Release Launch Pipeline
 
-The distance between "done" and "launched" is longer than most teams expect. A game that is feature-complete, bug-free, and fun can still fail at launch because the store page was not optimized, the press kit was missing, the age rating was not filed, or the day-one patch pipeline was not tested. This workflow is an exhaustive, phase-gated checklist that ensures nothing falls through the cracks between your final build and the moment players can buy and play your game. Every phase has a clear completion gate, and the final go/no-go decision is made with full visibility into remaining risks.
+The distance between "done" and "launched" is longer than most teams expect. And the distance between "launched" and "sustained" is longer still. A game that is feature-complete, bug-free, and fun can still fail because the store page was not optimized, the press kit was missing, the age rating was not filed, or the day-one patch pipeline was not tested. Worse -- a game that launches perfectly can die in week two without a post-launch strategy.
+
+Hades did not become a cultural phenomenon on launch day. It became one through 18 months of Early Access with a meticulously planned patch cadence. Stardew Valley did not stop at 1.0 -- ConcernedApe's free content updates built a community that still plays eight years later. This workflow covers both sides: the exhaustive pre-launch pipeline AND the post-launch operations that determine whether your game survives past the first week.
 
 ### Purpose & Triggers
 
@@ -31,11 +33,12 @@ The distance between "done" and "launched" is longer than most teams expect. A g
 
 ### Critical Rules
 
-1. **Every phase is gated.** Do not advance to the next phase until the current phase is signed off. Skipping a phase to save time is how launches implode.
-2. **Storefronts are not optional.** Even if the game is technically ready, a store page that is missing screenshots, has a vague description, or uses the wrong tags will kill discoverability. The store page IS the game's first impression.
-3. **Legal compliance is not a suggestion.** Missing an age rating, an open-source license attribution, or a privacy policy can result in the game being pulled from a storefront post-launch. This is a catastrophic outcome that is entirely preventable.
-4. **Plan for failure.** The launch plan must include a rollback strategy. If something goes catastrophically wrong on launch day, what do you do? If the answer is "panic," your launch plan is incomplete.
-5. **Day-one patches are expected, not shameful.** Between going gold and launch day, new issues will be found. Plan for a day-one patch pipeline from the start. The question is not "will we need one?" but "how fast can we deploy one?"
+1. **Every phase is gated.** Do not advance to the next phase until the current phase is signed off. Skipping a phase to save time is how launches implode. Vampire Survivors launched without a press kit and still succeeded -- but that was 2021 lightning in a bottle, not a replicable strategy.
+2. **Storefronts are not optional.** A store page that is missing screenshots, has a vague description, or uses the wrong tags will kill discoverability. The store page IS the game's first impression. Treat it as a design deliverable, not a checkbox.
+3. **Legal compliance is not a suggestion.** Missing an age rating or privacy policy can result in the game being pulled post-launch. This is a catastrophic outcome that is entirely preventable.
+4. **Plan for failure.** The launch plan must include a rollback strategy. If the answer to "what if launch goes wrong?" is "panic," your launch plan is incomplete.
+5. **Day-one patches are expected, not shameful.** Between going gold and launch day, new issues will be found. The question is not "will we need one?" but "how fast can we deploy one?"
+6. **Launch day is day one, not the finish line.** Dead Cells shipped its 1.0 and then delivered 6 major content updates over 4 years. Hades had 18 months of Early Access patches before 1.0. Your post-launch strategy matters as much as your pre-launch checklist.
 6. **Reference `docs/game-design-theory.md`** for player psychology considerations in storefront presentation and first-time user experience.
 
 ### Workflow
@@ -319,6 +322,167 @@ Define what happens if launch goes catastrophically wrong:
 - **CONDITIONAL GO**: Launch proceeds but with specific conditions. Example: "GO, contingent on the day-one patch deploying successfully by 6 AM launch day." Define what happens if the condition is not met.
 - **NO-GO**: One or more launch blockers remain unresolved. Identify the new target date and the path to resolution. Communicate the delay transparently -- a delayed game that launches well is remembered more fondly than a rushed game that launches broken.
 
+---
+
+**Phase 7: Post-Launch Operations**
+
+Launch day is the beginning, not the end. The first 30 days after release determine whether your game builds momentum or fades into the Steam graveyard. This phase covers the operational cadence that sustains a live game.
+
+**Patch Cadence Planning**
+
+Define three distinct update tiers with different release cycles:
+
+```
+PATCH CADENCE MODEL
+-------------------------------------------------
+HOTFIXES (days 1-7 post-launch, then as needed):
+  Scope: Crash fixes, progression blockers, data loss bugs, critical
+  balance breaks (one weapon doing 10x intended damage)
+  Turnaround: 24-72 hours from report to live
+  Process: Fix → abbreviated QA → deploy → verify
+  Communication: "We are aware. Fix incoming." posted within 2 hours
+  of confirmed report. Players tolerate bugs. They do not tolerate silence.
+
+CONTENT PATCHES (every 2-4 weeks for first 3 months):
+  Scope: Balance tuning based on live data, quality-of-life improvements,
+  bug fixes batched from the tracker, minor content additions (new items,
+  cosmetics, challenges)
+  Turnaround: 1-2 sprint cycles
+  Process: Plan → build → QA → staging → deploy → monitor
+  Communication: Patch notes published 24 hours before deployment.
+  Write patch notes for players, not developers. "Sword damage reduced
+  15%" means nothing. "The Iron Sword was trivializing mid-game bosses,
+  so we brought its damage closer to other tier-2 weapons" tells a story.
+
+  Dead Cells' patch cadence: biweekly during Early Access, monthly after
+  1.0, with each update clearly themed (the "Rise of the Giant" DLC,
+  the "Bad Seed" expansion). Every patch had a narrative identity.
+
+MAJOR UPDATES (every 3-6 months):
+  Scope: New content (areas, enemies, bosses, mechanics), system overhauls,
+  seasonal events, paid DLC
+  Turnaround: Full milestone planning cycle
+  Process: Design → prototype → build → extended QA → marketing push → deploy
+  Communication: Announce 2-4 weeks in advance with trailer or dev blog.
+  Time major updates with Steam sales for maximum visibility.
+
+  Stardew Valley model: free major updates as community-building investment.
+  ConcernedApe shipped 1.1, 1.2, 1.3, 1.4, and 1.5 as free updates over
+  5 years, each one reigniting press coverage and sales. The free updates
+  generated more revenue through base game sales than paid DLC would have.
+-------------------------------------------------
+```
+
+**Community Management Strategy**
+
+Your community is your most powerful marketing channel and your most dangerous risk vector. Manage it deliberately.
+
+```
+COMMUNITY CHANNELS (priority order for most indie games)
+-------------------------------------------------
+Discord:
+  Set up BEFORE launch. Have channels for: announcements, bug reports,
+  feedback, general discussion, fan art/content. Assign moderators.
+  Respond to bug reports within 4 hours during launch week.
+  Run a "known issues" pinned post updated in real-time on launch day.
+
+Steam Forums:
+  Monitor daily for the first month. Steam forum sentiment directly
+  influences store page visibility. Respond to negative posts with
+  empathy and specifics -- "We hear you. This is on our radar for
+  the next patch" turns a detractor into a watcher.
+
+Reddit:
+  Post launch announcement in relevant subreddits (r/indiegaming,
+  genre-specific subs). Be present in comments. Do NOT astroturf.
+  Reddit detects and punishes corporate-feeling engagement instantly.
+
+Twitter/Social:
+  Share GIFs of satisfying moments, patch previews, player
+  achievements. The Vampire Survivors social strategy was almost
+  entirely player-generated content retweets -- free, authentic,
+  and more effective than any marketing campaign.
+-------------------------------------------------
+```
+
+**Metrics Monitoring Dashboard**
+
+Track these metrics daily for the first 30 days, weekly after:
+
+```
+POST-LAUNCH METRICS
+-------------------------------------------------
+Retention:
+  D1 retention (% who play again within 24 hours): Target 40%+
+  D7 retention: Target 20%+
+  D30 retention: Target 10%+
+  If D1 < 30%, the first-time experience has a critical problem.
+  If D7 drops sharply from D1, mid-game content is failing.
+
+Engagement:
+  Median session length: Compare to your design target
+  Sessions per week per active player
+  Completion rate: % who reach credits (for narrative games)
+  Compare to Hades benchmarks: ~20 hours median to first clear
+
+Revenue (if commercial):
+  Daily revenue and 7-day moving average
+  Revenue per user (RPU) by acquisition source
+  Refund rate: above 10% is a red flag, above 20% is a crisis
+  Wishlist conversion rate on launch day: industry average ~15-20%
+
+Sentiment:
+  Steam review score: track daily. Below 70% "Mixed" threshold
+  triggers a community response plan.
+  Review keyword frequency: what are players praising/complaining about?
+  Net Promoter Score from in-game surveys (if implemented)
+
+Stability:
+  Crash rate: target < 0.5% of sessions
+  Average FPS across hardware tiers
+  Error log volume (trending up = new bugs introduced by patches)
+-------------------------------------------------
+```
+
+**Post-Launch Content Roadmap Template**
+
+Draft this BEFORE launch. It keeps the team focused and gives the community something to look forward to.
+
+```
+POST-LAUNCH ROADMAP
+-------------------------------------------------
+Month 1: Stability & Balance
+  - Hotfixes for launch issues
+  - Balance pass based on live data (not dev intuition)
+  - Quality-of-life improvements from community feedback
+  - "Thank you" patch with 1-2 small community-requested features
+
+Month 2-3: First Content Update
+  - [Themed content addition: new area/mode/characters]
+  - Major balance overhaul if needed
+  - Accessibility improvements from player feedback
+
+Month 4-6: Major Content Drop
+  - [Significant expansion: new mechanics, story content, or game mode]
+  - Align with a Steam sale or seasonal event for visibility
+  - Press outreach for "now with [new feature]" coverage
+
+Month 6-12: Sustained Operations or Sunset
+  Decision point: Is the game growing, stable, or declining?
+  - Growing: Plan next content year, consider DLC or expansion
+  - Stable: Maintain with quarterly patches, shift team to next project
+  - Declining: Ship a final "definitive edition" patch, communicate
+    honestly with community, redirect resources
+
+The Hades model: 10 major content updates during Early Access,
+each one adding weapons, characters, story content, and systems.
+Each update had a themed identity and generated fresh press coverage.
+By 1.0, the game had 18 months of community investment behind it.
+-------------------------------------------------
+```
+
+---
+
 ### Output Format
 
 ```
@@ -363,6 +527,12 @@ Define what happens if launch goes catastrophically wrong:
 - Check-in schedule: [times]
 - Escalation path: [who decides what]
 
+### Post-Launch Operations Plan
+- Patch cadence: [hotfix/content/major schedule]
+- Community channels: [platform list with owners]
+- Metrics dashboard: [tool and key metric targets]
+- Content roadmap: [month-by-month plan]
+
 ### Decision: [GO / CONDITIONAL GO / NO-GO]
 **Conditions (if CONDITIONAL GO):** [list]
 **Reasoning:** [2-3 sentences]
@@ -376,6 +546,7 @@ Define what happens if launch goes catastrophically wrong:
 - **Rollback plan tested**: The rollback plan is not theoretical -- it has been tested in a staging environment. A rollback plan that has never been executed is a hope, not a plan.
 - **War room staffed**: Every critical function (engineering, community management, platform relations) has a named individual on-call with confirmed availability.
 - **Legal verification complete**: No third-party asset remains unverified. No compliance requirement remains unmet. Zero ambiguity in this area.
+- **Post-launch plan exists**: Patch cadence defined, community channels established, metrics dashboard configured, content roadmap drafted. A launch without a post-launch plan is a game with a one-week lifespan.
 - **Decision traceability**: The go/no-go decision can be traced back to specific completion states and risk assessments. A future post-mortem should be able to reconstruct exactly what was known at decision time.
 
 ### Example Use Cases
@@ -385,3 +556,4 @@ Define what happens if launch goes catastrophically wrong:
 3. "Our game launches next Friday and we just found a significant bug. Help me evaluate whether this is a launch blocker or a day-one patch item."
 4. "We need to prepare a press kit for our upcoming release. What should be in it and how should it be organized?"
 5. "We're debating whether to delay our launch by two weeks to fix remaining bugs or ship on time with a day-one patch. Help me frame this as a go/no-go decision with a proper risk assessment."
+6. "We launched last week and reviews are mixed. Help me build a post-launch operations plan with patch cadence, community response strategy, and a content roadmap to turn the reviews around."

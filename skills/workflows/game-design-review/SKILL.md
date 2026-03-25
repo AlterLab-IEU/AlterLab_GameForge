@@ -10,16 +10,9 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Design Document Review Workflow
 
-A game design document is a living contract between your ambitions and your execution
-capacity. A bad GDD is not one that is poorly formatted -- it is one that lets the team
-build confidently in the wrong direction for weeks before anyone notices. This workflow
-performs a deep, multi-dimensional review that catches structural problems, logical
-contradictions, scope illusions, and missing pieces before they become expensive mistakes
-in code.
+A game design document is a living contract between your ambitions and your execution capacity. A bad GDD is not poorly formatted -- it is one that lets the team build confidently in the wrong direction for weeks before anyone notices. Hollow Knight's design doc worked because Team Cherry kept it tight, falsifiable, and obsessively focused on three pillars. Most GDDs fail because they describe a game without constraining it -- anything goes, so nothing works.
 
-This is not a checklist review. A checklist confirms that sections exist. This review
-confirms that the sections are good -- that they are internally consistent, psychologically
-grounded, scope-honest, and specific enough to actually guide implementation decisions.
+This is not a checklist review. A checklist confirms sections exist. This review confirms sections are good -- internally consistent, psychologically grounded, scope-honest, and specific enough to guide implementation decisions. Disco Elysium's systems-narrative integration did not happen by accident -- it happened because the design document specified exactly how every skill check connected to every dialogue branch. That level of specificity is what this review demands.
 
 ### Purpose & Triggers
 
@@ -48,13 +41,9 @@ Problems this solves:
    Critical. A vague art style reference is Minor. Assign severity explicitly so the
    designer knows where to spend time.
 
-3. **Be specific, not vague.** "The combat system could be better" is useless feedback.
-   "The combat system describes player attacks but never specifies enemy behavior patterns,
-   making it impossible to tune difficulty" is actionable.
+3. **Be specific, not vague.** "The combat system could be better" is useless feedback. "The combat system describes player attacks but never specifies enemy behavior patterns, making it impossible to tune difficulty" is actionable. Name the problem, cite the section, propose the fix.
 
-4. **Propose, do not prescribe.** Offer alternative approaches, not mandates. The designer
-   owns the vision. Your job is to identify problems and suggest solutions, not to redesign
-   the game.
+4. **Propose, do not prescribe.** Offer alternative approaches with reasoning, not mandates. The designer owns the vision. Your job is to identify problems and suggest directions -- "Disco Elysium solved this by tying skill checks to dialogue, not combat" is a reference that opens thinking. "Just copy Disco Elysium" is lazy.
 
 5. **Reference the theory.** When flagging an issue, connect it to established design
    principles from `docs/game-design-theory.md`. "This violates Flow Theory because the
@@ -221,13 +210,12 @@ Can a new player learn this game without external help?
 
 **Step 9: Competitive Differentiation**
 
-Is the unique hook actually unique?
+Is the unique hook actually unique? Hollow Knight's hook was not "metroidvania" -- that genre was already crowded. Its hook was the atmosphere: melancholy insect civilization, tight combat feel, and a world that rewarded patient exploration. The differentiation was experiential, not categorical.
 
 - Identify the 3 closest comparable games
-- For each comparable, define what makes THIS game different
-- Check whether the differentiators are mechanical or cosmetic
-  (cosmetic differentiation is not real differentiation)
-- Assess whether the unique hook is prominent enough to communicate in marketing
+- For each comparable, define what makes THIS game different at the experience level, not the feature level
+- Check whether the differentiators are mechanical or cosmetic (cosmetic differentiation is not real differentiation -- "our zombies are blue" is not a hook)
+- Assess whether the unique hook is prominent enough to communicate in a 30-second trailer
 
 ### Output Format
 

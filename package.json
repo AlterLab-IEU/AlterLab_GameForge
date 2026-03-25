@@ -1,13 +1,13 @@
 {
   "name": "alterlab-gameforge",
   "private": true,
-  "version": "1.1.0",
-  "description": "25 production-grade Claude AI skills for indie game development — agents, workflows, and engine specialists",
+  "version": "1.2.0",
+  "description": "29 production-grade Claude AI skills for indie game development — agents, workflows, and engine specialists",
   "author": "Cem Ipek <cem.ipek@ieu.edu.tr>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AlterLab-IEU/AlterLab-GameForge.git"
+    "url": "https://github.com/AlterLab-IEU/AlterLab_GameForge.git"
   },
   "keywords": [
     "claude-ai",

@@ -11,7 +11,9 @@ allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 
 # AlterLab GameForge -- Economy & System Balance Validation
 
-Balance is not about making everything equal -- it is about making everything feel fair, creating meaningful choices, and ensuring no single strategy dominates all others. A perfectly balanced game where every option is identical is a game with no interesting decisions. The goal is controlled asymmetry: every choice should have a trade-off, every path should be viable, and every player should feel that their preferred playstyle is respected. This workflow provides formal models for validating economy, progression, difficulty, and reward systems.
+Balance is not about making everything equal -- it is about making everything feel fair while keeping decisions meaningful. A perfectly balanced game where every option is identical is a game with no interesting decisions. Into the Breach achieves near-perfect balance not through symmetry but through information transparency -- every option is viable because every consequence is visible. Slay the Spire achieves it through controlled variance -- any card can be powerful in the right deck, and Jorbs' statistical breakdowns prove the math holds across thousands of runs.
+
+The goal is controlled asymmetry: every choice has a trade-off, every path is viable, and every player feels their preferred playstyle is respected. This workflow provides formal models -- including statistical validation and simulation -- for validating economy, progression, difficulty, and reward systems.
 
 ### Purpose & Triggers
 
@@ -33,9 +35,9 @@ Balance is not about making everything equal -- it is about making everything fe
 ### Critical Rules
 
 1. **Balance is relative, not absolute.** A weapon that deals 100 damage is not overpowered or underpowered in isolation. It is only meaningful relative to enemy health pools, other weapon options, ammunition scarcity, and player skill ceiling.
-2. **Dominant strategies kill games.** If one approach is strictly better than all alternatives in all situations, you have a balance failure. Every viable strategy should have at least one situation where it is suboptimal.
-3. **Perception matters more than math.** A system can be mathematically balanced but FEEL unfair. Player psychology (loss aversion, anchoring, confirmation bias) must be factored into balance analysis. A player who loses a rare item to a 5% failure chance will remember that loss far more vividly than the 95 times they succeeded.
-4. **Never balance in a vacuum.** Every system interacts with every other system. Changing the warrior's damage output affects healer balance, enemy design, level pacing, and economy. Map the dependency graph before touching any number.
+2. **Dominant strategies kill games.** If one approach is strictly better than all alternatives in all situations, you have a balance failure. Dead Cells handles this by making every weapon viable through situational DPS curves -- a slow broadsword outdamages daggers against single targets but fails against swarms. Every viable strategy must have at least one situation where it is suboptimal.
+3. **Perception matters more than math.** A system can be mathematically balanced but FEEL unfair. Player psychology (loss aversion, anchoring, confirmation bias) must be factored into balance analysis. A player who loses a rare item to a 5% failure chance remembers that loss far more vividly than the 95 successes. Balatro understands this -- its pity system and score multiplier transparency make variance feel fair even when the math is brutal.
+4. **Never balance in a vacuum.** Every system interacts with every other system. Changing the warrior's damage output affects healer balance, enemy design, level pacing, and economy. Map the dependency graph before touching any number. Factorio's developers famously trace every balance change through the entire production chain before shipping it.
 5. **Data over intuition.** When you have telemetry, use it. When you do not, use Monte Carlo simulation to generate synthetic data. "It feels about right" is not a balance methodology.
 6. **Reference `docs/game-design-theory.md`** for Flow Theory (challenge-skill balance), SDT (competence feedback loops), and MDA Framework (how balance affects target aesthetics).
 
@@ -217,7 +219,7 @@ If you can only predict the Design and Dynamics impact but not the Experience im
 **Step 5C: Advanced Simulation and Monitoring**
 
 **ML-Driven Simulation Approaches:**
-For complex economies and progression systems, consider training reinforcement learning (RL) agents to play your game's economy:
+For complex economies and progression systems, train reinforcement learning (RL) agents to play your game's economy:
 - Define the player's "optimal" behavior as the RL agent's reward function
 - Let the agent play thousands of iterations to discover exploit paths, degenerate strategies, and equilibrium states that human testing would take months to surface
 - RL agents are particularly effective at finding resource duplication exploits, infinite loops in crafting chains, and arbitrage opportunities in multi-currency economies
@@ -244,7 +246,167 @@ After launch, monitor these metrics continuously:
 - **Velocity** -- how quickly does currency circulate? High velocity means currency moves fast through the economy (healthy in moderation, inflationary at extremes). Low velocity means currency is hoarded (indicates sinks are unattractive or faucets are too generous).
 - **Gini coefficient** -- measures wealth inequality across the player population. A high Gini coefficient means a small number of players hold most of the wealth. This is expected (hardcore players accumulate faster) but extreme values indicate the economy is not serving casual players.
 
-**Step 6: Monte Carlo Simulation Guidance**
+**Step 6: Statistical Validation Methods**
+
+Qualitative balance assessment catches the obvious problems. Statistical validation catches the subtle ones -- the economy that inflates 2% per hour until hour 40 when it collapses, the weapon that is balanced on average but has a 3% chance of one-shotting a boss, the matchup that is 50/50 overall but 90/10 at high skill levels.
+
+**6.1 Distribution Analysis**
+
+Every randomized system has an underlying probability distribution. Know which one yours uses and whether it matches your design intent:
+
+```
+DISTRIBUTION TYPE GUIDE
+-------------------------------------------------
+Normal (Gaussian):
+  Use for: Damage ranges, stat variation, NPC behavior variance
+  Shape: Bell curve -- most results cluster near the mean
+  Example: Base damage 100, standard deviation 10 → 95% of hits
+  land between 80-120. Players experience consistent damage.
+  Watch for: Tails. A normal distribution with high variance
+  produces occasional extreme outliers that feel like bugs.
+
+Uniform:
+  Use for: Loot table rolls, random map generation, spawn placement
+  Shape: Flat -- every outcome equally likely
+  Example: Drop table with 10 items, each 10% chance.
+  Watch for: Streaks. Uniform random FEELS streaky because humans
+  are terrible at recognizing true randomness. 5 of the same drop
+  in a row is statistically plausible but psychologically devastating.
+  Slay the Spire mitigates this by using weighted shuffle bags
+  instead of pure uniform random for card rewards.
+
+Poisson:
+  Use for: Rare event timing (boss spawns, critical failures, jackpots)
+  Shape: Skewed right -- most intervals are short, occasional long gaps
+  Example: Average 1 legendary drop per 10 hours, but actual gaps
+  range from 2 hours to 30+ hours.
+  Watch for: The long tail. A Poisson process can produce gaps so long
+  that players assume the system is broken.
+
+Weighted Random with Pity Timer:
+  Use for: Gacha, loot boxes, rare reward systems
+  Shape: Weighted random with a guaranteed floor
+  Implementation: Track consecutive failures. After N failures,
+  force a success. Reset the counter.
+  Example: Hades uses pity timers on its boon system -- if you have
+  not received a specific god's boon in N rooms, the probability
+  weight increases until it appears.
+  Industry standard pity thresholds: 50-100 attempts for rare items,
+  10-20 for uncommon. Publish these numbers to build player trust.
+-------------------------------------------------
+```
+
+**6.2 Expected Value Calculations**
+
+For every player decision with multiple outcomes, calculate the Expected Value (EV):
+
+```
+EV = Sum of (Probability_i * Value_i) for all outcomes i
+
+EXAMPLE: Upgrade gamble system
+  Success (70%): weapon gains +10 damage (value: +10)
+  Failure (25%): weapon unchanged (value: 0)
+  Catastrophe (5%): weapon loses 5 damage (value: -5)
+
+  EV = (0.70 * 10) + (0.25 * 0) + (0.05 * -5) = 7.0 - 0.25 = 6.75
+
+  The EV is positive, so upgrading is mathematically correct every time.
+  But the 5% catastrophe creates fear disproportionate to its probability
+  (loss aversion factor ~2.5x). The FELT EV is lower than the actual EV.
+```
+
+Use EV calculations to verify that:
+- No decision has a strictly dominant strategy (one option with highest EV in ALL contexts)
+- Risk-reward tradeoffs are real -- higher-risk options have higher EV to compensate
+- The "safe" option is viable but suboptimal, not optimal (otherwise risk is never rewarded)
+- Currency conversions and trade systems do not create arbitrage loops (buy low, sell high, infinite money)
+
+Into the Breach achieves this brilliantly -- every move has a calculable EV because all information is visible. The tension comes from the tradeoffs between protecting buildings, killing Vek, and positioning for next turn. No move is mathematically dominant because the EV depends entirely on board state.
+
+**6.3 Win Rate Analysis and Matchup Matrices**
+
+For competitive or asymmetric games, build a matchup matrix:
+
+```
+MATCHUP MATRIX (win rates, row vs. column)
+-------------------------------------------------
+           | Warrior | Mage    | Rogue   | Ranger
+-------------------------------------------------
+Warrior    | 50%     | 55%     | 40%     | 52%
+Mage       | 45%     | 50%     | 58%     | 43%
+Rogue      | 60%     | 42%     | 50%     | 55%
+Ranger     | 48%     | 57%     | 45%     | 50%
+-------------------------------------------------
+
+HEALTH THRESHOLDS:
+  45-55% per matchup: Healthy. Rock-paper-scissors dynamic is working.
+  40-60%: Acceptable with awareness. One class counters another, but
+    the disadvantaged class can still win through superior play.
+  Below 40% or above 60%: Imbalanced. The counter is too hard.
+    Either nerf the advantage or give the disadvantaged class tools
+    to outplay the matchup.
+  Any class with ALL matchups above 52%: Overpowered. Nerf directly
+    or buff ALL other classes (usually nerf is cleaner).
+  Any class with ALL matchups below 48%: Underpowered. Buff directly.
+```
+
+For PvE with build diversity (roguelikes, RPGs), replace matchup matrices with build win-rate tracking:
+
+```
+BUILD WIN-RATE ANALYSIS
+-------------------------------------------------
+Track across N simulated or observed runs:
+  Build archetype | Win rate | Avg clear time | Pick rate
+  [build A]       | [%]      | [minutes]      | [% of runs]
+  [build B]       | [%]      | [minutes]      | [% of runs]
+
+Red flags:
+- One build with >70% pick rate: it is either overpowered or perceived
+  as overpowered. Either way, the meta is stale.
+- Any build below 30% win rate: it feels unplayable. Buff it or remove it.
+- High win rate + low pick rate: hidden gem. Consider making it more
+  discoverable, not nerfing it.
+- Low win rate + high pick rate: it is fun but weak. Buff it -- players
+  are already drawn to the fantasy; reward them for choosing it.
+
+Slay the Spire's balance: all four characters maintain 40-60% win rates
+at high ascension, but through completely different strategic lenses.
+The Silent's win rate drops at Ascension 18+ while the Defect's rises --
+this is intentional difficulty differentiation, not imbalance.
+-------------------------------------------------
+```
+
+**6.4 Sensitivity Analysis**
+
+Before shipping a balance change, test how sensitive the system is to that parameter:
+
+```
+SENSITIVITY ANALYSIS PROTOCOL
+-------------------------------------------------
+1. Identify the parameter being changed (e.g., sword damage: 25 → 22)
+2. Model the ripple effects at three magnitudes:
+   - Conservative change: -5% (23.75)
+   - Proposed change: -12% (22.0)
+   - Aggressive change: -20% (20.0)
+3. For each magnitude, trace through the dependency graph:
+   - How does TTK change against each enemy type?
+   - How does the economy shift (repair costs, replacement rate)?
+   - How does the progression curve bend (time to midgame, time to endgame)?
+   - How does the player's PERCEPTION change? (-12% damage may feel like
+     -30% if the weapon already felt weak.)
+4. If the proposed change produces dramatically different outcomes at
+   +/- 2%, the system is brittle at this parameter. Consider a structural
+   fix instead of number tuning.
+
+Dead Cells demonstrates good sensitivity management -- weapon DPS curves
+are designed so that a 10% nerf moves a weapon from "top tier" to "viable"
+rather than from "viable" to "unusable." This is achieved by compressing
+the DPS range: the best weapon deals ~40% more DPS than the worst, not
+400% more.
+-------------------------------------------------
+```
+
+**Step 7: Monte Carlo Simulation Guidance**
 
 **When to Simulate**
 
@@ -268,7 +430,7 @@ Use Monte Carlo simulation when:
 - **Worst-case scenarios**: What happens in the bottom 1%? If the unluckiest 1% of players have a truly miserable experience (200 attempts for a guaranteed drop, zero useful loot in 10 hours of play), you need a safety net.
 - **Exploit detection**: Look for strategies that produce outcomes far above the median. If a specific combination of choices produces 10x the median outcome, players will find it and it will become the only viable strategy.
 
-**Step 7: Compile Balance Report**
+**Step 8: Compile Balance Report**
 
 Synthesize all analysis into the standardized Balance Report format (see Output Format below). Prioritize findings by impact on player experience and effort to fix.
 
@@ -335,12 +497,13 @@ Synthesize all analysis into the standardized Balance Report format (see Output 
 
 ### Quality Criteria
 
-- **Completeness**: All five balance dimensions (economy, progression, difficulty, reward pacing, simulation) are addressed, even if some are brief due to the game's design.
+- **Completeness**: All balance dimensions (economy, progression, difficulty, reward pacing, statistical validation, simulation) are addressed, even if some are brief due to the game's design.
+- **Statistical rigor**: EV calculations for key decisions, distribution analysis for randomized systems, and matchup matrices for competitive/asymmetric elements. No balance claim without supporting math.
 - **Data grounding**: Every finding is supported by either telemetry data, simulation results, or systematic analysis -- not guesswork or "feel."
 - **Actionability**: Every identified imbalance includes a specific tuning recommendation with an expected outcome. "Reduce gold drop rate by 15%" is actionable. "Fix the economy" is not.
-- **Dependency awareness**: Recommendations include assessment of ripple effects. No change is proposed in isolation.
-- **Player archetype coverage**: Analysis considers at least three player archetypes (casual, average, hardcore) and verifies that all three have a viable experience.
-- **Edge case awareness**: Extreme scenarios (very lucky, very unlucky, degenerate strategies) are identified and addressed.
+- **Dependency awareness**: Recommendations include sensitivity analysis of ripple effects. No change is proposed in isolation.
+- **Player archetype coverage**: Analysis covers at least three player archetypes (casual, average, hardcore) and verifies all three have a viable experience.
+- **Edge case awareness**: Extreme scenarios (very lucky, very unlucky, degenerate strategies) are identified and addressed through percentile analysis and pity system validation.
 
 ### Example Use Cases
 

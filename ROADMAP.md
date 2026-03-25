@@ -1,10 +1,10 @@
 # AlterLab GameForge Roadmap
 
-Current version: **v1.1.0** (25 skills, 14 templates, 6 docs)
+Current version: **v1.2.0** (29 skills, 17 templates, 8 docs)
 
 ---
 
-## v1.2.0 — Depth & Polish (Near Term)
+## v1.2.0 — Depth & Polish (SHIPPED)
 
 ### New Skills
 
@@ -120,6 +120,7 @@ Current community interests (from indie dev forums and game jam feedback):
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v1.2.0 | 2026-03-25 | 29 skills (+economy-designer, +accessibility-specialist, +localization-manager, +analytics-setup), voice consistency pass on all 25 existing skills, persona rewrites for technical-director and designer, full rebuilds of retrospective and team-orchestrator, 3 new templates, 2 new docs, all 9 agents get "When NOT to Use Me" sections, brainstorm gets market validation, balance gets statistical methods, launch gets post-launch ops, engine specialists get migration guides |
 | v1.1.0 | 2026-03-25 | 25 skills (added scope-check, retrospective, reverse-document), 6 docs (added workflow-guide), 4 new templates, engine version updates, regulatory compliance, expanded game design theory |
 | v1.0.0 | 2026-03-24 | Initial release — 22 skills, 10 templates, 5 docs, full agent hierarchy |
 
