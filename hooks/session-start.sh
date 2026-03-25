@@ -32,3 +32,5 @@ fi
 
 echo ""
 echo "=== Ready to forge ==="
+
+exit 0

@@ -16,3 +16,5 @@ fi
 if [ -d "design" ] && [ ! -d "tests" ]; then
   echo "💡 Design docs exist but no test directory. Consider setting up testing."
 fi
+
+exit 0

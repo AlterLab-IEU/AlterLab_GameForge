@@ -397,7 +397,8 @@ Pillars are the load-bearing promises of your design. Every mechanic, feature, a
 of content must trace back to at least one pillar. If a feature does not serve a pillar,
 it is either an orphan that should be cut or evidence that you are missing a pillar.
 
-Reference `docs/game-design-theory.md` for the full pillar methodology.
+Reference `docs/game-design-theory.md` for the full pillar methodology and use
+`@templates/game-pillars.md` to document the pillars formally.
 
 **Exercise 4.1 -- Define 3-5 Pillars**
 

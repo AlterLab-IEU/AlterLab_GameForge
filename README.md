@@ -1,14 +1,14 @@
 <h1 align="center">AlterLab GameForge</h1>
 
 <p align="center">
-  <strong>22 production-grade Claude AI skills for indie game development</strong><br />
+  <strong>25 production-grade Claude AI skills for indie game development</strong><br />
   <em>From concept to launch -- one skill at a time</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Skills-22-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Skills-25-blueviolet?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Agents-9-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Workflows-10-teal?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Workflows-13-teal?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Engines-Godot%20%7C%20Unity%20%7C%20Unreal-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Claude-AI%20Powered-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" />
@@ -22,7 +22,7 @@
 
 ## What Is This?
 
-AlterLab GameForge is a curated collection of **22 Claude AI skills** that give you a full indie game studio inside your terminal. Each skill is a deep, production-grade instruction set that transforms Claude into a specialized game development expert -- from creative direction and narrative design to engine-specific coding and launch preparation.
+AlterLab GameForge is a curated collection of **25 Claude AI skills** that give you a full indie game studio inside your terminal. Each skill is a deep, production-grade instruction set that transforms Claude into a specialized game development expert -- from creative direction and narrative design to engine-specific coding and launch preparation.
 
 GameForge is the third entry in the **AlterLab Skills Trilogy**:
 
@@ -30,7 +30,7 @@ GameForge is the third entry in the **AlterLab Skills Trilogy**:
 |---|---|---|
 | [AlterLab FC Skills](https://github.com/AlterLab-IEU/AlterLab-FC-Skills) | Communication students | 72 |
 | [AlterLab Academic Skills](https://github.com/AlterLab-IEU/AlterLab-Academic-Skills) | Researchers & academics | 186+ |
-| **AlterLab GameForge** | **Indie game developers** | **22** |
+| **AlterLab GameForge** | **Indie game developers** | **25** |
 
 Whether you are a solo developer building your first game or a small team shipping your tenth, GameForge gives you access to expert-level guidance across every discipline of game development.
 
@@ -72,7 +72,7 @@ Whether you are a solo developer building your first game or a small team shippi
 </details>
 
 <details>
-<summary><strong>Workflow Skills (10)</strong> -- Structured processes for game dev tasks</summary>
+<summary><strong>Workflow Skills (13)</strong> -- Structured processes for game dev tasks</summary>
 
 | Skill | Description |
 |---|---|
@@ -86,6 +86,9 @@ Whether you are a solo developer building your first game or a small team shippi
 | `game-balance-check` | Analyzes game balance -- economy, difficulty curves, progression pacing, and edge cases |
 | `game-launch` | Prepares for release -- store pages, build checklists, marketing beats, and day-one patches |
 | `game-team-orchestrator` | Coordinates multiple agents on a complex task, managing handoffs and resolving conflicts |
+| `game-scope-check` | Evaluates project scope against timeline, team size, and budget -- flags cuts and risks |
+| `game-retrospective` | Runs structured sprint, milestone, or project retrospectives with actionable takeaways |
+| `game-reverse-document` | Generates design documentation from existing game code -- reverse-engineers the GDD |
 
 </details>
 
@@ -142,7 +145,7 @@ GameForge is designed as an interconnected skill system, not a loose collection 
               |              |              |
      +--------+--+  +-------+---+  +-------+--------+
      |  Agents   |  | Workflows |  |   Engine       |
-     |  (9)      |  |  (10)     |  |   Specialists  |
+     |  (9)      |  |  (13)     |  |   Specialists  |
      +-----------+  +-----------+  |   (3)          |
               |              |     +----------------+
               +--------------+
@@ -177,7 +180,7 @@ GameForge is part of a broader vision: making expert knowledge accessible throug
 | | AlterLab FC Skills | AlterLab Academic Skills | AlterLab GameForge |
 |---|---|---|---|
 | **Domain** | Communication & media | Research & academia | Indie game development |
-| **Skills** | 72 | 186+ | 22 |
+| **Skills** | 72 | 186+ | 25 |
 | **Agents** | Faculty, advisors, critics | Researchers, reviewers, analysts | Studio team leads |
 | **Workflows** | Project pipelines | Research workflows | Dev pipelines |
 | **Specialists** | Platform-specific | Method-specific | Engine-specific |
@@ -213,6 +216,9 @@ AlterLab_GameForge/
 |   |   +-- game-balance-check/SKILL.md
 |   |   +-- game-launch/SKILL.md
 |   |   +-- game-team-orchestrator/SKILL.md
+|   |   +-- game-scope-check/SKILL.md
+|   |   +-- game-retrospective/SKILL.md
+|   |   +-- game-reverse-document/SKILL.md
 |   |
 |   +-- engine-specialists/
 |       +-- game-godot-specialist/SKILL.md
@@ -225,6 +231,7 @@ AlterLab_GameForge/
 |   +-- coordination-rules.md
 |   +-- agent-hierarchy.md
 |   +-- coding-standards.md
+|   +-- workflow-guide.md
 |
 +-- hooks/
 |   +-- session-start.sh
@@ -235,12 +242,20 @@ AlterLab_GameForge/
 |   +-- log-agent.sh
 |
 +-- templates/
-|   +-- gdd-template.md
-|   +-- tdd-template.md
-|   +-- sprint-plan-template.md
-|   +-- playtest-report-template.md
-|   +-- balance-sheet-template.md
-|   +-- store-page-template.md
+|   +-- game-design-document.md
+|   +-- game-concept.md
+|   +-- game-pillars.md
+|   +-- architecture-decision-record.md
+|   +-- sprint-plan.md
+|   +-- art-bible.md
+|   +-- sound-bible.md
+|   +-- character-sheet.md
+|   +-- economy-model.md
+|   +-- level-design-document.md
+|   +-- release-checklist.md
+|   +-- systems-index.md
+|   +-- ai-content-policy.md
+|   +-- post-mortem.md
 |
 +-- scripts/
 |   +-- validate.js
@@ -286,5 +301,5 @@ You are free to use, modify, and distribute these skills in your own projects --
 ---
 
 <p align="center">
-  <sub>Part of the AlterLab Skills Trilogy: FC Skills (72) | Academic Skills (186+) | GameForge (22)</sub>
+  <sub>Part of the AlterLab Skills Trilogy: FC Skills (72) | Academic Skills (186+) | GameForge (25)</sub>
 </p>

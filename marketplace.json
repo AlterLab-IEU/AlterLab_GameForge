@@ -178,7 +178,7 @@
     {
       "name": "game-scope-check",
       "description": "Evaluate project scope against timeline and resources. Triggers when users mention scope creep, feature lists growing, timeline pressure, or resource constraints.",
-      "path": "skills/workflows/game-scope-check",
+      "path": "skills/workflows/game-scope-check/SKILL.md",
       "category": "workflows",
       "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
       "keywords": ["scope", "project-management", "feature-creep", "timeline"],
@@ -187,7 +187,7 @@
     {
       "name": "game-retrospective",
       "description": "Run a structured retrospective after a sprint, milestone, or project completion. Triggers for retrospective, post-mortem, lessons learned.",
-      "path": "skills/workflows/game-retrospective",
+      "path": "skills/workflows/game-retrospective/SKILL.md",
       "category": "workflows",
       "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
       "keywords": ["retrospective", "post-mortem", "lessons-learned", "agile"],
@@ -196,7 +196,7 @@
     {
       "name": "game-reverse-document",
       "description": "Generate documentation from existing code or prototypes. Triggers when users have working code but no design docs.",
-      "path": "skills/workflows/game-reverse-document",
+      "path": "skills/workflows/game-reverse-document/SKILL.md",
       "category": "workflows",
       "source": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
       "keywords": [
@@ -265,12 +265,25 @@
     }
   ],
   "templates": [
-    { "name": "gdd", "path": "templates/gdd.md" },
-    { "name": "tdd", "path": "templates/tdd.md" },
+    {
+      "name": "game-design-document",
+      "path": "templates/game-design-document.md"
+    },
+    { "name": "game-concept", "path": "templates/game-concept.md" },
+    {
+      "name": "architecture-decision-record",
+      "path": "templates/architecture-decision-record.md"
+    },
     { "name": "sprint-plan", "path": "templates/sprint-plan.md" },
-    { "name": "playtest-report", "path": "templates/playtest-report.md" },
-    { "name": "balance-sheet", "path": "templates/balance-sheet.md" },
-    { "name": "store-page", "path": "templates/store-page.md" },
+    { "name": "art-bible", "path": "templates/art-bible.md" },
+    { "name": "sound-bible", "path": "templates/sound-bible.md" },
+    { "name": "character-sheet", "path": "templates/character-sheet.md" },
+    { "name": "economy-model", "path": "templates/economy-model.md" },
+    {
+      "name": "level-design-document",
+      "path": "templates/level-design-document.md"
+    },
+    { "name": "release-checklist", "path": "templates/release-checklist.md" },
     { "name": "game-pillars", "path": "templates/game-pillars.md" },
     { "name": "systems-index", "path": "templates/systems-index.md" },
     { "name": "ai-content-policy", "path": "templates/ai-content-policy.md" },

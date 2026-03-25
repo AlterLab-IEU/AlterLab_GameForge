@@ -19,6 +19,7 @@ All skills reference a common knowledge base. These docs provide the theoretical
 - `@docs/coordination-rules.md` -- Turn order, conflict resolution, escalation paths between agents
 - `@docs/agent-hierarchy.md` -- Reporting structure and decision authority for all 9 agents
 - `@docs/coding-standards.md` -- Code style, architecture patterns, and engine-specific conventions
+- `@docs/workflow-guide.md` -- 11-phase development lifecycle mapping all 25 skills to project phases
 
 Always check these docs before answering game development questions. They contain the canonical standards for this project.
 
@@ -111,16 +112,20 @@ The following hooks run automatically during Claude Code sessions:
 
 The `templates/` directory contains starter templates for common game development artifacts:
 
-- Game Design Document (GDD)
-- Technical Design Document (TDD)
-- Sprint planning sheets
-- Playtest report forms
-- Balance spreadsheet structures
-- Store page copy templates
-- Game pillars definition template
-- Systems tracking index
-- AI content usage policy
-- Post-mortem report
+- Game Design Document (`game-design-document.md`)
+- Game Concept (`game-concept.md`)
+- Architecture Decision Record (`architecture-decision-record.md`)
+- Sprint Plan (`sprint-plan.md`)
+- Art Bible (`art-bible.md`)
+- Sound Bible (`sound-bible.md`)
+- Character Sheet (`character-sheet.md`)
+- Economy Model (`economy-model.md`)
+- Level Design Document (`level-design-document.md`)
+- Release Checklist (`release-checklist.md`)
+- Game Pillars (`game-pillars.md`)
+- Systems Index (`systems-index.md`)
+- AI Content Policy (`ai-content-policy.md`)
+- Post-Mortem Report (`post-mortem.md`)
 
 Reference templates with `@templates/template-name.md` in skill outputs.
 

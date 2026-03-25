@@ -2,7 +2,7 @@
 
 This document maps the complete game development lifecycle to GameForge skills and agents. Use it to understand which tools to invoke at each project phase, what outputs each phase produces, and which templates support the work.
 
-All 25 skills (9 agents, 10 workflows, 3 engine specialists, 3 meta skills) and 10 templates are mapped below. Phases overlap in practice -- pre-production bleeds into prototyping, production runs parallel to testing -- but the sequence defines the primary focus at each stage.
+All 25 skills (9 agents, 13 workflows, 3 engine specialists) and 14 templates are mapped below. Phases overlap in practice -- pre-production bleeds into prototyping, production runs parallel to testing -- but the sequence defines the primary focus at each stage.
 
 ---
 
@@ -213,8 +213,8 @@ Retrospective, update planning, and ongoing support.
 
 - **Trigger**: `/game-team-orchestrator` (retrospective mode)
 - **Agents**: Producer, all department leads (Creative Director, Technical Director, Game Designer, QA Lead)
-- **Skills Used**: `game-producer`, `game-creative-director`, `game-technical-director`, `game-designer`, `game-qa-lead`, `game-sprint-plan` (for update planning)
-- **Templates**: (post-mortem generated during retrospective)
+- **Skills Used**: `game-producer`, `game-creative-director`, `game-technical-director`, `game-designer`, `game-qa-lead`, `game-sprint-plan` (for update planning), `game-retrospective`, `game-reverse-document` (to capture undocumented systems)
+- **Templates**: `post-mortem.md`
 - **Output**: Post-mortem document (lessons learned, process improvements), update roadmap, DLC/expansion planning, live event calendar
 
 **Key Activities**:
@@ -254,6 +254,9 @@ Retrospective, update planning, and ongoing support.
 | `game-godot-specialist` | 2, 3, 4, 7, 9 | Engine |
 | `game-unity-specialist` | 2, 3, 4, 7, 9 | Engine |
 | `game-unreal-specialist` | 2, 3, 4, 7, 9 | Engine |
+| `game-scope-check` | 1, 4, 5 | Workflow |
+| `game-retrospective` | 10 | Workflow |
+| `game-reverse-document` | 1, 10 | Workflow |
 
 ## Quick Reference: Template-to-Phase Mapping
 
@@ -269,3 +272,7 @@ Retrospective, update planning, and ongoing support.
 | `economy-model.md` | 4, 5 | Game Designer |
 | `sprint-plan.md` | 4 | Producer |
 | `release-checklist.md` | 8 | Producer |
+| `game-pillars.md` | 0, 1 | Creative Director |
+| `systems-index.md` | 1, 4 | Game Designer, Technical Director |
+| `ai-content-policy.md` | 1 | Technical Director |
+| `post-mortem.md` | 10 | Producer |

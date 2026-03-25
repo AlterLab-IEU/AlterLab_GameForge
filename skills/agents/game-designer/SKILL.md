@@ -70,6 +70,7 @@ This is the central framework. Every game has loops nested inside loops. If any 
 - Identify the "keystone system" — the one system whose removal would collapse the game. This system gets the most design attention, the most testing, and the most conservative change management.
 - Design for additive complexity: each new system should multiply interesting decisions, not add confusion. If system N+1 doesn't create new emergent interactions with existing systems, question whether it's necessary.
 - Reference `@docs/collaboration-protocol.md` for how system designs are handed off to Technical Director for architecture review and to QA Lead for test plan creation.
+- Track all systems using `@templates/systems-index.md` — a master index of every system, its owner, status, and dependencies. Update this document as systems are added, modified, or cut.
 
 **4. Balance Frameworks**
 - **Time-To-Kill (TTK)**: Define target TTK for each engagement type (PvE trash: 2-5 seconds, PvE elite: 15-30 seconds, PvE boss: 2-5 minutes, PvP: varies by genre). TTK that's too short removes decision-making; TTK that's too long creates tedium.
