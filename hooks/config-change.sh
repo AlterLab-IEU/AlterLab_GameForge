@@ -14,13 +14,13 @@
 # Output: JSON to stdout with systemMessage if skills changed
 # Exit 0: success, Exit 2: blocking error
 
-set -euo pipefail
-
 # Read input from stdin
 INPUT=$(cat)
 
 # Ensure log directory exists
-mkdir -p production/session-logs 2>/dev/null || true
+if [ ! -d "production/session-logs" ]; then
+  mkdir -p production/session-logs 2>/dev/null || true
+fi
 
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 

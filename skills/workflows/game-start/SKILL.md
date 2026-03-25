@@ -128,6 +128,8 @@ Step 1.2 -- Define the concept (route to `game-brainstorm` if needed):
 
 Step 1.3 -- Create the initial file structure:
 
+The following is the recommended generic starting point. Adapt it to your engine.
+
 ```
 project-root/
   design/
@@ -159,6 +161,14 @@ project-root/
     milestones/           -- Milestone definitions and completion criteria
   prototypes/             -- Throwaway prototypes (never promote to production code)
 ```
+
+**Engine-specific alternatives:**
+
+- **Godot projects:** The standard Godot layout applies: `scripts/`, `scenes/`, `resources/`, `addons/`. The `design/`, `docs/`, and `production/` directories overlay on top at the project root alongside `project.godot`.
+- **Unity projects:** `Assets/Scripts/`, `Assets/Prefabs/`, `Assets/Scenes/`. The `design/`, `docs/`, and `production/` directories go at the project root alongside `Assets/`.
+- **Unreal projects:** `Source/`, `Content/`, `Config/`. The `design/`, `docs/`, and `production/` directories go at the project root.
+
+This structure is a recommendation, not a requirement. GameForge hooks detect source code across multiple conventional locations (`src/`, `scripts/`, `Scripts/`, `Source/`, `Assets/Scripts/`, `lib/`). If your project already has a structure, keep it -- add the `design/`, `docs/`, and `production/` overlays where they make sense.
 
 Step 1.4 -- Generate starter documents:
 - Create a minimal Game Concept Document (reference `templates/game-concept.md`)

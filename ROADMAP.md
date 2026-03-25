@@ -1,6 +1,6 @@
 # AlterLab GameForge Roadmap
 
-Current version: **v1.3.0** (31 skills, 17 templates, 9 docs, 11 hooks)
+Current version: **v1.4.0** (31 skills, 17 templates, 12 docs, 11 hooks, 9 starters)
 
 ---
 
@@ -98,13 +98,67 @@ Current version: **v1.3.0** (31 skills, 17 templates, 9 docs, 11 hooks)
 
 ---
 
-## v1.4.0 — Depth & Ecosystem (Next)
+## v1.4.0 — Launch Ready (SHIPPED)
+
+### Starter Configurations (NEW)
+
+| Starter | What | Status |
+|---------|------|--------|
+| `starters/claude-config/` | Base CLAUDE.md and settings.json for any game project | SHIPPED |
+| `starters/godot/` | Godot 4.x CLAUDE.md and .gitignore with GDScript standards, scene conventions | SHIPPED |
+| `starters/unity/` | Unity 6.x CLAUDE.md and .gitignore with C# standards, SO architecture | SHIPPED |
+| `starters/unreal/` | Unreal 5.x CLAUDE.md and .gitignore with C++/Blueprint standards, GAS patterns | SHIPPED |
+| `starters/README.md` | Setup guide with copy-paste instructions for all engines | SHIPPED |
+
+### Documentation Overhaul (NEW)
+
+| Doc | What | Status |
+|-----|------|--------|
+| `README.md` rewrite | Quick start section, "Where Do I Start?" routing table, architecture diagram, starters section, trilogy links | SHIPPED |
+| `docs/workflow-examples.md` | Three end-to-end walkthroughs showing skill chaining in real scenarios | SHIPPED |
+| `docs/FAQ.md` | Frequently asked questions with practical answers | SHIPPED |
+| `docs/directory-conventions.md` | Recommended project directory layout for GameForge projects | SHIPPED |
+| `CONTRIBUTING.md` | Full contribution guide with format reference, PR workflow, skill template | SHIPPED |
+
+### Flexibility Pass
+
+| Feature | What | Status |
+|---------|------|--------|
+| Hook rewrite (all 11) | Removed `set -e`, eliminated bash arrays, replaced hardcoded `src/` with `find_source_dirs`, all hooks end with `exit 0` | SHIPPED |
+| `game-start` update | Engine-aware project bootstrapping with starter config references | SHIPPED |
+| Directory conventions doc | `docs/directory-conventions.md` — recommended layouts without rigidity | SHIPPED |
+
+### Community Infrastructure (NEW)
+
+| Feature | What | Status |
+|---------|------|--------|
+| Issue templates (3) | Bug report, feature request, skill request — with YAML frontmatter, labels, structured sections | SHIPPED |
+| PR template | Pull request template with type checkboxes and quality checklist | SHIPPED |
+| `CODE_OF_CONDUCT.md` | Contributor Covenant code of conduct | SHIPPED |
+| `SECURITY.md` | Security policy for skill-based projects | SHIPPED |
+| `.github/SUBMISSIONS.md` | Awesome-list submission drafts for 5 curated lists | SHIPPED |
+| `.gitignore` expansion | Coverage for OS files, IDE, Node, env, logs, GameForge runtime, Godot, Unity, Unreal, build outputs | SHIPPED |
+
+### Deferred to v2.0.0
+
+| Feature | Reason |
+|---------|--------|
+| `game-ci-pipeline` | Deferred from v1.3.0 and v1.4.0 — lower priority than starters and docs |
+| `game-jam-mode` | Community request — deferred to v2.0.0 scope |
+| Engine sub-specialists | Depth gap vs CCGS, but current single specialists cover core needs |
+| File-type rules | Production quality gates — deferred pending user feedback |
+| Guided GDD authoring | CCGS /design-system equivalent — deferred |
+| Team composition profiles | Intelligence feature — deferred from v1.3.0 |
+
+---
+
+## v2.0.0 — Platform & Ecosystem (Next)
 
 ### New Skills
 
 | Skill | What | Why |
 |-------|------|-----|
-| `game-ci-pipeline` | CI/CD setup for game builds — automated testing, build pipelines, deployment | Deferred from v1.3.0. Technical director mentions CI but no operational skill exists. |
+| `game-ci-pipeline` | CI/CD setup for game builds — automated testing, build pipelines, deployment | Deferred from v1.3.0/v1.4.0. Technical director mentions CI but no operational skill exists. |
 | `game-jam-mode` | Compressed 48-72 hour workflows for game jams | Top community request. Current skills assume weeks/months timelines. |
 
 ### Depth Expansion
@@ -115,17 +169,6 @@ Current version: **v1.3.0** (31 skills, 17 templates, 9 docs, 11 hooks)
 | File-type rules | shader-code, narrative, gameplay-code, engine-code rules | CCGS differentiator. Production quality gates. |
 | Guided GDD authoring | Section-by-section GDD creation workflow | CCGS /design-system equivalent. |
 | Team composition profiles | Users define team size/composition, skills adapt | Deferred from v1.3.0 intelligence features. |
-
-### Ecosystem
-
-| Feature | What | Why |
-|---------|------|-----|
-| Awesome list submissions | PRs to 5 major awesome-claude lists | Zero marketplace presence currently. Highest-ROI visibility action. |
-| SkillsMP / MCPMarket listing | Ensure indexing on major skill directories | 87K+ skills indexed on SkillsMP, GameForge not yet listed. |
-
----
-
-## v2.0.0 — Platform & Ecosystem (Long Term Vision)
 
 ### Multi-Engine Deep Integration
 
@@ -140,8 +183,9 @@ Current version: **v1.3.0** (31 skills, 17 templates, 9 docs, 11 hooks)
 | Feature | What | Why |
 |---------|------|-----|
 | Skill marketplace listing | Publish to Claude Code marketplace for one-click install | Currently requires manual git clone. Marketplace listing makes discovery frictionless. |
-| Community skill contributions | CONTRIBUTING.md + skill template + validation CI for community PRs | 31 skills cover core needs. Community can build niche skills (VR, mobile, specific genres). |
 | Genre-specific skill packs | Expansion packs: RPG Pack, Platformer Pack, Narrative Pack with genre-tailored agents | Current skills are genre-agnostic. Genre packs add specialized knowledge (RPG: quest design, skill trees; Platformer: level flow, difficulty curves). |
+| Awesome list submissions | PRs to 5 major awesome-claude lists (drafts in `.github/SUBMISSIONS.md`) | Zero marketplace presence currently. Highest-ROI visibility action. |
+| SkillsMP / MCPMarket listing | Ensure indexing on major skill directories | 87K+ skills indexed on SkillsMP, GameForge not yet listed. |
 
 ### AI-Native Features
 
@@ -175,6 +219,7 @@ Current community interests (from indie dev forums and game jam feedback):
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v1.4.0 | 2026-03-25 | Starters directory (9 files: base config, Godot, Unity, Unreal), documentation overhaul (README rewrite, workflow-examples, FAQ, directory-conventions, CONTRIBUTING), flexibility pass (all 11 hooks rewritten, hardcoded paths removed, bash arrays eliminated), community infrastructure (3 issue templates, PR template, CODE_OF_CONDUCT, SECURITY, .gitignore expansion, awesome-list submission drafts), docs count 9 to 12 |
 | v1.3.0 | 2026-03-25 | 31 skills (+game-postmortem, +game-market-research), MCP integration doc with 34 verified servers, MCP sections in 7 skills, 5 new hooks (post-compact, subagent-track, instructions-validate, stop-failure, config-change), shell preprocessing in game-start and game-sprint-plan, named pipelines in game-team-orchestrator, all 31 skills frontmatter modernized (version, model, effort, context, memory), trigger optimization on all descriptions, engine updates (Godot 4.6.1, Unity 6.3 Havok/pricing, UE 5.7 Nanite/SWRT), regulatory freshness (COPPA April 2026, Steam 3-tier AI, PEGI June 2026, App Store iOS 26 SDK), accessibility updates (EAA enforcement, ESA 24 tags, Apple Nutrition Label), AI content policy template aligned to Steam framework |
 | v1.2.0 | 2026-03-25 | 29 skills (+economy-designer, +accessibility-specialist, +localization-manager, +analytics-setup), voice consistency pass on all 25 existing skills, persona rewrites for technical-director and designer, full rebuilds of retrospective and team-orchestrator, 3 new templates, 2 new docs, all 9 agents get "When NOT to Use Me" sections, brainstorm gets market validation, balance gets statistical methods, launch gets post-launch ops, engine specialists get migration guides |
 | v1.1.0 | 2026-03-25 | 25 skills (added scope-check, retrospective, reverse-document), 6 docs (added workflow-guide), 4 new templates, engine version updates, regulatory compliance, expanded game design theory |

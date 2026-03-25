@@ -12,14 +12,14 @@
 # Output: JSON to stdout (minimal, non-blocking)
 # Exit 0: success, Exit 2: blocking error
 
-set -euo pipefail
-
 # Read input from stdin
 INPUT=$(cat)
 
 # Ensure log directory exists
 LOG_DIR="production/session-logs"
-mkdir -p "$LOG_DIR" 2>/dev/null || true
+if [ ! -d "$LOG_DIR" ]; then
+  mkdir -p "$LOG_DIR" 2>/dev/null || true
+fi
 
 LOG_FILE="$LOG_DIR/agents.log"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
@@ -56,7 +56,7 @@ fi
 echo "[$TIMESTAMP] $EVENT_TYPE agent=$AGENT_TYPE" >> "$LOG_FILE" 2>/dev/null || true
 
 # Track parallel agent count for SubagentStart events
-if [ "$EVENT_TYPE" = "START" ]; then
+if [ "$EVENT_TYPE" = "START" ] && [ -f "$LOG_FILE" ]; then
   # Count currently active agents (START entries minus STOP entries)
   START_COUNT=$(grep -c " START " "$LOG_FILE" 2>/dev/null || echo "0")
   STOP_COUNT=$(grep -c " STOP " "$LOG_FILE" 2>/dev/null || echo "0")

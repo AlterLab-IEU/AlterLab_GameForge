@@ -14,14 +14,16 @@
 # Output: JSON to stdout with systemMessage containing recovery guidance
 # Exit 0: success, Exit 2: blocking error
 
-set -euo pipefail
-
 # Read input from stdin
 INPUT=$(cat)
 
 # Ensure state directories exist
-mkdir -p production/session-state 2>/dev/null || true
-mkdir -p production/session-logs 2>/dev/null || true
+if [ ! -d "production/session-state" ]; then
+  mkdir -p production/session-state 2>/dev/null || true
+fi
+if [ ! -d "production/session-logs" ]; then
+  mkdir -p production/session-logs 2>/dev/null || true
+fi
 
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
@@ -60,12 +62,14 @@ fi
 
 # Check for active pipeline state
 ACTIVE_PIPELINE="none"
-for pipeline_file in production/session-state/pipeline-*.json; do
-  if [ -f "$pipeline_file" ]; then
-    ACTIVE_PIPELINE=$(basename "$pipeline_file" .json)
-    break
-  fi
-done
+if [ -d "production/session-state" ]; then
+  for pipeline_file in production/session-state/pipeline-*.json; do
+    if [ -f "$pipeline_file" ]; then
+      ACTIVE_PIPELINE=$(basename "$pipeline_file" .json)
+      break
+    fi
+  done
+fi
 
 # Write recovery JSON
 cat > "$RECOVERY_FILE" <<RECOVERY

@@ -12,7 +12,27 @@
 # Output: JSON to stdout with systemMessage containing context reminders
 # Exit 0: success, Exit 2: blocking error
 
-set -euo pipefail
+# Find source directories (engine-aware)
+find_source_dirs() {
+  DIRS=""
+  for d in src scripts Scripts Source Assets/Scripts lib; do
+    if [ -d "$d" ]; then
+      DIRS="$DIRS $d"
+    fi
+  done
+  echo "$DIRS"
+}
+
+# Find design directories
+find_design_dirs() {
+  DIRS=""
+  for d in design design/gdd docs/design Documentation; do
+    if [ -d "$d" ]; then
+      DIRS="$DIRS $d"
+    fi
+  done
+  echo "$DIRS"
+}
 
 # Read input from stdin (compaction event data)
 INPUT=$(cat)
@@ -40,18 +60,31 @@ elif [ -f "Cargo.toml" ] && grep -q "bevy\|macroquad" Cargo.toml 2>/dev/null; th
   ENGINE="Rust"
 fi
 
-# Detect project phase from directory structure
-if [ ! -d "src" ] && [ ! -d "design" ]; then
+# Detect project phase from directory structure (engine-aware)
+SRC_DIRS=$(find_source_dirs)
+DESIGN_DIRS=$(find_design_dirs)
+HAS_SRC=""
+HAS_DESIGN=""
+if [ -n "$SRC_DIRS" ]; then
+  HAS_SRC="yes"
+fi
+if [ -n "$DESIGN_DIRS" ]; then
+  HAS_DESIGN="yes"
+fi
+
+if [ -z "$HAS_SRC" ] && [ -z "$HAS_DESIGN" ]; then
   PHASE="empty-project"
-elif [ -d "design" ] && [ ! -d "src" ]; then
+elif [ -n "$HAS_DESIGN" ] && [ -z "$HAS_SRC" ]; then
   PHASE="concept"
-elif [ -d "src" ] && [ -d "design" ]; then
+elif [ -n "$HAS_SRC" ] && [ -n "$HAS_DESIGN" ]; then
   PHASE="in-progress"
+elif [ -n "$HAS_SRC" ] && [ -z "$HAS_DESIGN" ]; then
+  PHASE="code-only"
 fi
 
 # Read active sprint info if available
 if [ -f "production/session-state/last-sprint.json" ]; then
-  SPRINT_GOAL=$(cat production/session-state/last-sprint.json 2>/dev/null | head -5)
+  SPRINT_GOAL=$(head -5 production/session-state/last-sprint.json 2>/dev/null)
 fi
 
 # Read active session state if available

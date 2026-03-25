@@ -12,30 +12,15 @@
 # Output: JSON to stdout with systemMessage if docs are missing
 # Exit 0: success, Exit 2: blocking error
 
-set -euo pipefail
-
 # Read input from stdin
 INPUT=$(cat)
-
-# Define required documentation files
-# These are the files referenced in CLAUDE.md "Shared Documentation" section
-REQUIRED_DOCS=(
-  "docs/collaboration-protocol.md"
-  "docs/game-design-theory.md"
-  "docs/coordination-rules.md"
-  "docs/agent-hierarchy.md"
-  "docs/coding-standards.md"
-  "docs/workflow-guide.md"
-  "docs/monetization-ethics.md"
-  "docs/engine-comparison.md"
-)
 
 # Track missing files
 MISSING=""
 MISSING_COUNT=0
 
-# Check each required doc
-for doc in "${REQUIRED_DOCS[@]}"; do
+# Check each required doc (inline values, no bash arrays)
+for doc in docs/collaboration-protocol.md docs/game-design-theory.md docs/coordination-rules.md docs/agent-hierarchy.md docs/coding-standards.md docs/workflow-guide.md docs/monetization-ethics.md docs/engine-comparison.md; do
   if [ ! -f "$doc" ]; then
     MISSING="$MISSING $doc"
     MISSING_COUNT=$((MISSING_COUNT + 1))
