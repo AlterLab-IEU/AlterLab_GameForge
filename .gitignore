@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.local
+production/session-state/
+production/session-logs/
+.reference/

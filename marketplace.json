@@ -1,0 +1,164 @@
+{
+  "name": "alterlab-gameforge",
+  "version": "1.0.0",
+  "displayName": "AlterLab GameForge",
+  "description": "22 production-grade Claude AI skills for indie game development — 9 studio agents, 10 workflow skills, 3 engine specialists",
+  "author": {
+    "name": "Cem Ipek",
+    "email": "cem.ipek@ieu.edu.tr",
+    "url": "https://github.com/AlterLab-IEU"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/AlterLab-IEU/AlterLab-GameForge",
+  "categories": ["game-development", "creative", "productivity"],
+  "skills": [
+    {
+      "name": "game-creative-director",
+      "path": "skills/agents/game-creative-director/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-technical-director",
+      "path": "skills/agents/game-technical-director/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-producer",
+      "path": "skills/agents/game-producer/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-designer",
+      "path": "skills/agents/game-designer/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-narrative-director",
+      "path": "skills/agents/game-narrative-director/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-art-director",
+      "path": "skills/agents/game-art-director/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-audio-director",
+      "path": "skills/agents/game-audio-director/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-qa-lead",
+      "path": "skills/agents/game-qa-lead/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-ux-designer",
+      "path": "skills/agents/game-ux-designer/SKILL.md",
+      "category": "agents"
+    },
+    {
+      "name": "game-start",
+      "path": "skills/workflows/game-start/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-brainstorm",
+      "path": "skills/workflows/game-brainstorm/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-design-review",
+      "path": "skills/workflows/game-design-review/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-code-review",
+      "path": "skills/workflows/game-code-review/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-sprint-plan",
+      "path": "skills/workflows/game-sprint-plan/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-prototype",
+      "path": "skills/workflows/game-prototype/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-playtest",
+      "path": "skills/workflows/game-playtest/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-balance-check",
+      "path": "skills/workflows/game-balance-check/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-launch",
+      "path": "skills/workflows/game-launch/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-team-orchestrator",
+      "path": "skills/workflows/game-team-orchestrator/SKILL.md",
+      "category": "workflows"
+    },
+    {
+      "name": "game-godot-specialist",
+      "path": "skills/engine-specialists/game-godot-specialist/SKILL.md",
+      "category": "engine-specialists"
+    },
+    {
+      "name": "game-unity-specialist",
+      "path": "skills/engine-specialists/game-unity-specialist/SKILL.md",
+      "category": "engine-specialists"
+    },
+    {
+      "name": "game-unreal-specialist",
+      "path": "skills/engine-specialists/game-unreal-specialist/SKILL.md",
+      "category": "engine-specialists"
+    }
+  ],
+  "hooks": [
+    {
+      "name": "session-start",
+      "path": "hooks/session-start.sh",
+      "event": "PostToolUse"
+    },
+    {
+      "name": "session-stop",
+      "path": "hooks/session-stop.sh",
+      "event": "Stop"
+    },
+    {
+      "name": "pre-compact",
+      "path": "hooks/pre-compact.sh",
+      "event": "PreToolUse"
+    },
+    {
+      "name": "validate-commit",
+      "path": "hooks/validate-commit.sh",
+      "event": "PreToolUse"
+    },
+    {
+      "name": "detect-gaps",
+      "path": "hooks/detect-gaps.sh",
+      "event": "PostToolUse"
+    },
+    {
+      "name": "log-agent",
+      "path": "hooks/log-agent.sh",
+      "event": "PostToolUse"
+    }
+  ],
+  "templates": {
+    "path": "templates/"
+  },
+  "docs": {
+    "path": "docs/"
+  }
+}
