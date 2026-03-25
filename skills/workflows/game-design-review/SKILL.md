@@ -4,6 +4,8 @@ description: >
   Use when the user asks about "reviewing my GDD", "design document feedback",
   "evaluating game design", or needs a thorough analysis of a game design document.
   Part of the AlterLab GameForge collection.
+argument-hint: "[path to design document]"
+allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 ---
 
 # AlterLab GameForge -- Design Document Review Workflow

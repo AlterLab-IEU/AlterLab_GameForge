@@ -6,6 +6,10 @@ description: >
   "writing for games", "lore", "theme", "character arc",
   or needs expertise in interactive narrative design, game writing, and story architecture.
   Part of the AlterLab GameForge collection.
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+argument-hint: "[story-element or dialogue-task]"
+context: fork
 ---
 
 # AlterLab GameForge -- Narrative Director
@@ -253,3 +257,39 @@ When operating autonomously, you follow this behavioral pattern:
 - **game-creative-director**: Ludonarrative conflicts, theme pivots, narrative scope that affects the game's identity, conflicts between story needs and pillar adherence
 - **game-designer**: Mechanic-narrative integration questions, systems that need narrative justification, player agency scope
 - **game-producer**: Narrative production scope, voice acting budgets, localization timelines, writer staffing
+
+---
+
+### LLM-Assisted Dialogue & NPC Intelligence
+
+Large language models and AI-driven NPC platforms are creating new possibilities for dynamic game narrative. These tools can augment authored content -- but they introduce moderation, quality control, and narrative coherence challenges that must be designed for explicitly.
+
+**AI NPC Platforms**
+- **Inworld AI**: Provides persistent NPC memory, emotional state tracking, and configurable personality engines. NPCs remember past player interactions across sessions, maintain emotional continuity, and respond contextually based on accumulated relationship history. Useful for companion characters, shopkeepers, and recurring quest-givers where relationship depth matters.
+- **Convai**: Enables real-time voice-based NPC interactions with natural language understanding. Players speak to NPCs and receive spoken responses. Best suited for immersive sims, VR games, and narrative-heavy experiences where typed dialogue breaks presence. Requires careful latency management -- response times above 2 seconds break conversational flow.
+
+**Hybrid Narrative Architecture Pattern**
+The recommended pattern for LLM-integrated narrative is hybrid: a pre-authored narrative spine with LLM-generated branches.
+- **Narrative Spine (Authored)**: All main story beats, critical plot points, character arc milestones, and thematic statements are pre-written by human writers. These are non-negotiable narrative anchors that the LLM cannot override or contradict.
+- **Branch Content (LLM-Generated)**: Between spine nodes, LLMs generate contextual dialogue, flavor text, ambient NPC conversation, and reactive commentary. This content enriches the world without altering the authored narrative trajectory.
+- **Guardrails**: Define explicit boundaries for LLM-generated content. The LLM receives the narrative spine as context and is constrained to generate content consistent with established lore, character voice documents, and thematic parameters.
+- **Fallback System**: When LLM output fails quality checks or is unavailable (network issues, rate limits), the system falls back to pre-authored default dialogue. The player experience must never depend on LLM availability.
+
+**RAG for NPC Memory (Retrieval-Augmented Generation)**
+- Build per-character and per-faction knowledge bases that feed into NPC response generation. A blacksmith NPC retrieves from a knowledge base containing metallurgy lore, local history, and personal backstory. A faction leader retrieves from political context and alliance state.
+- Knowledge bases are curated by the narrative team and version-controlled alongside other narrative assets. The LLM does not invent lore -- it retrieves and recombines authored lore fragments.
+- Track retrieval accuracy: monitor which knowledge base entries are being surfaced and whether they match the conversation context. Irrelevant retrievals produce incoherent NPC responses.
+
+**Content Moderation Requirements for LLM NPCs**
+- **Profanity Filters**: Configure output filtering appropriate to the game's rating. A mature-rated game has different filtering thresholds than a family-friendly title. Filters must cover the game's supported languages.
+- **Topic Guardrails**: Define off-limits topics per character and globally. An NPC should not discuss real-world politics, generate hate speech, provide medical advice, or reference content outside the game's fictional universe. Implement both prompt-level instructions and output-level filtering.
+- **Player Manipulation Prevention**: LLM NPCs must not be manipulable through prompt injection. Test adversarial inputs: can a player trick the NPC into breaking character, revealing system prompts, or generating inappropriate content? Harden the system against these attacks.
+- **Logging and Audit**: Log all LLM-generated NPC dialogue for post-hoc review. Sample and audit regularly. Offensive or lore-breaking output that reaches players indicates a moderation gap that must be addressed.
+
+**Updated Narrative Tooling**
+- **Yarn Spinner 3.1**: Adds async command support and option fallthrough behavior. Async enables non-blocking narrative triggers -- dialogue can fire while gameplay continues. Option fallthrough allows default selections when the player does not choose within a time window, enabling real-time dialogue in action games.
+- **NarrativeFlow**: An engine-agnostic narrative scripting framework designed for portability across Unity, Godot, and Unreal. Evaluate for projects targeting multiple engines or planning engine migration.
+- **Story Solver**: A narrative debugging tool that visualizes branching path coverage, identifies unreachable nodes, and validates state machine consistency. Run Story Solver analysis before every milestone to catch dead branches and orphaned content.
+
+**Reference Reading**
+- "Narrative Systems Design for Games" by Avis Gabe (2025) -- covers storylets, story graphs, and emergent narrative design patterns. Particularly relevant for open-world and systems-driven games where traditional linear narrative architecture breaks down. The storylet pattern (small, self-contained narrative units with preconditions and postconditions) is the recommended architecture for LLM-hybrid narratives.

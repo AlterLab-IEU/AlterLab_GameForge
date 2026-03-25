@@ -57,6 +57,48 @@
 | Cosmetics | Premium | [Fixed prices] | [Monetization (if F2P)] | [One-time per item] |
 | Respec/reset | Gold or Premium | [Increasing cost per use] | [Prevents free-infinite-experimentation] | [Occasional] |
 
+### Sink Types
+
+Distinguish between hard sinks and soft sinks when designing your drain systems:
+
+| Type | Mechanism | Examples | Effect on Economy |
+|------|-----------|---------|-------------------|
+| **Hard Sink** (permanent removal) | Currency/items are destroyed | Consumables used, durability loss (item breaks), death penalties (gold lost), crafting material consumption, repair costs | Directly reduces money supply; essential for controlling inflation |
+| **Soft Sink** (temporary restriction) | Currency/items are delayed or gated | Time gates (cooldowns before earning again), decay (unused items lose value over time), lockout timers, seasonal resets | Slows velocity of currency without permanent removal; controls flow rate |
+
+**Design guideline:** A healthy economy needs both. Hard sinks control total supply (M), soft sinks control velocity (V). If you only have soft sinks, inflation is inevitable.
+
+### Stock/Flow Definitions
+
+Understanding the difference between stocks and flows is critical for economy monitoring:
+
+- **Stocks** are quantities at a point in time: gold held, health points, items in inventory, reputation score.
+- **Flows** are rates of change: income per second, damage per hit, gold spent per session, items acquired per hour.
+
+**Monitoring guidance:**
+- Track stocks over time per player cohort. Plot median and P90 values.
+- Alert on exponential stock growth — it signals broken faucets or insufficient sinks.
+- Monitor flow ratios (faucet rate / sink rate). Target a ratio of 1.0-1.2 for a slightly generous economy.
+
+### Quantity Theory of Virtual Money
+
+Apply the Quantity Theory of Money to predict and control inflation in your virtual economy:
+
+**M × V = P × Q**
+
+| Variable | Meaning | Game Example |
+|----------|---------|-------------|
+| **M** (Money Supply) | Total currency in circulation | Sum of all gold held by all players |
+| **V** (Velocity) | How often each unit changes hands | Average gold transactions per unit per day |
+| **P** (Price Level) | Average price of goods | Average cost of items in player-to-player trade |
+| **Q** (Transaction Volume) | Number of transactions | Total trades per day |
+
+**Practical use:** If M increases (faucets outpace sinks) and V stays constant, then P must rise (inflation). Use this to predict when prices will spiral and preemptively increase sinks or reduce faucets.
+
+### Economy Simulation
+
+Use [Machinations.io](https://machinations.io) to model and simulate your economy before implementation. Machinations provides visual stock-and-flow diagrams purpose-built for game economies. **Model before you build.** Simulate at least 100 hours of player-time before committing to production values.
+
 ### Sink Rules
 - **Essential progression should never require premium currency.**
 - **Repair/maintenance costs should be noticeable but never punishing** (target: 5-15% of session income).
@@ -106,6 +148,31 @@
 - [ ] No artificial friction: free players are never intentionally frustrated to drive spending
 - [ ] Clear value: players always know exactly what they are buying
 - [ ] Refund policy: [Define refund conditions]
+
+### Ethical Monetization
+
+**PEGI Rating Implications (June 2026):**
+- Loot boxes with randomized paid content trigger PEGI 16 minimum rating
+- NFT or blockchain-based item ownership triggers PEGI 18 rating
+- Assess rating impact early — a higher rating narrows your audience
+
+**Virtual Currency Transparency:**
+- Always show the real-money equivalent alongside virtual currency prices
+- Example: "500 Gems ($4.99)" not just "500 Gems"
+- Never obscure the conversion rate through intermediate currencies
+
+**Battle Pass Ethics:**
+- Reward effort and time invested, not spending
+- Free track must feel rewarding, not punishing
+- No FOMO pressure: avoid "miss it forever" language and expiring rewards
+- Allow catch-up mechanics for players who miss days
+
+**Dark Pattern Avoidance Checklist:**
+- [ ] No forced waits designed to encourage spending
+- [ ] No artificial scarcity (fake "limited time" offers that recur)
+- [ ] No hidden odds on randomized purchases
+- [ ] No pay-to-win advantages
+- [ ] No predatory pricing tiers that manipulate anchoring bias
 
 ---
 

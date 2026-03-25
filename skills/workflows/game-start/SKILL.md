@@ -4,6 +4,8 @@ description: >
   Use when the user asks about "starting a new game project", "setting up a game project",
   "project onboarding", or needs initial project scaffolding and state assessment. Part of
   the AlterLab GameForge collection.
+argument-hint: "[engine: godot|unity|unreal]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 ---
 
 # AlterLab GameForge -- Project Onboarding Workflow

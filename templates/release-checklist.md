@@ -120,6 +120,14 @@
 - [ ] Platform-specific features work (Activity Cards, Quick Resume, etc.)
 - [ ] TRC/TCR/Lotcheck requirements addressed
 
+### Console Certification Timeline
+
+| Platform | Typical Duration | Notes |
+|----------|-----------------|-------|
+| PlayStation | 2-3 weeks | |
+| Xbox | 1-2 weeks | Faster with ID@Xbox program |
+| Nintendo Switch | 2-4 weeks | |
+
 ### Mobile (if applicable)
 - [ ] Touch controls responsive and well-sized
 - [ ] Battery usage within acceptable range
@@ -143,6 +151,18 @@
 | Store description (long) | [Full description] | [ ] Written | [ ] Approved |
 | Tags / categories | [Platform-specific] | [ ] Set | [ ] Approved |
 | System requirements | [Min/Recommended specs] | [ ] Written | [ ] Approved |
+
+### Store Asset Dimensions (Updated November 2024)
+
+| Asset | Dimensions (px) |
+|-------|-----------------|
+| Steam Header Capsule | 920 x 430 |
+| Steam Small Capsule | 462 x 174 |
+| Steam Main Capsule | 1232 x 706 |
+| Steam Vertical Capsule | 748 x 896 |
+| Steam Hero Graphic | 3840 x 1240 |
+| Steam Library Capsule | 600 x 900 |
+| itch.io Cover | 630 x 500 (recommended) |
 
 ### Pricing
 - [ ] Price set for all regions / storefronts
@@ -176,6 +196,35 @@
 - [ ] Accessibility statement published
 - [ ] EULA reviewed and published (if applicable)
 - [ ] Open-source license attributions included (if using OSS libraries)
+
+### Regulatory Compliance
+
+- [ ] **EAA:** EU Accessibility Act compliance verified (communication, e-commerce, distribution features)
+- [ ] **CVAA:** Text/voice chat accessibility verified (if applicable)
+- [ ] **COPPA:** Age verification and parental consent flow implemented (if targeting under 13)
+- [ ] **PEGI 2026:** Rating impact assessed (loot boxes = 16+, NFTs = 18+, unmoderated chat = 18+)
+- [ ] **IARC:** Age rating obtained through IARC for digital storefronts
+
+### Accessibility (ESA AGI Tags)
+
+- [ ] ESA Accessible Games Initiative tags selected (pick from 24 standardized tags)
+- [ ] Top tags assessed:
+  - [ ] Subtitle Options
+  - [ ] Difficulty Options
+  - [ ] Controller Remapping
+  - [ ] Colorblind Mode
+  - [ ] Screen Reader Support
+  - [ ] One-Handed Play
+  - [ ] Adjustable Game Speed
+  - [ ] Visual Cues for Audio
+  - [ ] Text Size Options
+
+### AI Content Disclosure
+
+- [ ] **Steam:** AI use disclosed for player-facing content
+- [ ] **itch.io:** Generative AI content tagged (failure = potential delisting)
+- [ ] AI Content Policy document completed (reference: `@templates/ai-content-policy.md`)
+- [ ] Human creative contribution documented for copyright protection
 
 ---
 

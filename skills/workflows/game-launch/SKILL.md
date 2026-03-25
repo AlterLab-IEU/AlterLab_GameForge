@@ -4,6 +4,9 @@ description: >
   Use when the user asks about "launch preparation", "release checklist", "store submission",
   "go/no-go decision", "day-one patch", "launch readiness", or needs to manage the full
   pre-release pipeline from final build to public availability. Part of the AlterLab GameForge collection.
+argument-hint: "[platform: steam|itch|epic|console]"
+allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+disable-model-invocation: true
 ---
 
 # AlterLab GameForge -- Pre-Release Launch Pipeline
@@ -85,10 +88,12 @@ This is the final technical gate. The game must be provably stable, performant, 
 Each storefront has specific asset requirements. Missing or non-compliant assets will delay submission or cause rejection.
 
 **Steam:**
-- Store page header capsule image (460x215, 231x87 for small capsule)
-- Large capsule image (616x353)
+- Header capsule image (920x430)
+- Small capsule image (462x174)
+- Main capsule image (1232x706)
+- Vertical capsule image (748x896)
 - Hero graphic (3840x1240) for top of store page
-- Capsule artwork for library (600x900)
+- Library capsule artwork (600x900)
 - At least 5 screenshots (1280x720 minimum, 1920x1080 recommended). These should be curated moments that communicate the core experience -- not random gameplay captures.
 - At least one gameplay trailer (60-90 seconds, embedded or YouTube link)
 - Store description: hook paragraph, feature list, system requirements. Write this as marketing copy, not a design document. Lead with the emotional experience, not the feature list.
@@ -206,6 +211,38 @@ This phase is non-negotiable. Skipping or deferring compliance tasks creates leg
 - Create a credits screen or text file that includes all required attributions.
 
 **Phase 4 Gate:** All age ratings obtained. Privacy policy published and accessible in-game. EULA reviewed by someone with legal knowledge (ideally a lawyer). All third-party assets verified for license compliance. Credits complete.
+
+---
+
+**📊 Market Context**
+
+Understanding the competitive landscape is essential for setting realistic launch expectations and calibrating your marketing effort. These numbers are sobering but necessary:
+
+- **20,017 games** were released on Steam in 2025 alone. Your game is competing for attention with roughly 55 new releases every single day.
+- **83% of those games earned less than $10,000** in their first year. The long tail is extremely long.
+- **40% did not recoup the $100 Steam Direct listing fee.** Nearly half of all releases are effectively invisible to the market.
+- **Minimum 7,000-10,000 wishlists** are needed for meaningful algorithmic visibility on launch day. Steam's algorithm rewards momentum -- games that sell quickly in the first 48 hours get promoted to more storefronts and recommendation feeds. Below this wishlist threshold, the algorithm largely ignores your game.
+- **Top 1% of indie titles earn 90% of total indie revenue.** The distribution is winner-take-most, not winner-take-all, but the concentration is extreme.
+- **70% indie financial failure rate.** Seven out of ten commercial indie games do not earn enough to fund the next project. This is not a reason to quit -- it is a reason to plan marketing as seriously as development.
+
+These numbers are not meant to discourage. They are meant to ensure that your launch plan includes sufficient marketing effort, realistic revenue projections, and a clear understanding of what "success" means for YOUR project. A game that sells 500 copies and funds a game jam follow-up is a success by one measure. A game that sells 5,000 copies but needed to sell 50,000 to break even is a failure by another. Define your success threshold before launch day.
+
+---
+
+**⚖️ Regulatory Compliance Checkpoint**
+
+Beyond age ratings and privacy policies, the regulatory landscape for games is expanding rapidly. Review each of these for applicability to your title:
+
+- **EAA (European Accessibility Act)**: Enforceable since June 2025. Applies to games with communication features (chat, voice) or e-commerce features (in-game purchases) sold in the EU. Requires accessible alternatives for core interactions. Non-compliance can result in market access restrictions within the EU.
+- **CVAA (21st Century Communications and Video Accessibility Act)**: Text and voice chat features must be accessible to players with disabilities. Applies to games distributed in the US with communication functionality. Fines up to $1.4M per violation. Covers real-time text, captioning, and UI navigability for communication features.
+- **COPPA (Children's Online Privacy Protection Act)**: Parental consent required for data collection from players under 13. Amendment effective April 2026 expands the definition of "personal information" and tightens consent requirements. If your game could reasonably attract children (E or E10+ rating, cartoon art style, educational content), COPPA compliance is mandatory.
+- **PEGI 2026 Update**: Effective June 2026. Games containing loot box mechanics receive a minimum PEGI 16 rating. Games containing NFT or blockchain integration receive an automatic PEGI 18 rating. Plan your monetization model with these rating implications in mind.
+- **ESA Accessible Games Initiative**: 24 standardized accessibility tags for storefronts. Filling these accurately improves discoverability among accessibility-conscious players and demonstrates good faith compliance with emerging accessibility standards.
+- **Steam AI Disclosure**: Required for any game with player-facing AI-generated content (text, images, audio, or gameplay elements generated by AI models at runtime). Disclose in the store page content descriptor and in the game's settings/about section.
+- **itch.io AI Disclosure**: Generative AI content must be tagged explicitly. Games using AI-generated assets (art, music, text) without proper tagging risk delisting. Tag requirements apply to both the game page metadata and the game description.
+- **Console Certification**: Each first-party platform (Sony, Microsoft, Nintendo) requires a dedicated certification pass that takes 2-4 weeks. Plan your submission timeline to include at least one rejection-and-resubmission cycle. First submissions rarely pass on the first attempt. Budget 4-8 weeks total for console certification in your launch timeline.
+
+Review this checklist with your team (or yourself, for solo devs) at least 8 weeks before your target launch date. Regulatory requirements that surface at the last minute are the most common cause of preventable launch delays.
 
 ---
 

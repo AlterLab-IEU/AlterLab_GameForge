@@ -2,6 +2,9 @@
 name: "game-godot-specialist"
 description: >
   Use when the user works with Godot Engine, asks about GDScript, scene composition, signals, resources, shaders, GDExtension, physics, UI, or needs Godot 4.x expertise. Part of the AlterLab GameForge collection.
+argument-hint: "[question or task]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+context: fork
 ---
 
 # AlterLab GameForge — Godot 4 Specialist
@@ -292,6 +295,134 @@ project/
 
 5. **"How do I set up multiplayer in Godot 4?"**
    Cover MultiplayerSpawner, MultiplayerSynchronizer, RPCs with `@rpc` annotation, authority model, and the SceneMultiplayer API.
+
+---
+
+#### Testing with GUT and gdUnit4
+
+Automated testing in Godot prevents regressions as the codebase grows. Two frameworks are production-ready:
+
+**GUT (Godot Unit Testing)** — install via AssetLib or as a git submodule:
+```gdscript
+# test_health_component.gd — place in res://addons/gut/test/
+extends GutTest
+
+var health_component: HealthComponent
+
+func before_each() -> void:
+    health_component = HealthComponent.new()
+    health_component.max_health = 100
+    add_child_autofree(health_component)
+
+func test_initial_health_equals_max() -> void:
+    assert_eq(health_component.current_health, 100)
+
+func test_take_damage_reduces_health() -> void:
+    health_component.take_damage(30)
+    assert_eq(health_component.current_health, 70)
+
+func test_lethal_damage_emits_died_signal() -> void:
+    watch_signals(health_component)
+    health_component.take_damage(999)
+    assert_signal_emitted(health_component, "died")
+
+func test_health_cannot_go_below_zero() -> void:
+    health_component.take_damage(999)
+    assert_ge(health_component.current_health, 0)
+```
+
+**gdUnit4** — an alternative with a richer assertion API and CI integration via GitHub Actions. Prefer it for projects that already use CI/CD.
+
+**What to test in games:**
+- Data-manipulation nodes: inventory, economy, progression, save/load round-trips.
+- State machine transitions: assert that specific inputs produce specific state changes.
+- Resource loading: assert that data files parse correctly and contain expected fields.
+- **Do NOT try to unit-test rendering, physics, or audio.** These require integration testing with visual inspection, not assertion-based tests.
+
+Run GUT from the command line for CI: `godot --headless -d -s addons/gut/gut_cmdln.gd`
+
+#### Production PBR Spatial Shader
+
+Most Godot games need at least one custom PBR surface shader. Here is a production-grade lit shader template:
+
+```glsl
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+
+// Surface properties
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable;
+uniform vec4 albedo_tint : source_color = vec4(1.0);
+uniform sampler2D normal_map : hint_normal, filter_linear_mipmap, repeat_enable;
+uniform float normal_scale : hint_range(-16.0, 16.0) = 1.0;
+uniform sampler2D orm_texture : hint_default_white, filter_linear_mipmap, repeat_enable;
+// orm_texture: R = Occlusion, G = Roughness, B = Metallic
+
+uniform float roughness_scale : hint_range(0.0, 1.0) = 1.0;
+uniform float metallic_scale : hint_range(0.0, 1.0) = 1.0;
+
+// Emission
+uniform sampler2D emission_texture : source_color, filter_linear_mipmap, repeat_enable;
+uniform vec4 emission_color : source_color = vec4(0.0);
+uniform float emission_energy : hint_range(0.0, 16.0) = 1.0;
+
+void fragment() {
+    vec2 uv = UV;
+
+    vec4 albedo_sample = texture(albedo_texture, uv) * albedo_tint;
+    ALBEDO = albedo_sample.rgb;
+    ALPHA = albedo_sample.a;
+
+    vec3 orm = texture(orm_texture, uv).rgb;
+    AO = orm.r;
+    ROUGHNESS = orm.g * roughness_scale;
+    METALLIC = orm.b * metallic_scale;
+
+    NORMAL_MAP = texture(normal_map, uv).rgb;
+    NORMAL_MAP_DEPTH = normal_scale;
+
+    vec3 emission_sample = texture(emission_texture, uv).rgb;
+    EMISSION = (emission_color.rgb + emission_sample) * emission_energy;
+}
+```
+
+This shader is compatible with Godot 4.x's Vulkan renderer, respects the PBR lighting model (Burley diffuse, GGX specular), and uses the ORM packing convention that most DCC tools export. To use: create a `ShaderMaterial`, assign this shader, and plug in your texture maps.
+
+### Godot 4.5 & 4.6 Updates
+
+#### Godot 4.5 (September 2025)
+
+- **Shader Baker:** Pre-compiles shaders during export, delivering up to 20x load time reduction on Metal/D3D12. Enable in Export Settings. Always enable for production builds.
+- **AccessKit:** Screen reader support for Control nodes, Project Manager, Inspector, and standard UI. Godot is the first mainstream engine with built-in accessibility support.
+- **Stencil Buffer:** Portal effects, outlines, masking, and X-ray vision patterns are now possible natively without workarounds.
+- **Android 16KB page size support** for compliance with modern Android requirements.
+- **visionOS support** for Apple Vision Pro development.
+
+#### Godot 4.6 (January 2026)
+
+- **Jolt is now the DEFAULT 3D physics engine** (was opt-in since 4.4). GodotPhysics3D is deprecated for new projects.
+- **Modern Editor Theme:** Clean lines, reduced clutter, grayscale palette for improved readability and focus.
+- **Node Internal IDs:** References no longer break on node rename or scene reorganization. Use NodePath with internal IDs for stable references.
+- **LibGodot:** Build Godot as a standalone library and embed it into other applications.
+- **IKModifier3D:** TwoBoneIK, FABRIK, and CCDIK solvers replace the old IK system with a proper solver architecture.
+- **Delta Patching:** Export patches only include changed resource parts. Critical for live games and reducing update sizes.
+- **OpenXR 1.1 support** for modern VR/AR development.
+
+#### GDScript Updates
+
+- **Typed dictionaries:** `var inventory: Dictionary[String, int] = {}` provides full type safety with Inspector export support.
+- Works with `@export` for editor editing, enabling type-safe dictionary configuration in the Inspector.
+
+#### Deprecated Items (warn users)
+
+- **GodotPhysics3D:** No longer the default. Use Jolt for all new projects. Migration: physics behavior is compatible, just change the project setting.
+- **Monolithic TileMap:** Replaced by TileMapLayer nodes (since 4.3). Migration: the editor offers automatic conversion.
+- **Old IK system:** Replaced by IKModifier3D with a proper solver architecture. Migrate to TwoBoneIK/FABRIK/CCDIK.
+
+#### Best Practices Update
+
+- Always enable Shader Baker in export presets for production builds.
+- Use physics interpolation for both 2D and 3D (stable since 4.4).
+- Test accessibility with AccessKit enabled during development. Verify screen reader compatibility for all Control-based UI.
 
 ---
 

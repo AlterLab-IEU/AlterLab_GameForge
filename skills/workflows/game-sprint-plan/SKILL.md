@@ -4,6 +4,8 @@ description: >
   Use when the user asks about "sprint planning", "task breakdown", "development planning",
   "scheduling game work", or needs structured sprint organization for a game development
   team. Part of the AlterLab GameForge collection.
+argument-hint: "[milestone or focus area]"
+allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 ---
 
 # AlterLab GameForge -- Sprint Planning Workflow
@@ -340,6 +342,59 @@ Track the ratio. Over time, you will learn your personal/team estimation
 bias and can pre-correct for it.
 -------------------------------------------------
 ```
+
+**📋 Solo Dev / Kanban Mode**
+
+Not every project needs Scrum. For solo developers or teams of two, the overhead of sprint ceremonies (planning meetings, standups, retrospectives with yourself) often exceeds their value. Kanban provides the same workflow discipline with less process friction.
+
+**When to use Kanban instead of Scrum:**
+- Solo developer or team of 2 where sprint ceremonies would be a conversation with yourself
+- Projects with unpredictable task sizes (creative work, R&D-heavy prototyping)
+- Maintenance phases where work arrives continuously rather than in planned batches
+- When the overhead of sprint planning consistently takes longer than the sprint itself
+
+**Kanban Board Structure:**
+```
+Backlog --> In Progress (WIP limit: 2-3) --> Testing --> Done
+```
+The WIP (Work In Progress) limit is the critical constraint. For solo devs, a WIP limit of 2-3 prevents the "10 things started, nothing finished" anti-pattern. For a pair, WIP limit of 3-4 is appropriate. If you are tempted to increase the WIP limit, you are avoiding the discipline that makes Kanban work.
+
+**Discipline Swimlanes:**
+Organize your board with horizontal swimlanes by discipline: Code, Art, Audio, Design, Business. This makes context-switching visible. If your "In Progress" column has one card in Code, one in Art, and one in Business, you are paying three context-switching penalties simultaneously. Try to batch work by discipline when possible.
+
+**Weekly Review Cadence:**
+Instead of sprint retrospectives, hold a weekly review (even if it is just 15 minutes of self-reflection for solo devs):
+- What moved to Done this week?
+- What has been stuck in In Progress for more than 3 days? Why?
+- Is the WIP limit being respected, or are you cheating?
+- Does the Backlog still reflect actual priorities, or has it drifted?
+
+**Tool Recommendations:**
+- **HacknPlan** -- purpose-built for game development, understands discipline categories
+- **Codecks** -- uses a card game metaphor, visually engaging, good for small teams
+- **GitHub Projects** -- free, integrates with your repository, good for code-heavy projects
+- **Notion** -- flexible, good for solo devs who want kanban + documentation in one place
+
+**MoSCoW Enforcement Percentages**
+
+Every sprint (or weekly kanban review) should verify that the planned work distribution follows these proportions:
+
+| Priority | Target Percentage | Purpose |
+|----------|------------------|---------|
+| **Must** | 60% of capacity | Core deliverables that define sprint success |
+| **Should** | 25% of capacity | High-value enhancements that strengthen the sprint goal |
+| **Could** | 15% of capacity | Polish and stretch goals, cut first under pressure |
+| **Won't** | 0% of capacity | Explicitly deferred -- not in this sprint, no exceptions |
+
+If your Must-Have tasks exceed 60% of capacity, you are overcommitting on critical work and leaving no room for the unexpected. If Could-Have tasks creep above 15%, you are spending too much time on polish before the foundations are solid. Track these percentages explicitly in your sprint plan and review them during retrospectives.
+
+**Scope-Check Integration**
+
+When sprint velocity data suggests the team is consistently completing less than planned (completion rate below 75% for 3+ consecutive sprints), this is a scope creep signal. Before planning the next sprint:
+- Run `/game-scope-check` to assess whether the overall project scope has grown beyond the original estimate
+- Compare the current feature list against the original vertical slice definition
+- Identify features that were added after the initial plan without corresponding scope reduction elsewhere
+- Make an explicit cut/keep decision for each added feature before the next planning session
 
 ### Output Format
 

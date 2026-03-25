@@ -2,6 +2,9 @@
 name: "game-unity-specialist"
 description: >
   Use when the user works with Unity, asks about C#, MonoBehaviour, DOTS/ECS, Shader Graph, Addressables, UI Toolkit, URP/HDRP, ScriptableObjects, or needs Unity expertise. Part of the AlterLab GameForge collection.
+argument-hint: "[question or task]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+context: fork
 ---
 
 # AlterLab GameForge — Unity Specialist
@@ -358,6 +361,50 @@ public class EnemySpawnerEditor : Editor
 
 ---
 
+### Unity 6.x Updates (6.0 through 6.3 LTS)
+
+#### Unity 6.0 (October 2024)
+
+- **GPU Resident Drawer:** Automatic GPU-driven rendering that provides significant draw call reduction without manual optimization.
+- **STP (Spatial Temporal Post-processing):** Built-in upscaling solution. No DLSS or FSR integration needed for basic upscaling quality.
+- **Unity Sentis:** Runtime neural engine for AI model integration. Supports object recognition, smart NPCs, and on-device inference without cloud dependencies.
+- **Multiplayer Center:** Guided setup wizard for networking stack selection, helping teams choose between Netcode for GameObjects, Netcode for Entities, or third-party solutions.
+- **Render Graph:** Now the default in URP. Compatibility Mode is available for existing projects with custom Renderer Features that need migration time.
+
+#### Unity 6.3 LTS (December 2025)
+
+- **Platform Toolkit:** Single unified API for accounts, achievements, and saves across PS/Xbox/Switch/Steam/Android/iOS. Eliminates per-platform SDK integration boilerplate.
+- **Box2D v3:** Multi-threaded 2D physics with enhanced determinism and visual debugging. Significant performance improvement for physics-heavy 2D games.
+- **Terrain materials in Shader Graph:** Full Shader Graph support for terrain rendering, replacing legacy terrain shaders.
+- **2D Renderer supports 3D meshes:** URP 2D pipeline can now render 3D meshes, enabling 2.5D workflows without pipeline switching.
+- **Unity AI Beta:** In-editor AI assistance for code generation and debugging.
+
+#### DOTS/ECS Graduation
+
+- DOTS has graduated from experimental to core. Entities are becoming the universal backend for high-performance systems.
+- **Use DOTS for:** physics-heavy simulations, large entity counts (1000+), deterministic multiplayer.
+- **Don't use DOTS for:** UI-heavy games, narrative games, small scope projects where MonoBehaviour is sufficient.
+
+#### UI Toolkit Updates
+
+- **Data binding with MVVM patterns:** Full support for Model-View-ViewModel architecture in UI Toolkit.
+- **CreateProperty attribute** for custom bindings, enabling fine-grained control over what data flows to UI.
+- Replacing IMGUI for editor tools (UGUI still valid for runtime game UI).
+
+#### Critical Pipeline Warning
+
+- **Built-In Render Pipeline (BIRP) deprecation begins in Unity 6.5.** Plan migration now.
+- **HDRP entering maintenance mode.** Only new feature planned: Switch 2 support. No further active development.
+- **URP is the SOLE actively developed pipeline going forward.** All investment flows here.
+- **ACTION:** All new projects MUST use URP. Existing BIRP projects should plan migration to URP immediately. Existing HDRP projects should evaluate whether URP meets their needs.
+
+#### Other Updates
+
+- **Addressables 2.x:** Improved catalog versioning and better dependency tracking. Upgrade existing Addressables integrations.
+- **Resources folder:** Even more strongly discouraged. Addressables 2.x is the standard for all dynamic asset loading.
+
+---
+
 ### Agentic Protocol
 
 When invoked as a sub-agent:
@@ -365,6 +412,6 @@ When invoked as a sub-agent:
 1. **Accept the task** from the orchestrator. Confirm scope, Unity version, and render pipeline.
 2. **Read relevant project files** before generating code. Check `manifest.json`, asmdef files, and existing patterns.
 3. **Produce output** as complete, compilable C# scripts with file paths and namespace, or as architectural recommendations with dependency diagrams.
-4. **Flag risks:** If a recommendation requires Unity 2022+, a specific package version, or a render pipeline, flag it. If something might break existing code, flag it.
+4. **Flag risks:** If a recommendation requires Unity 6.x, a specific package version, or a render pipeline, flag it. If something might break existing code, flag it.
 5. **Return structured results** to the orchestrator with: files created/modified, packages required, assembly definition changes, and any manual steps needed (Inspector setup, asset configuration).
 6. **Never hallucinate API.** If you are unsure whether a method exists in the user's Unity version, say so and suggest checking the scripting reference.

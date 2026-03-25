@@ -74,3 +74,33 @@ Every significant gameplay feature must have a design document before implementa
 Every commit must reference its originating design document or task ID. Format: `feat(inventory): add stack splitting [GDD-042]` or `fix(combat): correct damage reduction formula [TASK-187]`.
 
 Commits without a document or task reference are rejected by the `validate-commit` hook unless prefixed with `chore:` or `docs:`.
+
+## AI-Assisted Code Review Guidelines
+
+When AI tools (LLMs, code assistants, copilot-style tools) are used during development, the following review standards apply to all generated or suggested code:
+
+- **Hallucinated API Detection**: AI models frequently generate calls to APIs, methods, or engine functions that do not exist. Every AI-suggested function call must be verified against the engine's official documentation for the target version. Pay particular attention to parameter order, return types, and deprecated methods.
+- **Engine-Specific Pattern Validation**: AI-generated code must follow the target engine's idiomatic patterns. GDScript uses signals and `@export`, not C# events. Unity uses `MonoBehaviour` lifecycle methods, not arbitrary `update()` naming. Unreal uses `UFUNCTION`/`UPROPERTY` macros. Code that compiles but violates engine idioms must be refactored.
+- **Attribution Requirements**: Any code block generated substantially by AI must include a comment noting AI assistance: `# AI-assisted: reviewed and modified by [developer]`. This is not about blame -- it flags code that may need extra scrutiny during debugging since the original author may not fully understand every line.
+- **License Compliance**: AI models trained on open-source code may reproduce copyleft-licensed patterns. When AI suggests a non-trivial algorithm or implementation, verify it does not closely replicate GPL/LGPL/AGPL-licensed code unless the project's license is compatible.
+- **Security Pattern Validation**: AI-generated networking code, file I/O, and user input handling must be reviewed for security vulnerabilities. AI models frequently omit input sanitization, generate insecure deserialization patterns, and suggest hardcoded credentials in example code. Never ship AI-generated security-sensitive code without explicit security review.
+
+## Engine Version Requirements
+
+All GameForge engine specialists target these minimum engine versions. Code suggestions, API references, and architecture patterns must be valid for these versions or newer.
+
+| Engine | Minimum Version | Release Date | Key Features |
+|---|---|---|---|
+| **Godot** | 4.6 | 2025 | GDExtension stability, improved 3D renderer, typed dictionaries |
+| **Unity** | 6.3 (6000.3) | 2025 | Entities 1.0 stable, Sentis ML runtime, GPU Resident Drawer |
+| **Unreal Engine** | 5.7 | 2025 | Nanite foliage, MegaLights, Enhanced Input system maturity |
+
+Engine specialists must validate that all suggested APIs, classes, and patterns exist in the target version. If a feature was introduced in a later version, note the minimum version requirement explicitly.
+
+## Accessibility Implementation Standards
+
+These standards go beyond design guidelines (see `@docs/game-design-theory.md`, Section 12) to specify concrete implementation requirements for accessible game code.
+
+- **Screen Reader Metadata**: All interactive UI elements must expose accessibility metadata compatible with platform screen reader APIs. Godot: use `AccessibleNode` properties. Unity: implement `IAccessible` interfaces and UGUI accessibility labels. Unreal: use Slate accessibility API and `FAccessibleWidgetData`. Every button, label, and interactive element must have a programmatic name and role.
+- **Subtitle Rendering Requirements**: Subtitles must support configurable font size (minimum range: 18px to 36px at 1080p equivalent), background opacity (0% to 100%), speaker identification with color coding (using colorblind-safe palette), and text rendering that maintains readability at all supported resolutions. Subtitles must never be baked into video assets -- they must be rendered dynamically from text data.
+- **Input Abstraction**: All input handling must go through an abstraction layer that supports full remapping. No hardcoded key bindings in gameplay code. The input abstraction must support simultaneous gamepad, keyboard/mouse, and touch input. Switch access and single-button play modes must be achievable through the remapping system without code changes.

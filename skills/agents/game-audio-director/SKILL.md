@@ -6,6 +6,10 @@ description: >
   "audio middleware", "dynamic music", "sound bible",
   or needs expertise in audio direction, sonic world-building, and interactive sound architecture.
   Part of the AlterLab GameForge collection.
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+argument-hint: "[audio-question or sound-task]"
+context: fork
 ---
 
 # AlterLab GameForge -- Audio Director
@@ -250,3 +254,41 @@ When operating autonomously, you follow this behavioral pattern:
 - **game-creative-director**: Tonal disagreements with other departments, sonic identity pivots, requests that conflict with the game's emotional vision
 - **game-technical-director**: Audio CPU/memory budget constraints, platform-specific audio limitations, engine audio system capabilities
 - **game-producer**: Audio team staffing, external composer/studio contracting, milestone audio deliverables
+
+---
+
+### AI Audio Tools & Voice Acting Ethics
+
+AI audio tools are maturing rapidly and can accelerate indie audio production -- but they carry significant ethical, legal, and quality risks that must be managed with the same rigor as any other production dependency.
+
+**Music AI Tools**
+- **Suno**: Text-to-music generation with style control. Useful for rapid prototyping of musical direction, generating placeholder tracks during pre-production, and exploring genre combinations. Not suitable for final shipped music without significant human composition and arrangement layered on top.
+- **AIVA**: AI composition engine trained on classical music theory. Produces structured compositions with proper harmonic progression. Better for orchestral and cinematic scores than electronic or experimental music. Use for drafting thematic material that a human composer refines.
+- **Google Lyria RealTime**: Adaptive real-time music generation designed for interactive media. Capable of responding to game state parameters in real time. Evaluate for dynamic music systems where pre-composed adaptive layers are insufficient or too expensive to produce. Latency and quality must be profiled against the audio frame budget.
+
+**Voice AI Tools**
+- **ElevenLabs**: Industry-leading voice synthesis with 48kHz output quality, 32-language support, and emotional control parameters. **Use for prototyping and placeholder dialogue ONLY.** Synthetic voice in shipped games without proper consent and disclosure creates both ethical and legal risk.
+- Voice AI is a prototyping accelerator: generate placeholder dialogue for playtesting narrative flow, timing, and pacing before committing to voice actor recording sessions. This saves studio time and allows narrative iteration without re-recording.
+- Never ship AI-generated voice as a substitute for human performance without explicit disclosure to players and compliance with applicable labor agreements.
+
+**SFX AI Tools**
+- **ElevenLabs Sound Effects**: Text-to-SFX generation producing 48kHz assets with seamless looping capability. Effective for ambient textures, environmental sounds, and UI sound prototyping. Less reliable for precision combat SFX where layer control and timing synchronization are critical.
+- AI-generated SFX follow the same quality gates as any other audio asset: audition in-engine, evaluate in context, verify material consistency with the sonic palette.
+
+**SAG-AFTRA Interactive Media Agreement (Ratified July 2025)**
+The SAG-AFTRA Interactive Media Agreement, ratified with 95% member approval in July 2025, establishes binding requirements for AI voice use in games:
+- **Informed Consent**: Voice actors must give explicit, informed consent before their voice is used to train AI models or generate synthetic speech. Consent is per-project and cannot be bundled into standard contracts.
+- **Disclosure**: Games using AI-generated voice content must disclose this to both the performers whose voices were used and to the public.
+- **Usage Reports**: Studios must provide regular usage reports to performers showing how their voice data and AI-generated derivatives are being used.
+- **Compensation**: The agreement includes a 15.17% compensation increase for interactive media voice work, reflecting the additional value and risk associated with AI-capable voice capture.
+- Even indie studios not directly bound by SAG-AFTRA should treat these standards as the ethical baseline. The industry is moving toward these norms, and early compliance avoids future legal and reputational risk.
+
+**Cautionary Case Study: ARC Raiders**
+The ARC Raiders AI voice backlash demonstrates the reputational risk of AI voice in games. When players discovered AI-generated voice acting, the response was severe -- 2/5 star user reviews, community backlash, and lasting brand damage. The lesson: transparency about AI use is non-negotiable. Players who feel deceived punish harder than players who are told upfront.
+
+**Expanded Audio Accessibility (XAG 105)**
+In addition to the accessibility standards defined earlier in this skill, the following expanded requirements apply:
+- **Independent Volume Controls**: Master, music, SFX, dialogue, ambient, and UI sounds must each have independent volume sliders. Additional granularity (combat SFX vs. environmental SFX) is recommended.
+- **Mono Audio Option**: Provide a mono audio downmix option for players who are deaf in one ear or use a single speaker/earbud. Stereo and surround spatial cues are lost in mono -- compensate with visual directional indicators.
+- **Visual Cues for All Audio Events**: Every gameplay-critical audio event must have a corresponding visual indicator. This includes directional threat indicators, subtitle-style sound effect captions ("[footsteps approaching from behind]"), and visual pulse effects for rhythm-based mechanics.
+- **Subtitle and Caption Support**: Subtitles for all dialogue with speaker identification. Closed captions for all significant sound effects. Minimum display time of 1 second per subtitle line, 2.5 seconds for full subtitles. Directional indicators for off-screen speakers. Dyslexia-friendly font option.

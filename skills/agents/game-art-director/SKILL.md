@@ -6,6 +6,10 @@ description: >
   "reference boards", "color palette", "shape language",
   or needs expertise in visual identity and art production leadership.
   Part of the AlterLab GameForge collection.
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+argument-hint: "[visual-question or asset-review]"
+context: fork
 ---
 
 # AlterLab GameForge -- Art Director
@@ -220,3 +224,44 @@ When operating autonomously, you follow this behavioral pattern:
 - **game-creative-director**: Vision-level visual decisions, art style pivots, scope cuts affecting visual quality
 - **game-technical-director**: Performance budget conflicts, rendering pipeline limitations, platform-specific constraints
 - **game-producer**: Art team capacity, milestone deliverables, outsourcing decisions
+
+---
+
+### AI-Assisted Visual Asset Pipeline
+
+AI image and 3D generation tools are production accelerators when used with disciplined art direction. Without human oversight, they produce "gameslop" -- technically passable but artistically hollow assets that erode visual identity. The following framework ensures AI tools serve the style guide rather than replacing it.
+
+**Scenario/Midjourney/Stable Diffusion Workflow Stages**
+1. **Concept Exploration**: Use AI image generators for rapid mood exploration and reference generation during pre-production. Generate 50-100 variations in a session to map the visual possibility space. These are conversation starters, not final assets.
+2. **Style Transfer Prototyping**: Feed the approved style guide references into img2img workflows to test how the established visual language translates across asset categories (characters, environments, props, UI elements).
+3. **Texture and Pattern Generation**: Use AI-generated textures as base material for hand-refinement. AI excels at seamless tiling patterns, organic noise textures, and material variations. Always run through the material library standards before integration.
+4. **Concept Art Acceleration**: Use AI to generate initial concept compositions, then paint over, correct proportions, adjust to style guide, and add production-specific details. The AI provides the first 60%; the artist provides the critical last 40%.
+5. **Iteration Speedup**: When an approved concept needs 20 color variations or time-of-day lighting studies, use AI batch generation with controlled prompts to accelerate exploration.
+
+**Quality Gates for AI-Generated Assets (5-Stage Pipeline)**
+- **Stage 1 -- Generate**: AI produces raw output based on art-directed prompts. Prompts must reference the style guide and include anti-prompts for known failure modes.
+- **Stage 2 -- Automated QA**: Run automated checks for resolution compliance, color palette adherence (sample dominant colors against the approved hex ranges), and silhouette readability. Reject assets that fail automated thresholds before human review.
+- **Stage 3 -- Art Director Review**: Human review against the full style guide. Check shape language consistency, material treatment accuracy, tonal alignment, and "uncanny valley" artifacts common to AI generation (extra fingers, melted geometry, inconsistent lighting direction).
+- **Stage 4 -- Integration Test**: Place the asset in-engine at gameplay camera distance. Verify it reads correctly alongside hand-crafted assets. AI assets that look good in isolation but clash in context fail this gate.
+- **Stage 5 -- Playtest Validation**: Include AI-generated assets in playtests. Monitor for player feedback that breaks immersion ("that looks weird," "this doesn't fit"). Assets that generate negative qualitative feedback are pulled for revision.
+
+**3D AI Tool Matrix**
+| Tool | Best Use Case | Quality Tier | Typical Output |
+|------|--------------|-------------|----------------|
+| Rodin | Hero assets, key characters, signature props | Production-ready with cleanup | High-detail meshes requiring retopology |
+| Meshy | Props, environmental objects, background assets | Mid-tier, good for LOD2+ | Usable geometry with acceptable topology |
+| Tripo | Character prototyping, NPC variations, creature concepts | Concept-to-production bridge | Requires significant cleanup for production |
+| Kaedim | Production batch assets, kit pieces, modular components | Batch-efficient, consistent quality | Clean geometry suitable for modular assembly |
+
+**"Gameslop" Avoidance Protocol**
+- **Mandate human art direction before batch generation.** AI tools amplify direction -- if the direction is vague, the output is generic. Every AI generation session starts with a written brief referencing specific style guide sections.
+- AI-generated assets must not exceed 30% of final shipped visual content without explicit creative director approval. The visual identity must be human-authored at its core.
+- Flag and reject "AI tells" -- over-smooth surfaces, inconsistent shadow direction, symmetry artifacts, impossible material transitions. Train the team to recognize these patterns.
+- Never use raw AI output as final game assets. Every AI-generated asset passes through at least one stage of human refinement.
+
+**Training Data Provenance and Copyright Documentation**
+- Document which AI tools and models were used for every shipped asset. Maintain a provenance log in the asset database.
+- Verify the training data licensing for every AI tool in the pipeline. Some models are trained on copyrighted work without license -- this creates legal risk for commercial games.
+- For assets generated with tools using open-weight models (Stable Diffusion, etc.), document the specific model checkpoint and LoRA used.
+- Consult with legal counsel on AI-generated asset copyright status in your target distribution markets. Copyright law for AI-generated content varies by jurisdiction and is evolving rapidly.
+- Never use AI tools to replicate a specific artist's style by name. "In the style of [living artist]" prompts create both ethical and legal liability.

@@ -2,6 +2,9 @@
 name: "game-unreal-specialist"
 description: >
   Use when the user works with Unreal Engine 5, asks about C++/Blueprints, GAS, replication, Nanite, Lumen, CommonUI, Enhanced Input, World Partition, or needs UE5 expertise. Part of the AlterLab GameForge collection.
+argument-hint: "[question or task]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+context: fork
 ---
 
 # AlterLab GameForge — Unreal Engine 5 Specialist
@@ -375,6 +378,51 @@ For open-world games:
 
 5. **"Set up Enhanced Input with context switching between on-foot and vehicle controls."**
    Provide Input Actions, two Mapping Contexts (OnFoot, Vehicle), switching logic in the Pawn, and modifier/trigger configuration.
+
+---
+
+### Unreal Engine 5.5 through 5.7
+
+#### UE 5.5 (November 2024)
+
+- **MegaLights (experimental):** Orders of magnitude more dynamic shadowed area lights than previously possible.
+- **Path Tracer:** Production-ready hardware-accelerated ray tracing with NFOR denoiser for offline and real-time hybrid rendering.
+- **Mutable Character Customization:** Dynamic skeletal meshes, materials, and textures with optimized memory for runtime character customization.
+- **MetaHuman Animator:** Performance capture to MetaHuman pipeline for facial animation.
+- **Lumen HWRT at 60Hz:** Hardware ray-traced global illumination at interactive frame rates on supported hardware.
+- **Nanite texture painting:** Paint directly on Nanite geometry in the editor.
+
+#### UE 5.6 (June 2025)
+
+- **Engine-first animation:** Unified animation system improvements for more streamlined workflows.
+- **MetaHuman in-editor authoring:** Create and edit MetaHumans directly in-editor, no longer requires external tools.
+- **Fast Geometry Streaming:** Improved level streaming performance for open worlds.
+
+#### UE 5.7 (November 2025)
+
+- **PCG Framework: PRODUCTION-READY.** Dedicated PCG Editor Mode with GPU compute optimizations for procedural content generation at scale.
+- **Nanite Foliage (experimental):** New geometry pipeline for dense animated vegetation, supporting millions of elements at stable frame rates.
+- **Substrate: PRODUCTION-READY.** Modular material authoring with physically accurate layered materials across platforms including mobile.
+- **MegaLights (beta):** Graduating from experimental. Now supports directional lights, Niagara particles, translucency, and hair.
+- **AI Assistant:** Native slide-out panel for questions and C++ code generation within the editor.
+
+#### Marketplace Change
+
+- **Fab has REPLACED** the UE Marketplace, Sketchfab, ArtStation Marketplace, and Quixel.com as the unified asset store.
+- **Quixel Megascans:** No longer free unlimited. A free starter pack of 1,500 assets is available; the rest requires purchase.
+- **ACTION:** Update all asset sourcing workflows to use Fab.
+
+#### CommonUI Breaking Changes (5.5+)
+
+- **PushWidget now auto-activates widgets internally.** Do NOT call `ActivateWidget` after `PushWidget`. Doing so will cause double-activation bugs.
+- **GetDesiredInputConfig replaces SetInputMode.** `SetInputMode` is now ILLEGAL when CommonUI is active. Using it will cause input routing conflicts.
+- These are **BREAKING changes** that will cause bugs if old patterns are used. Audit all CommonUI code when upgrading to 5.5+.
+
+#### Status Updates
+
+- **GAS (Gameplay Ability System):** Stable and production-ready. No major API changes. Continue using current patterns.
+- **Verse:** UEFN-only. Planned for UE6 (preview ~2027-2028). C++ and Blueprints remain the only options for standard UE5 projects.
+- **EOS (Epic Online Services):** Free cross-platform multiplayer, matchmaking, and voice chat. Use for any game needing online services.
 
 ---
 

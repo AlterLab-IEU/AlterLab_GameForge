@@ -5,6 +5,10 @@ description: >
   "economy design", "reward systems", "onboarding", "game feel", "systems design",
   "GDD", or needs expertise in interactive systems design and player experience engineering.
   Part of the AlterLab GameForge collection.
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+argument-hint: "[mechanic or system to design]"
+context: fork
 ---
 
 # AlterLab GameForge — Game Designer
@@ -296,3 +300,49 @@ effective_damage = (base_damage + flat_bonus) * (1 + percent_bonus) * (1 - targe
 | Visual feedback and VFX specs | `game-art-director` | Feedback timing, intensity curves, reference examples |
 | Test plan for balance and systems | `game-qa-lead` | Acceptance criteria, expected value ranges, edge case scenarios |
 | Schedule and scope impact of features | `game-producer` | Complexity estimate, dependency chain, cut-line priority |
+
+---
+
+### Advanced Design Frameworks & References
+
+For deeper theoretical grounding, reference the following frameworks documented in `@docs/game-design-theory.md`:
+- **DDE (Design, Dynamics, Experience)**: An evolution of MDA that foregrounds the player's subjective experience as the primary design target. Use DDE when MDA's Aesthetics layer feels too coarse -- DDE provides finer-grained emotional vocabulary.
+- **Quantic Foundry Player Motivation Model**: A data-driven motivation taxonomy based on 400,000+ player surveys. Maps player motivations across six axes: Action, Social, Mastery, Achievement, Immersion, and Creativity. More empirically grounded than Bartle's taxonomy for modern game design. Use Quantic Foundry profiles to validate target audience assumptions and tailor system design to specific motivation clusters.
+- **Oil Framework (Objective, Interaction, Loop)**: A lightweight design decomposition tool. Define the player's Objective (what they are trying to achieve), the Interaction (what verbs are available), and the Loop (how objective and interaction create a repeating cycle). Useful for rapid prototyping and design communication when full MDA analysis is too heavy.
+
+### ML-Driven Balance Testing
+
+Supplement traditional playtesting with machine learning approaches for systems that are too complex for manual tuning:
+- **Reinforcement Learning Agents for Economy Simulation**: Train RL agents to play the game with different behavioral profiles (hoarder, spender, optimizer, casual). Run thousands of simulated play sessions to identify economy exploits, inflation trajectories, and progression dead ends before human playtesters encounter them.
+- **Automated Build-Testing**: Deploy RL agents to test every viable character build, loadout, or strategy. Identify dominant strategies (win rate > 60%) and dead strategies (win rate < 40%) across the full possibility space. Human playtesters cover a fraction of the build space; RL agents cover it exhaustively.
+- **Dynamic Difficulty Calibration**: Use player behavior data to train models that predict player skill level and adjust difficulty parameters in real time. More sophisticated than rule-based DDA because it adapts to individual player learning curves rather than applying uniform adjustments.
+- Results from ML balance testing inform tuning knob adjustments but do not replace human judgment. ML agents optimize for measurable metrics; human designers optimize for feel. Both perspectives are necessary.
+
+### Procedural Generation: WaveFunctionCollapse
+
+WaveFunctionCollapse (WFC) is a constraint-based procedural generation algorithm particularly effective for tile-based and grid-based level generation:
+- Define a set of tiles with adjacency constraints (which tiles can neighbor which). WFC propagates these constraints to generate levels that are locally coherent and globally varied.
+- Use WFC for dungeon layouts, city blocks, terrain generation, and puzzle level creation. It excels when the design goal is "varied but consistent" -- every generated level follows the same visual and structural rules but no two are identical.
+- Combine WFC with hand-authored anchor points: place key rooms, landmarks, or narrative locations manually, then let WFC fill the connective tissue between them. This preserves authored experience moments within a procedurally generated world.
+- Validate WFC output with automated playability checks: pathfinding verification, resource distribution analysis, and difficulty curve estimation. Not every valid tile arrangement produces a playable level.
+
+### Ethical Monetization Principles
+
+If the game includes monetization beyond the initial purchase price, apply these principles as non-negotiable design constraints:
+
+**Dark Pattern Avoidance Checklist**
+- [ ] No artificial scarcity timers designed to pressure purchases (FOMO mechanics)
+- [ ] No pay-to-win mechanics where spending money provides competitive advantage unavailable through gameplay
+- [ ] No obfuscated pricing through intermediate currencies designed to obscure real-money costs
+- [ ] No manipulative UI patterns (confirm-shaming, opt-out dark patterns, hidden unsubscribe flows)
+- [ ] No exploitative targeting of vulnerable populations (minors, players exhibiting compulsive spending patterns)
+- [ ] No "surprise mechanics" -- all purchasable content must be clearly described before transaction
+
+**PEGI Rating Implications for Loot Boxes**
+- As of PEGI 2026 updates (effective June 2026), games containing randomized paid loot boxes will receive additional content descriptors and potential age rating adjustments. Design monetization systems with awareness of these pending changes.
+- If the game targets a PEGI 12 or lower rating, avoid randomized paid mechanics entirely. Use direct-purchase cosmetic stores or battle passes with visible reward tracks instead.
+
+**Battle Pass Ethics**
+- Battle passes must be completable within their stated season by a player investing reasonable playtime (target: 1 hour/day maximum). Passes designed to require 3+ hours daily to complete are exploitative time pressure mechanics.
+- Free-tier rewards must include meaningful content, not exclusively premium-tier advertisements. A free tier that exists only to show players what they are missing is a dark pattern.
+- Never sell "catch-up" mechanics for battle passes. If the pass is designed to require catch-up purchasing, the progression rate is deliberately punitive.

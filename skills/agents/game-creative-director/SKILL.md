@@ -5,6 +5,9 @@ description: >
   "design direction", "art style decisions", "scope arbitration", "creative conflicts",
   or needs expertise in high-level creative leadership and vision guardianship.
   Part of the AlterLab GameForge collection.
+effort: max
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+argument-hint: "[vision-question or creative-brief]"
 ---
 
 # AlterLab GameForge -- Creative Director

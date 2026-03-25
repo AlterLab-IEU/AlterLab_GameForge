@@ -5,6 +5,8 @@ description: >
   "difficulty scaling", "reward pacing", "Monte Carlo simulation", or needs to validate
   and tune game systems for fairness, engagement, and long-term retention.
   Part of the AlterLab GameForge collection.
+argument-hint: "[system to analyze]"
+allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 ---
 
 # AlterLab GameForge -- Economy & System Balance Validation
@@ -200,6 +202,47 @@ Does the reward system sustain engagement after the main campaign is complete?
 - Are there endgame-exclusive rewards that provide ongoing goals (prestige systems, seasonal content, mastery challenges)?
 - Does the endgame reward system shift from power growth to lateral progression (cosmetics, alternative playstyles, collection)?
 - Is there social reward (leaderboards, cooperative challenges, player expression) that provides motivation beyond material rewards?
+
+**Step 5B: DDE Framework Lens for Balance Analysis**
+
+When analyzing any game system for balance, apply the Design-Dynamics-Experience (DDE) framework lens alongside the MDA framework. Specifically, ask: "How does this system affect the player Experience layer?" Balance changes that look correct at the Design layer (the numbers) can produce unexpected results at the Dynamics layer (how systems interact) and unintended emotional responses at the Experience layer (what the player actually feels).
+
+For every balance adjustment, trace the impact through all three layers:
+- **Design**: What number changed? (e.g., weapon damage reduced by 15%)
+- **Dynamics**: How does the system behavior change? (e.g., time-to-kill increases, players must engage enemies for longer, ammo consumption increases)
+- **Experience**: How does the player's emotional response change? (e.g., combat feels more deliberate and tactical -- OR -- combat feels tedious and spongy, depending on other variables)
+
+If you can only predict the Design and Dynamics impact but not the Experience impact, you need a playtest, not more math.
+
+**Step 5C: Advanced Simulation and Monitoring**
+
+**ML-Driven Simulation Approaches:**
+For complex economies and progression systems, consider training reinforcement learning (RL) agents to play your game's economy:
+- Define the player's "optimal" behavior as the RL agent's reward function
+- Let the agent play thousands of iterations to discover exploit paths, degenerate strategies, and equilibrium states that human testing would take months to surface
+- RL agents are particularly effective at finding resource duplication exploits, infinite loops in crafting chains, and arbitrage opportunities in multi-currency economies
+- This approach requires investment but can detect exploits before players do, saving post-launch emergency patches
+
+**Machinations.io:**
+For visualizing and simulating economy flows without writing code, use Machinations.io (machinations.io). It provides a visual node-based editor specifically designed for game economy modeling:
+- Build your faucet/sink diagram as a live simulation
+- Run thousands of iterations to see how currency pools behave over time
+- Test "what if" scenarios (what if drop rates are halved? what if a new sink is added?) without touching game code
+- Particularly useful for pre-implementation validation -- test the economy design before building it
+
+**Hard Sink vs. Soft Sink Distinction:**
+Not all sinks are equal. Distinguish between:
+- **Hard sinks**: Currency is permanently destroyed. Examples: consumable items that are used and gone, repair costs, fast travel fees, crafting materials consumed during crafting. Hard sinks are the primary tool for controlling inflation.
+- **Soft sinks**: Currency changes form but is not destroyed. Examples: trading between players (currency moves, net supply unchanged), cosmetic purchases (currency to the system, cosmetic to the player -- the cosmetic has ongoing value). Soft sinks slow velocity but do not reduce supply.
+
+A healthy economy needs both. Hard sinks control inflation. Soft sinks control velocity. If you only have soft sinks, your economy will inflate over time regardless of flow rates.
+
+**Stock/Flow Monitoring Guidelines:**
+After launch, monitor these metrics continuously:
+- **Currency stock levels** per player segment (new, mid-game, endgame) -- are they growing, stable, or declining?
+- **Flow rates** at each faucet and sink -- which are the highest-volume flows? These are your most impactful tuning levers.
+- **Velocity** -- how quickly does currency circulate? High velocity means currency moves fast through the economy (healthy in moderation, inflationary at extremes). Low velocity means currency is hoarded (indicates sinks are unattractive or faucets are too generous).
+- **Gini coefficient** -- measures wealth inequality across the player population. A high Gini coefficient means a small number of players hold most of the wealth. This is expected (hardcore players accumulate faster) but extreme values indicate the economy is not serving casual players.
 
 **Step 6: Monte Carlo Simulation Guidance**
 

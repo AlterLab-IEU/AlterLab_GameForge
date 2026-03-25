@@ -4,6 +4,9 @@ description: >
   Use when the user asks about "multi-agent coordination", "team orchestration", "feature handoff",
   "cross-domain collaboration", or needs multiple agents to work together on a complex feature.
   Part of the AlterLab GameForge collection.
+argument-hint: "[feature-description]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+disable-model-invocation: true
 ---
 
 # AlterLab GameForge -- Game Team Orchestrator
@@ -234,3 +237,120 @@ Precise and organizational. You think in work packages, dependencies, and handof
 | Testing needed | `game-qa-lead` | Test scope, acceptance criteria, priority |
 | Schedule impact assessment | `game-producer` | Scope change, estimated effort, affected sprints |
 | Engine-specific implementation | Engine specialist | Technical spec, platform targets, constraints |
+
+### Worked Example: Coordinating a Save System
+
+A save system touches more domains than it appears. Here is a complete coordination plan using the formats defined above.
+
+**Feature:** Persistent save/load system — player can quit and resume progress between sessions.
+
+**Affected Domains:** Game Designer (what state must be saved), Technical Director (architecture, serialization format, file corruption handling), UX Designer (save slot UI, auto-save feedback), Narrative Director (checkpoint placement, save-on-story-beat logic), QA Lead (save corruption, cross-platform, version migration).
+
+**Feature Decomposition:**
+
+```
+FEATURE DECOMPOSITION
+Feature: Persistent Save/Load System
+Owner: game-technical-director
+
+WP-1: State Definition
+  Agent: game-designer
+  Inputs: Current game state, progression system design
+  Outputs: "Save State Specification" — enumerated list of every variable that must persist
+  Depends On: none
+  Estimated Effort: 4 hours
+
+WP-2: Save Checkpoint Design
+  Agent: game-narrative-director
+  Inputs: Level designs, story beat document
+  Outputs: "Checkpoint Map" — list of locations and conditions that trigger auto-save
+  Depends On: none (parallel with WP-1)
+  Estimated Effort: 2 hours
+
+WP-3: Architecture Design
+  Agent: game-technical-director
+  Inputs: WP-1 State Specification, engine choice
+  Outputs: "Save System ADR" — format (JSON/binary), file location, versioning strategy, corruption fallback
+  Depends On: WP-1
+  Estimated Effort: 4 hours
+
+WP-4: Save Slot UX
+  Agent: game-ux-designer
+  Inputs: WP-1 State Spec (to know what to display: timestamp, level, playtime, screenshot)
+  Outputs: "Save Slot Wireframes" — UI flow for save/load menu, auto-save indicator
+  Depends On: WP-1
+  Estimated Effort: 3 hours
+
+WP-5: Implementation
+  Agent: engine-specialist
+  Inputs: WP-3 ADR, WP-4 Wireframes, WP-2 Checkpoint Map
+  Outputs: Working save/load code, auto-save trigger hooks
+  Depends On: WP-3, WP-4, WP-2
+  Estimated Effort: 1-2 days
+
+WP-6: QA Test Plan
+  Agent: game-qa-lead
+  Inputs: WP-3 ADR (to understand failure modes), WP-5 implementation
+  Outputs: Test plan covering: mid-save interruption, corrupt file fallback, cross-platform validation, save migration if data schema changes
+  Depends On: WP-5
+  Estimated Effort: 4 hours
+```
+
+**Execution sequence:** WP-1 and WP-2 run in parallel. WP-3 and WP-4 run in parallel after WP-1. WP-5 starts after WP-3, WP-4, and WP-2. WP-6 follows WP-5.
+
+**Handoff from WP-3 to WP-5 (sample):**
+```
+HANDOFF DOCUMENT
+From: game-technical-director
+To: engine-specialist
+Feature: Persistent Save/Load System
+
+Context: The state definition (WP-1) identified 47 variables across 6 categories.
+Architecture decision: JSON format, stored at user://saves/slot_{n}.json,
+versioned with a "schema_version" field. Corruption fallback: if JSON parse fails,
+load from slot_{n}.bak (written before each new save).
+
+Decisions Made:
+- JSON over binary for debuggability and moddability
+- Three save slots (not unlimited) to reduce storage and QA complexity
+- Auto-save on every checkpoint, not on a timer (avoids mid-combat state)
+
+Constraints:
+- Must work on all target platforms (PC, console) — no platform-specific file APIs
+- Schema version must increment whenever the state structure changes
+- Save file must not block the main thread (async write required)
+
+Deliverables Included:
+- save_state_spec.md (full variable list with types and default values)
+- save_system_adr.md (format, location, versioning, fallback specification)
+
+Open Questions:
+- Should cloud saves sync automatically or require explicit user action? (Escalate to game-producer for schedule impact)
+- Screenshot-in-slot-UI: engine-specialist to confirm feasibility before WP-4 is finalized.
+
+Acceptance Criteria:
+- Save and load round-trip with zero data loss for all 47 variables
+- Corrupt file detected and fallback loaded without crashing
+- Auto-save does not cause a visible frame hitch on minimum-spec hardware
+```
+
+### Partial Orchestration: When Not to Invoke All Agents
+
+Full 9-agent orchestration is for large features (combat systems, complete save systems, new game modes). Many tasks need only 2-3 agents. Invoking unnecessary agents wastes context and produces noise.
+
+**When 2 agents suffice:** One creative + one technical for a well-scoped feature. Example: adding a new status effect → game-designer (define the effect rules) + engine-specialist (implement it).
+
+**When 3-4 agents suffice:** Most content additions and mid-scale features. Example: a new enemy type → game-designer (behavior rules) + game-art-director (visual brief) + game-audio-director (SFX needs) + engine-specialist (implementation). No need for creative director, producer, or narrative director unless the enemy has story significance.
+
+**Signal that full orchestration is needed:** A feature that creates new player-facing systems (progression, economy, core loop mechanics), requires new infrastructure (multiplayer, save system, analytics), or changes how multiple existing systems interact.
+
+### Solo Developer Self-Routing
+
+For solo developers, the team orchestrator becomes a self-routing decision tree. You wear every role, but you still benefit from structured handoffs between your own "hats":
+
+1. Put on the designer hat: write the design spec. Stop. Save it.
+2. Put on the technical hat: read the spec as if someone else wrote it. Identify ambiguities and implementation risks. Write those down.
+3. Put on the implementation hat: work from the spec and the technical notes, not from memory.
+4. Put on the QA hat: test against the original acceptance criteria, not against "does it feel done."
+
+The value is in the pause between each hat. The handoff document you write to yourself is not bureaucracy -- it is an externalized working memory that surfaces the gaps you would miss if you moved straight from "idea" to "code."

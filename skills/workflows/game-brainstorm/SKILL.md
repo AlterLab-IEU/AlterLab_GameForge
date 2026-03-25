@@ -4,6 +4,8 @@ description: >
   Use when the user asks about "game ideas", "brainstorming", "concept development",
   "ideation", or needs structured creative exploration for a new game concept. Part of
   the AlterLab GameForge collection.
+argument-hint: "[genre or theme, or 'open' for freeform]"
+allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 ---
 
 # AlterLab GameForge -- Structured Ideation Workflow

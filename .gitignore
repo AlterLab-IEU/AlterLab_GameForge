@@ -6,3 +6,4 @@ node_modules/
 production/session-state/
 production/session-logs/
 .reference/
+.research/

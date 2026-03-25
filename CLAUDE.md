@@ -2,10 +2,10 @@
 
 ## Project Overview
 
-AlterLab GameForge is a collection of 22 production-grade Claude AI skills purpose-built for indie game development. The skills are organized into three categories:
+AlterLab GameForge is a collection of 25 production-grade Claude AI skills purpose-built for indie game development. The skills are organized into three categories:
 
 - **9 Studio Agents** -- Specialized roles that emulate a full game studio team
-- **10 Workflow Skills** -- Structured processes for common game dev tasks
+- **13 Workflow Skills** -- Structured processes for common game dev tasks
 - **3 Engine Specialists** -- Deep expertise for Godot, Unity, and Unreal Engine
 
 Every skill is grounded in established game design theory (MDA Framework, Self-Determination Theory, Flow Theory, Bartle's Player Types) and delivers structured, actionable output.
@@ -78,6 +78,9 @@ Route user requests to the correct skill based on intent:
 | Checking game balance and tuning | `game-balance-check` |
 | Preparing for release or store submission | `game-launch` |
 | Coordinating multiple agents on a task | `game-team-orchestrator` |
+| Evaluating scope against timeline | `game-scope-check` |
+| Running a sprint/milestone/project retrospective | `game-retrospective` |
+| Generating documentation from existing code | `game-reverse-document` |
 
 ### Engine Specialist Routing
 
@@ -97,9 +100,9 @@ The following hooks run automatically during Claude Code sessions:
 
 | Hook | Event | Purpose |
 |---|---|---|
-| `session-start` | PostToolUse | Initialize session state, load project context |
+| `session-start` | SessionStart | Initialize session state, load project context |
 | `session-stop` | Stop | Save session state, write session log |
-| `pre-compact` | PreToolUse | Archive context before memory compaction |
+| `pre-compact` | PreCompact | Archive context before memory compaction |
 | `validate-commit` | PreToolUse | Enforce commit message convention before git commits |
 | `detect-gaps` | PostToolUse | Identify missing skill coverage in agent responses |
 | `log-agent` | PostToolUse | Record which agents were invoked and their outputs |
@@ -114,6 +117,10 @@ The `templates/` directory contains starter templates for common game developmen
 - Playtest report forms
 - Balance spreadsheet structures
 - Store page copy templates
+- Game pillars definition template
+- Systems tracking index
+- AI content usage policy
+- Post-mortem report
 
 Reference templates with `@templates/template-name.md` in skill outputs.
 
@@ -146,6 +153,10 @@ chore: add frontmatter validation to validate script
 - No stubs or placeholder sections
 - Every skill must include concrete output templates
 - All cross-references between skills must be valid
+- All skills must include `argument-hint` in frontmatter
+- All skills must include `allowed-tools` in frontmatter
+- Agent skills should include `effort` level (max for directors, high for leads)
+- Agent skills with isolated context should use `context: fork`
 
 ## Session State
 
@@ -157,7 +168,7 @@ Active session data is stored in `production/session-state/` and session logs in
 AlterLab_GameForge/
   skills/
     agents/          -- 9 studio agent skills
-    workflows/       -- 10 workflow skills
+    workflows/       -- 13 workflow skills
     engine-specialists/  -- 3 engine-specific skills
   docs/              -- Shared knowledge base
   hooks/             -- Session lifecycle hooks

@@ -4,6 +4,8 @@ description: >
   Use when the user asks about "rapid prototyping", "testing a mechanic", "proof of concept",
   "hypothesis-driven development", "prototype evaluation", or needs to quickly validate a game
   idea before committing to full production. Part of the AlterLab GameForge collection.
+argument-hint: "[mechanic to prototype]"
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 ---
 
 # AlterLab GameForge -- Hypothesis-Driven Prototyping
@@ -201,6 +203,23 @@ When you PROMOTE a prototype:
 - **Learning extraction**: Does the report contain at least one insight that applies beyond this specific prototype? Every experiment should teach you something about your game, your players, or game design itself.
 - **Anti-pattern avoidance**: The report should explicitly note if any anti-patterns were triggered during the process (scope creep, polish temptation, prototype-to-production leak).
 
+### Hypothesis-to-MDA Mapping Reference
+
+Use this quick-reference to ensure your hypothesis targets a specific player aesthetic from the MDA framework (`docs/game-design-theory.md`). Hypotheses that do not map to a named aesthetic are usually either too vague or testing a technical question rather than a design question.
+
+| MDA Aesthetic | Prototype Tests For | Example Hypothesis Signal |
+|---------------|--------------------|-----------------------------|
+| **Sensation** | Moment-to-moment feel — juice, game feel, feedback responsiveness | Player leans forward, comments on how something "feels" unprompted |
+| **Fantasy** | Role embodiment — does the player feel like the character? | Player uses "I" language: "I felt powerful when I did that" |
+| **Narrative** | Story comprehension and investment | Player asks what happens next; player makes decisions based on story logic |
+| **Challenge** | Difficulty calibration, fair failure | Player retries immediately without frustration; says "I almost had it" |
+| **Fellowship** | Social interaction quality in multiplayer | Players communicate spontaneously; laughter and negotiation |
+| **Discovery** | Exploration motivation and reward | Player moves away from the critical path voluntarily |
+| **Expression** | Player creativity and personalization | Player makes choices that reflect identity, not just optimization |
+| **Submission** | Idle engagement, low-stakes repetition | Player enters a quiet, rhythmic state; relaxed body language |
+
+If your hypothesis maps to multiple aesthetics, you have combined questions. Split the hypothesis.
+
 ### Anti-Patterns to Watch For
 
 **"Let me just clean up the prototype a bit."**
@@ -218,6 +237,63 @@ No, not at the prototype stage. 3-5 testers is sufficient for a binary signal. I
 **"It didn't work but I think with more time..."**
 The sunk cost fallacy is the most expensive bias in game development. If 3 days could not validate the hypothesis, more time will not help. Either the hypothesis is wrong, or the scope is too large. Reformulate and try again with a tighter focus.
 
+### Prototype Fidelity Levels
+
+Not every prototype needs to be digital. Choose the fidelity level that answers the hypothesis fastest:
+
+| Level | Method | Best For | Time Cost | Realism |
+|-------|--------|----------|-----------|---------|
+| **Paper** | Index cards, dice, tokens on a table | Turn-based mechanics, economy systems, card game loops, board-like structures | Hours | Low — but fast to iterate |
+| **Tabletop Digital** | Spreadsheet simulation or dice-roller scripts | Balance testing, probability distributions, progression math | 1-2 hours | Medium for numbers, zero for feel |
+| **Digital Throwaway** | One scene, hardcoded values, programmer art | Real-time feel, input-to-feedback loops, spatial mechanics | 1-3 days | High for feel, low for content |
+| **Polish Prototype** | Cleaned-up throwaway with placeholder art | Stakeholder review, investor demo, team morale validation | 1 week | High |
+
+**Decision rule:** Start at the lowest fidelity level that can test your hypothesis. A stamina-system economy can be validated with a spreadsheet in 30 minutes. A grappling-hook feel requires a digital prototype. Jumping to digital when paper would work wastes 80% of the time budget.
+
+### Competitive Bake-Off Protocol
+
+When two competing designs exist, test both simultaneously rather than sequentially. Sequential testing introduces temporal variables (tester mood, team familiarity with the space, external events). Simultaneous testing isolates the design variable.
+
+**Setup:**
+1. Build both implementations to the minimum scope required to test the hypothesis.
+2. Divide testers into two groups (minimum 3 per group, so minimum 6 testers total).
+3. Each group plays only one version -- no tester plays both during the same session.
+4. Use identical observation protocols and debrief questions for both groups.
+5. The researchers do NOT know which version a tester is playing during the debrief (blind evaluation where possible).
+
+**Analysis:**
+- Compare behavioral data first (flow state duration, hesitation counts, emotional peaks). Verbal data is secondary.
+- If one version produces clearly stronger behavioral signals, it wins regardless of which design the team prefers.
+- If results are inconclusive (both versions score similarly), the hypothesis was not differentiated enough. Refine both designs and test again.
+- Document what each version proved, even the losing one -- the loser often teaches more than the winner.
+
+**Anti-pattern alert:** Do not let the team vote on which version is better after watching testers. Team preference is contaminated by authorship bias. Let the behavioral data decide.
+
+### Solo Developer Adaptation
+
+Solo developers face a structural problem: you cannot observe yourself playing your own prototype objectively. Your workarounds:
+
+1. **Time-shifted testing.** Build the prototype, then wait 48 hours before playing it yourself. Your memory will have faded enough that you approach it more like a new player. This is not ideal but better than testing immediately after building.
+2. **Record yourself.** Play with a screen recorder running. Watch the recording the next day with the clinical eye of an observer. Treat the recording as if it were a different person playing. You will see things you did not notice while playing.
+3. **Minimum 3 external testers, no exceptions.** Solo dev status is not an excuse for skipping external testing. Even 3 testers from your family, friends, or local indie dev community generate better signal than self-testing. Your game must eventually be played by people who are not you.
+4. **Online testing platforms.** For remote testing, use OBS + Discord screen share, or platforms like itch.io private access links. Remote testers sacrifice face-camera data but provide authentic cold-start behavior.
+5. **Apply the 30% solo buffer.** Prototype time budgets for solo developers should use 30% overhead (not 20%) because you carry every discipline cost: design, build, test facilitation, and analysis. A "3-day prototype" for a solo dev is effectively 2.1 productive days of focused work.
+
+### Pre-Build Checklist
+
+Before writing a single line of prototype code, verify these conditions are met. If any are missing, stop and resolve them first:
+
+- [ ] **Hypothesis is written** in the required format: "We believe that [mechanic] will produce [behavior/emotion] when [condition]."
+- [ ] **Falsification criteria are defined**: you can name at least two observable signals that would prove the hypothesis false.
+- [ ] **MDA aesthetic is identified**: you know which of the eight aesthetics this test targets.
+- [ ] **Time box is set**: you have a fixed end date, not "whenever it feels done."
+- [ ] **Scope checklist is complete**: Must Have / Nice to Have / Out of Scope columns are populated with specific items.
+- [ ] **Testers are scheduled**: you have names and times for at least 3 external players before you begin building.
+- [ ] **Recording setup is tested**: your screen capture software works on a test recording before the prototype exists.
+- [ ] **Prototype branch is created**: you are not building on main. This is the physical enforcement of "prototype code does not graduate."
+
+This checklist exists because the build phase is the most seductive part of prototyping. The pull to start building before the hypothesis is clear is powerful and almost always leads to scope creep and ambiguous results. Spending 20 minutes on this checklist saves 2 days of wasted work.
+
 ### Example Use Cases
 
 1. "I want to test whether a rewind mechanic feels satisfying in a platformer. Set up a prototype hypothesis and scope for me."
@@ -225,3 +301,5 @@ The sunk cost fallacy is the most expensive bias in game development. If 3 days 
 3. "Our GDD assumes players will enjoy a base-building loop between dungeon runs, but nobody on the team has tested this assumption. Walk me through prototyping it."
 4. "I built a prototype for our grappling hook mechanic and tested it with 4 people. Here are my notes -- help me analyze the results and make a kill/promote decision."
 5. "We validated our core combat loop last sprint. Now I need to prototype the progression meta-layer. Help me define the hypothesis and scope."
+6. "I'm a solo developer. I built a prototype last week and just got 3 testers to try it. Two of them seemed bored and one seemed confused. Help me interpret whether this is a kill or a conditional promote."
+7. "We need to validate two competing economy designs -- a fixed-cost crafting system vs. a variable-cost bidding system. Walk me through designing a paper prototype bake-off."

@@ -5,6 +5,10 @@ description: >
   "regression testing", "release certification", "QA automation", "bug triage",
   or needs expertise in quality assurance, defect management, and release gate governance
   for game development. Part of the AlterLab GameForge collection.
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+argument-hint: "[test-scope or bug-report]"
+context: fork
 ---
 
 # AlterLab GameForge — QA Lead
@@ -303,3 +307,28 @@ You are **GateKeeper**, the quality authority who ensures the game meets its sta
 | Visual or art quality issues | `game-art-director` | Screenshot comparisons, platform rendering differences |
 | Audio bugs and mixing issues | `game-audio-director` | Audio capture, reproduction conditions, platform-specific behavior |
 | Platform certification specifics | `game-technical-director` | TRC/XR/Lotcheck violation list, remediation requirements |
+
+---
+
+### AI-Assisted Testing
+
+AI testing tools are emerging as practical supplements to human QA -- particularly for regression coverage, overnight test runs, and exhaustive exploration of game state spaces that human testers cannot cover in reasonable time.
+
+**AI Testing Platforms**
+- **nunu.ai**: Define test goals in plain English ("verify the player can complete the tutorial without getting stuck," "check that all shop items can be purchased and equipped"). Nunu's multimodal AI agents interpret the game visually and execute test scenarios autonomously. Backed by $6M seed funding from a16z. Evaluate for regression testing and overnight exploratory testing where human availability is limited.
+- **Regression Games**: Unity-native AI testing framework. Integrates directly with the Unity Editor and can be scripted to play through game scenarios, validate outcomes, and report failures. Best suited for Unity projects where tight engine integration reduces setup overhead.
+- **modl.ai**: Autonomous test bots that learn to play the game through observation and reinforcement learning. Deploy for overnight regression runs where bots explore the game space and report crashes, stuck states, and performance anomalies. Particularly effective for open-world and sandbox games where the state space is too large for scripted test cases.
+- AI test tools supplement but do not replace human QA. Automated agents catch crashes, stuck states, and regression failures. Human testers catch fun problems, balance perception issues, and UX friction. Both are necessary.
+
+**ML-Driven Balance Testing via RL Agents**
+- Train reinforcement learning agents to play the game with different skill profiles and behavioral strategies. Deploy agents across the full build matrix to identify balance outliers.
+- RL agents are particularly effective for: economy stress testing (find exploits humans miss), difficulty curve validation (identify progression walls and triviality zones), and PvP balance assessment (identify dominant strategies across the full meta).
+- Coordinate with `game-designer` for defining balance targets and acceptable ranges. RL agents provide data; human designers interpret meaning.
+
+**Compliance Testing Checklist**
+Maintain a compliance testing checklist that covers regulatory and platform requirements:
+- [ ] **Accessibility (XAG)**: All applicable Xbox Accessibility Guidelines criteria tested and documented. Coordinate with `game-ux-designer` for audit methodology.
+- [ ] **Accessibility (EAA)**: EU Accessibility Act compliance verified for in-game communication, e-commerce features, and digital distribution interfaces. Applicable for games distributed in the EU market.
+- [ ] **Accessibility (CVAA)**: 21st Century Communications and Video Accessibility Act compliance verified for all communication features (chat, voice, social). Required for US distribution.
+- [ ] **PEGI 2026 Loot Box Rating Verification**: If the game contains randomized paid mechanics, verify correct PEGI content descriptors are applied per the June 2026 update. Incorrect rating can result in store removal.
+- [ ] **AI Content Disclosure**: If the game uses AI-generated content (art, voice, music, dialogue), verify disclosure requirements are met per platform policies and applicable regulations. Document AI tool usage in the game's credits and store page as required.

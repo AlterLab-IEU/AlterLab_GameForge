@@ -5,6 +5,10 @@ description: >
   "controller navigation", "player feedback", "usability testing", "colorblind modes",
   or needs expertise in player-facing experience design, interface architecture, and
   inclusive design for games. Part of the AlterLab GameForge collection.
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+argument-hint: "[ux-question or accessibility-audit]"
+context: fork
 ---
 
 # AlterLab GameForge — UX Designer
@@ -321,3 +325,50 @@ Game UI operates under constraints that web UI does not. The player is doing som
 | Audio feedback design for UI | `game-audio-director` | Interaction events list, emotional targets, timing requirements |
 | Narrative text presentation | `game-narrative-director` | Subtitle specs, dialogue UI requirements, reading accommodation needs |
 | Schedule impact of accessibility work | `game-producer` | Remediation effort estimates, compliance deadlines, priority recommendations |
+
+---
+
+### Regulatory Compliance
+
+Accessibility in games is increasingly governed by regulation, not just best practice. The following frameworks carry legal weight or industry-standard authority. Track compliance from pre-production onward -- retrofitting regulatory compliance is significantly more expensive than designing for it.
+
+**EU Accessibility Act (EAA)**
+The European Accessibility Act has been enforceable since June 2025. It applies to digital products and services sold in the EU, including games with in-game communication features, e-commerce components (in-app purchases, storefronts), and digital distribution platforms.
+- EAA compliance is based on the POUR principles (Perceivable, Operable, Understandable, Robust) and references the EN 301 549 standard for digital accessibility.
+- Games with chat, voice communication, or online storefronts must ensure these features are accessible. This includes text-to-speech for chat, screen reader compatibility for store interfaces, and captioning for voice communication.
+- Non-compliance carries enforcement penalties that vary by EU member state. Treat EAA as a hard constraint for any game distributed in the European market.
+- Even if your game does not currently target EU distribution, designing to EAA standards future-proofs the product for market expansion.
+
+**ESA Accessible Games Initiative: Standardized Accessibility Tags**
+The Entertainment Software Association's Accessible Games Initiative defines 24 standardized accessibility tags for game storefronts. The top 10 most relevant for indie development:
+1. **Subtitle Options** -- configurable subtitles with size, background, and speaker identification
+2. **Colorblind Mode** -- alternative color palettes or non-color-dependent information design
+3. **Remappable Controls** -- full input rebinding for all actions
+4. **Difficulty Options** -- multiple difficulty levels or configurable challenge parameters
+5. **Screen Reader Support** -- menu and UI narration for visually impaired players
+6. **One-Handed Mode** -- playable control scheme using a single hand
+7. **Motion Sensitivity Options** -- disabling/reducing screen shake, camera bob, motion blur
+8. **Text Size Options** -- scalable UI text meeting minimum readability standards
+9. **Audio Cue Visualization** -- visual alternatives for all gameplay-critical audio
+10. **Game Speed Adjustment** -- slow-motion or pause options for timing-sensitive mechanics
+
+Use these tags as a design checklist during pre-production. Each tag represents a discrete accessibility feature that can be scoped, implemented, and verified independently.
+
+**Expanded XAG Standards**
+- **XAG 105 (Audio Accessibility)**: Requires independent volume controls for all major audio categories, mono audio option, visual cues for all gameplay-critical audio events, subtitle/caption support with speaker identification, and sound effect captions. See `game-audio-director` for detailed implementation guidance.
+- **XAG 117 (Visual Distractions and Motion Settings)**: Requires options to disable or reduce screen shake, camera bob, motion blur, film grain, chromatic aberration, and other visual effects that can cause motion sickness or sensory discomfort. Provide intensity sliders rather than binary on/off toggles where possible.
+
+**Subtitle Standards**
+- Minimum display time: 1 second per subtitle line, 2.5 seconds for a full subtitle block
+- Directional indicators for off-screen speakers (arrow or compass notation showing speaker location relative to camera)
+- Sound effect captions in brackets: "[door creaking]", "[explosion in distance]", "[footsteps approaching from left]"
+- Dyslexia-friendly font option (OpenDyslexic or similar) available in accessibility settings
+- Background opacity slider for subtitle readability across varying scene brightness
+- Speaker identification by both name and consistent color assignment
+
+**Onboarding Taxonomy**
+Rank onboarding approaches by quality, from best to acceptable:
+1. **Invisible**: Player learns through play without recognizing they are being taught. Environmental constraints, level design, and emergent discovery drive learning. (Example: Portal, Breath of the Wild)
+2. **Playable**: Dedicated tutorial content that is itself engaging gameplay, not a disconnected exercise. The tutorial IS the game, just with training wheels. (Example: Celeste's first chapter, Hades' first run)
+3. **Replayable**: Tutorial content that can be revisited on demand. Practice modes, training arenas, move lists with demonstration. Valuable for complex games where skills degrade between sessions.
+4. **Traditional**: Explicit instruction through tooltips, text prompts, and guided sequences. Acceptable as a fallback but never the primary onboarding method. If traditional tutorials are necessary, make them skippable and re-accessible from the menu.
