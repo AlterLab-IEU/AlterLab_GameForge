@@ -1,13 +1,15 @@
 ---
 name: "game-retrospective"
 description: >
-  Run a game development post-mortem rooted in the GDC tradition — not a corporate sprint
-  retro. Triggers when users mention retrospective, retro, post-mortem, lessons learned,
-  "what went right", "what went wrong", kill list review, or need structured reflection
-  after a sprint, milestone, or project. DO NOT trigger for design reviews (use
-  game-design-review) or playtesting (use game-playtest).
+  Run a game development post-mortem rooted in the GDC tradition. Triggers on:
+  "retrospective", "retro", "post-mortem", "lessons learned", "what went right", "what
+  went wrong", "kill list review". Do NOT invoke for design document review (use
+  game-design-review) or playtesting (use game-playtest). Part of the AlterLab GameForge
+  collection.
 argument-hint: "[sprint-N or milestone-name or 'project']"
+effort: medium
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Game Development Post-Mortem

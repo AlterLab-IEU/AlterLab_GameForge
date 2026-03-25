@@ -1,15 +1,18 @@
 ---
 name: "game-narrative-director"
 description: >
-  Use when the user asks about "story structure", "branching narrative", "dialogue systems",
-  "world-building", "character design", "environmental storytelling", "ludonarrative",
-  "writing for games", "lore", "theme", "character arc",
-  or needs expertise in interactive narrative design, game writing, and story architecture.
-  Part of the AlterLab GameForge collection.
-effort: high
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about story structure, branching narrative, dialogue systems,
+  world-building, character design, environmental storytelling, ludonarrative coherence,
+  writing for games, lore, theme, or character arcs. Triggers on: "story", "narrative",
+  "dialogue", "lore", "world-building", "character arc", "branching", "ludonarrative".
+  Do NOT invoke for creative vision (use game-creative-director) or game mechanics
+  (use game-designer). Part of the AlterLab GameForge collection.
 argument-hint: "[story-element or dialogue-task]"
+model: opus
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Narrative Director

@@ -1,14 +1,16 @@
 ---
 name: "game-qa-lead"
 description: >
-  Use when the user asks about "testing strategy", "bug tracking", "playtest methodology",
-  "regression testing", "release certification", "QA automation", "bug triage",
-  or needs expertise in quality assurance, defect management, and release gate governance
-  for game development. Part of the AlterLab GameForge collection.
-effort: high
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+  Invoke when the user asks about testing strategy, bug tracking, playtest methodology,
+  regression testing, release certification, QA automation, or bug triage. Triggers on:
+  "testing", "bug", "QA", "regression", "certification", "playtest methodology", "test
+  plan", "release gate". Do NOT invoke for usability testing (use game-ux-designer) or
+  balance validation (use game-balance-check). Part of the AlterLab GameForge collection.
 argument-hint: "[test-scope or bug-report]"
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge — QA Lead

@@ -1,14 +1,18 @@
 ---
 name: "game-team-orchestrator"
 description: >
-  Coordinate multiple agents on complex game development features using battle-tested spawn
-  recipes. Triggers when users mention "multi-agent coordination", "team orchestration",
-  "feature handoff", "cross-domain collaboration", or need a combat system, narrative
-  feature, UI overhaul, performance pass, or launch prep coordinated across specialists.
-  Part of the AlterLab GameForge collection.
+  Coordinate multiple agents on complex game development features using battle-tested
+  spawn recipes. Triggers on: "multi-agent coordination", "team orchestration", "feature
+  handoff", "cross-domain collaboration", or when a task spans multiple specialist domains
+  (combat system, narrative feature, UI overhaul, performance pass, launch prep). Do NOT
+  invoke for single-domain tasks -- route directly to the appropriate specialist. Part of
+  the AlterLab GameForge collection.
 argument-hint: "[feature-description]"
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+model: opus
+effort: high
 disable-model-invocation: true
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Game Team Orchestrator
@@ -460,6 +464,261 @@ met. When they finally shipped, the game was stable, the FTUE was polished (char
 creation flows directly into a high-impact opening), and the store page accurately
 represented the experience. The result: one of the highest-rated RPGs ever, with a launch
 week that generated more positive word-of-mouth than any marketing budget could buy.
+
+---
+
+## Named Pipelines
+
+Named pipelines are pre-defined skill chains for recurring multi-step workflows. Each
+pipeline defines the skill sequence, the state file that carries context between steps, and
+the execution instructions. Use these when the user's request maps to a well-known
+development lifecycle pattern rather than a custom cross-domain feature.
+
+Pipelines use JSON state files stored in `production/session-state/` to pass context between
+skills. Each skill in the chain reads the state, performs its work, appends its results, and
+writes the updated state back. The orchestrator monitors state transitions and invokes the
+next skill when the previous one completes.
+
+### Pipeline State Schema
+
+Every pipeline state file follows this schema:
+
+```json
+{
+  "pipeline": "pipeline-name",
+  "version": "1.3.0",
+  "status": "in_progress | completed | blocked | failed",
+  "current_phase": "skill-name",
+  "started_at": "ISO 8601 timestamp",
+  "updated_at": "ISO 8601 timestamp",
+  "phases": [
+    {
+      "skill": "skill-name",
+      "status": "pending | in_progress | completed | skipped | failed",
+      "started_at": "ISO 8601 timestamp or null",
+      "completed_at": "ISO 8601 timestamp or null",
+      "output_ref": "path to output artifact or null",
+      "findings": [],
+      "decisions": []
+    }
+  ],
+  "context": {
+    "project_name": "string",
+    "engine": "string or null",
+    "initiated_by": "user or orchestrator"
+  }
+}
+```
+
+### Pipeline 1: New Project Pipeline
+
+**Sequence:** `game-brainstorm` --> `game-start` --> `game-prototype`
+
+**Purpose:** Take a game idea from raw concept through structured project setup to a
+playable first prototype. This is the most common entry point for new users.
+
+**State file:** `production/session-state/pipeline-new-project.json`
+
+**Execution:**
+
+1. Initialize the pipeline state file:
+   ```
+   Write the pipeline state JSON with three phases (brainstorm, start, prototype),
+   all set to "pending". Set context from user input.
+   ```
+
+2. Invoke `/game-brainstorm` with the user's concept:
+   ```
+   Use the Skill tool: invoke game-brainstorm with the user's game idea.
+   When complete, update phase status to "completed" and record the output
+   artifact path (the concept document produced by brainstorm).
+   ```
+
+3. Invoke `/game-start` with the brainstorm output:
+   ```
+   Use the Skill tool: invoke game-start. The auto-populated preprocessing
+   in game-start will detect the current project state. Pass the concept
+   document path from the brainstorm phase as context.
+   When complete, update phase status and record the project structure created.
+   ```
+
+4. Invoke `/game-prototype` with the project setup:
+   ```
+   Use the Skill tool: invoke game-prototype with the core mechanic identified
+   during brainstorm. The project structure from game-start provides the scaffold.
+   When complete, mark the pipeline as "completed".
+   ```
+
+**Decision points:**
+- If `game-brainstorm` produces multiple viable concepts, present them to the user and
+  wait for selection before proceeding to `game-start`.
+- If `game-start` detects an existing project (State 3 or 4), skip to the appropriate
+  state handler rather than running the full new project flow.
+- If the user's prototype scope exceeds 2 weeks of estimated work, flag for scope
+  reduction before invoking `game-prototype`.
+
+---
+
+### Pipeline 2: Design Iteration Pipeline
+
+**Sequence:** `game-design-review` --> `game-balance-check` --> `game-scope-check`
+
+**Purpose:** Run a structured design health check that reviews the GDD for completeness,
+validates balance and economy tuning, then evaluates whether the scope matches the timeline.
+Use this pipeline after major design changes or before milestone gates.
+
+**State file:** `production/session-state/pipeline-design-iteration.json`
+
+**Execution:**
+
+1. Initialize the pipeline state file with three phases.
+
+2. Invoke `/game-design-review` on the current design documents:
+   ```
+   Use the Skill tool: invoke game-design-review targeting the design/ directory.
+   The review produces a findings list with severity ratings.
+   Record all Critical and Important findings in the pipeline state.
+   ```
+
+3. Invoke `/game-balance-check` with design review context:
+   ```
+   Use the Skill tool: invoke game-balance-check. Pass any economy or
+   progression findings from the design review as context.
+   Record balance issues and tuning recommendations.
+   ```
+
+4. Invoke `/game-scope-check` with accumulated findings:
+   ```
+   Use the Skill tool: invoke game-scope-check. The accumulated findings
+   from both previous phases inform whether design ambitions match timeline.
+   Produce the final scope assessment with cut/keep recommendations.
+   ```
+
+**Decision points:**
+- If `game-design-review` finds no Critical issues, `game-balance-check` can run with
+  reduced scope (skip systems that passed review).
+- If `game-balance-check` reveals economy issues that require design rework, pause the
+  pipeline and route the rework back to the designer before proceeding to scope check.
+- The final scope check synthesizes all findings — present the unified report to the user.
+
+---
+
+### Pipeline 3: Release Pipeline
+
+**Sequence:** `game-code-review` --> `game-playtest` --> `game-launch`
+
+**Purpose:** Pre-release quality gate that reviews code health, validates the player
+experience through structured playtesting, then prepares launch assets and store submission.
+This pipeline should run at least once before any public release.
+
+**State file:** `production/session-state/pipeline-release.json`
+
+**Execution:**
+
+1. Initialize the pipeline state file with three phases.
+
+2. Invoke `/game-code-review` for release readiness:
+   ```
+   Use the Skill tool: invoke game-code-review targeting the full codebase.
+   Focus on release-blocking issues: crashes, data loss risks, performance
+   regressions, security vulnerabilities.
+   Record all Critical findings. If any exist, the pipeline blocks at this phase.
+   ```
+
+3. Invoke `/game-playtest` with code review context:
+   ```
+   Use the Skill tool: invoke game-playtest. Focus on FTUE (first 30 minutes),
+   core loop satisfaction, and showstopper experience issues.
+   Record playtest findings and player feedback themes.
+   ```
+
+4. Invoke `/game-launch` with accumulated quality data:
+   ```
+   Use the Skill tool: invoke game-launch. Pass the code review findings
+   and playtest results as context for the launch checklist.
+   The launch skill handles store page prep, compliance checks, and
+   submission workflows.
+   ```
+
+**Decision points:**
+- **Hard gate after code review:** If Critical bugs exist, the pipeline blocks. Do not
+  proceed to playtest with known crash-level issues. Fix first, re-run code review.
+- If playtest reveals FTUE issues rated "players quit within 5 minutes," treat this as
+  a release blocker equivalent to a Critical bug.
+- The launch phase may reveal platform-specific compliance issues (COPPA, PEGI, Steam
+  AI disclosure) that require going back to code changes.
+
+---
+
+### Pipeline 4: Sprint Cycle Pipeline
+
+**Sequence:** `game-sprint-plan` --> [work] --> `game-retrospective`
+
+**Purpose:** Bookend a development sprint with structured planning and retrospective.
+The middle phase is actual development work (not a skill invocation). This pipeline
+creates the planning artifact, tracks sprint execution, and captures lessons learned.
+
+**State file:** `production/session-state/pipeline-sprint.json`
+
+**Execution:**
+
+1. Initialize the pipeline state file with three phases (plan, work, retrospective).
+
+2. Invoke `/game-sprint-plan` to create the sprint plan:
+   ```
+   Use the Skill tool: invoke game-sprint-plan with the target milestone
+   or focus area. The auto-populated preprocessing injects recent commits,
+   open issues, and velocity data.
+   Record the sprint plan document path and the sprint goal.
+   ```
+
+3. Work phase (manual):
+   ```
+   Set the work phase to "in_progress". This phase tracks actual development.
+   The orchestrator does NOT invoke a skill here — the team does the work.
+   Periodically update the state file with completed tasks if the user reports
+   progress. When the user signals sprint end, mark work phase "completed".
+   ```
+
+4. Invoke `/game-retrospective` to capture learnings:
+   ```
+   Use the Skill tool: invoke game-retrospective. Pass the sprint plan
+   (what was planned) and any progress updates (what was completed) as context.
+   The retrospective produces a lessons-learned document and velocity update.
+   Update production/session-state/velocity.json with the new data point.
+   Mark the pipeline as "completed".
+   ```
+
+**Decision points:**
+- If the work phase extends beyond the planned sprint duration, the orchestrator
+  should flag this and ask the user whether to extend the sprint or close it as-is.
+- If the retrospective reveals chronic overcommitment (completion rate below 75% for
+  3+ sprints), recommend running `/game-scope-check` before the next sprint plan.
+- Velocity data from the retrospective feeds into the next sprint plan's preprocessing.
+
+---
+
+### Pipeline Execution Protocol
+
+When the user requests a pipeline (explicitly or implicitly through a matching intent):
+
+1. **Identify the pipeline.** Match the user's request to one of the four named pipelines.
+   If the request spans multiple pipelines, sequence them (e.g., New Project followed by
+   Sprint Cycle).
+
+2. **Initialize state.** Create the pipeline state JSON file. Set all phases to "pending."
+
+3. **Execute sequentially.** Invoke each skill in order using the Skill tool. After each
+   skill completes, update the state file before proceeding.
+
+4. **Handle blocks.** If a phase fails or produces blocking findings, pause the pipeline.
+   Present the blocker to the user. Do not proceed until the block is resolved.
+
+5. **Report completion.** When all phases complete, produce a pipeline summary:
+   - Duration (start to finish)
+   - Key decisions made at each phase
+   - Artifacts produced (with file paths)
+   - Open items deferred to next pipeline or sprint
 
 ---
 

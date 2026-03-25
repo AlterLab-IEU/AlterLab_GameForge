@@ -1,12 +1,15 @@
 ---
 name: "game-reverse-document"
 description: >
-  Generate documentation from existing code or prototypes. Triggers when users have working
-  code but no design docs, want to document an existing system, need to onboard someone to
-  a codebase, or say "document this". DO NOT trigger for writing new design docs from scratch
-  (use game-brainstorm or game-design-review).
+  Generate documentation from existing code or prototypes. Triggers on: "document this",
+  "reverse document", "generate docs from code", "onboard to codebase", "document existing
+  system". Do NOT invoke for writing new design docs from scratch (use game-brainstorm or
+  game-design-review). Part of the AlterLab GameForge collection.
 argument-hint: "[path to code or 'project' for full scan]"
+effort: medium
+context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Reverse Documentation Workflow

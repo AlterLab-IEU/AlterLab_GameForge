@@ -1,9 +1,9 @@
-node_modules/
-.DS_Store
 *.log
+.DS_Store
 .env
 .env.local
-production/session-state/
-production/session-logs/
 .reference/
 .research/
+node_modules/
+production/session-logs/
+production/session-state/

@@ -1,11 +1,16 @@
 ---
 name: "game-design-review"
 description: >
-  Use when the user asks about "reviewing my GDD", "design document feedback",
-  "evaluating game design", or needs a thorough analysis of a game design document.
-  Part of the AlterLab GameForge collection.
+  Invoke when the user wants feedback on a game design document, GDD review, design
+  evaluation, or consistency check on an existing design. Triggers on: "review my GDD",
+  "design feedback", "evaluate design", "design document review", "GDD critique".
+  Do NOT invoke for brainstorming new ideas (use game-brainstorm) or balance tuning
+  (use game-balance-check). Part of the AlterLab GameForge collection.
 argument-hint: "[path to design document]"
+effort: medium
+context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Design Document Review Workflow

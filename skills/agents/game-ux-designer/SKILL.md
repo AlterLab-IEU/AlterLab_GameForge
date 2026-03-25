@@ -1,14 +1,17 @@
 ---
 name: "game-ux-designer"
 description: >
-  Use when the user asks about "accessibility", "game UI", "onboarding", "HUD design",
-  "controller navigation", "player feedback", "usability testing", "colorblind modes",
-  or needs expertise in player-facing experience design, interface architecture, and
-  inclusive design for games. Part of the AlterLab GameForge collection.
-effort: high
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about game UI, onboarding, HUD design, controller navigation,
+  player feedback, usability testing, colorblind modes, or game-specific UX patterns.
+  Triggers on: "UI", "UX", "onboarding", "HUD", "controller nav", "usability", "colorblind",
+  "player feedback", "menu design". Do NOT invoke for deep accessibility audits (use
+  game-accessibility-specialist) or art style (use game-art-director). Part of the AlterLab
+  GameForge collection.
 argument-hint: "[ux-question or accessibility-audit]"
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge — UX Designer
@@ -332,6 +335,39 @@ Game UI operates under constraints that web UI does not. The player is doing som
 | Audio feedback design for UI | `game-audio-director` | Interaction events list, emotional targets, timing requirements |
 | Narrative text presentation | `game-narrative-director` | Subtitle specs, dialogue UI requirements, reading accommodation needs |
 | Schedule impact of accessibility work | `game-producer` | Remediation effort estimates, compliance deadlines, priority recommendations |
+
+## MCP Integration
+
+The UX designer role connects to MCP servers for UI prototyping, automated usability testing, and design system management -- enabling player-centered design workflows directly from the Claude Code session.
+
+### Connected MCP Servers
+
+| MCP Server | UX Design Use | How It Helps |
+|---|---|---|
+| **Figma** (connected) | UI mockups, prototyping, design systems | Pull design context from Figma files to evaluate information hierarchy, navigation flow, and accessibility compliance. Inspect component specifications for controller-navigable UI patterns. Verify color contrast ratios against WCAG 2.1 AA standards. Review HUD layouts at different resolution breakpoints. |
+| **Playwright** (connected) | Web game UI testing, automated usability validation | Automate browser-based testing for web games (Phaser, Pixi.js, Three.js builds). Test menu navigation flows with keyboard-only input to verify controller-first design patterns. Capture screenshots at different viewport sizes for responsive UI validation. Run accessibility audits on web-based game UI. |
+
+### Example Workflows
+
+**Accessibility Audit via Figma:**
+1. Pull the current UI design from Figma using the design context tool
+2. Extract text sizes and verify against the minimum 28px at 1080p standard (XAG criterion)
+3. Check color pairs for contrast ratio compliance (4.5:1 minimum for WCAG AA)
+4. Verify that no information is conveyed through color alone -- check for shape, icon, or text redundancy
+5. Generate an accessibility audit report with pass/fail per criterion and remediation recommendations
+
+**Web Game UI Testing Pipeline:**
+1. Launch the web game build using Playwright's browser navigation
+2. Run a keyboard-only navigation test across all menu screens -- verify every element is reachable without a mouse
+3. Capture the navigation path and identify dead ends, circular loops, or excessive depth (3+ levels)
+4. Take screenshots at 1280x720, 1920x1080, and 3840x2160 to verify responsive scaling behavior
+5. Test screen reader compatibility by inspecting accessible names and roles on interactive elements
+
+**Onboarding Flow Validation:**
+1. Use Playwright to record a first-time player's navigation path through the tutorial sequence
+2. Measure time-to-complete for each onboarding step against the knowledge curve targets
+3. Identify points where the player pauses (potential confusion) or backtracks (potential clarity failure)
+4. Cross-reference findings with the Onboarding Flow Map and propose iteration adjustments
 
 ---
 

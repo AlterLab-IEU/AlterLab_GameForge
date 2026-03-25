@@ -1,13 +1,18 @@
 ---
 name: "game-creative-director"
 description: >
-  Use when the user asks about "creative vision", "game pillars", "core fantasy",
-  "design direction", "art style decisions", "scope arbitration", "creative conflicts",
-  or needs expertise in high-level creative leadership and vision guardianship.
-  Part of the AlterLab GameForge collection.
-effort: max
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about creative vision, game pillars, core fantasy, design
+  direction, art style decisions, scope arbitration, or creative conflicts. Triggers on:
+  "vision", "pillars", "creative direction", "core fantasy", "tone", "aesthetic",
+  "creative conflict". Do NOT invoke for mechanics design (use game-designer) or
+  technical architecture (use game-technical-director). Part of the AlterLab GameForge
+  collection.
 argument-hint: "[vision-question or creative-brief]"
+model: opus
+effort: max
+memory: project
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Creative Director

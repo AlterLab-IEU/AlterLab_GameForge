@@ -1,12 +1,18 @@
 ---
 name: "game-balance-check"
 description: >
-  Use when the user asks about "game balance", "economy tuning", "progression curve",
-  "difficulty scaling", "reward pacing", "Monte Carlo simulation", or needs to validate
-  and tune game systems for fairness, engagement, and long-term retention.
-  Part of the AlterLab GameForge collection.
+  Invoke when the user needs to validate game balance, tune economy systems, analyze
+  progression curves, evaluate difficulty scaling, or check reward pacing. Includes
+  Monte Carlo simulation and statistical validation. Triggers on: "balance", "economy
+  tuning", "progression curve", "difficulty scaling", "reward pacing", "Monte Carlo",
+  "fairness check". Do NOT invoke for economy/monetization design (use
+  game-economy-designer) or code review (use game-code-review). Part of the AlterLab
+  GameForge collection.
 argument-hint: "[system to analyze]"
+effort: medium
+context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Economy & System Balance Validation

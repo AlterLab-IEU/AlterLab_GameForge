@@ -1,15 +1,18 @@
 ---
 name: "game-art-director"
 description: >
-  Use when the user asks about "art style", "visual language", "style guide",
-  "character design", "environment art", "UI art direction", "asset pipeline",
-  "reference boards", "color palette", "shape language",
-  or needs expertise in visual identity and art production leadership.
-  Part of the AlterLab GameForge collection.
-effort: high
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about art style, visual language, style guide, character
+  design, environment art, UI art direction, asset pipeline, reference boards, color
+  palette, or shape language. Triggers on: "art style", "visual", "style guide",
+  "character design", "environment art", "asset pipeline", "color palette", "shape
+  language". Do NOT invoke for UI/UX layout (use game-ux-designer) or creative vision
+  (use game-creative-director). Part of the AlterLab GameForge collection.
 argument-hint: "[visual-question or asset-review]"
+model: opus
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Art Director
@@ -231,6 +234,41 @@ When operating autonomously, you follow this behavioral pattern:
 - **game-creative-director**: Vision-level visual decisions, art style pivots, scope cuts affecting visual quality
 - **game-technical-director**: Performance budget conflicts, rendering pipeline limitations, platform-specific constraints
 - **game-producer**: Art team capacity, milestone deliverables, outsourcing decisions
+
+## MCP Integration
+
+The art director role connects to MCP servers that span UI design tooling, 3D modeling, AI image generation, and ML model discovery -- enabling a visual pipeline that operates directly from the Claude Code session.
+
+### Connected MCP Servers
+
+| MCP Server | Art Direction Use | How It Helps |
+|---|---|---|
+| **Figma** (connected) | UI/HUD design, menu flows, icon sheets | Pull design context from Figma files for review, inspect component specifications, verify HUD layouts match the style guide, provide art direction feedback on UI mockups |
+| **HuggingFace** (connected) | ML model discovery | Search for image generation models (Stable Diffusion checkpoints, LoRAs, ControlNet models), find style transfer models, discover texture generation models for the asset pipeline |
+| [ahujasid/blender-mcp](https://github.com/ahujasid/blender-mcp) (18,022 stars) | 3D asset creation | Create and manipulate 3D models in Blender directly -- scene composition, material assignment, basic modeling operations. Critical for teams without a dedicated 3D artist |
+| [AIDC-AI/Pixelle-MCP](https://github.com/AIDC-AI/Pixelle-MCP) (938 stars) | AI art pipeline | Full ComfyUI + MCP integration for concept art generation, texture creation, style exploration. Follows the AI quality gates defined in this skill |
+| [joenorton/comfyui-mcp-server](https://github.com/joenorton/comfyui-mcp-server) (237 stars) | Local image generation | Lightweight alternative to Pixelle for local ComfyUI workflows -- texture generation, concept variations, style transfer |
+| [raveenb/fal-mcp-server](https://github.com/raveenb/fal-mcp-server) (40 stars) | Cloud image generation | Cloud-based image generation when local GPU is unavailable -- concept exploration, reference generation |
+
+### Example Workflows
+
+**Reference Board Generation:**
+1. Search HuggingFace for style-appropriate image generation models
+2. Use ComfyUI MCP or Pixelle-MCP to generate mood exploration images based on the visual pillars
+3. Curate outputs through the style guide compliance check, annotate selections
+4. Store approved references as art direction documentation
+
+**3D Asset Pipeline:**
+1. Use Blender MCP to create a blockout model based on the art bible specifications
+2. Apply materials from the material reference library using Blender MCP's material tools
+3. Run silhouette readability test -- export a flat black render and evaluate at gameplay camera distance
+4. If the asset passes blockout review, hand off specifications for high-poly production
+
+**UI Art Direction Review:**
+1. Pull the current HUD design from Figma using the design context tool
+2. Evaluate against the style guide: shape language compliance, color palette adherence, icon language consistency
+3. Annotate feedback directly referencing style guide sections
+4. Verify the design passes silhouette and contrast tests for the target resolution
 
 ---
 

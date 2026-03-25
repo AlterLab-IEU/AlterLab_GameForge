@@ -1,11 +1,17 @@
 ---
 name: "game-sprint-plan"
 description: >
-  Use when the user asks about "sprint planning", "task breakdown", "development planning",
-  "scheduling game work", or needs structured sprint organization for a game development
-  team. Part of the AlterLab GameForge collection.
+  Invoke when the user needs to plan a development sprint, break down tasks, schedule
+  game work, or organize a sprint with cross-discipline dependencies. Triggers on:
+  "sprint plan", "task breakdown", "development planning", "scheduling", "sprint
+  backlog". Do NOT invoke for scope evaluation (use game-scope-check) or retrospectives
+  (use game-retrospective). Part of the AlterLab GameForge collection.
 argument-hint: "[milestone or focus area]"
+model: opus
+effort: high
+disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Sprint Planning Workflow
@@ -58,6 +64,32 @@ Problems this solves:
 6. **Velocity honesty over velocity aspirations.** If the team has completed an average of 30 story points in each of the last 3 sprints, planning 45 points this sprint is not ambition -- it is delusion. Use actual historical velocity, not hoped-for velocity. Larian's milestone-based development for BG3 worked because they tracked velocity obsessively and adjusted scope accordingly -- not because they crunched harder.
 
 7. **Align with pillars.** Every sprint goal traces to a design pillar. If a sprint goal does not serve any pillar, the team is either working on infrastructure (acceptable but call it out) or drifting from the vision (flag for discussion). Supergiant's sprint goals are always framed as player experience statements, not feature lists -- "players feel the weight of their weapon choices" not "implement weapon system." Reference `docs/game-design-theory.md` for pillar methodology and `docs/collaboration-protocol.md` for cross-discipline coordination rules.
+
+### Sprint Context (Auto-populated)
+
+These values are injected automatically via shell preprocessing before the skill content
+reaches Claude. They provide real-time project data so sprint planning starts from the
+actual state of the codebase, not from memory or assumption.
+
+- Recent commits: !`git log --oneline -20 2>/dev/null || echo "No git history"`
+- Open issues: !`gh issue list --limit 10 --state open 2>/dev/null || echo "No GitHub issues accessible"`
+- Last sprint: !`cat production/session-state/last-sprint.json 2>/dev/null || echo "No previous sprint data"`
+- Team velocity: !`cat production/session-state/velocity.json 2>/dev/null || echo "No velocity data"`
+- Active branches: !`git branch --list 2>/dev/null | head -10 || echo "No branches detected"`
+- Uncommitted changes: !`git status --short 2>/dev/null | wc -l || echo "0"`
+- Days since last tag: !`git log --tags --simplify-by-decoration --pretty="format:%ar" 2>/dev/null | head -1 || echo "No tags — no milestone history"`
+- Current milestone files: !`ls production/milestones/ 2>/dev/null | tail -3 || echo "No milestone directory"`
+
+Use this auto-populated data to inform sprint planning decisions. The recent commits reveal
+what work was recently completed and what areas of the codebase are active. Open issues
+provide the backlog candidates. Previous sprint data and velocity JSON enable data-driven
+capacity planning (see Step 5 and Step 7). Active branches reveal work in progress that may
+carry over into this sprint. Days since last tag indicates how long since the last formal
+milestone, which helps calibrate sprint scope.
+
+If velocity data is unavailable (first sprint), plan conservatively and use this sprint to
+establish a baseline. If last sprint data is available, compare planned vs. completed to
+calibrate this sprint's commitments.
 
 ### Workflow
 

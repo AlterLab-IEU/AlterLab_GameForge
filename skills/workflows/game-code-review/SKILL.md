@@ -1,11 +1,17 @@
 ---
 name: "game-code-review"
 description: >
-  Use when the user asks about "reviewing game code", "code review", "checking my
-  game architecture", or needs game-specific technical analysis beyond standard web
-  code review practices. Part of the AlterLab GameForge collection.
+  Invoke when the user wants a game-specific code review, architecture check, or
+  technical analysis of game code. Covers frame independence, hot path performance,
+  state machine integrity, and resource lifecycle. Triggers on: "code review", "review
+  my code", "check architecture", "game code quality". Do NOT invoke for design
+  document review (use game-design-review) or general sprint planning (use
+  game-sprint-plan). Part of the AlterLab GameForge collection.
 argument-hint: "[file or directory to review]"
+effort: high
+context: fork
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Game Code Review Workflow
@@ -465,6 +471,36 @@ A successful game code review meets all of these:
 - The architecture assessment identifies the most dangerous coupling points
 - Positive patterns are highlighted to reinforce good practices
 - Recommendations are prioritized by effort-to-impact ratio
+
+## MCP Integration
+
+The code review workflow connects to MCP servers for version control integration and engine-specific live code analysis -- enabling reviews that operate on real PR diffs and can verify code against engine documentation in real time.
+
+### Connected MCP Servers
+
+| MCP Server | Code Review Use | How It Helps |
+|---|---|---|
+| **GitHub** (connected) | PR integration, diff analysis | Pull PR diffs for targeted review, read changed files in context, post review comments with line-specific references, check CI status and test results before reviewing, verify branch protection rules are met |
+| **Context7** (connected) | Engine documentation verification | When reviewing code for hallucinated APIs (Check 2.10.1), query Context7 for the engine's current documentation to verify that every API call, method, and enum actually exists in the project's engine version |
+| Engine MCPs (install per project) | Live code analysis | Connect the appropriate engine MCP to verify code behavior in the running editor: |
+| - [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) (2,616 stars) | Godot code verification | Run GDScript in the editor to verify delta time behavior, test signal connections, validate scene tree structure |
+| - [CoplayDev/unity-mcp](https://github.com/CoplayDev/unity-mcp) (7,540 stars) | Unity code verification | Inspect Unity editor state, verify component references, check asset dependencies |
+| - [chongdashu/unreal-mcp](https://github.com/chongdashu/unreal-mcp) (1,637 stars) | Unreal code verification | Control Unreal Editor to test Blueprint connections, verify C++ compilation, inspect actor hierarchies |
+
+### Example Workflows
+
+**PR-Based Code Review:**
+1. Use GitHub MCP to fetch the PR diff and list of changed files
+2. Read each changed file using the Filesystem tools
+3. Run all 11 game-specific checks (delta time, hot path allocations, state management, etc.) against the changed code
+4. Use Context7 to verify any unfamiliar API calls against the engine's current documentation
+5. Post review findings as GitHub PR comments with inline code references and severity ratings
+
+**Engine-Assisted Live Review:**
+1. Connect the appropriate engine MCP for the project (Godot, Unity, or Unreal)
+2. For performance-suspect code, use the engine MCP to run the code in the editor and observe frame timing
+3. For state management issues, use the engine MCP to inspect the object's runtime state during gameplay
+4. Include engine-verified findings in the review report alongside static analysis results
 
 ### Example Use Cases
 

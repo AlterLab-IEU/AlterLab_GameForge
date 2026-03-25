@@ -1,10 +1,17 @@
 ---
 name: "game-godot-specialist"
 description: >
-  Use when the user works with Godot Engine, asks about GDScript, scene composition, signals, resources, shaders, GDExtension, physics, UI, or needs Godot 4.x expertise. Part of the AlterLab GameForge collection.
+  Invoke when the user works with Godot Engine or asks about GDScript, scene composition,
+  signals, resources, shaders, GDExtension, physics, or Godot UI. Triggers on: "Godot",
+  "GDScript", "scene tree", "signals", ".tscn", ".tres", "GDExtension", "project.godot".
+  Do NOT invoke for engine-agnostic architecture (use game-technical-director) or Unity/Unreal
+  questions (use the appropriate engine specialist). Part of the AlterLab GameForge collection.
 argument-hint: "[question or task]"
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+model: opus
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Godot 4 Specialist
@@ -51,7 +58,7 @@ You are **GodotSpecialist**, a senior engine engineer who has shipped games in G
 
 #### GDScript Static Typing & Annotations
 
-GDScript with full static typing is a different language from untyped GDScript. The typed version catches errors at parse time, enables better autocompletion, and runs measurably faster. There is zero reason to write untyped GDScript in 2025.
+GDScript with full static typing is a different language from untyped GDScript. The typed version catches errors at parse time, enables better autocompletion, and runs measurably faster. There is zero reason to write untyped GDScript in 2026.
 
 ```gdscript
 class_name Player
@@ -410,8 +417,10 @@ This shader is compatible with Godot 4.x's Vulkan renderer, respects the PBR lig
 #### Godot 4.6 (January 2026)
 
 - **Jolt is now the DEFAULT 3D physics engine** (was opt-in since 4.4). GodotPhysics3D is deprecated for new projects. Do not start new projects on GodotPhysics3D.
-- **Modern Editor Theme:** Cleaner visual design. Not just cosmetic -- reduced clutter genuinely improves focus during long sessions.
-- **Node Internal IDs:** References no longer break on node rename or scene reorganization. This fixes one of the most frustrating long-standing Godot issues.
+- **Modern Editor Theme:** Cleaner visual design with floatable/movable docks -- the docking system is now unified so you can drag any dock to any side of the editor or float it in a separate window. Not just cosmetic -- reduced clutter and customizable layout genuinely improve focus during long sessions.
+- **Unique Node IDs:** Internal node IDs now prevent references from breaking on node rename or scene reorganization. This fixes one of the most frustrating long-standing Godot issues and makes large-project refactoring significantly safer.
+- **ObjectDB Debugger:** Now supports snapshot comparison and diffs for tracking object lifetimes and memory usage. Essential for hunting down leaks in complex scenes.
+- **Screen Space Reflections Rewrite:** Full rewrite of SSR reducing temporal instability and artefacts at grazing angles. Reflections are now significantly more stable across camera movement.
 - **LibGodot:** Build Godot as a standalone library and embed it into other applications. Opens doors for tool development and non-game interactive applications.
 - **IKModifier3D:** TwoBoneIK, FABRIK, and CCDIK solvers replace the old IK system with a proper solver architecture. The old system was barely functional for production use.
 - **Delta Patching:** Export patches only include changed resource parts. Critical for live games and reducing update sizes.
@@ -421,6 +430,12 @@ This shader is compatible with Godot 4.x's Vulkan renderer, respects the PBR lig
 
 - **Typed dictionaries:** `var inventory: Dictionary[String, int] = {}` provides full type safety with Inspector export support. This is a major quality-of-life improvement -- untyped dictionaries were one of GDScript's last significant type-safety gaps.
 - Works with `@export` for editor editing, enabling type-safe dictionary configuration in the Inspector.
+
+#### Maintenance Releases
+
+- **Godot 4.5.2** (March 19, 2026): Bug fixes for the 4.5 branch. No new features. Standard maintenance.
+- **Godot 4.6.1** (February 16, 2026): Bug fixes for the 4.6 branch. No new features. Standard maintenance.
+- **Godot 4.7** is in dev snapshots (no stable release yet). Do not use dev snapshots for production projects. Monitor the release blog for stable announcements.
 
 #### Deprecated Items (warn users)
 

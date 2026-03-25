@@ -1,11 +1,16 @@
 ---
 name: "game-brainstorm"
 description: >
-  Use when the user asks about "game ideas", "brainstorming", "concept development",
-  "ideation", or needs structured creative exploration for a new game concept. Part of
-  the AlterLab GameForge collection.
+  Invoke when the user wants to brainstorm game ideas, explore concepts, run structured
+  ideation, or develop a new game concept from scratch. Triggers on: "game idea",
+  "brainstorm", "concept", "ideation", "what if", "game concept", "pitch". Do NOT invoke
+  for reviewing existing designs (use game-design-review) or market analysis (use
+  game-market-research). Part of the AlterLab GameForge collection.
 argument-hint: "[genre or theme, or 'open' for freeform]"
+effort: medium
+context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Structured Ideation Workflow

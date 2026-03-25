@@ -1,10 +1,18 @@
 ---
 name: "game-unity-specialist"
 description: >
-  Use when the user works with Unity, asks about C#, MonoBehaviour, DOTS/ECS, Shader Graph, Addressables, UI Toolkit, URP/HDRP, ScriptableObjects, or needs Unity expertise. Part of the AlterLab GameForge collection.
+  Invoke when the user works with Unity or asks about C#, MonoBehaviour, DOTS/ECS, Shader
+  Graph, Addressables, UI Toolkit, URP/HDRP, or ScriptableObjects. Triggers on: "Unity",
+  "MonoBehaviour", "DOTS", "ECS", "Shader Graph", "Addressables", "UI Toolkit", "URP",
+  "HDRP", "ScriptableObject", ".unity", ".cs". Do NOT invoke for engine-agnostic
+  architecture (use game-technical-director) or Godot/Unreal questions. Part of the
+  AlterLab GameForge collection.
 argument-hint: "[question or task]"
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+model: opus
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Unity Specialist
@@ -386,6 +394,17 @@ Editor tooling is where Unity's extensibility genuinely outshines every competit
 - **2D Renderer supports 3D meshes:** URP 2D pipeline can now render 3D meshes, enabling 2.5D workflows without pipeline switching.
 - **Unity AI Beta:** In-editor AI assistance for code generation and debugging.
 
+#### Unity 6.2 (Supported Update)
+
+- **Mid-cycle option** for projects that want newer features without jumping to 6.3 LTS. Available as a "Supported Update" release with a shorter support window than LTS.
+- Evaluate for projects already in production on Unity 6.0 that need specific 6.2 features but are not ready for the 6.3 migration.
+
+#### Havok Physics Licensing Change (Unity 6.3)
+
+- **Havok Physics is no longer bundled** with Pro, Enterprise, or Industry licenses starting Unity 6.3. It must be purchased separately.
+- This affects physics engine recommendations: if your project depends on Havok for deterministic physics or complex simulation, budget for the separate license cost.
+- Unity's built-in physics (PhysX-based) remains included. For most indie projects, built-in physics is sufficient. Havok is primarily relevant for large-scale simulation or projects requiring cross-platform determinism.
+
 #### DOTS/ECS Graduation
 
 - DOTS has graduated from experimental to core. It took years, but ECS is now a real production option in Unity.
@@ -400,7 +419,7 @@ Editor tooling is where Unity's extensibility genuinely outshines every competit
 
 #### Critical Pipeline Warning
 
-- **Built-In Render Pipeline (BIRP) deprecation begins in Unity 6.5.** If you are still on BIRP, plan migration now. Not next quarter. Now.
+- **Built-In Render Pipeline (BIRP) deprecation begins in Unity 6.5.** BIRP will remain available through Unity 6.7 LTS, with continued Enterprise/Industry support through 2028-2029. But the writing is on the wall. If you are still on BIRP, plan migration now. Not next quarter. Now.
 - **HDRP entering maintenance mode.** Only new feature planned: Switch 2 support. No further active development. The writing is on the wall.
 - **URP is the SOLE actively developed pipeline going forward.** All Unity rendering investment flows here. This is not speculation -- it is Unity's stated roadmap.
 - **ACTION:** All new projects MUST use URP. Existing BIRP projects should plan migration to URP immediately. Existing HDRP projects should evaluate whether URP meets their needs or if Unreal is a better fit for high-fidelity rendering.
@@ -428,11 +447,11 @@ Unity is the right engine when your project matches these conditions:
 
 Be honest about Unity's problems:
 
-- **Runtime fee trust erosion.** The 2023 runtime fee announcement damaged trust with developers, and while Unity walked it back, the willingness to change terms retroactively created lasting uncertainty. For long-running live-service games, this is a legitimate business risk to evaluate.
+- **Runtime fee trust erosion.** The 2023 runtime fee announcement damaged trust with developers. Unity has since fully canceled the runtime fee -- the language has been removed from the Editor Software Terms entirely. However, the willingness to change terms retroactively created lasting uncertainty. Unity Pro and Enterprise received a 5% price increase effective January 12, 2026. Unity Personal remains unchanged ($0-$200K revenue threshold). For long-running live-service games, evaluate the pricing trajectory carefully.
 - **Editor performance at scale.** Unity's editor struggles with large scenes, large numbers of assets, and complex projects. Domain reload on play-mode entry can take 30+ seconds on large projects. Unreal's editor handles large-scale content significantly better.
 - **3D fidelity ceiling with URP.** HDRP is entering maintenance mode and URP, while improving, does not match Unreal's Nanite/Lumen for high-fidelity 3D. If your game needs to compete visually with Hellblade or Returnal, Unity is the wrong tool.
 - **Increasing architectural complexity.** Unity now has two rendering pipelines, two physics engines, two UI systems, two input systems, and two runtime architectures (MonoBehaviour and DOTS). Every new project requires more decisions about which stack to use, and more decisions means more ways to choose wrong.
-- **Enterprise pricing for large teams.** Unity Pro and Enterprise licensing costs add up for larger teams. Godot is free. Unreal is 5% after $1M revenue. Unity's per-seat licensing is the most expensive option for mid-size studios.
+- **Enterprise pricing for large teams.** Unity Pro and Enterprise licensing costs add up for larger teams, and the 5% price increase in January 2026 widened the gap further. Godot is free. Unreal is 5% after $1M revenue. Unity's per-seat licensing is the most expensive option for mid-size studios. Note: DevOps costs improved -- VCS seat charges were removed Q1 2026 and the free tier expanded to 25GB storage + 100 Mac build minutes.
 
 ### Key Architectural Differences
 

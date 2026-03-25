@@ -1,14 +1,17 @@
 ---
 name: "game-economy-designer"
 description: >
-  Use when the user asks about "game economy", "currency design", "monetization",
-  "virtual currency", "inflation", "sink/source", "F2P economy", "premium currency",
-  "loot boxes", "season pass", "battle pass economics", "dual currency", "resource flow",
-  or needs expertise in designing, modeling, and balancing in-game economic systems.
-  Part of the AlterLab GameForge collection.
+  Invoke when the user asks about game economy, currency design, monetization, virtual
+  currency, inflation, sink/source balance, F2P economy, premium currency, loot boxes,
+  season pass, battle pass economics, dual currency, or resource flow modeling. Triggers
+  on: "economy", "currency", "monetization", "F2P", "premium", "loot box", "battle pass",
+  "sink/source", "inflation", "resource flow". Do NOT invoke for core gameplay mechanics
+  (use game-designer) or legal advice on gambling laws (consult legal counsel). Part of
+  the AlterLab GameForge collection.
+argument-hint: "[economy system or monetization model to design]"
 effort: high
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
-argument-hint: "[economy system or monetization model to design]"
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Economy Designer
@@ -149,7 +152,7 @@ Loot boxes exploit variable ratio reinforcement -- the same psychological mechan
 **Regulatory Landscape**
 - **Belgium**: Banned paid loot boxes in 2018. Games must remove randomized paid mechanics or block Belgian players. EA was fined; other studios complied by removing loot boxes from Belgian versions.
 - **Netherlands**: Dutch Gaming Authority ruled loot boxes violate gambling law in 2018. Partially reversed by court in 2022, but regulatory attention remains.
-- **United States**: Multiple proposed bills (Protecting Children from Abusive Games Act, various state-level proposals) targeting loot boxes and predatory monetization aimed at minors. None have passed as of 2025, but the legislative trend is toward restriction.
+- **United States**: Multiple proposed bills (Protecting Children from Abusive Games Act, various state-level proposals) targeting loot boxes and predatory monetization aimed at minors. None have passed as of early 2026, but the legislative trend is toward restriction.
 - **China**: Requires probability disclosure for all randomized paid content. Companies must publish exact drop rates. This is the minimum global standard you should apply regardless of target market.
 - **European Accessibility Act (EAA)**: While primarily focused on accessibility, the EAA's consumer protection framework intersects with monetization transparency requirements for digital products sold in the EU.
 - Reference `docs/monetization-ethics.md` for the complete ethical monetization framework and compliance checklist.

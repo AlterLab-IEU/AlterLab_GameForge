@@ -1,15 +1,18 @@
 ---
 name: "game-audio-director"
 description: >
-  Use when the user asks about "sound design", "music direction", "audio identity",
-  "adaptive audio", "spatial audio", "SFX", "sonic palette", "dialogue systems",
-  "audio middleware", "dynamic music", "sound bible",
-  or needs expertise in audio direction, sonic world-building, and interactive sound architecture.
-  Part of the AlterLab GameForge collection.
-effort: high
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about sound design, music direction, audio identity, adaptive
+  audio, spatial audio, SFX, sonic palette, dialogue systems, audio middleware, dynamic
+  music, or sound bible creation. Triggers on: "sound design", "music", "audio", "SFX",
+  "adaptive audio", "spatial audio", "sonic palette", "FMOD", "Wwise", "sound bible".
+  Do NOT invoke for narrative dialogue writing (use game-narrative-director) or creative
+  vision (use game-creative-director). Part of the AlterLab GameForge collection.
 argument-hint: "[audio-question or sound-task]"
+model: opus
+effort: high
 context: fork
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Audio Director
@@ -261,6 +264,38 @@ When operating autonomously, you follow this behavioral pattern:
 - **game-creative-director**: Tonal disagreements with other departments, sonic identity pivots, requests that conflict with the game's emotional vision
 - **game-technical-director**: Audio CPU/memory budget constraints, platform-specific audio limitations, engine audio system capabilities
 - **game-producer**: Audio team staffing, external composer/studio contracting, milestone audio deliverables
+
+## MCP Integration
+
+The audio director role connects to MCP servers for voice synthesis, sound effect generation, and cloud-based audio model access -- enabling rapid audio prototyping directly from the Claude Code session.
+
+### Connected MCP Servers
+
+| MCP Server | Audio Direction Use | How It Helps |
+|---|---|---|
+| [elevenlabs/elevenlabs-mcp](https://github.com/elevenlabs/elevenlabs-mcp) (1,272 stars) | Voice, TTS, SFX generation | Generate placeholder dialogue for playtest builds using text-to-speech with emotional control parameters. Produce sound effects at 48kHz quality for prototyping. Create voice prototypes in 32 languages for localization planning. **Use for prototyping only** -- see SAG-AFTRA compliance rules below. |
+| [raveenb/fal-mcp-server](https://github.com/raveenb/fal-mcp-server) (40 stars) | Music and ambient audio generation | Access cloud-based audio generation models for background music prototyping, ambient soundscape exploration, and audio texture creation. Useful when no local audio tools are available. |
+
+### Example Workflows
+
+**Placeholder Dialogue Pipeline:**
+1. Write dialogue lines in the narrative script document
+2. Use ElevenLabs MCP to generate TTS renditions with appropriate emotional parameters (tone, pace, intensity)
+3. Integrate generated audio into the game build for playtest timing validation
+4. Evaluate whether dialogue pacing works with gameplay rhythm before booking voice actors
+5. Replace all AI-generated dialogue with human performances before shipping -- document provenance per the AI Audio Tools section below
+
+**SFX Prototyping Session:**
+1. Define the sound event in the SFX Design Specification format (layer stack, variation requirements, spatialization)
+2. Use ElevenLabs MCP Sound Effects tool to generate candidate sounds matching the description
+3. Audition generated SFX in-engine at gameplay pace -- evaluate against the sonic palette and material sound matrix
+4. Flag assets that pass the quality gate for further hand-refinement; reject assets with "AI tells" (over-smooth tails, inconsistent spatial character)
+
+**Ambient Soundscape Exploration:**
+1. Define the target biome or environment's sonic identity from the Sound Bible
+2. Use fal-mcp to generate ambient texture candidates (wind layers, water loops, environmental drones)
+3. Evaluate against frequency ownership rules -- ensure generated ambience does not collide with dialogue or primary SFX frequency ranges
+4. Layer approved textures into the middleware bus architecture for in-context mixing
 
 ---
 

@@ -1,11 +1,15 @@
 ---
 name: "game-start"
 description: >
-  Use when the user asks about "starting a new game project", "setting up a game project",
-  "project onboarding", or needs initial project scaffolding and state assessment. Part of
-  the AlterLab GameForge collection.
+  Invoke when the user wants to start a new game project, set up project scaffolding,
+  onboard into an existing codebase, or initialize GameForge session state. Triggers on:
+  "start a game", "new game project", "set up project", "project onboarding", "initialize
+  project". Do NOT invoke for brainstorming ideas (use game-brainstorm) or prototyping
+  mechanics (use game-prototype). Part of the AlterLab GameForge collection.
 argument-hint: "[engine: godot|unity|unreal]"
+effort: medium
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Project Onboarding Workflow
@@ -49,11 +53,36 @@ Problems this solves:
    documented in `docs/collaboration-protocol.md`. All design terminology should follow
    `docs/game-design-theory.md`.
 
+### Project Detection (Auto-populated)
+
+These values are injected automatically via shell preprocessing before the skill content
+reaches Claude. They provide real-time project data so state detection starts from facts,
+not assumptions.
+
+- Engine: !`ls project.godot *.unity *.uproject 2>/dev/null | head -1 || echo "No engine project file detected"`
+- Git status: !`git log --oneline -5 2>/dev/null || echo "No git history"`
+- Source file count: !`find . -name "*.gd" -o -name "*.cs" -o -name "*.cpp" -o -name "*.h" -o -name "*.rs" -o -name "*.js" 2>/dev/null | wc -l`
+- Existing docs: !`ls -1 docs/ 2>/dev/null || echo "No docs directory"`
+- Design directory: !`ls -1 design/ 2>/dev/null || echo "No design directory"`
+- Test directory: !`ls -1 tests/ 2>/dev/null || echo "No tests directory"`
+- Build config: !`ls Makefile CMakeLists.txt SConstruct *.sln package.json Cargo.toml 2>/dev/null | head -3 || echo "No build config detected"`
+- Project age: !`git log --reverse --format="%ar" 2>/dev/null | head -1 || echo "Unknown — no git history"`
+- Active contributors: !`git shortlog -sn --no-merges 2>/dev/null | head -5 || echo "Unknown — no git history"`
+- TODO/FIXME count: !`grep -r "TODO\|FIXME\|HACK\|XXX" src/ 2>/dev/null | wc -l || echo "0"`
+
+Use this auto-populated data to shortcut Step 0 below. If the engine field shows a detected
+project file, skip the engine detection prompts. If source file count is zero, you are in
+State 1 (Empty Project). If source file count is nonzero but docs directory is empty, the
+project likely has documentation gaps. The git history age and contributor count help
+distinguish solo dev projects from team projects, which affects recommended workflow
+complexity.
+
 ### Workflow
 
 **Step 0: Project State Detection**
 
-Before any recommendations, assess the current state by scanning for these signals:
+Before any recommendations, assess the current state by scanning for these signals.
+Cross-reference against the auto-populated data above — much of this may already be answered.
 
 ```
 STATE DETECTION MATRIX

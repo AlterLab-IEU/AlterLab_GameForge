@@ -2,10 +2,10 @@
 
 ## Project Overview
 
-AlterLab GameForge is a collection of 29 production-grade Claude AI skills purpose-built for indie game development. The skills are organized into three categories:
+AlterLab GameForge is a collection of 31 production-grade Claude AI skills purpose-built for indie game development. The skills are organized into three categories:
 
 - **11 Studio Agents** -- Specialized roles that emulate a full game studio team
-- **15 Workflow Skills** -- Structured processes for common game dev tasks
+- **17 Workflow Skills** -- Structured processes for common game dev tasks
 - **3 Engine Specialists** -- Deep expertise for Godot, Unity, and Unreal Engine
 
 Every skill is grounded in established game design theory (MDA Framework, Self-Determination Theory, Flow Theory, Bartle's Player Types) and delivers structured, actionable output.
@@ -19,9 +19,10 @@ All skills reference a common knowledge base. These docs provide the theoretical
 - `@docs/coordination-rules.md` -- Turn order, conflict resolution, escalation paths between agents
 - `@docs/agent-hierarchy.md` -- Reporting structure and decision authority for all 11 agents
 - `@docs/coding-standards.md` -- Code style, architecture patterns, and engine-specific conventions
-- `@docs/workflow-guide.md` -- 11-phase development lifecycle mapping all 29 skills to project phases
+- `@docs/workflow-guide.md` -- 11-phase development lifecycle mapping all 31 skills to project phases
 - `@docs/monetization-ethics.md` -- Ethical monetization framework, dark pattern identification, regulatory landscape
 - `@docs/engine-comparison.md` -- Structured comparison matrix for Godot, Unity, and Unreal Engine
+- `@docs/mcp-integrations.md` -- MCP server ecosystem for game dev, engine-specific recommendations, setup guides
 
 Always check these docs before answering game development questions. They contain the canonical standards for this project.
 
@@ -79,6 +80,7 @@ Route user requests to the correct skill based on intent:
 |---|---|
 | Starting a new game project | `game-start` |
 | Ideation, brainstorming, concept exploration | `game-brainstorm` |
+| Market research, competitive analysis, market sizing | `game-market-research` |
 | Reviewing a game design document | `game-design-review` |
 | Reviewing game code or architecture | `game-code-review` |
 | Planning a development sprint | `game-sprint-plan` |
@@ -89,6 +91,7 @@ Route user requests to the correct skill based on intent:
 | Coordinating multiple agents on a task | `game-team-orchestrator` |
 | Evaluating scope against timeline | `game-scope-check` |
 | Running a sprint/milestone/project retrospective | `game-retrospective` |
+| Running a post-mortem or project review | `game-postmortem` |
 | Generating documentation from existing code | `game-reverse-document` |
 | Translation, localization, internationalization (i18n) | `game-localization-manager` |
 | Analytics, telemetry, KPIs, data-driven design | `game-analytics-setup` |
@@ -117,6 +120,11 @@ The following hooks run automatically during Claude Code sessions:
 | `validate-commit` | PreToolUse | Enforce commit message convention before git commits |
 | `detect-gaps` | PostToolUse | Identify missing skill coverage in agent responses |
 | `log-agent` | PostToolUse | Record which agents were invoked and their outputs |
+| `post-compact` | PostCompact | Restore essential context after context compaction |
+| `subagent-track` | SubagentStart/SubagentStop | Log subagent delegation for orchestration tracking |
+| `instructions-validate` | InstructionsLoaded | Validate required docs exist when CLAUDE.md loads |
+| `stop-failure` | StopFailure | Save session state and guide recovery on API errors |
+| `config-change` | ConfigChange | Detect skill/config modifications during session |
 
 ## Templates
 
@@ -186,7 +194,7 @@ Active session data is stored in `production/session-state/` and session logs in
 AlterLab_GameForge/
   skills/
     agents/          -- 11 studio agent skills
-    workflows/       -- 15 workflow skills
+    workflows/       -- 17 workflow skills
     engine-specialists/  -- 3 engine-specific skills
   docs/              -- Shared knowledge base
   hooks/             -- Session lifecycle hooks

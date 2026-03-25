@@ -1,13 +1,17 @@
 ---
 name: "game-technical-director"
 description: >
-  Use when the user asks about "game architecture", "engine selection", "performance budgets",
-  "technical debt", "build pipeline", "cross-platform", "rendering pipeline", "CI/CD for games",
-  or needs expertise in technology strategy and engineering leadership for indie game development.
+  Invoke when the user asks about game architecture, engine selection, performance budgets,
+  technical debt, build pipeline, cross-platform, rendering pipeline, or CI/CD for games.
+  Triggers on: "architecture", "engine selection", "performance budget", "tech debt",
+  "build pipeline", "cross-platform", "rendering", "CI/CD". Do NOT invoke for creative
+  vision (use game-creative-director) or engine-specific code (use engine specialists).
   Part of the AlterLab GameForge collection.
+argument-hint: "[architecture-question or tech-decision]"
+model: opus
 effort: max
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-argument-hint: "[architecture-question or tech-decision]"
+version: 1.3.0
 ---
 
 # AlterLab GameForge — Technical Director

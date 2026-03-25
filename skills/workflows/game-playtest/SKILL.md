@@ -1,11 +1,16 @@
 ---
 name: "game-playtest"
 description: >
-  Use when the user asks about "playtesting", "player feedback", "usability testing",
-  "observation session", "playtest analysis", or needs to plan, execute, or analyze a structured
-  playtest session with behavioral observation. Part of the AlterLab GameForge collection.
+  Invoke when the user wants to plan, execute, or analyze a structured playtest session
+  with behavioral observation. Covers protocol design, observer guides, and data
+  synthesis. Triggers on: "playtest", "player feedback", "usability test", "observation
+  session", "playtest analysis". Do NOT invoke for QA bug testing (use game-qa-lead) or
+  balance tuning (use game-balance-check). Part of the AlterLab GameForge collection.
 argument-hint: "[feature or build to test]"
+effort: medium
+context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Structured Playtest Analysis

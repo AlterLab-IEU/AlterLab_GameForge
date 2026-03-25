@@ -2,7 +2,7 @@
 
 This document maps the complete game development lifecycle to GameForge skills and agents. Use it to understand which tools to invoke at each project phase, what outputs each phase produces, and which templates support the work.
 
-All 25 skills (9 agents, 13 workflows, 3 engine specialists) and 14 templates are mapped below. Phases overlap in practice -- pre-production bleeds into prototyping, production runs parallel to testing -- but the sequence defines the primary focus at each stage.
+All 31 skills (11 agents, 17 workflows, 3 engine specialists), 11 hooks, and 17 templates are mapped below. Phases overlap in practice -- pre-production bleeds into prototyping, production runs parallel to testing -- but the sequence defines the primary focus at each stage.
 
 ---
 
@@ -66,7 +66,7 @@ Test the riskiest assumptions before committing to full production. Build the mi
 Build one complete, polished slice of the game that represents final quality across all disciplines.
 
 - **Trigger**: `/game-team-orchestrator` (coordinates all agents)
-- **Agents**: All 9 agents
+- **Agents**: All 11 agents
 - **Skills Used**: `game-team-orchestrator`, `game-creative-director`, `game-art-director`, `game-audio-director`, `game-narrative-director`, `game-designer`, `game-technical-director`, `game-ux-designer`, `game-qa-lead`, `game-producer`, engine specialist
 - **Templates**: `art-bible.md`, `sound-bible.md`, `character-sheet.md`, `level-design-document.md`
 - **Output**: One fully polished level/area/sequence, art bible, sound bible, all pipelines validated end-to-end
@@ -87,7 +87,7 @@ Build one complete, polished slice of the game that represents final quality acr
 The bulk of content creation. All systems are built, all content is authored, all assets are produced.
 
 - **Trigger**: `/game-sprint-plan` (repeated per sprint)
-- **Agents**: All 9 agents in their respective domains
+- **Agents**: All 11 agents in their respective domains
 - **Skills Used**: `game-sprint-plan`, `game-designer`, `game-narrative-director`, `game-art-director`, `game-audio-director`, `game-technical-director`, `game-ux-designer`, `game-qa-lead`, `game-producer`, engine specialist, `game-team-orchestrator`
 - **Templates**: `sprint-plan.md`, `level-design-document.md`, `character-sheet.md`, `economy-model.md`
 - **Output**: All game content, systems, levels, characters, audio, UI -- the complete game
@@ -254,9 +254,15 @@ Retrospective, update planning, and ongoing support.
 | `game-godot-specialist` | 2, 3, 4, 7, 9 | Engine |
 | `game-unity-specialist` | 2, 3, 4, 7, 9 | Engine |
 | `game-unreal-specialist` | 2, 3, 4, 7, 9 | Engine |
+| `game-economy-designer` | 4, 5 | Agent |
+| `game-accessibility-specialist` | 3, 4, 7 | Agent |
 | `game-scope-check` | 1, 4, 5 | Workflow |
 | `game-retrospective` | 10 | Workflow |
 | `game-reverse-document` | 1, 10 | Workflow |
+| `game-localization-manager` | 4, 8 | Workflow |
+| `game-analytics-setup` | 4, 9, 10 | Workflow |
+| `game-postmortem` | 10 | Workflow |
+| `game-market-research` | 0, 1 | Workflow |
 
 ## Quick Reference: Template-to-Phase Mapping
 

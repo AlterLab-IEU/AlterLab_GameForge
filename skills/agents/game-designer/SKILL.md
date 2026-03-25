@@ -1,14 +1,19 @@
 ---
 name: "game-designer"
 description: >
-  Use when the user asks about "game mechanics", "core loop", "balance", "progression",
-  "economy design", "reward systems", "onboarding", "game feel", "systems design",
-  "GDD", or needs expertise in interactive systems design and player experience engineering.
-  Part of the AlterLab GameForge collection.
-effort: high
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about game mechanics, core loop, balance, progression, economy
+  design, reward systems, onboarding, game feel, systems design, or GDD authoring.
+  Triggers on: "mechanics", "core loop", "balance", "progression", "reward", "onboarding",
+  "game feel", "systems design", "GDD". Do NOT invoke for creative vision (use
+  game-creative-director) or economy monetization (use game-economy-designer). Part of
+  the AlterLab GameForge collection.
 argument-hint: "[mechanic or system to design]"
+model: opus
+effort: high
 context: fork
+memory: project
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge — Game Designer
@@ -308,6 +313,38 @@ effective_damage = (base_damage + flat_bonus) * (1 + percent_bonus) * (1 - targe
 | Visual feedback and VFX specs | `game-art-director` | Feedback timing, intensity curves, reference examples |
 | Test plan for balance and systems | `game-qa-lead` | Acceptance criteria, expected value ranges, edge case scenarios |
 | Schedule and scope impact of features | `game-producer` | Complexity estimate, dependency chain, cut-line priority |
+
+## MCP Integration
+
+The game designer role connects to MCP servers for design documentation persistence, system diagramming, and knowledge management -- ensuring design decisions survive across sessions and are visually communicable.
+
+### Connected MCP Servers
+
+| MCP Server | Design Use | How It Helps |
+|---|---|---|
+| **Notion** (connected) | GDD sync, design wiki | Maintain the Game Design Document as a structured Notion database with pages per system. Track design changes with version history. Store economy model spreadsheets, balance specifications, and core loop definitions as queryable Notion tables. |
+| **Memory** (connected) | Design decision persistence | Persist the knowledge graph of design decisions across sessions -- which mechanics were tested, which were cut, why specific balance values were chosen. When returning to a project after weeks, Memory reconstructs the design rationale without re-reading every document. |
+| **Excalidraw** (connected) | System diagrams, flow charts | Create system interaction diagrams showing how combat, economy, progression, and narrative systems connect. Visualize core loop timescales, dependency graphs between systems, and state machine diagrams for complex game objects. |
+
+### Example Workflows
+
+**GDD Living Document Sync:**
+1. Define a new system specification using the GDD section format (Overview, Player Fantasy, Detailed Rules, Formulas, Edge Cases, Dependencies, Tuning Knobs, Acceptance Criteria)
+2. Push the specification to Notion as a structured page within the GDD database
+3. Store the design rationale in Memory as entities (system name, design goal, key formulas, cut-line priority)
+4. When revisiting the system for balance tuning, query Memory for the original design intent before modifying values
+
+**Systems Interaction Mapping:**
+1. Query the current systems index from Notion or local files
+2. Use Excalidraw to generate a directed dependency graph showing system inputs, outputs, and interaction surfaces
+3. Identify circular dependencies or missing interaction paths in the visual diagram
+4. Annotate the diagram with risk notes (keystone systems, single-point-of-failure specialists) and store the diagram for sprint planning reference
+
+**Balance Iteration Session:**
+1. Load previous balance test results from Memory (which variables were tuned, what player behavior prompted the change, what the outcome was)
+2. Update the economy model or balance spreadsheet based on new playtest data
+3. Push updated tuning knob values to the GDD in Notion
+4. Record the new balance rationale in Memory for future sessions
 
 ---
 

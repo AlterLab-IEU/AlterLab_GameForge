@@ -1,11 +1,16 @@
 ---
 name: "game-prototype"
 description: >
-  Use when the user asks about "rapid prototyping", "testing a mechanic", "proof of concept",
-  "hypothesis-driven development", "prototype evaluation", or needs to quickly validate a game
-  idea before committing to full production. Part of the AlterLab GameForge collection.
+  Invoke when the user wants to rapidly prototype a mechanic, test a proof of concept,
+  run hypothesis-driven development, or validate a game idea before full production.
+  Triggers on: "prototype", "proof of concept", "test this mechanic", "validate idea",
+  "rapid prototype", "bake-off". Do NOT invoke for starting a full project (use
+  game-start) or brainstorming concepts (use game-brainstorm). Part of the AlterLab
+  GameForge collection.
 argument-hint: "[mechanic to prototype]"
+effort: medium
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Hypothesis-Driven Prototyping

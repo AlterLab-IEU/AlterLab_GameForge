@@ -4,9 +4,9 @@
 
 <br>
 
-<a href="skills/"><img src="https://img.shields.io/badge/Skills-29-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
+<a href="skills/"><img src="https://img.shields.io/badge/Skills-31-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
 <a href="skills/agents/"><img src="https://img.shields.io/badge/Agents-11-2563EB?style=for-the-badge&logo=databricks&logoColor=white" alt="Agents"></a>
-<a href="skills/workflows/"><img src="https://img.shields.io/badge/Workflows-15-0D9488?style=for-the-badge&logo=databricks&logoColor=white" alt="Workflows"></a>
+<a href="skills/workflows/"><img src="https://img.shields.io/badge/Workflows-17-0D9488?style=for-the-badge&logo=databricks&logoColor=white" alt="Workflows"></a>
 <a href="skills/engine-specialists/"><img src="https://img.shields.io/badge/Engines-Godot%20%7C%20Unity%20%7C%20Unreal-E11D48?style=for-the-badge&logo=godotengine&logoColor=white" alt="Engines"></a>
 <a href="https://www.anthropic.com"><img src="https://img.shields.io/badge/Claude-AI%20Powered-F97316?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="MIT License"></a>
@@ -17,7 +17,7 @@
 
 <br><br>
 
-<h3>29 Production-Grade Claude AI Skills for Indie Game Development</h3>
+<h3>31 Production-Grade Claude AI Skills for Indie Game Development</h3>
 
 <p><em>From concept to launch — studio agents, dev workflows, and engine specialists in one toolkit</em></p>
 
@@ -106,7 +106,7 @@
 
 ## 🎮 What Is This?
 
-A curated collection of **29 production-grade Claude AI skills** that give you a full indie game studio inside your terminal. Each skill is a deep instruction set that transforms Claude into a **specialized game development expert** — from creative direction and narrative design to engine-specific coding and launch preparation.
+A curated collection of **31 production-grade Claude AI skills** that give you a full indie game studio inside your terminal. Each skill is a deep instruction set that transforms Claude into a **specialized game development expert** — from creative direction and narrative design to engine-specific coding and launch preparation.
 
 Whether you are a solo developer building your first game or a small team shipping your tenth, GameForge gives you access to **expert-level guidance** across every discipline of game development.
 
@@ -135,7 +135,7 @@ These aren't chatbot personas. They're **autonomous agents** that produce real d
 | | Category | Skills | Focus Areas |
 |:---:|:---|:---:|:---|
 | 🎭 | **Studio Agents** | **11** | Creative direction, technical architecture, production, design, narrative, art, audio, QA, UX, economy, accessibility |
-| 🔄 | **Workflow Skills** | **15** | Project bootstrap, brainstorming, design review, code review, sprints, prototyping, playtesting, balance, launch, localization, analytics |
+| 🔄 | **Workflow Skills** | **17** | Project bootstrap, brainstorming, market research, design review, code review, sprints, prototyping, playtesting, balance, launch, post-mortem, localization, analytics |
 | ⚙️ | **Engine Specialists** | **3** | Godot 4 (GDScript/C#), Unity (C#/ECS), Unreal Engine (C++/Blueprints) |
 
 <br>
@@ -195,7 +195,7 @@ claude> /game-godot-specialist
 
 </details>
 
-### 🔄 Workflow Skills — Structured Processes for Game Dev (15 Skills)
+### 🔄 Workflow Skills — Structured Processes for Game Dev (17 Skills)
 
 <details>
 <summary><b>Click to expand full Workflow Skills list</b></summary>
@@ -219,6 +219,8 @@ claude> /game-godot-specialist
 | 13 | **Reverse Document** | GameReverseDocument | Generates design docs from existing game code — reverse-engineers the GDD |
 | 14 | **Localization Manager** | GameLocalizationManager | Manages translation pipelines, string extraction, and cultural adaptation for global markets |
 | 15 | **Analytics Setup** | GameAnalyticsSetup | Integrates telemetry, defines KPIs, builds dashboards, and sets up privacy-first analytics |
+| 16 | **Post-Mortem** | GamePostmortem | Runs structured post-mortem analysis pulling git history, milestone data, and lessons learned |
+| 17 | **Market Research** | GameMarketResearch | Conducts competitive landscape analysis, market sizing, audience profiling, and positioning strategy |
 
 </details>
 
@@ -295,7 +297,7 @@ GameForge is designed as an interconnected skill system:
 |              |              |
 +--------+--+ +-------+---+ +-------+--------+
 | Agents   | | Workflows | | Engine         |
-|  (11)    | |   (15)    | | Specialists    |
+|  (11)    | |   (17)    | | Specialists    |
 +----------+ +-----------+ |     (3)        |
      |            |        +----------------+
 +--------------+  |
@@ -310,6 +312,7 @@ GameForge is designed as an interconnected skill system:
 | workflow-guide.md
 | monetization-ethics.md
 | engine-comparison.md
+| mcp-integrations.md
 +---------------+
          |
 +------------+------------+
@@ -339,7 +342,7 @@ AlterLab_GameForge/
 │   │   ├── game-ux-designer/
 │   │   ├── game-economy-designer/
 │   │   └── game-accessibility-specialist/
-│   ├── 🔄 workflows/                 # Dev processes (15)
+│   ├── 🔄 workflows/                 # Dev processes (17)
 │   │   ├── game-start/
 │   │   ├── game-brainstorm/
 │   │   ├── game-design-review/
@@ -354,7 +357,9 @@ AlterLab_GameForge/
 │   │   ├── game-retrospective/
 │   │   ├── game-reverse-document/
 │   │   ├── game-localization-manager/
-│   │   └── game-analytics-setup/
+│   │   ├── game-analytics-setup/
+│   │   ├── game-postmortem/
+│   │   └── game-market-research/
 │   └── ⚙️ engine-specialists/        # Engine experts (3)
 │       ├── game-godot-specialist/
 │       ├── game-unity-specialist/
@@ -367,14 +372,20 @@ AlterLab_GameForge/
 │   ├── coding-standards.md
 │   ├── workflow-guide.md
 │   ├── monetization-ethics.md
-│   └── engine-comparison.md
+│   ├── engine-comparison.md
+│   └── mcp-integrations.md
 ├── 📁 hooks/
 │   ├── session-start.sh
 │   ├── session-stop.sh
 │   ├── pre-compact.sh
+│   ├── post-compact.sh
 │   ├── validate-commit.sh
 │   ├── detect-gaps.sh
-│   └── log-agent.sh
+│   ├── log-agent.sh
+│   ├── subagent-track.sh
+│   ├── instructions-validate.sh
+│   ├── stop-failure.sh
+│   └── config-change.sh
 ├── 📁 templates/
 │   ├── game-design-document.md
 │   ├── game-concept.md
@@ -445,7 +456,7 @@ MIT — Free to use, modify, and distribute.
 
 <br><br>
 
-<b>29 skills · 3 categories · 1 prompt away from expert-level game development</b>
+<b>31 skills · 3 categories · 1 prompt away from expert-level game development</b>
 
 <br><br>
 

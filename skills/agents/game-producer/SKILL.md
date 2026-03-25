@@ -1,12 +1,18 @@
 ---
 name: "game-producer"
 description: >
-  Use when the user asks about "sprint planning", "milestone tracking", "scope management",
-  "risk assessment", "scheduling", "resource allocation", or needs production coordination
-  across the development team. Part of the AlterLab GameForge collection.
-effort: max
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+  Invoke when the user asks about sprint planning, milestone tracking, scope management,
+  risk assessment, scheduling, resource allocation, team velocity, or needs production
+  coordination across the development team. Triggers on: "sprint", "milestone", "scope",
+  "risk", "schedule", "resource", "velocity", "deadline", "crunch", "cut list". Do NOT
+  invoke for creative vision (use game-creative-director) or architecture decisions
+  (use game-technical-director). Part of the AlterLab GameForge collection.
 argument-hint: "[schedule-question or scope-issue]"
+model: opus
+effort: max
+memory: project
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Game Producer
@@ -313,6 +319,40 @@ Context for scope and ambition calibration:
 - **83% of Steam games earn less than $10,000 in revenue.** This is the statistical reality of the indie market. Scope decisions must account for the probability that the game will not achieve financial success. Build a game that is worth making even if it doesn't sell.
 - **40% of Steam games do not recoup the $100 listing fee.** This means the median indie game on Steam generates effectively zero revenue. The implication: ship faster, spend less, validate the market before committing to multi-year development.
 - These statistics are not reasons to give up. They are reasons to be disciplined about scope, realistic about timelines, and strategic about market positioning. The games that succeed are differentiated, well-scoped, and finished.
+
+## MCP Integration
+
+The producer role benefits from MCP servers that provide direct access to project management, scheduling, and communication tools -- enabling real-time coordination without context-switching.
+
+### Connected MCP Servers
+
+| MCP Server | Production Use | How It Helps |
+|---|---|---|
+| **GitHub** (connected) | Sprint tracking, milestone management | Create issues for sprint backlog items, track PR velocity for burndown data, manage project boards for kanban-style task visualization, automate release tagging |
+| **Notion** (connected) | GDD management, wiki maintenance | Sync the Game Design Document as a living Notion database, maintain the risk register as a structured table, track cut list priorities, store sprint retrospective notes |
+| **Google Calendar** (connected) | Milestone scheduling, deadline tracking | Create milestone gate events with reminders, schedule sprint reviews and retrospectives, set playtest session windows, track regulatory compliance deadlines (EAA, PEGI, COPPA) |
+| **Slack** (connected) | Team communication, status updates | Post sprint status summaries to team channels, send blocker alerts, coordinate playtest scheduling, distribute milestone gate review agendas |
+| **Canva** (connected) | Stakeholder reporting | Generate visual sprint dashboards, create milestone progress infographics for stakeholder updates |
+
+### Example Workflows
+
+**Sprint Planning Session:**
+1. Pull open GitHub issues tagged with the current milestone
+2. Check Google Calendar for team availability and upcoming deadlines
+3. Cross-reference Notion GDD for feature priority and cut list ranking
+4. Create a sprint plan document, then push sprint items as GitHub issues with assignees and labels
+
+**Risk Register Update:**
+1. Query GitHub for stale issues (no activity in 2+ weeks) -- these are potential schedule risks
+2. Update the Notion risk register table with new risk scores
+3. If any risk scores exceed 15 (critical), post an alert to the Slack team channel
+4. Add a Google Calendar event for the risk mitigation review meeting
+
+**Milestone Gate Review:**
+1. Pull GitHub milestone completion percentage and open blocker issues
+2. Compile gate criteria status from Notion sprint tracking database
+3. Generate a gate review agenda and post to Slack
+4. After review, update Google Calendar with the next milestone target date
 
 ### Regulatory Timeline Awareness
 

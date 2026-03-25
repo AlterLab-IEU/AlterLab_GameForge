@@ -1,6 +1,6 @@
 # AlterLab GameForge Roadmap
 
-Current version: **v1.2.0** (29 skills, 17 templates, 8 docs)
+Current version: **v1.3.0** (31 skills, 17 templates, 9 docs, 11 hooks)
 
 ---
 
@@ -42,31 +42,86 @@ Current version: **v1.2.0** (29 skills, 17 templates, 8 docs)
 
 ---
 
-## v1.3.0 — Automation & Intelligence (Medium Term)
+## v1.3.0 — Automation & Intelligence (SHIPPED)
 
 ### MCP Integrations
 
-| Integration | What | Why | Scope |
-|-------------|------|-----|-------|
-| GitHub Issues workflow | Skills auto-create issues for bugs found during code review, playtest findings, QA results | Currently all output is text in chat. Structured issue creation reduces copy-paste overhead. | Hook + workflow changes |
-| Notion GDD sync | Game Design Document template syncs to Notion pages, stays updated as design evolves | GDDs rot when they live only in markdown. Notion integration keeps the living document alive. | MCP tool integration |
-| Figma asset pipeline | Art director skill can reference Figma files, extract style tokens, validate asset specs | Asset pipeline is described but not connected to actual design tools. | MCP tool integration |
+| Integration | What | Status |
+|-------------|------|--------|
+| MCP integration guide | `docs/mcp-integrations.md` — full catalog of 34 game dev MCP servers with tiered recommendations, setup guides, per-engine configs | SHIPPED |
+| GitHub Issues workflow | MCP sections in game-producer, game-code-review, game-qa-lead for issue creation | SHIPPED |
+| Notion GDD sync | MCP section in game-designer for Notion-backed GDD persistence | SHIPPED |
+| Figma asset pipeline | MCP section in game-art-director and game-ux-designer for Figma integration | SHIPPED |
+| Engine MCPs | MCP sections in engine specialists referencing godot-mcp (2.6K stars), unity-mcp (7.5K stars), unreal-mcp (1.6K stars) | SHIPPED |
+| Audio MCP | MCP section in game-audio-director for ElevenLabs voice/SFX | SHIPPED |
 
 ### Advanced Workflows
 
-| Workflow | What | Why | Scope |
-|----------|------|-----|-------|
-| `game-postmortem` | Structured post-mortem workflow pulling git history, milestone data, retrospective notes | Post-mortem template exists but has no automated data collection. | Workflow skill, ~300 lines |
-| `game-market-research` | Market sizing, competitor analysis, trend detection for game concepts | Brainstorming has no market validation step. This fills that gap. | Workflow skill, ~250 lines |
-| `game-ci-pipeline` | CI/CD setup for game builds — automated testing, build pipelines, deployment | Technical director mentions CI but no operational skill exists. | Workflow skill, ~200 lines |
+| Workflow | What | Status |
+|----------|------|--------|
+| `game-postmortem` | 5-phase post-mortem with shell preprocessing for git stats (384 lines) | SHIPPED |
+| `game-market-research` | 6-phase market research with competitive analysis and TAM/SAM/SOM (405 lines) | SHIPPED |
+| Shell preprocessing | `!`command`` blocks in game-start (10 detectors) and game-sprint-plan (8 detectors) | SHIPPED |
+| Named pipelines | 4 pipeline definitions in game-team-orchestrator with JSON state schema | SHIPPED |
+| `game-ci-pipeline` | CI/CD setup for game builds | Deferred to v1.4.0 |
 
 ### Skill Intelligence
 
+| Feature | What | Status |
+|---------|------|--------|
+| Cross-skill memory | `memory: project` on producer, designer, creative-director via persistent agent memory | SHIPPED |
+| Adaptive complexity | Shell preprocessing detects project maturity in game-start and game-sprint-plan | SHIPPED |
+| Frontmatter modernization | All 31 skills updated: `version`, `model`, `effort`, `context`, `memory`, `disable-model-invocation` | SHIPPED |
+| Trigger optimization | All 31 skill descriptions rewritten for auto-invocation with trigger/anti-trigger keywords | SHIPPED |
+
+### New Hooks (5)
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `post-compact` | PostCompact | Restore game dev context after compaction |
+| `subagent-track` | SubagentStart/SubagentStop | Log agent delegation for orchestration |
+| `instructions-validate` | InstructionsLoaded | Validate required docs on CLAUDE.md load |
+| `stop-failure` | StopFailure | Save state and guide recovery on API errors |
+| `config-change` | ConfigChange | Detect skill modifications during session |
+
+### Content Freshness
+
+| Update | Details |
+|--------|---------|
+| Engine versions | Godot 4.6.1 (floatable docks, ObjectDB, SSR rewrite), Unity 6.3 LTS (Havok licensing, pricing), UE 5.7 (Nanite Voxels/Skinning/PVE, SWRT deprecation) |
+| COPPA April 2026 | Compliance deadline, biometric identifiers, formal infosec program |
+| Steam AI disclosure | Three-tier framework (pre-generated, live-generated, dev tools exempt) |
+| PEGI June 2026 | Loot boxes PEGI 16, NFTs PEGI 18, time-limited offers PEGI 12, daily quests PEGI 7 |
+| App Store | iOS 26 SDK requirement April 28, 2026, Accessibility Nutrition Label |
+| EAA enforcement | MSA designation, fine ranges, scope clarification for games |
+| AI content policy | Template updated to match Steam three-tier framework |
+
+---
+
+## v1.4.0 — Depth & Ecosystem (Next)
+
+### New Skills
+
+| Skill | What | Why |
+|-------|------|-----|
+| `game-ci-pipeline` | CI/CD setup for game builds — automated testing, build pipelines, deployment | Deferred from v1.3.0. Technical director mentions CI but no operational skill exists. |
+| `game-jam-mode` | Compressed 48-72 hour workflows for game jams | Top community request. Current skills assume weeks/months timelines. |
+
+### Depth Expansion
+
 | Feature | What | Why |
 |---------|------|-----|
-| Cross-skill memory | Skills remember context from previous invocations via MCP memory server | Currently each skill invocation is stateless. A sprint plan can't reference last sprint's retrospective. |
-| Adaptive complexity | Skills detect project maturity (prototype/alpha/beta/release) and adjust depth accordingly | Same skill gives same output whether the game is day 1 or month 12. Should scale. |
-| Team composition profiles | Users define their actual team (solo dev, 3-person team, 10-person studio) and skills adjust advice | Solo dev doesn't need the same sprint plan structure as a 10-person team. |
+| Engine sub-specialists | Shader, UI, networking specialists per engine | CCGS has 4 per engine vs our 1. Depth gap. |
+| File-type rules | shader-code, narrative, gameplay-code, engine-code rules | CCGS differentiator. Production quality gates. |
+| Guided GDD authoring | Section-by-section GDD creation workflow | CCGS /design-system equivalent. |
+| Team composition profiles | Users define team size/composition, skills adapt | Deferred from v1.3.0 intelligence features. |
+
+### Ecosystem
+
+| Feature | What | Why |
+|---------|------|-----|
+| Awesome list submissions | PRs to 5 major awesome-claude lists | Zero marketplace presence currently. Highest-ROI visibility action. |
+| SkillsMP / MCPMarket listing | Ensure indexing on major skill directories | 87K+ skills indexed on SkillsMP, GameForge not yet listed. |
 
 ---
 
@@ -85,7 +140,7 @@ Current version: **v1.2.0** (29 skills, 17 templates, 8 docs)
 | Feature | What | Why |
 |---------|------|-----|
 | Skill marketplace listing | Publish to Claude Code marketplace for one-click install | Currently requires manual git clone. Marketplace listing makes discovery frictionless. |
-| Community skill contributions | CONTRIBUTING.md + skill template + validation CI for community PRs | 25 skills cover core needs. Community can build niche skills (VR, mobile, specific genres). |
+| Community skill contributions | CONTRIBUTING.md + skill template + validation CI for community PRs | 31 skills cover core needs. Community can build niche skills (VR, mobile, specific genres). |
 | Genre-specific skill packs | Expansion packs: RPG Pack, Platformer Pack, Narrative Pack with genre-tailored agents | Current skills are genre-agnostic. Genre packs add specialized knowledge (RPG: quest design, skill trees; Platformer: level flow, difficulty curves). |
 
 ### AI-Native Features
@@ -120,6 +175,7 @@ Current community interests (from indie dev forums and game jam feedback):
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v1.3.0 | 2026-03-25 | 31 skills (+game-postmortem, +game-market-research), MCP integration doc with 34 verified servers, MCP sections in 7 skills, 5 new hooks (post-compact, subagent-track, instructions-validate, stop-failure, config-change), shell preprocessing in game-start and game-sprint-plan, named pipelines in game-team-orchestrator, all 31 skills frontmatter modernized (version, model, effort, context, memory), trigger optimization on all descriptions, engine updates (Godot 4.6.1, Unity 6.3 Havok/pricing, UE 5.7 Nanite/SWRT), regulatory freshness (COPPA April 2026, Steam 3-tier AI, PEGI June 2026, App Store iOS 26 SDK), accessibility updates (EAA enforcement, ESA 24 tags, Apple Nutrition Label), AI content policy template aligned to Steam framework |
 | v1.2.0 | 2026-03-25 | 29 skills (+economy-designer, +accessibility-specialist, +localization-manager, +analytics-setup), voice consistency pass on all 25 existing skills, persona rewrites for technical-director and designer, full rebuilds of retrospective and team-orchestrator, 3 new templates, 2 new docs, all 9 agents get "When NOT to Use Me" sections, brainstorm gets market validation, balance gets statistical methods, launch gets post-launch ops, engine specialists get migration guides |
 | v1.1.0 | 2026-03-25 | 25 skills (added scope-check, retrospective, reverse-document), 6 docs (added workflow-guide), 4 new templates, engine version updates, regulatory compliance, expanded game design theory |
 | v1.0.0 | 2026-03-24 | Initial release — 22 skills, 10 templates, 5 docs, full agent hierarchy |

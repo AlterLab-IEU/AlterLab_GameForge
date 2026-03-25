@@ -1,12 +1,15 @@
 ---
 name: "game-scope-check"
 description: >
-  Evaluate project scope against timeline and resources. Triggers when users mention scope
-  creep, feature lists growing, timeline pressure, "can we fit this in", or resource
-  constraints. DO NOT trigger for sprint planning (use game-sprint-plan) or general project
-  status.
+  Evaluate project scope against timeline and resources. Triggers on: "scope creep",
+  "feature list", "can we fit this in", "timeline pressure", "resource constraints",
+  "cut list", "scope evaluation". Do NOT invoke for sprint planning (use game-sprint-plan)
+  or general project status (use game-producer). Part of the AlterLab GameForge collection.
 argument-hint: "[feature-list or milestone to evaluate]"
+effort: medium
+context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+version: 1.3.0
 ---
 
 # AlterLab GameForge -- Scope Check Workflow
