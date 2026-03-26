@@ -368,30 +368,30 @@ Fill in the `[BRACKETED PLACEHOLDERS]` with your game's details — project name
 
 ## 🏗️ Architecture
 
-```
-+-------------------+
-|    CLAUDE.md      |  Routing & config
-+-------------------+
-         |
-+--------+---------+-----------+
-|        |         |           |
-+----------+  +-----------+  +----------------+
-| Agents   |  | Workflows |  | Engine         |
-| (11)     |  | (20)      |  | Specialists(3) |
-+----------+  +-----------+  +----------------+
-|        |         |
-+---------+----+--------------+
-         |
-  +-------+-------+
-  | Shared Docs   |  15 reference documents
-  +---------------+
-         |
-  +-----------+-----------+-----------+
-  |           |           |           |
-+--------+  +----------+  +----------+  +-------------+
-| Hooks  |  | Templates|  | Starters |  | Genre Packs |
-| (11)   |  | (20)     |  | (3)      |  | (2)         |
-+--------+  +----------+  +----------+  +-------------+
+```mermaid
+graph TD
+    A["🧭 CLAUDE.md<br/><i>Routing & Config</i>"] --> B["🎬 Agents<br/><b>11 skills</b>"]
+    A --> C["🔧 Workflows<br/><b>20 skills</b>"]
+    A --> D["🎯 Engine Specialists<br/><b>3 skills</b>"]
+    
+    B --> E["📚 Shared Docs<br/><i>15 reference documents</i>"]
+    C --> E
+    D --> E
+    
+    E --> F["⚡ Hooks<br/><b>11</b>"]
+    E --> G["📄 Templates<br/><b>20</b>"]
+    E --> H["🚀 Starters<br/><b>3</b>"]
+    E --> I["🎲 Genre Packs<br/><b>2</b>"]
+
+    style A fill:#6366f1,stroke:#4f46e5,color:#fff
+    style B fill:#3b82f6,stroke:#2563eb,color:#fff
+    style C fill:#0d9488,stroke:#0f766e,color:#fff
+    style D fill:#e11d48,stroke:#be123c,color:#fff
+    style E fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    style F fill:#f59e0b,stroke:#d97706,color:#fff
+    style G fill:#f59e0b,stroke:#d97706,color:#fff
+    style H fill:#f59e0b,stroke:#d97706,color:#fff
+    style I fill:#f59e0b,stroke:#d97706,color:#fff
 ```
 
 <br>
