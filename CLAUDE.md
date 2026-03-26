@@ -2,11 +2,13 @@
 
 ## Project Overview
 
-AlterLab GameForge is a collection of 31 production-grade Claude AI skills purpose-built for indie game development. The skills are organized into three categories:
+AlterLab GameForge is a collection of 34 production-grade Claude AI skills purpose-built for indie game development. The skills are organized into three categories:
 
 - **11 Studio Agents** -- Specialized roles that emulate a full game studio team
-- **17 Workflow Skills** -- Structured processes for common game dev tasks
+- **20 Workflow Skills** -- Structured processes for common game dev tasks
 - **3 Engine Specialists** -- Deep expertise for Godot, Unity, and Unreal Engine
+
+Additionally, 2 genre packs (Roguelike, Narrative) provide genre-specific reference material.
 
 Every skill is grounded in established game design theory (MDA Framework, Self-Determination Theory, Flow Theory, Bartle's Player Types) and delivers structured, actionable output.
 
@@ -23,6 +25,9 @@ All skills reference a common knowledge base. These docs provide the theoretical
 - `@docs/monetization-ethics.md` -- Ethical monetization framework, dark pattern identification, regulatory landscape
 - `@docs/engine-comparison.md` -- Structured comparison matrix for Godot, Unity, and Unreal Engine
 - `@docs/mcp-integrations.md` -- MCP server ecosystem for game dev, engine-specific recommendations, setup guides
+- `@docs/ai-native-gamedev.md` -- AI tools for game development, production-ready vs experimental assessment
+- `@docs/genre-pack-spec.md` -- Format specification for genre-specific enhancement packs
+- `@docs/skill-quality-rubric.md` -- 5-dimension quality scoring system for skill evaluation
 
 Always check these docs before answering game development questions. They contain the canonical standards for this project.
 
@@ -95,6 +100,9 @@ Route user requests to the correct skill based on intent:
 | Generating documentation from existing code | `game-reverse-document` |
 | Translation, localization, internationalization (i18n) | `game-localization-manager` |
 | Analytics, telemetry, KPIs, data-driven design | `game-analytics-setup` |
+| Game jam participation (48-72 hour compressed development) | `game-jam-mode` |
+| CI/CD pipeline setup, automated builds, deployment | `game-ci-pipeline` |
+| Writing a game design document section by section | `game-gdd-author` |
 
 ### Engine Specialist Routing
 
@@ -147,6 +155,9 @@ The `templates/` directory contains starter templates for common game developmen
 - Playtester Survey (`playtester-survey.md`)
 - Competitive Analysis (`competitive-analysis.md`)
 - Accessibility Audit (`accessibility-audit.md`)
+- Jam Concept (`jam-concept.md`)
+- Jam Submission Checklist (`jam-submission.md`)
+- CI Pipeline Configuration (`ci-pipeline-config.md`)
 
 Reference templates with `@templates/template-name.md` in skill outputs.
 
@@ -193,16 +204,21 @@ Active session data is stored in `production/session-state/` and session logs in
 ```
 AlterLab_GameForge/
   skills/
-    agents/          -- 11 studio agent skills
-    workflows/       -- 17 workflow skills
+    agents/              -- 11 studio agent skills
+    workflows/           -- 20 workflow skills
     engine-specialists/  -- 3 engine-specific skills
-  docs/              -- Shared knowledge base
-  hooks/             -- Session lifecycle hooks
-  templates/         -- Starter templates for game dev artifacts
-  scripts/           -- Validation and utility scripts
-  production/        -- Runtime session data (gitignored)
-  CLAUDE.md          -- This file
-  README.md          -- Project showcase
-  marketplace.json   -- Plugin manifest for Claude Code
-  package.json       -- Project metadata
+  genre-packs/           -- Genre-specific reference material (not skills)
+    roguelike/           -- Roguelike design patterns, balance, brainstorm
+    narrative/           -- Narrative game patterns, pacing, brainstorm
+  docs/                  -- 15 shared knowledge base documents
+  hooks/                 -- 11 session lifecycle hooks
+  templates/             -- 20 starter templates for game dev artifacts
+  scripts/               -- Validation scripts (validate.sh)
+  starters/              -- Engine-specific project configs
+  production/            -- Runtime session data (gitignored)
+  .github/workflows/     -- CI validation pipeline
+  CLAUDE.md              -- This file
+  README.md              -- Project showcase
+  marketplace.json       -- Plugin manifest for Claude Code
+  package.json           -- Project metadata
 ```

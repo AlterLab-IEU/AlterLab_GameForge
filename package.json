@@ -1,8 +1,8 @@
 {
   "name": "alterlab-gameforge",
   "private": true,
-  "version": "1.4.0",
-  "description": "31 production-grade Claude AI skills for indie game development — agents, workflows, and engine specialists",
+  "version": "2.0.0",
+  "description": "34 production-grade Claude AI skills for indie game development — agents, workflows, engine specialists, genre packs",
   "author": "Cem Ipek <cem.ipek@ieu.edu.tr>",
   "license": "MIT",
   "repository": {
@@ -27,7 +27,7 @@
     "claude-code"
   ],
   "scripts": {
-    "validate": "node scripts/validate.js",
-    "list": "node scripts/validate.js --list"
+    "validate": "bash scripts/validate.sh",
+    "validate:verbose": "bash scripts/validate.sh --verbose"
   }
 }

@@ -4,30 +4,43 @@
 
 <br>
 
-<a href="skills/"><img src="https://img.shields.io/badge/Skills-31-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
+<a href="skills/"><img src="https://img.shields.io/badge/Skills-34-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
 <a href="skills/agents/"><img src="https://img.shields.io/badge/Agents-11-2563EB?style=for-the-badge&logo=databricks&logoColor=white" alt="Agents"></a>
-<a href="skills/workflows/"><img src="https://img.shields.io/badge/Workflows-17-0D9488?style=for-the-badge&logo=databricks&logoColor=white" alt="Workflows"></a>
+<a href="skills/workflows/"><img src="https://img.shields.io/badge/Workflows-20-0D9488?style=for-the-badge&logo=databricks&logoColor=white" alt="Workflows"></a>
 <a href="skills/engine-specialists/"><img src="https://img.shields.io/badge/Engines-Godot%20%7C%20Unity%20%7C%20Unreal-E11D48?style=for-the-badge&logo=godotengine&logoColor=white" alt="Engines"></a>
 <a href="https://www.anthropic.com"><img src="https://img.shields.io/badge/Claude-AI%20Powered-F97316?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="MIT License"></a>
 
 <br>
 
-<a href="templates/"><img src="https://img.shields.io/badge/Templates-17-8B5CF6?style=for-the-badge&logo=files&logoColor=white" alt="Templates"></a>
+<a href="templates/"><img src="https://img.shields.io/badge/Templates-20-8B5CF6?style=for-the-badge&logo=files&logoColor=white" alt="Templates"></a>
 <a href="hooks/"><img src="https://img.shields.io/badge/Hooks-11-3B82F6?style=for-the-badge&logo=webhook&logoColor=white" alt="Hooks"></a>
-<a href="docs/"><img src="https://img.shields.io/badge/Docs-12-06B6D4?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Docs"></a>
+<a href="docs/"><img src="https://img.shields.io/badge/Docs-15-06B6D4?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Docs"></a>
+<a href="genre-packs/"><img src="https://img.shields.io/badge/Genre%20Packs-2-14B8A6?style=for-the-badge&logo=rocket&logoColor=white" alt="Genre Packs"></a>
 <a href="starters/"><img src="https://img.shields.io/badge/Starters-3-14B8A6?style=for-the-badge&logo=rocket&logoColor=white" alt="Starters"></a>
+<a href=".github/workflows/"><img src="https://img.shields.io/badge/CI-Passing-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI"></a>
 <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="PRs Welcome"></a>
 
 <br><br>
 
-<h3>31 Production-Grade Claude AI Skills for Indie Game Development</h3>
+<h3>34 Production-Grade Claude AI Skills for Indie Game Development</h3>
 
-<p><em>From concept to launch -- studio agents, dev workflows, and engine specialists in one toolkit.</em></p>
+<p><em>From concept to launch -- studio agents, dev workflows, engine specialists, and genre packs in one toolkit.</em></p>
 
 </div>
 
 <br>
+
+---
+
+## What's New in v2.0.0
+
+- **3 new workflow skills**: Game Jam Mode (48-72h compressed workflows), CI Pipeline (engine-specific CI/CD with Steam/itch.io deployment), GDD Author (guided section-by-section authoring)
+- **Engine deepening**: Networking, animation, VFX, AI, and material system sections added to all 3 engine specialists
+- **2 genre packs**: Roguelike (888 lines) and Narrative (943 lines) -- design patterns, balance frameworks, and ideation prompts grounded in shipped games
+- **CI validation**: 486 automated checks via `validate.sh` + GitHub Actions pipeline
+- **Quality rubric**: 5-dimension scoring system (Trigger/Depth/Consistency/Usefulness/Voice) with 8+ minimum bar
+- **AI-native gamedev guide**: Honest assessment of AI tools for game development -- what ships today vs what's hype
 
 ---
 
@@ -47,7 +60,7 @@ claude> /game-designer
 claude> /game-godot-specialist
 ```
 
-That's it. 31 skills are now available as slash commands. Each one transforms Claude into a specialized game dev expert with real frameworks, structured outputs, and production-grade templates.
+That's it. 34 skills are now available as slash commands. Each one transforms Claude into a specialized game dev expert with real frameworks, structured outputs, and production-grade templates.
 
 > **Alternative:** Copy any [`SKILL.md`](skills/) file into a [Claude Project's](https://claude.ai) custom instructions. Same result, different interface.
 
@@ -98,7 +111,7 @@ Not sure which skill to use? Pick your situation:
 
 </details>
 
-### Workflow Skills -- Structured Dev Processes (17)
+### Workflow Skills -- Structured Dev Processes (20)
 
 <details>
 <summary><b>Click to expand</b></summary>
@@ -124,6 +137,9 @@ Not sure which skill to use? Pick your situation:
 | 15 | **Analytics Setup** | Integrates telemetry, defines KPIs, builds dashboards, privacy-first |
 | 16 | **Post-Mortem** | Structured post-mortem pulling git history, milestone data, lessons learned |
 | 17 | **Market Research** | Competitive landscape, market sizing, audience profiling, positioning strategy |
+| 18 | **Game Jam Mode** | Compressed 48-72 hour workflows -- theme interpretation, scope ruthlessness, 6-phase jam pipeline |
+| 19 | **CI Pipeline** | CI/CD for game builds -- engine-specific pipelines, Steam/itch.io deployment, GitHub Actions templates |
+| 20 | **GDD Author** | Guided section-by-section GDD authoring -- pillar validation, scope tiers, MDA integration |
 
 </details>
 
@@ -179,6 +195,9 @@ Skills are interconnected. The Game Designer and QA Lead reference the same bala
 | *"Localize my game for the Japanese market"* | `game-localization-manager` |
 | *"Analyze the competitive landscape for cozy farm sims"* | `game-market-research` |
 | *"Run a post-mortem on this milestone"* | `game-postmortem` |
+| *"I'm doing a 48-hour game jam this weekend"* | `game-jam-mode` |
+| *"Set up CI/CD for my Godot project"* | `game-ci-pipeline` |
+| *"Help me write my GDD section by section"* | `game-gdd-author` |
 
 > For complete end-to-end walkthroughs, see [docs/workflow-examples.md](docs/workflow-examples.md). For common questions, see [docs/FAQ.md](docs/FAQ.md).
 
@@ -219,22 +238,35 @@ Fill in the `[BRACKETED PLACEHOLDERS]` with your game's details -- project name,
 |                  |           |
 +----------+  +-----------+  +----------------+
 | Agents   |  | Workflows |  | Engine         |
-|   (11)   |  |   (17)    |  | Specialists(3) |
+|   (11)   |  |   (20)    |  | Specialists(3) |
 +----------+  +-----------+  +----------------+
      |              |              |
      +---------+----+--------------+
                |
        +-------+-------+
-       | Shared Docs   |  12 reference documents
+       | Shared Docs   |  15 reference documents
        +---------------+
                |
-   +-----------+-----------+
-   |           |           |
-+--------+ +----------+ +----------+
-| Hooks  | | Templates| | Starters |
-|  (11)  | |   (17)   | |   (3)    |
-+--------+ +----------+ +----------+
+   +-----------+-----------+-----------+
+   |           |           |           |
++--------+ +----------+ +----------+ +-------------+
+| Hooks  | | Templates| | Starters | | Genre Packs |
+|  (11)  | |   (20)   | |   (3)    | |     (2)     |
++--------+ +----------+ +----------+ +-------------+
 ```
+
+<br>
+
+## Genre Packs
+
+Genre packs are in-repo reference material that enrich existing skills with genre-specific design patterns, balance frameworks, and ideation prompts. They are not standalone skills -- they are consumed by `game-brainstorm`, `game-designer`, `game-balance-check`, and `game-gdd-author` when a genre is specified.
+
+| Pack | Lines | What It Covers |
+|:---|:---:|:---|
+| **Roguelike** | 888 | Permadeath, run structure, proc-gen, meta-progression, synergy systems, Monte Carlo validation, 6+ reference games |
+| **Narrative** | 943 | Branching architecture, choice design, dialogue systems, consequence modeling, environmental storytelling, 10+ reference games |
+
+> Want to contribute a genre pack? See the [genre pack contribution guide](CONTRIBUTING.md#contributing-a-genre-pack) and [format spec](docs/genre-pack-spec.md).
 
 <br>
 
@@ -244,17 +276,21 @@ Fill in the `[BRACKETED PLACEHOLDERS]` with your game's details -- project name,
 AlterLab_GameForge/
  skills/
    agents/                  # 11 studio agent skills
-   workflows/               # 17 workflow skills
+   workflows/               # 20 workflow skills
    engine-specialists/      # 3 engine-specific skills
- docs/                      # 12 shared knowledge base documents
+ genre-packs/               # Genre-specific reference material
+   roguelike/               #   Permadeath, proc-gen, synergy systems
+   narrative/               #   Branching, dialogue, consequence modeling
+ docs/                      # 15 shared knowledge base documents
  hooks/                     # 11 session lifecycle hooks
- templates/                 # 17 starter templates for game dev artifacts
+ templates/                 # 20 starter templates for game dev artifacts
  starters/                  # Engine-specific project configs
    claude-config/           #   Base config (all engines)
    godot/                   #   Godot 4.x conventions
    unity/                   #   Unity 6.x conventions
    unreal/                  #   Unreal Engine 5.x conventions
- scripts/                   # Validation and utility scripts
+ scripts/                   # Validation scripts (validate.sh)
+ .github/workflows/         # CI validation pipeline
  CLAUDE.md                  # Project-level Claude config & routing
  marketplace.json           # Plugin manifest for Claude Code
  package.json               # Project metadata
@@ -282,7 +318,7 @@ GameForge is one of three skill collections built by AlterLab:
 |:---|:---:|:---|
 | [**AlterLab FC Skills**](https://github.com/AlterLab-IEU/AlterLab_FC_Skills) | 72 | Football coaching -- tactical analysis, player development, match prep |
 | [**AlterLab Academic Skills**](https://github.com/AlterLab-IEU/AlterLab_Academic_Skills) | 186+ | Academic writing -- research, papers, grants, peer review |
-| **AlterLab GameForge** (this repo) | 31 | Indie game development -- studio agents, workflows, engine specialists |
+| **AlterLab GameForge** (this repo) | 34 | Indie game development -- studio agents, workflows, engine specialists, genre packs |
 
 Same architecture. Same quality bar. Different domains.
 
@@ -319,7 +355,7 @@ This project is licensed under the **[MIT License](LICENSE)** -- free to use, mo
 
 **Built by Cem Ipek at [AlterLab Creative Technologies Laboratory](https://github.com/AlterLab-IEU)**
 
-31 skills -- 3 categories -- 1 prompt away from expert-level game development
+34 skills -- 3 categories -- 2 genre packs -- 1 prompt away from expert-level game development
 
 ---
 

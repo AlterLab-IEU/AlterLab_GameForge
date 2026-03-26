@@ -1,0 +1,45 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Skill Validation Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run validation suite
+        run: bash scripts/validate.sh --verbose
+
+      - name: Check markdown links (soft)
+        if: always()
+        continue-on-error: true
+        run: |
+          # Check for obviously broken internal links
+          BROKEN=0
+          for md_file in $(find . -name "*.md" -not -path "./.git/*" -not -path "./.research/*"); do
+            # Extract relative links like [text](path/to/file.md)
+            links=$(grep -oE '\]\([^)]+\.md\)' "$md_file" | grep -v 'http' | sed 's/\](//' | sed 's/)//' | sed 's/#.*//')
+            for link in $links; do
+              dir=$(dirname "$md_file")
+              resolved="$dir/$link"
+              # Normalize path
+              if [[ ! -f "$resolved" && ! -f "$link" ]]; then
+                echo "::warning file=$md_file::Broken link: $link"
+                ((BROKEN++))
+              fi
+            done
+          done
+          echo "Found $BROKEN potentially broken markdown links"

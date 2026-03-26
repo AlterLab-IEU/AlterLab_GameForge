@@ -84,7 +84,7 @@ chore: add validation script for skill frontmatter
 
 ---
 
-## Quality Bar (v1.4.0)
+## Quality Bar (v2.0.0)
 
 Every skill must meet these minimums before merge:
 
@@ -161,6 +161,109 @@ Before requesting review, confirm:
 - [ ] No secrets, API keys, or personal data included
 - [ ] Links to shared docs use `@docs/` notation correctly
 - [ ] Starters tested in an actual game project (if applicable)
+
+---
+
+## Contributing a Genre Pack
+
+Genre packs are in-repo reference material that enrich existing skills with genre-specific knowledge. They are not new skills and do not affect the skill count. See [docs/genre-pack-spec.md](docs/genre-pack-spec.md) for the full format specification.
+
+### Contribution Levels
+
+| Level | Type | Barrier | Review Required |
+|-------|------|---------|----------------|
+| 1 | Fix typos, broken links, improve wording in existing packs | None | Maintainer quick-review |
+| 2 | Add reference games, expand anti-patterns, improve balance formulas | Low | Maintainer review |
+| 3 | Contribute a new genre pack (3 files minimum) | Medium | Full quality review (5 dimensions) |
+
+### How to Contribute a New Genre Pack
+
+1. **Open an issue** describing the genre pack you want to create. Include:
+   - Target genre name
+   - 5+ reference games you will analyze
+   - Bullet list of core patterns you plan to document (at least 5)
+   - Rationale for why this genre is underserved
+
+2. **Fork the repo** and create a branch:
+   ```bash
+   git checkout -b feat/genre-pack-{genre}
+   ```
+
+3. **Create the directory and required files**:
+   ```
+   genre-packs/{genre}/
+     README.md              # Pack overview, when to use, workflow
+     PATTERNS.md            # 200+ lines: design patterns, anti-patterns, MDA analysis, reference games
+     balance-template.md    # 100+ lines: tuning parameters, scaling formulas, simulation guidance
+     brainstorm-variant.md  # 80+ lines: ideation prompts, genre constraints, subgenre exploration
+   ```
+
+4. **Follow the format spec**: All files must have YAML frontmatter (`name`, `genre`, `version`, `description`). See [docs/genre-pack-spec.md](docs/genre-pack-spec.md) for exact structure and minimum content requirements.
+
+5. **Self-check before submitting**:
+   - [ ] PATTERNS.md has 5+ core patterns, 4+ anti-patterns, 6+ reference games with MDA analysis
+   - [ ] balance-template.md has concrete numerical ranges (not placeholders) and at least one simulation methodology
+   - [ ] brainstorm-variant.md prompts produce usable output within 5 minutes
+   - [ ] All cross-references resolve to existing files
+   - [ ] Pack is internally consistent (patterns referenced in balance template exist in PATTERNS.md)
+
+6. **Submit a PR** against `main`. Your pack will be reviewed against the [5-dimension quality rubric](docs/skill-quality-rubric.md) with a minimum score of 8+ on all dimensions.
+
+### Genre Pack Quality Dimensions
+
+| Dimension | What It Measures |
+|-----------|-----------------|
+| **Accuracy** | Are patterns correct and grounded in shipped games? |
+| **Actionability** | Can a developer apply this immediately? |
+| **Completeness** | Does it cover core patterns, not just surface tropes? |
+| **Integration** | Does it work with existing GameForge skills and frameworks? |
+| **Originality** | Does it add value beyond what a web search provides? |
+
+### Genre Pack Issue Template
+
+When opening a genre pack proposal issue, use this format:
+
+```markdown
+## Genre Pack Proposal: [Genre Name]
+
+### Target Genre
+[Genre name and brief description]
+
+### Reference Games (5+ required)
+1. [Game] -- [Why it's a key reference]
+2. [Game] -- [Why it's a key reference]
+3. [Game] -- [Why it's a key reference]
+4. [Game] -- [Why it's a key reference]
+5. [Game] -- [Why it's a key reference]
+
+### Core Patterns (outline)
+- [Pattern 1]
+- [Pattern 2]
+- [Pattern 3]
+- [Pattern 4]
+- [Pattern 5]
+
+### Why This Genre
+[Why is this genre underserved? What indie market demand exists?]
+
+### Estimated Timeline
+[When you expect to submit the PR]
+```
+
+---
+
+## Reporting Issues with Specific Skills
+
+If you encounter a problem with a specific skill (incorrect advice, broken cross-references, outdated information, or routing issues), open an issue with:
+
+1. **Skill name**: Which skill has the issue (e.g., `game-designer`, `game-balance-check`)
+2. **Issue type**: Incorrect content, broken reference, routing problem, outdated information, or missing coverage
+3. **Reproduction**: The prompt or workflow that exposed the issue
+4. **Expected behavior**: What the skill should have done
+5. **Actual behavior**: What it did instead
+6. **Suggested fix** (optional): If you know how to fix it, describe the change
+
+For small fixes (typos, broken links), skip the issue and submit a PR directly.
 
 ---
 

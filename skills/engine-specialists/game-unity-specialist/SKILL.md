@@ -12,7 +12,7 @@ model: opus
 effort: high
 context: fork
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
-version: 1.3.0
+version: 2.0.0
 ---
 
 # AlterLab GameForge -- Unity Specialist
@@ -333,6 +333,109 @@ Editor tooling is where Unity's extensibility genuinely outshines every competit
 - **LOD Groups:** Reduce polygon count at distance.
 - **Occlusion Culling:** Bake occlusion data for indoor/urban environments. Escape from Tarkov's performance issues stem partly from inadequate occlusion culling.
 - **Batching:** Static batching for immovable objects, dynamic batching for small meshes, SRP Batcher for shader variants.
+
+#### Networking (Netcode for GameObjects)
+
+Unity's first-party networking solution is **Netcode for GameObjects** (NGO). It is server-authoritative, supports client-hosted and dedicated servers, and integrates with Unity's Relay and Lobby services. Among Us shipped with a custom networking solution and spent months fixing its problems post-launch -- NGO exists so you do not repeat that.
+
+```csharp
+// Server-authoritative health system with NetworkVariable
+public class PlayerHealth : NetworkBehaviour
+{
+    // NetworkVariable replicates automatically, server can write, clients read
+    private NetworkVariable<int> _health = new(100,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    public override void OnNetworkSpawn()
+    {
+        _health.OnValueChanged += OnHealthChanged;
+    }
+
+    // Client requests damage via ServerRpc
+    [ServerRpc(RequireOwnership = false)]
+    public void TakeDamageServerRpc(int damage, ServerRpcParams rpcParams = default)
+    {
+        // Server validates and applies
+        _health.Value = Mathf.Max(0, _health.Value - damage);
+        if (_health.Value <= 0)
+            DieClientRpc();
+    }
+
+    [ClientRpc]
+    private void DieClientRpc()
+    {
+        // All clients play death effect
+        GetComponent<Animator>().SetTrigger("Death");
+    }
+
+    private void OnHealthChanged(int oldValue, int newValue)
+    {
+        // UI update on all clients
+        UIManager.Instance.UpdateHealthBar(newValue);
+    }
+}
+```
+
+Key networking rules:
+- **`NetworkVariable<T>`** for replicated state. Server writes, clients read and react via `OnValueChanged`. Use for health, score, position, inventory. Do NOT use RPCs for continuous state -- bandwidth explodes.
+- **`ServerRpc`** for client-to-server requests (fire weapon, use item, interact). Always validate on the server -- never trust client data.
+- **`ClientRpc`** for server-to-all-clients events (explosions, sound effects, UI updates). Use sparingly -- prefer `NetworkVariable` for state.
+- **`NetworkObject`** and **`NetworkBehaviour`** replace `GameObject` and `MonoBehaviour` for networked entities. Every networked object needs a `NetworkObject` component.
+- **Unity Relay** handles NAT traversal for peer-to-peer. **Unity Lobby** handles matchmaking. Both are free up to a usage threshold.
+- **Netcode for Entities** (DOTS-based) exists for high-entity-count games (100+ networked entities). NGO is correct for most indie projects.
+- **Test with Unity Transport Simulator:** Simulate latency, jitter, and packet loss in the editor. A game that works at 0ms breaks at 150ms. Test early.
+
+#### Animation System
+
+```csharp
+// Animator Controller integration with gameplay
+public class PlayerAnimator : MonoBehaviour
+{
+    [SerializeField] private Animator _animator;
+
+    // Cache hash IDs -- never use string lookups at runtime
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
+    private static readonly int AttackTriggerHash = Animator.StringToHash("Attack");
+    private static readonly int DeathTriggerHash = Animator.StringToHash("Death");
+
+    public void UpdateMovement(float speed, bool isGrounded)
+    {
+        _animator.SetFloat(SpeedHash, speed);
+        _animator.SetBool(IsGroundedHash, isGrounded);
+    }
+
+    public void PlayAttack() => _animator.SetTrigger(AttackTriggerHash);
+
+    // Animation Event -- called from specific keyframe in attack animation
+    public void OnAttackHitFrame()
+    {
+        // Damage logic triggers at the exact animation frame, not on button press
+        GetComponent<CombatSystem>().ProcessAttackHit();
+    }
+}
+```
+
+Key animation patterns:
+- **Animator Controller** is the state machine. States contain clips, transitions have conditions. Celeste's character animation is driven by an Animator with precise transition timings that match the game feel.
+- **Blend Trees** for smooth transitions: 1D (speed → walk/run), 2D (direction → 8-way movement). Hollow Knight uses blend trees for directional attacks.
+- **Animation Events** fire gameplay callbacks at specific keyframes. Use for: attack damage windows, footstep sounds, particle spawns, VFX triggers. Do NOT poll animation state -- use events.
+- **Root Motion** (`applyRootMotion = true`) drives movement from animation data. Use for: cinematic sequences, climbing, precise melee combat. Do NOT use for: general locomotion in a responsive action game.
+- **Animation Layers** for additive animations: upper body aiming while lower body runs. Set layer weight and mask to control blending.
+- **Timeline** for cinematics, cutscenes, and scripted sequences. Not for gameplay animation -- use Animator for that.
+- **Always cache `Animator.StringToHash()`** -- string-based parameter access allocates every frame. This is a performance bug that shows up in every Unity profiling session.
+
+#### Cinemachine
+
+Cinemachine is the de facto camera system for Unity. Nearly every shipped Unity game uses it. Do not build a custom camera system unless Cinemachine genuinely cannot do what you need.
+
+- **CinemachineCamera** (formerly VirtualCamera in Cinemachine 2.x) defines a camera behavior: follow target, look-at target, body algorithm, aim algorithm.
+- **Follow/LookAt** targets separate what the camera follows from what it looks at. Essential for third-person: follow the player, look at the player's aim point.
+- **Transposer** for fixed-offset following (platformers, top-down). **Framing Transposer** for screen-space framing (keep player in bottom-third).
+- **Confiner** bounds the camera to level geometry. Every 2D platformer needs this to prevent the camera from showing outside the level.
+- **Impulse** system for screen shake. Use `CinemachineImpulseSource` triggered by gameplay events (explosions, hits). Far cleaner than manual shake code.
+- **Cinemachine Brain** on the main camera handles blending between virtual cameras. Transition by priority or explicit activation.
 
 ---
 

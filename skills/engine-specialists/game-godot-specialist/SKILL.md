@@ -11,7 +11,7 @@ model: opus
 effort: high
 context: fork
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
-version: 1.3.0
+version: 2.0.0
 ---
 
 # AlterLab GameForge -- Godot 4 Specialist
@@ -273,6 +273,102 @@ project/
 ```
 
 This is not the only valid structure, but it is the one that scales. Every Godot project that outgrows a flat folder structure ends up here eventually -- save yourself the migration.
+
+#### Multiplayer Networking
+
+Godot's high-level multiplayer API is built on top of ENet (reliable UDP) and works through `MultiplayerSpawner`, `MultiplayerSynchronizer`, and RPCs. It is functional, lightweight, and poorly documented -- which is why most networked Godot games have authority bugs in their first build.
+
+```gdscript
+# Server-authoritative movement pattern
+# This runs on the server; clients send input, server moves the player
+extends CharacterBody2D
+
+@export var speed: float = 300.0
+
+# Client sends input to server
+@rpc("any_peer", "call_local", "reliable")
+func send_input(input_vector: Vector2) -> void:
+    if not multiplayer.is_server():
+        return
+    # Server validates and applies movement
+    velocity = input_vector.normalized() * speed
+    move_and_slide()
+
+# MultiplayerSynchronizer handles replicating position to all clients
+```
+
+Key networking rules for Godot:
+- **Server has authority.** Gameplay state changes happen on the server via `@rpc("any_peer", "call_local", "reliable")`. Clients send input, server applies it. No exceptions.
+- **Use `MultiplayerSynchronizer`** for automatic property replication (position, health, animation state). Configure which properties replicate and at what interval. Do not replicate everything -- bandwidth is finite.
+- **Use `MultiplayerSpawner`** for automatic scene instantiation across peers. Register spawnable scenes in the inspector. The spawner handles creation/destruction sync.
+- **Use `@rpc("authority")`** for server-to-client calls (damage numbers, effects). Use `@rpc("any_peer")` for client-to-server calls (input, requests). Never use `@rpc("any_peer")` for state changes the server should control.
+- **Rollback netcode:** For competitive games, use the GDScript Rollback Networking addon (by Snopek) or build on `SceneMultiplayer` with input prediction. Godot's built-in networking does NOT include rollback -- you must add it.
+- **Lobby/matchmaking:** Use Steam Lobbies (via GodotSteam) or a custom WebSocket lobby server. Godot has no built-in matchmaking.
+- **Test with simulated latency:** Use `ENetMultiplayerPeer`'s `set_transfer_channel()` and test with artificial delay. A game that works at 0ms ping and breaks at 150ms is a game that does not work.
+
+#### Animation System
+
+Godot's animation system is one of its best-kept secrets. AnimationPlayer can animate ANY property on ANY node -- not just transforms. Use it for UI transitions, shader uniforms, gameplay state changes, camera effects.
+
+```gdscript
+# AnimationTree with state machine for character animation
+extends CharacterBody2D
+
+@onready var anim_tree: AnimationTree = $AnimationTree
+@onready var state_machine: AnimationNodeStateMachinePlayback = anim_tree["parameters/playback"]
+
+func _physics_process(delta: float) -> void:
+    # Update blend position for directional movement
+    var input_vector: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+    if input_vector != Vector2.ZERO:
+        anim_tree["parameters/Idle/blend_position"] = input_vector
+        anim_tree["parameters/Run/blend_position"] = input_vector
+        state_machine.travel("Run")
+    else:
+        state_machine.travel("Idle")
+```
+
+Key animation patterns:
+- **AnimationPlayer** for simple sequences: death effects, UI transitions, cutscenes. Use `call_method` tracks to trigger gameplay events at specific keyframes (spawn particles at frame 12 of attack animation).
+- **AnimationTree** for complex blending: character movement (blend spaces for 8-directional), layered animations (run + attack simultaneously), state machines for clean transitions.
+- **Blend Space 2D** maps a 2D input (movement direction) to animation blending. Cassette Beasts uses this for smooth directional transitions.
+- **State machines** in AnimationTree handle transition conditions (Idle→Run on velocity > 0, Run→Idle on velocity == 0, Any→Death on health <= 0). Use `auto_advance` for one-shot animations that return to a previous state.
+- **`animation_finished` signal** is critical for attack combos, death sequences, and any animation that triggers gameplay after completion. Always connect it, never poll `is_playing()`.
+- **Root motion** (experimental in Godot 4.3+): Use sparingly. Most indie games work better with code-driven movement synced to animations, not animation-driven movement.
+
+#### Navigation & AI
+
+```gdscript
+# Basic AI patrol/chase pattern using NavigationAgent2D
+extends CharacterBody2D
+
+@export var patrol_points: Array[Marker2D] = []
+@export var chase_speed: float = 200.0
+@export var patrol_speed: float = 100.0
+@export var detection_range: float = 300.0
+
+@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
+var current_patrol_index: int = 0
+var target: Node2D = null
+
+func _physics_process(delta: float) -> void:
+    if target and global_position.distance_to(target.global_position) < detection_range:
+        nav_agent.target_position = target.global_position
+        var direction: Vector2 = (nav_agent.get_next_path_position() - global_position).normalized()
+        velocity = direction * chase_speed
+    elif patrol_points.size() > 0:
+        nav_agent.target_position = patrol_points[current_patrol_index].global_position
+        if nav_agent.is_navigation_finished():
+            current_patrol_index = (current_patrol_index + 1) % patrol_points.size()
+        var direction: Vector2 = (nav_agent.get_next_path_position() - global_position).normalized()
+        velocity = direction * patrol_speed
+    move_and_slide()
+```
+
+- **NavigationRegion2D/3D** defines walkable areas. Bake navigation meshes in the editor or at runtime with `bake_navigation_mesh()`.
+- **NavigationAgent2D/3D** handles pathfinding. Set `target_position`, read `get_next_path_position()`. The agent handles path recalculation and avoidance.
+- **Avoidance** (RVO): Enable `avoidance_enabled` on agents for crowd behavior. Computationally expensive -- disable for enemies outside camera view.
+- **State machine AI:** Combine NavigationAgent with a state machine (Idle, Patrol, Chase, Attack, Flee). Each state sets `target_position` and `velocity` differently. Do NOT use `AnimationTree` for AI state -- use a separate state machine or match/enum pattern.
 
 ---
 

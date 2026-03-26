@@ -12,7 +12,7 @@ model: opus
 effort: high
 context: fork
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
-version: 1.3.0
+version: 2.0.0
 ---
 
 # AlterLab GameForge -- Unreal Engine 5 Specialist
@@ -352,6 +352,100 @@ For open-world games, World Partition is how Unreal handles scale that would bre
 - **Memory tracking** -- `memreport`, LLM (Low Level Memory) tags for per-system memory. Returnal on PS5 runs within strict memory budgets because of aggressive LLM tracking.
 - **Caching:** Use `TMap` and `TSet` for frequent lookups. Cache expensive calculations. Do not call `GetWorld()->GetGameState()` every frame.
 - **Async operations:** Use `AsyncTask(ENamedThreads::GameThread, [](){ ... })` for deferred work.
+
+#### Niagara VFX System
+
+Niagara is Unreal's GPU-accelerated particle system and one of its strongest differentiators. Returnal's bullet-hell effects, Fortnite's environmental VFX, and The Matrix Awakens demo all run on Niagara. Cascade is deprecated -- do not use it for new projects.
+
+Key Niagara concepts:
+- **System** → **Emitters** → **Modules.** Systems contain emitters, emitters contain modules that control spawn, update, render behavior. Think of it as a node graph for particles.
+- **GPU Simulation** for massive particle counts (100K+). Use GPU sim for: rain, snow, fire, debris, magic effects. Use CPU sim only when you need game logic interaction per-particle.
+- **Data Interfaces** connect Niagara to game data: mesh surfaces (spawn particles on mesh), collision (particles react to world geometry), Skeletal Mesh (particles follow bones), Audio Spectrum (particles react to music).
+- **Events** allow emitters to communicate: a "spawn" event from a fireball emitter triggers a "burst" event on an explosion emitter. Use for: chain reactions, multi-stage effects, conditional VFX.
+- **Niagara Fluids** (5.5+): real-time fluid simulation for smoke, fire, water. GPU-only, performance-intensive. Use sparingly -- a single fluid sim can cost 2-3ms.
+- **Scratch Pad** modules for custom HLSL in Niagara. When the built-in modules do not do what you need, write custom particle behavior in HLSL. This is how studios create unique VFX signatures.
+
+```cpp
+// Triggering Niagara VFX from C++ gameplay code
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
+void AWeapon::OnHit(const FHitResult& Hit)
+{
+    // Spawn one-shot VFX at impact point
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+        GetWorld(), HitVFXSystem, Hit.ImpactPoint,
+        Hit.ImpactNormal.Rotation(), FVector(1.f),
+        true, true, ENCPoolMethod::AutoRelease);
+
+    // Or spawn attached VFX that follows an actor
+    UNiagaraComponent* BurnVFX = UNiagaraFunctionLibrary::SpawnSystemAttached(
+        BurnVFXSystem, Hit.GetActor()->GetRootComponent(),
+        NAME_None, FVector::ZeroVector, FRotator::ZeroRotator,
+        EAttachLocation::KeepRelativeOffset, true);
+    BurnVFX->SetVariableFloat(FName("Intensity"), DamageAmount / MaxDamage);
+}
+```
+
+Performance rules: pool Niagara systems with `ENCPoolMethod::AutoRelease`. Set `MaxPoolSize` in project settings. Disable `bAutoActivate` on placed systems and activate from code. Profile with `stat Niagara` and GPU Profiler.
+
+#### Material System
+
+Unreal's Material Editor is a node-based shader graph. Materials in Unreal are not afterthoughts -- they are a core feature that defines visual quality. The Talos Principle 2 and Black Myth: Wukong push UE5 materials to photorealistic extremes. Even stylized games like Fortnite use complex material setups for performance and flexibility.
+
+Key material concepts:
+- **Material** is the base shader graph. **Material Instances** override parameters without recompiling. Always author a "Master Material" with exposed parameters, then create instances per asset. Recompiling materials is slow (30-60s). Parameter changes on instances are instant.
+- **Material Functions** are reusable sub-graphs. Create functions for: triplanar mapping, detail texture blending, wind animation, fresnel effects. Share across materials to avoid duplication.
+- **Material Parameter Collections** (MPCs) are global parameter sets accessible from any material. Use for: time-of-day (sun color, fog density), weather intensity, global tint. Change one MPC value and every material responds.
+- **Substrate** (UE 5.7+, formerly Strata): multi-lobe material model replacing the single-lobe Shading Model system. Enables per-pixel material layering (paint over rust over metal). Opt-in per project -- production-ready but increases shader complexity.
+- **Virtual Textures** for terrain and large-scale material blending. Runtime Virtual Texturing (RVT) composites multiple material layers into a single texture lookup. Essential for open-world terrain rendering.
+
+Common material patterns:
+- **Dissolve effect:** World-position noise → step/smoothstep → Opacity Mask. Drive threshold from a Material Parameter Collection.
+- **Vertex animation:** World Position Offset for wind (grass, foliage, cloth). Use `SimpleGrassWind` node or custom sine-based vertex displacement.
+- **Distance-based blending:** Switch detail levels based on camera distance using `CameraPositionWS`. Reduces texture bandwidth at distance.
+
+#### AI System (Behavior Trees & EQS)
+
+Unreal's AI framework is the most complete of any mainstream engine. Behavior Trees with Blackboards, Environment Query System (EQS), Smart Objects, and Navigation Mesh are all built-in and battle-tested. Fortnite's AI opponents, Returnal's enemies, and Hellblade's companions all run on this stack.
+
+```cpp
+// Behavior Tree Task -- move to player and attack
+UCLASS()
+class UBTTask_AttackPlayer : public UBTTaskNode
+{
+    GENERATED_BODY()
+public:
+    virtual EBTNodeResult::Type ExecuteTask(
+        UBehaviorTreeComponent& OwnerComp,
+        uint8* NodeMemory) override
+    {
+        AAIController* Controller = OwnerComp.GetAIOwner();
+        APawn* ControlledPawn = Controller->GetPawn();
+        AActor* TargetActor = Cast<AActor>(
+            OwnerComp.GetBlackboardComponent()->GetValueAsObject(
+                FName("TargetActor")));
+
+        if (!TargetActor) return EBTNodeResult::Failed;
+
+        // Execute attack ability via GAS
+        if (UAbilitySystemComponent* ASC = ControlledPawn->FindComponentByClass<UAbilitySystemComponent>())
+        {
+            ASC->TryActivateAbilityByClass(AttackAbilityClass);
+            return EBTNodeResult::Succeeded;
+        }
+        return EBTNodeResult::Failed;
+    }
+};
+```
+
+Key AI patterns:
+- **Behavior Tree** is the decision graph: Selectors (try children until one succeeds), Sequences (run children in order, fail if any fails), Decorators (conditions on nodes), Tasks (leaf actions). Think of it as a priority-sorted decision tree.
+- **Blackboard** is the AI's memory: stores target actor, patrol location, alert level, last known position. Tasks read/write Blackboard keys. Keep Blackboards small -- 5-10 keys maximum per AI type.
+- **EQS (Environment Query System)** answers spatial questions: "find cover within 20m with line of sight to target" or "find the nearest item of type X." Use EQS for tactical positioning, item searching, spawn point selection. Do NOT hardcode spatial queries in C++.
+- **Smart Objects** (5.1+) define interactable points in the world (sit on bench, peek around cover, vault over wall). AI claims a Smart Object slot, plays the associated animation/behavior, then releases it. Fortnite's NPCs use Smart Objects for ambient behavior.
+- **Navigation Mesh** is baked or runtime-generated. Use `NavModifierVolume` for dynamic areas (doors, destructible walls). Set agent radius and height per AI type -- a large enemy needs a different nav mesh than a small one.
+- **Perception System** (`UAIPerceptionComponent`) handles sight, hearing, damage, and custom senses. Configure sight angle, range, and lose-sight time. Use `OnTargetPerceptionUpdated` delegate for reactive AI.
 
 ---
 
