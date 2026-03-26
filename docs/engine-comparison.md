@@ -35,7 +35,7 @@ This document provides a structured comparison of the three major game engines f
 
 ## Feature Comparison
 
-| Dimension | Godot 4.x | Unity 6 (2025) | Unreal Engine 5.5 |
+| Dimension | Godot 4.x | Unity 6 (2025) | Unreal Engine 5.7 |
 |---|---|---|---|
 | **License** | MIT (fully open source, no fees ever) | Free tier (Revenue < $200K). Plus $399/seat/year. Pro $2,040/seat/year. Runtime fee controversially introduced 2023, partially rolled back 2024. | Free until $1M gross revenue, then 5% royalty. First $1M is always royalty-free. |
 | **Primary languages** | GDScript (Python-like), C#, C++ (via GDExtension) | C# | C++, Blueprints (visual scripting) |
@@ -92,7 +92,7 @@ This document provides a structured comparison of the three major game engines f
 
 ## Performance Characteristics
 
-| Characteristic | Godot 4.x | Unity 6 | Unreal 5.5 |
+| Characteristic | Godot 4.x | Unity 6 | Unreal 5.7 |
 |---|---|---|---|
 | **Draw calls** | Efficient batching for 2D. 3D draw call overhead higher than competitors for complex scenes. | SRP Batcher reduces draw calls effectively. Good for mid-complexity scenes. | Nanite eliminates traditional draw call concerns for static geometry. Industry-leading. |
 | **Physics** | Godot Physics (built-in) or Jolt Physics (integration available). Adequate for indie scale. Not suited for large-scale simulations. | PhysX (NVIDIA) built-in. Reliable and well-optimized. DOTS Physics for ECS-based simulations. | Chaos Physics. Handles large-scale destruction and simulation. Heavier but more capable. |
@@ -171,7 +171,7 @@ This document provides a structured comparison of the three major game engines f
 
 **Weaknesses**: The heaviest engine by far. Project sizes, build times, and hardware requirements are significantly higher. The learning curve is steep, especially for C++. Iteration speed is slower than Godot or Unity for rapid prototyping. 2D support is effectively nonexistent. Small indie teams may find the engine's complexity overhead does not justify the rendering power if their game is stylized or 2D. The engine is optimized for larger teams with specialized roles.
 
-**Trajectory**: Dominant in AAA, growing in AA-indie. Unreal 5.5 continues to improve Nanite, Lumen, and World Partition. The barrier for indie teams is not cost (it is free until $1M) but complexity and iteration speed. Unreal is the right choice for visually ambitious 3D games and the wrong choice for a 2D roguelike.
+**Trajectory**: Dominant in AAA, growing in AA-indie. Unreal 5.7 continues to improve Nanite, Lumen, and World Partition. The barrier for indie teams is not cost (it is free until $1M) but complexity and iteration speed. Unreal is the right choice for visually ambitious 3D games and the wrong choice for a 2D roguelike.
 
 **Shipped games of note**: Fortnite (battle royale, 2017+), Returnal (roguelike shooter, 2021), Hellblade II: Senua's Saga (narrative action, 2024), The Talos Principle 2 (puzzle, 2023), Ghostrunner (action, 2020), Mortal Shell (soulslike, 2020). Fewer small-indie titles, more AA and AAA productions.
 

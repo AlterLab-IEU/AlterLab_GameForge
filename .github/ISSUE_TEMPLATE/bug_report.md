@@ -37,6 +37,9 @@ Which skill is affected?
 - [ ] game-sprint-plan
 - [ ] game-start
 - [ ] game-team-orchestrator
+- [ ] game-jam-mode
+- [ ] game-ci-pipeline
+- [ ] game-gdd-author
 - [ ] game-godot-specialist
 - [ ] game-unity-specialist
 - [ ] game-unreal-specialist

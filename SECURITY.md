@@ -29,10 +29,10 @@ We will acknowledge receipt within 48 hours and provide a fix or mitigation with
 
 ## Supported Versions
 
-| Version | Supported |
-|---------|-----------|
-| 1.4.x   | Yes       |
-| < 1.4   | No        |
+| Version | Supported          |
+|---------|--------------------|
+| 2.0.x   | Yes                |
+| < 2.0   | Limited support    |
 
 ## Scope
 

@@ -13,7 +13,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 **Draft entry:**
 ```markdown
 ### Game Development
-- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 31 production-grade skills for indie game development — 11 studio agents, 17 workflow skills, 3 engine specialists (Godot, Unity, Unreal)
+- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 34 production-grade skills for indie game development — 11 studio agents, 20 workflow skills, 3 engine specialists (Godot, Unity, Unreal)
 ```
 
 ---
@@ -26,7 +26,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 
 **Draft entry:**
 ```markdown
-| [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) | 31 production-grade Claude AI skills for indie game development — studio agents, workflow skills, and engine specialists for Godot, Unity, and Unreal Engine | skill |
+| [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) | 34 production-grade Claude AI skills for indie game development — studio agents, workflow skills, and engine specialists for Godot, Unity, and Unreal Engine | skill |
 ```
 
 ---
@@ -38,7 +38,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 
 **Draft entry:**
 ```markdown
-- **[AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge)** — A comprehensive game development skill suite with 31 skills organized as studio agents (Creative Director, Producer, Game Designer, etc.), structured workflows (sprint planning, code review, playtesting, launch prep), and deep engine specialists for Godot 4, Unity 6, and Unreal Engine 5. Grounded in MDA Framework, Flow Theory, and Self-Determination Theory.
+- **[AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge)** — A comprehensive game development skill suite with 34 skills organized as studio agents (Creative Director, Producer, Game Designer, etc.), structured workflows (sprint planning, code review, playtesting, launch prep), and deep engine specialists for Godot 4, Unity 6, and Unreal Engine 5. Grounded in MDA Framework, Flow Theory, and Self-Determination Theory.
 ```
 
 ---
@@ -51,7 +51,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 
 **Draft entry:**
 ```markdown
-- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 31 game dev skills for Claude Code: studio agents, dev workflows, and engine specialists for Godot/Unity/Unreal. From concept to launch.
+- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 34 game dev skills for Claude Code: studio agents, dev workflows, and engine specialists for Godot/Unity/Unreal. From concept to launch.
 ```
 
 ---
@@ -63,7 +63,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 
 **Draft entry:**
 ```markdown
-- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 31 production-grade game dev skills — studio agents, workflows, engine specialists
+- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 34 production-grade game dev skills — studio agents, workflows, engine specialists
 ```
 
 ---
