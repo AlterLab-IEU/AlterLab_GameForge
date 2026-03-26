@@ -19,7 +19,7 @@
 <a href="genre-packs/"><img src="https://img.shields.io/badge/Genre%20Packs-2-14B8A6?style=for-the-badge&logo=rocket&logoColor=white" alt="Genre Packs"></a>
 <a href="starters/"><img src="https://img.shields.io/badge/Starters-3-14B8A6?style=for-the-badge&logo=rocket&logoColor=white" alt="Starters"></a>
 <a href=".github/workflows/"><img src="https://img.shields.io/badge/CI-Passing-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI"></a>
-<a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="PRs Welcome"></a>
+<a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcomhe-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="PRs Welcome"></a>
 
 <br><br>
 
@@ -309,20 +309,6 @@ Seven skills have built-in MCP sections: Producer, Code Review, QA Lead, Designe
 <br>
 
 ---
-
-## AlterLab Skills Trilogy
-
-GameForge is one of three skill collections built by AlterLab:
-
-| Collection | Skills | Domain |
-|:---|:---:|:---|
-| [**AlterLab FC Skills**](https://github.com/AlterLab-IEU/AlterLab_FC_Skills) | 72 | Football coaching -- tactical analysis, player development, match prep |
-| [**AlterLab Academic Skills**](https://github.com/AlterLab-IEU/AlterLab_Academic_Skills) | 186+ | Academic writing -- research, papers, grants, peer review |
-| **AlterLab GameForge** (this repo) | 34 | Indie game development -- studio agents, workflows, engine specialists, genre packs |
-
-Same architecture. Same quality bar. Different domains.
-
-<br>
 
 ## Contributing
 
