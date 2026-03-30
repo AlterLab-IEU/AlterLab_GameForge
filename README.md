@@ -16,6 +16,11 @@
 <a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/issues"><img src="https://img.shields.io/github/issues/AlterLab-IEU/AlterLab_GameForge?style=for-the-badge&logo=github&color=EF4444&logoColor=white" alt="Issues"></a>
 <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="PRs Welcome"></a>
 <a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/releases"><img src="https://img.shields.io/badge/Release-v2.0.0-8B5CF6?style=for-the-badge&logo=github&logoColor=white" alt="v2.0.0"></a>
+<a href="https://github.com/BehiSecc/awesome-claude-skills"><img src="https://awesome.re/badge.svg" alt="Awesome"></a>
+
+<br>
+
+> 📢 **Featured in** [awesome-claude-skills](https://github.com/BehiSecc/awesome-claude-skills) (5.7k ⭐)
 
 <br><br>
 
@@ -450,6 +455,11 @@ Seven skills have built-in MCP sections: Producer, Code Review, QA Lead, Designe
 <br>
 
 ---
+
+## 🔗 Sister Projects
+
+- [AlterLab-FC-Skills](https://github.com/AlterLab-IEU/AlterLab-FC-Skills) — 72 agentic skills for communication students
+- [AlterLab-Academic-Skills](https://github.com/AlterLab-IEU/AlterLab-Academic-Skills) — 186+ academic research skills across 13 domains
 
 ## 🤝 Contributing
 
