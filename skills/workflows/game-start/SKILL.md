@@ -1,342 +1,357 @@
 ---
-name: "game-start"
+name: game-start
 description: >
-  Invoke when the user wants to start a new game project, set up project scaffolding,
-  onboard into an existing codebase, or initialize GameForge session state. Triggers on:
-  "start a game", "new game project", "set up project", "project onboarding", "initialize
-  project". Do NOT invoke for brainstorming ideas (use game-brainstorm) or prototyping
-  mechanics (use game-prototype). Part of the AlterLab GameForge collection.
-argument-hint: "[engine: godot|unity|unreal]"
-effort: medium
-allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
+  Sets up a game project for GameForge: detects engine and project state, writes
+  .gameforge/project.json and production/session-state/, merges the engine starter CLAUDE.md,
+  configures Git and Git LFS per engine, and connects coding agents to the engine (MCP servers,
+  llms.txt). Use for "start a new game", "set up my project", "onboard me to this codebase",
+  "initialize GameForge". Not for finding an idea (use game-brainstorm) or getting something
+  playable tonight (use game-vibe-code).
+argument-hint: "[engine: godot|unity|unreal|threejs|web2d] [working title]"
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(git init *), Bash(git lfs *), Bash(git status *), Bash(git log *), Bash(git rev-parse *), Bash(mkdir *)
 ---
 
-# AlterLab GameForge -- Project Onboarding Workflow
+# AlterLab GameForge -- Project Setup and Onboarding
 
-Every game project has a beginning, but not every beginning looks the same. You might be standing in front of an empty folder with nothing but ambition. You might have a thick design document but zero lines of code. You might be stepping into a codebase someone else started six months ago. This workflow detects where you are and gets you moving without wasting time on steps you have already completed.
+This is the front door of a GameForge project. In one pass it finds out where the project stands,
+wires the plugin into it so the hooks and other skills work, sets up version control the way the
+engine needs, connects Claude Code to the engine, and leaves a clear next step. It meets the project
+where it lives: an empty folder, a design doc with no code, or an inherited codebase all start here.
 
-The core philosophy: meet the project where it lives. Diagnose the current state, fill in the gaps, point toward the next meaningful action. Hollow Knight started as a game jam sketch. Stardew Valley started as a learning exercise. Undertale started as an EarthBound-inspired demo. None followed a textbook "correct" beginning -- but each had a moment where scattered ambition became structured execution. This workflow is that moment.
+Two jobs, in this order:
 
-### Purpose & Triggers
+1. **Wire the project** (always): `.gameforge/project.json`, `production/session-state/active.md`,
+   `.gitignore` entries, a merged `CLAUDE.md`, Git and Git LFS, agent setup.
+2. **Assess the project** (scaled to what exists): gaps, structure, and the next three actions.
 
-Use this workflow when:
-- A developer says "I want to start a new game" or "help me set up my project"
-- Someone joins an existing project and needs to get oriented
-- A team wants a health check on their current project structure
-- A solo dev has scattered files and wants to organize into a production-ready layout
-- Anyone asks "where do I even begin?" in a game development context
+## When NOT to use me
 
-Problems this solves:
-- Analysis paralysis at the start of a new project
-- Disorganized file structures that become unmanageable at scale
-- Missing documentation that causes confusion later
-- Skipped foundational decisions that create technical debt from day one
-- New team members spending days figuring out where things live
+| The user wants... | Route to |
+|---|---|
+| Something playable tonight, built with an AI agent, minimal setup | `/gameforge:game-vibe-code` (offer the 2-minute wiring below first) |
+| A 48-72 hour jam entry | `/gameforge:game-jam-mode` |
+| A game idea, not a project | `/gameforge:game-brainstorm` |
+| A deep engine choice debate | `/gameforge:game-technical-director` with `${CLAUDE_PLUGIN_ROOT}/docs/engine-comparison.md` |
+| Documentation for code that already exists | `/gameforge:game-reverse-document` |
+| "Which skill do I need?" | `/gameforge:game-help` |
 
-### Critical Rules
+## Critical Rules
 
-1. **Never overwrite existing work.** If the project already has files, structures, or docs,
-   preserve them. Suggest reorganization, never deletion without explicit confirmation.
+1. **Never overwrite.** Existing `CLAUDE.md`, `.gitignore`, `.gitattributes`, `.claude/settings.json`
+   and `.gameforge/project.json` are merged, never replaced. Show what you will add before writing.
+2. **Detect before prescribing.** Read the project first. Do not assume an empty project or a tidy one.
+3. **Ask only what you cannot detect.** If the engine is detectable, do not ask for it.
+4. **Re-runs are updates.** If `.gameforge/project.json` exists, this is a re-run: show the current
+   values, change only what the user asks, and re-check the wiring.
+5. **Localhost-only agent tooling.** Every MCP server you suggest binds to `127.0.0.1`. Tools that
+   execute code (Blender MCP, engine scripting bridges) are arbitrary code execution; say so.
+6. **No destructive git.** `git init` and `git lfs` setup only. Offer the first commit; do not make it
+   without the user's OK.
+7. **Scope honesty.** If the user describes a 200-hour game and three weekends, say so now, kindly,
+   and route to `/gameforge:game-scope-check`.
 
-2. **Detect before prescribing.** Always scan the project state before recommending actions.
-   Do not assume an empty project. Do not assume an existing one is well-organized.
+## Step 0: Read the room
 
-3. **Engine-agnostic until confirmed.** If no engine is detected from project files, ask.
-   Do not guess. The wrong engine assumption wastes enormous time.
+Gather silently before saying anything:
 
-4. **Documents are not optional.** Every project needs at minimum: a concept document, a technical architecture note, and a task tracking system. These are not bureaucracy -- they are the memory your future self will desperately need. ConcernedApe kept a running design doc throughout Stardew Valley's development, even as a solo dev. That document prevented drift across four years of work.
+| Check | How | Tells you |
+|---|---|---|
+| GameForge config | Read `.gameforge/project.json` | Re-run vs. first run |
+| Godot | Glob `project.godot`; read `config/features` for the version | engine `godot` |
+| Unity | Read `ProjectSettings/ProjectVersion.txt` (`m_EditorVersion: 6000.3...` = 6.3) | engine `unity` |
+| Unreal | Glob `*.uproject`; read `EngineAssociation` | engine `unreal` |
+| Web | Read `package.json` dependencies: `three`, `@react-three/fiber`, `@babylonjs/core`, `playcanvas`, `phaser`, `pixi.js`, `kaplay`, `excalibur` | engine id from the table below |
+| Other | `Cargo.toml` with `bevy`, `*.yyp` (GameMaker), `game.project` (Defold), `main.lua` + `conf.lua` (LOVE) | `bevy` or `other` |
+| Git | `git rev-parse --is-inside-work-tree`, `git status --short`, `git log --oneline -5` | History, dirty files |
+| LFS | Read `.gitattributes`; `git lfs version` | LFS installed / tracked |
+| Docs and code | Glob `design/**`, `docs/**`, `src/**`, `scripts/**`, `Source/**`, `Assets/Scripts/**`, `tests/**` | Project state |
+| Agent config | Read `CLAUDE.md`, `.claude/settings.json`, `.mcp.json` | What is already wired |
+| Focus | Read `production/session-state/active.md` | Where the last session stopped |
 
-5. **Scope honesty from minute one.** If someone describes a 200-hour project and says they have 3 weekends, flag it immediately. Kindly, but immediately. The graveyard of abandoned indie games is filled with projects that were "almost done" for two years.
+Classify the state:
 
-6. **Reference shared standards.** All structural decisions should align with the conventions
-   documented in `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md`. All design terminology should follow
-   `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`.
+| State | Signals | Assessment depth |
+|---|---|---|
+| 1. Empty | No engine files, no code, no docs | Setup + concept stub |
+| 2. Concept | Design docs, no code | Setup + doc gap analysis |
+| 3. In progress | Code and some docs | Setup + structural health check |
+| 4. Mature | Code, CI, tests, history | Setup + audit |
 
-### Project Detection (Auto-populated)
+## Step 1: Ask the few questions that matter
 
-These values are injected automatically via shell preprocessing before the skill content
-reaches Claude. They provide real-time project data so state detection starts from facts,
-not assumptions.
+Use one AskUserQuestion call with at most four questions, each with a recommended default:
 
-- Engine: !`ls project.godot *.unity *.uproject 2>/dev/null | head -1 || echo "No engine project file detected"`
-- Git status: !`git log --oneline -5 2>/dev/null || echo "No git history"`
-- Source file count: !`find . -name "*.gd" -o -name "*.cs" -o -name "*.cpp" -o -name "*.h" -o -name "*.rs" -o -name "*.js" 2>/dev/null | wc -l`
-- Existing docs: !`ls -1 docs/ 2>/dev/null || echo "No docs directory"`
-- Design directory: !`ls -1 design/ 2>/dev/null || echo "No design directory"`
-- Test directory: !`ls -1 tests/ 2>/dev/null || echo "No tests directory"`
-- Build config: !`ls Makefile CMakeLists.txt SConstruct *.sln package.json Cargo.toml 2>/dev/null | head -3 || echo "No build config detected"`
-- Project age: !`git log --reverse --format="%ar" 2>/dev/null | head -1 || echo "Unknown — no git history"`
-- Active contributors: !`git shortlog -sn --no-merges 2>/dev/null | head -5 || echo "Unknown — no git history"`
-- TODO/FIXME count: !`grep -r "TODO\|FIXME\|HACK\|XXX" src/ 2>/dev/null | wc -l || echo "0"`
+1. **Engine** (only if not detected). Offer the two or three that fit what they said, with the
+   recommended one first. Defaults: 2D web or jam -> Phaser 4; 3D web -> Three.js; 2D or stylized 3D
+   desktop -> Godot 4.7; broad platform reach or mobile -> Unity 6.3 LTS; high-end 3D -> Unreal 5.8.
+2. **Working title** (default: the folder name).
+3. **Goal**: weekend or jam game / portfolio piece / commercial release. A weekend web game gets the
+   2-minute wiring and a hand-off to `/gameforge:game-vibe-code`; a jam goes to
+   `/gameforge:game-jam-mode`.
+4. **Permissions file**: install the GameForge `.claude/settings.json` starter? (default: yes if none
+   exists).
 
-Use this auto-populated data to shortcut Step 0 below. If the engine field shows a detected
-project file, skip the engine detection prompts. If source file count is zero, you are in
-State 1 (Empty Project). If source file count is nonzero but docs directory is empty, the
-project likely has documentation gaps. The git history age and contributor count help
-distinguish solo dev projects from team projects, which affects recommended workflow
-complexity.
+The best engine is the one the team already knows. Switching mid-project costs more than a
+suboptimal first choice. For anything beyond these defaults, route to
+`/gameforge:game-technical-director`.
 
-### Workflow
+### Current engine versions (as of November 2026)
 
-**Step 0: Project State Detection**
+| Engine | Start new projects on | Know before you pick |
+|---|---|---|
+| Godot | **4.7.2** stable (4.7 released 2026-06-18) | 4.8 is in beta; its .NET build needs .NET 10. Web export uses the Compatibility renderer (WebGL 2) only, and C# projects cannot export to the web in 4.6/4.7. Jolt is the default 3D physics engine since 4.6. |
+| Unity | **6.3 LTS** (supported to Dec 2027) | 6.6 is the current Update release. 6.0 LTS left standard support on 2026-10-16. Unity 7.0 alpha is the first CoreCLR editor: not for production. Personal is free under US$200K revenue or funding; the Runtime Fee is gone. In 6.6, Fast Enter Play Mode is on by default, so static fields no longer reset. |
+| Unreal | **5.8** (2026-06-17) | The last planned UE5 major; UE6 early access is targeted for late 2027 (Verse, Scene Graph). 5% royalty above US$1M lifetime gross (3.5% under Launch Everywhere). No official browser export. |
+| Three.js | **r187** (`three@0.187.0`) | `WebGLRenderer` is the default; `WebGPURenderer` is opt-in with automatic WebGL 2 fallback. ESM-only: pin the exact version. React Three Fiber 9.8 is stable; v10 is alpha. |
+| Phaser | **4.2.1** | Phaser 4 is stable (MIT). The Canvas renderer is deprecated. Phaser AE is a separate, commercially licensed product. |
+| PixiJS | **8.22** | `await app.init()` is async; WebGL is the default renderer. |
+| Web tooling | **Vite 8** | Rolldown is the only bundler; needs Node 20.19+ or 22.12+. |
 
-Before any recommendations, assess the current state by scanning for these signals.
-Cross-reference against the auto-populated data above — much of this may already be answered.
+Record the exact version you detect or install in `engine_version`.
 
-```
-STATE DETECTION MATRIX
----------------------------------------------------------------
-Signal                          | Indicates
----------------------------------------------------------------
-No files / empty directory      | State 1: Empty Project
-Design docs but no source code  | State 2: Concept Exists
-Source code + design docs       | State 3: In-Progress
-Mature codebase + CI + tests    | State 4: Existing Project
----------------------------------------------------------------
+## Step 2: Wire GameForge into the project
 
-Engine Detection Signals:
-- project.godot, *.gd, *.tscn        --> Godot Engine
-- *.unity, *.cs, ProjectSettings/     --> Unity
-- *.uproject, *.cpp + UE macros       --> Unreal Engine
-- package.json + Phaser/PixiJS        --> Web-based engine
-- Cargo.toml + Bevy/macroquad         --> Rust-based engine
-- No recognizable engine files        --> Ask the user
-```
+Run `mkdir -p .gameforge production/session-state production/session-logs`, then write the files
+below. Creating `.gameforge/` and `production/session-state/` opts the project into GameForge's
+state hooks (pre-compact snapshot, recovery note, session and agent logs).
 
-Run the detection, report findings, then branch to the appropriate state handler.
+### 2a. `.gameforge/project.json`
 
----
-
-**State 1: Empty Project**
-
-The blank canvas. This is where most solo devs and small teams start.
-
-Step 1.1 -- Choose your engine (if not already decided):
-- Present tradeoffs honestly, not engine fanboyism
-- For 2D pixel art: Godot is lightweight and fast to prototype -- Cassette Beasts and Dome Keeper prove it ships commercial-quality games
-- For 3D with asset store needs: Unity has the broadest ecosystem and the largest pool of learning resources
-- For AAA-quality visuals: Unreal delivers but demands more hardware and expertise
-- For web distribution: Phaser, PixiJS, or PlayCanvas
-- The best engine is the one your team already knows. Switching engines mid-project kills more games than bad engine choices do
-- Route to the appropriate engine specialist skill after selection
-
-Step 1.2 -- Define the concept (route to `game-brainstorm` if needed):
-- At minimum capture: working title, genre, platform, core mechanic, target audience
-- If the user already has a concept, capture it in structured format
-- If the user has no concept, route them to `game-brainstorm` before continuing
-
-Step 1.3 -- Create the initial file structure:
-
-The following is the recommended generic starting point. Adapt it to your engine.
-
-```
-project-root/
-  design/
-    gdd/                  -- Game Design Document and sub-documents
-    narrative/            -- Story outlines, dialogue scripts, lore bibles
-    levels/               -- Level layouts, progression maps, zone designs
-    balance/              -- Economy spreadsheets, difficulty curves, tuning tables
-  docs/
-    architecture/         -- Technical architecture decisions and diagrams
-    api/                  -- Internal API documentation for game systems
-  src/
-    core/                 -- Engine initialization, main loop, global managers
-    gameplay/             -- Player mechanics, enemy behaviors, interaction systems
-    ai/                   -- NPC behavior trees, pathfinding, decision-making
-    ui/                   -- Menus, HUD, in-game UI components
-    tools/                -- Editor extensions, debug tools, dev utilities
-  assets/
-    art/                  -- Sprites, textures, models, animations
-    audio/                -- Music tracks, sound effects, ambient loops
-    vfx/                  -- Particle systems, shader effects, post-processing
-    shaders/              -- Custom shader files
-    data/                 -- JSON/XML config files, localization strings, data tables
-  tests/
-    unit/                 -- Isolated component tests
-    integration/          -- System interaction tests
-    playtest/             -- Playtest session logs and feedback forms
-  production/
-    sprints/              -- Sprint plans, retrospectives, velocity charts
-    milestones/           -- Milestone definitions and completion criteria
-  prototypes/             -- Throwaway prototypes (never promote to production code)
+```json
+{
+  "name": "Ember Drift",
+  "engine": "godot",
+  "engine_version": "4.7",
+  "phase": "concept",
+  "pillars": [],
+  "commit_convention": "conventional",
+  "lfs_threshold_mb": 20
+}
 ```
 
-**Engine-specific alternatives:**
+| Key | Values | Read by |
+|---|---|---|
+| `name` | Working title | skills |
+| `engine` | `godot`, `unity`, `unreal`, `threejs`, `r3f`, `babylon`, `playcanvas`, `phaser`, `pixi`, `kaplay`, `excalibur`, `bevy`, `other` | skills |
+| `engine_version` | Major.minor you detected, e.g. `"4.7"`, `"6.3"`, `"5.8"`, `"r187"` | skills |
+| `phase` | `concept`, `pre-production`, `prototype`, `vertical-slice`, `production`, `polish`, `release`, `post-launch` | session briefing, skills |
+| `pillars` | 3-5 short phrases; leave `[]` until `/gameforge:game-brainstorm` or `/gameforge:game-creative-director` defines them | creative director, design review |
+| `commit_convention` | `conventional` (default), `gameforge`, `off` | commit hook |
+| `lfs_threshold_mb` | Integer, default `20` | commit hook (blocks larger non-LFS files) |
 
-- **Godot projects:** The standard Godot layout applies: `scripts/`, `scenes/`, `resources/`, `addons/`. The `design/`, `docs/`, and `production/` directories overlay on top at the project root alongside `project.godot`.
-- **Unity projects:** `Assets/Scripts/`, `Assets/Prefabs/`, `Assets/Scenes/`. The `design/`, `docs/`, and `production/` directories go at the project root alongside `Assets/`.
-- **Unreal projects:** `Source/`, `Content/`, `Config/`. The `design/`, `docs/`, and `production/` directories go at the project root.
+Phase defaults by state: Empty -> `concept`; Concept -> `pre-production`; In progress -> `prototype`
+or `production` (ask if unclear); Mature -> `production` or later.
 
-This structure is a recommendation, not a requirement. GameForge hooks detect source code across multiple conventional locations (`src/`, `scripts/`, `Scripts/`, `Source/`, `Assets/Scripts/`, `lib/`). If your project already has a structure, keep it -- add the `design/`, `docs/`, and `production/` overlays where they make sense.
+### 2b. Session state and `.gitignore`
 
-Step 1.4 -- Generate starter documents:
-- Create a minimal Game Concept Document (reference `${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md`)
-- Create a Technical Architecture Note with engine choice rationale
-- Create a `TODO.md` with immediate next steps
-- Set up a basic `.gitignore` appropriate for the chosen engine
-
-Step 1.5 -- Suggest next steps:
-- Run `game-brainstorm` to flesh out the concept if it is thin
-- Define 3-5 design pillars (reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for methodology)
-- Build the first throwaway prototype to test the core mechanic
-- Estimate scope and plan a first sprint with `game-sprint-plan`
-
----
-
-**State 2: Concept Exists (Docs, No Code)**
-
-The user has thought about their game but has not started building it yet.
-
-Step 2.1 -- Review existing documentation:
-- Read all design docs and assess completeness
-- Check against the 8 required GDD sections (reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`)
-- Identify what is well-defined and what has gaps
-
-Step 2.2 -- Gap analysis:
-- Flag missing sections: core loop definition, pillar statements, scope estimate,
-  technical requirements, art style reference, audio direction, UI wireframes, progression
-- Rate each gap as Critical (blocks development), Important (causes confusion later),
-  or Nice-to-have (polish item)
-
-Step 2.3 -- Structural assessment:
-- Are the docs organized in the standard structure, or scattered?
-- If scattered, propose reorganization into the `design/` hierarchy
-- Check for contradictions between documents
-
-Step 2.4 -- Recommend next actions:
-- Fill critical gaps first (usually: core loop and technical architecture)
-- Route to `game-design-review` for a thorough design document review
-- Create the file structure from State 1, Step 1.3 if it does not exist
-- Identify the right moment to start coding (usually: after core loop is defined and
-  one pillar mechanic is well-specified)
-
----
-
-**State 3: In-Progress (Code and Docs)**
-
-Development is underway. The goal is to assess health and recommend priorities.
-
-Step 3.1 -- Codebase scan:
-- Count source files, estimate project size
-- Identify the primary language and engine
-- Check for test files (any testing at all?)
-- Look for configuration files, build scripts, CI setup
-- Scan for TODOs, FIXMEs, HACKs in the codebase and report counts
-
-Step 3.2 -- Documentation coverage:
-- Does a GDD exist? How complete is it?
-- Is there technical documentation?
-- Are there inline code comments on complex systems?
-- Is there a README that helps a new contributor get started?
-
-Step 3.3 -- Structural health:
-- Does the file structure follow a logical organization?
-- Are there any massive god-files that need decomposition?
-- Is there separation between gameplay logic and engine-specific code?
-- Are assets organized or dumped in flat directories?
-
-Step 3.4 -- Priority recommendations:
-- Rank findings by impact: what is most likely to cause pain next?
-- Suggest specific refactoring targets if the structure is problematic
-- Recommend documentation tasks that will save time in the next month
-- If testing is absent, recommend starting with the most critical system
-
----
-
-**State 4: Existing Project (Mature Codebase)**
-
-A well-established project. The goal is an honest audit, not a rubber stamp.
-
-Step 4.1 -- Architecture audit:
-- Map the high-level architecture: what systems exist and how do they communicate?
-- Check dependency directions: are there circular dependencies?
-- Assess the state management pattern: clean state machines or boolean soup?
-- Evaluate the data pipeline: are gameplay values data-driven or hardcoded?
-
-Step 4.2 -- Documentation audit:
-- Rate doc coverage from 0-100%: what percentage of systems have documentation?
-- Check doc freshness: are docs up to date or describing the game from 6 months ago?
-- Identify the most dangerous undocumented system (highest complexity, lowest docs)
-
-Step 4.3 -- Technical health check:
-- Test coverage assessment: what is tested, what is not?
-- Performance scan: any obvious hot-path concerns?
-- Dependency audit: outdated packages, security issues?
-- Build health: does the project build cleanly? Any warnings being ignored?
-
-Step 4.4 -- Recommendations:
-- Produce a prioritized action list organized by effort vs. impact
-- Focus on risks: what is most likely to cause a production incident?
-- Suggest process improvements (CI, testing, code review practices)
-- Identify technical debt that should be addressed before the next major feature
-
-### Output Format
-
-The workflow produces a **Project State Report** structured as follows:
+Write `production/session-state/active.md`; the session-start hook shows its first lines to Claude at
+the start of every session and after compaction:
 
 ```markdown
-# Project State Report
-**Project:** [name]
-**Date:** [date]
-**Detected State:** [Empty / Concept / In-Progress / Existing]
-**Engine:** [detected or user-specified]
-
-## Current State Assessment
-[Summary of what was found]
-
-## Completed Items
-- [What is already in good shape]
-
-## Gaps & Issues
-| Item | Severity | Category | Recommended Action |
-|------|----------|----------|-------------------|
-| ...  | Critical | Docs     | ...               |
-
-## File Structure
-[Current structure vs. recommended structure, with specific changes needed]
-
-## Recommended Next Steps
-1. [Highest priority action]
-2. [Second priority]
-3. [Third priority]
-
-## Suggested Workflow Sequence
-- [ ] [First workflow to run, e.g., game-brainstorm]
-- [ ] [Second workflow, e.g., game-design-review]
-- [ ] [Third workflow, e.g., game-sprint-plan]
+# Active focus
+**Now:** project setup with /gameforge:game-start (2026-11-05)
+**Decisions:** engine Godot 4.7.2 (team knows GDScript); Git LFS for source art and audio
+**Next:** /gameforge:game-brainstorm to pick the concept; then /gameforge:game-prototype
+**Blocked on:** nothing
 ```
 
-### Quality Criteria
+Append to `.gitignore` (create it if missing; never duplicate lines):
 
-A successful project onboarding meets all of these:
-- The detected state accurately reflects reality (no false assumptions)
-- Every critical gap is identified and has a concrete recommended action
-- The file structure is either created or a reorganization plan is provided
-- The user knows exactly what to do next -- no ambiguity
-- Engine-specific guidance matches the actual engine in use
-- The recommended workflow sequence is logical and actionable
-- Time estimates for next steps are honest, not optimistic
-- The report is specific to this project, not generic boilerplate
+```
+production/session-state/
+production/session-logs/
+```
 
-### Example Use Cases
+### 2c. `CLAUDE.md` from the engine starter
 
-1. **"I want to make my first game."**
-   Detects empty project, asks about engine preference and concept, scaffolds the full
-   directory structure, creates starter documents, and routes to `game-brainstorm`.
+| Engine | Starter |
+|---|---|
+| Godot | `${CLAUDE_PLUGIN_ROOT}/starters/godot/CLAUDE.md` |
+| Unity | `${CLAUDE_PLUGIN_ROOT}/starters/unity/CLAUDE.md` |
+| Unreal | `${CLAUDE_PLUGIN_ROOT}/starters/unreal/CLAUDE.md` |
+| Three.js, R3F, Babylon, PlayCanvas | `${CLAUDE_PLUGIN_ROOT}/starters/threejs/CLAUDE.md` |
+| Phaser, PixiJS, Kaplay, Excalibur | `${CLAUDE_PLUGIN_ROOT}/starters/web2d/CLAUDE.md` |
+| Other or undecided | `${CLAUDE_PLUGIN_ROOT}/starters/claude-config/CLAUDE.md` |
 
-2. **"I have a GDD but haven't started coding yet. What now?"**
-   Detects State 2, reviews the GDD for completeness, identifies gaps, recommends filling
-   critical sections before writing code, and suggests when to start prototyping.
+- **No `CLAUDE.md` yet:** copy the starter (Read it, Write it to `CLAUDE.md`) and fill the bracketed
+  placeholders from `project.json`.
+- **`CLAUDE.md` exists:** merge. Keep every existing line. Add the starter's missing sections inside
+  one delimited block so a re-run can update it in place:
 
-3. **"I inherited this project from a teammate who left. Help me understand it."**
-   Detects State 4, performs a full architecture audit, maps the systems, identifies
-   undocumented areas, and produces an orientation guide for the new developer.
+  ```markdown
+  <!-- gameforge:start (managed by /gameforge:game-start; edit freely, re-runs update only this block) -->
+  ...starter sections the project did not already have...
+  <!-- gameforge:end -->
+  ```
 
-4. **"We have a prototype but it's getting messy. Should we restructure?"**
-   Detects State 3, scans the codebase for structural issues, counts TODOs and FIXMEs,
-   assesses test coverage, and recommends specific refactoring priorities.
+  Where the user's rules conflict with the starter (commit format, folder layout, naming), keep the
+  user's and list the conflict in the report.
+- Make sure the first lines of `CLAUDE.md` say how to run and check the game (the build or test
+  command). Claude Code's own best-practice guidance is to keep `CLAUDE.md` short and lead with the
+  check command; a long `CLAUDE.md` is read less carefully, not more.
 
-5. **"Set up a new Godot project for a 2D roguelike."**
-   Detects empty project with a known engine and genre, creates the directory structure
-   with Godot-specific conventions, generates a concept doc stub with roguelike-relevant
-   sections, and routes to the Godot engine specialist for setup guidance.
+### 2d. Optional `.claude/settings.json`
+
+If the user said yes, use `${CLAUDE_PLUGIN_ROOT}/starters/claude-config/settings.json`. It enables the
+GameForge marketplace and plugin, allows read-only git and `git lfs track`, asks before push, merge
+and rebase, and denies force-push, `reset --hard`, `rm -rf` and reading `.env` or keystores. If a
+settings file exists, merge key by key: union the `allow`/`ask`/`deny` arrays, never remove a user
+rule, and never move a user's `deny` into `allow`.
+
+## Step 3: Version control and Git LFS
+
+1. **Init.** If not a repository: `git init -b main`.
+2. **Ignore.** Merge the engine's `.gitignore` block from
+   `${CLAUDE_SKILL_DIR}/references/vcs-setup.md` (read it now; it has per-engine `.gitignore` and
+   `.gitattributes` blocks and the engine-specific traps).
+3. **LFS.** Check `git lfs version`. If Git LFS is missing, tell the user how to install it (it is a
+   system package) and continue; the commit hook will still block non-LFS files at or above
+   `lfs_threshold_mb`. If present: `git lfs install --local`, merge the engine's `.gitattributes`
+   block, then verify with `git lfs track` (lists patterns).
+
+| Engine | LFS policy in one line |
+|---|---|
+| Godot | Text scenes and resources (`.tscn`, `.tres`, `.gd`) stay in git; source art, audio, models and fonts go to LFS. Commit `*.import` and `*.uid` files; ignore `.godot/`. |
+| Unity | Set Asset Serialization to **Force Text** and keep meta files visible; YAML scenes and prefabs stay in git; textures, audio, models, `.psd` go to LFS. Never ignore `.meta` files. |
+| Unreal | `.uasset` and `.umap` are binary: LFS from the first commit, marked `lockable` so teammates can `git lfs lock` them. |
+| Web | LFS for source files (`.blend`, `.psd`, `.kra`, masters). Keep shipped runtime assets small and in normal git if you deploy straight from the repository: branch-based GitHub Pages serves LFS pointer files, not the binaries. |
+
+## Step 4: Agent setup
+
+Connect Claude Code to the engine so it can check its own work. Read
+`${CLAUDE_SKILL_DIR}/references/agent-setup.md` before this step; it has the install commands, the
+check command per engine, and the security notes. Summary:
+
+| Engine | Official integration | Main alternative / docs for agents |
+|---|---|---|
+| Unity | Unity's Claude Code plugin (`/plugin marketplace add Unity-Technologies/unity-agent-plugin`, then `/plugin install unity@unity-agent-plugin`); needs the Unity CLI. Unity MCP server via `unity mcp configure`. Unity AI open beta since 2026-05-04. | CoplayDev/unity-mcp (MIT); `docs.unity.com/llms.txt` |
+| Unreal | Unreal MCP plugin, UE 5.8, **experimental, editor-only, unauthenticated**, on `127.0.0.1:8000` | chongdashu/unreal-mcp (community) |
+| Godot | None. No official MCP server or `llms.txt`. | Coding-Solo/godot-mcp (community). Godot's text `.tscn` and `.gd` files are easy for agents to edit directly. |
+| Three.js / R3F | No MCP server | `threejs.org/llms.txt`, `threejs.org/docs/llms-full.txt`, `r3f.docs.pmnd.rs/llms.txt` |
+| 2D web | No MCP server | `phaser.io/llms.txt` (it steers agents to the commercial Phaser AE; Phaser 4 is the MIT framework) |
+| Any web game | Playwright MCP for screenshots and input | `claude mcp add playwright npx @playwright/mcp@latest` |
+
+Rules: show the command and let the user run or approve it; every server stays on localhost; review a
+community server's repository before installing it; never put API keys in `CLAUDE.md` or committed
+config. The Godot Foundation's 2026 ban on AI-authored code applies to contributions to the engine
+itself, not to games made with Godot.
+
+## Step 5: Scaffold and assess
+
+Add the GameForge overlay where it does not exist; keep the engine's own layout untouched:
+
+```
+design/            GDD, pillars, concept, balance data
+docs/              architecture notes, ADRs
+production/        sprints/, milestones/, session-state/ (ignored), session-logs/ (ignored)
+prototypes/        throwaway experiments (never promoted to production code)
+```
+
+Engine layouts: Godot `scenes/`, `scripts/`, `assets/`, `addons/` beside `project.godot`; Unity
+`Assets/Scripts/`, `Assets/Scenes/`, `Assets/Prefabs/`; Unreal `Source/`, `Content/`, `Config/`; web
+`src/`, `public/`. See `${CLAUDE_PLUGIN_ROOT}/docs/directory-conventions.md`.
+
+Then scale the assessment to the state from Step 0. Read
+`${CLAUDE_SKILL_DIR}/references/project-audit.md` for States 3 and 4; it has the checklists.
+
+| State | Do |
+|---|---|
+| 1. Empty | Create `design/concept.md` from `${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md` with whatever the user already knows; leave the rest for `/gameforge:game-brainstorm`. Note the engine choice and why in `docs/architecture/0001-engine-choice.md` using `${CLAUDE_PLUGIN_ROOT}/templates/architecture-decision-record.md`. |
+| 2. Concept | Read the design docs. Flag missing core loop, pillars, scope estimate, target platform, art and audio direction. Rate each Critical / Important / Nice-to-have. Route to `/gameforge:game-design-review` or `/gameforge:game-gdd-author`. |
+| 3. In progress | Structural health: god files, gameplay mixed with engine glue, hardcoded tuning values, no tests, TODO/FIXME count. Rank by what will hurt next month. |
+| 4. Mature | Architecture map, doc coverage and freshness, test coverage, build health, dependency age. Produce an effort-vs-impact list. Route to `/gameforge:game-reverse-document` and `/gameforge:game-code-review`. |
+
+For an AI-heavy prototype found in State 3 (one huge file, no tests, generated assets), say so plainly
+and recommend `/gameforge:game-code-review` before new features; that is vibe debt, and it compounds.
+
+## Step 6: Report and hand off
+
+Write the report to `production/setup-report.md`, update `active.md` with the next step, and offer
+the first commit: `chore: initialize GameForge project` passes the default commit convention.
+
+## Working with AI Coding Agents
+
+Setup is where an agent-built project is won or lost: the agent can only verify what the project
+lets it run.
+
+- **Delegate:** scaffolding, `.gitignore`/`.gitattributes` merges, `project.json`, converting an
+  existing README into the `CLAUDE.md` block, writing the check command into a script.
+- **Verify by hand:** the engine opens the project without import errors; `git lfs ls-files` lists
+  a test binary after the first commit; the MCP server answers only on `127.0.0.1`; the check command
+  in `CLAUDE.md` actually runs and fails when it should.
+- **Give the agent a pass/fail check on day one.** A web game gets `npm run build` plus a Playwright
+  screenshot test; Godot gets a headless test runner (GUT or gdUnit4); Unity gets edit-mode tests in
+  batch mode; Unreal gets an automation test. Details per engine are in
+  `${CLAUDE_SKILL_DIR}/references/agent-setup.md`.
+- **Guardrails against vibe debt:** the GameForge hooks already block edits to engine-generated files
+  and oversized non-LFS binaries; add the folder layout and "one change per commit" to `CLAUDE.md`, and
+  keep `progress.md` (decisions, TODOs) next to `active.md` for long agent runs.
+- **Originality:** Claude Code declines to recreate specific existing games (since late October
+  2026). If the user's plan is "remake X", set the project up for an original game in X's genre and
+  route the concept work to `/gameforge:game-brainstorm`.
+- **Assets:** if the team plans AI-generated art, audio or voice, start the provenance log on day
+  one with `/gameforge:game-ai-assets`; store disclosures are generated from it later.
+- **Fast path:** a user who wants a playable tonight needs only Step 2 (two minutes) and the
+  Playwright MCP line, then `/gameforge:game-vibe-code`. Do not run a State 4 audit on a weekend toy.
+
+Prompt that works after setup: "Read CLAUDE.md and production/session-state/active.md, run the check
+command, and tell me what is broken before changing anything."
+
+## Output Format
+
+```markdown
+# Project Setup Report: [Working title]
+**Date:** [YYYY-MM-DD]   **State:** [Empty / Concept / In progress / Mature]
+**Engine:** [Godot 4.7.2]   **Phase:** [concept]   **Goal:** [commercial / portfolio / jam / weekend]
+
+## Wiring
+| Item | Status | Notes |
+|---|---|---|
+| .gameforge/project.json | created / updated / unchanged | [values changed] |
+| production/session-state/active.md | created | |
+| .gitignore (state dirs + engine block) | merged | [lines added] |
+| CLAUDE.md | copied / merged (gameforge block) | [conflicts kept as the user's] |
+| .claude/settings.json | installed / merged / skipped | |
+| Git | initialized / existing ([branch], [N] commits) | |
+| Git LFS | tracking [patterns] / not installed | threshold [20] MB |
+| Agent setup | [Playwright MCP, godot-mcp, Unity plugin...] | localhost only: [yes] |
+| Check command | `[npm run build && npx playwright test]` | ran: [pass/fail/not yet] |
+
+## What exists
+- [What is already in good shape]
+
+## Gaps
+| Item | Severity | Recommended action |
+|---|---|---|
+| [No core loop defined] | Critical | /gameforge:game-brainstorm |
+
+## Next three steps
+1. [Highest-leverage action, with the skill to run]
+2. [...]
+3. [...]
+```
+
+## Quality Criteria
+
+- The detected state and engine match reality; nothing was assumed that could have been read.
+- `.gameforge/project.json` is valid JSON with all seven keys and allowed values.
+- `production/session-state/` and `production/session-logs/` are ignored by git.
+- No existing file lost a line; every merge is listed in the report.
+- Git LFS covers the engine's binary formats, or the report says why not.
+- Every suggested MCP server is localhost-only, and code-execution risks are named.
+- `CLAUDE.md` leads with a check command that actually runs.
+- The user knows exactly what to run next.
+
+## Example Use Cases
+
+1. **"Set up a new Godot project for a 2D roguelike."** Empty state, engine given. Writes the wiring,
+   Godot `.gitignore`/LFS blocks, merges the Godot starter, suggests godot-mcp, creates a concept stub,
+   points to `${CLAUDE_PLUGIN_ROOT}/genre-packs/roguelike/README.md` and `/gameforge:game-brainstorm`.
+2. **"I inherited this Unity project."** Mature state. Detects 6.3 from `ProjectVersion.txt`, checks
+   Force Text and meta files, offers Unity's Claude Code plugin, runs the audit, routes to
+   `/gameforge:game-reverse-document`.
+3. **"I want a little Three.js game this weekend."** Two-minute wiring with `engine: threejs`,
+   Playwright MCP, then `/gameforge:game-vibe-code`.
+4. **"Re-run setup; we moved to Unreal 5.8."** Re-run: updates `engine` and `engine_version`, adds
+   `.uasset`/`.umap` LFS tracking with locking, keeps everything else.
