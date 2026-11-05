@@ -118,8 +118,13 @@ namespace Game.UI
 
         private Label _label;
 
-        private void Awake() => _label = _document.rootVisualElement.Q<Label>("health-label");
-        private void OnEnable() => _healthChanged.Raised += OnHealthChanged;
+        private void OnEnable()
+        {
+            // UIDocument builds its visual tree in its own OnEnable; query here, not in Awake.
+            _label = _document.rootVisualElement.Q<Label>("health-label");
+            _healthChanged.Raised += OnHealthChanged;
+        }
+
         private void OnDisable() => _healthChanged.Raised -= OnHealthChanged;
 
         private void OnHealthChanged(int value) => _label.text = value.ToString();
@@ -399,8 +404,7 @@ namespace Game.Gameplay
         public Bullet Get() => _pool.Get();
         public void Release(Bullet bullet) => _pool.Release(bullet);
     }
-
-    public sealed class Bullet : MonoBehaviour { }
+    // Bullet is a MonoBehaviour in its own Bullet.cs (component class name must match the file name).
 }
 ```
 
