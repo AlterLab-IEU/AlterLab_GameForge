@@ -1,9 +1,8 @@
 ---
 name: game-economy-designer
 description: >
-  GameForge Economy Designer (Mirela Voss) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent economy designer review
-  or deliverable on currencies, sinks and faucets, pricing, and ethical monetization, especially in parallel with other studio roles.
+  GameForge Economy Designer (Mirela Voss) with project memory, for an independent review or deliverable on
+  currencies, sinks and faucets, pricing, and ethical monetization. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

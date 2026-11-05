@@ -1,7 +1,7 @@
-# AI Asset Tools, Licences, and Provenance (Art Director reference)
+# AI Asset Tools, Licenses, and Provenance (Art Director reference)
 
-Snapshot: November 2026. Tool capabilities and licence terms change monthly. Treat every row as a
-starting point: open the vendor's current terms page, read the licence file itself (not a summary),
+Snapshot: November 2026. Tool capabilities and license terms change monthly. Treat every row as a
+starting point: open the vendor's current terms page, read the license file itself (not a summary),
 and record the date you checked in the AI Asset Policy and in each provenance entry.
 
 Claims marked *(vendor claim)* come only from the vendor. Claims marked **UNVERIFIED** could not be
@@ -9,14 +9,14 @@ confirmed and must not be repeated to the user as fact.
 
 ---
 
-## 1. Tool and licence matrix
+## 1. Tool and license matrix
 
 ### 3D generation
 
-| Tool | Status (late 2026) | Licence / terms | Strengths | Watch out for |
+| Tool | Status (late 2026) | License / terms | Strengths | Watch out for |
 |---|---|---|---|---|
 | **TRELLIS.2-4B** (Microsoft) | Open weights; paper 2025-12-16 | **MIT** | Full PBR output; you own the pipeline | Needs a 24 GB+ GPU; tested on Linux only |
-| **Hunyuan3D 2.1** (Tencent) | Open weights | Tencent licence **does not apply in the EU, UK, or South Korea, including outputs**; services above 1M monthly active users need a separate licence | Strong shape quality | Unusable for any game sold in those territories. Hunyuan3D 3.x reportedly API-only (**UNVERIFIED**) |
+| **Hunyuan3D 2.1** (Tencent) | Open weights | Tencent license **does not apply in the EU, UK, or South Korea, including outputs**; services above 1M monthly active users need a separate license | Strong shape quality | Unusable for any game sold in those territories. Hunyuan3D 3.x reportedly API-only (**UNVERIFIED**) |
 | **Meshy 6** | Service (Jan 2026) | Commercial service terms; check the plan's output rights | Low-poly mode, Remesh retopology, auto-rig | Auto-retopo is fine for props, not hero deformation |
 | **Tripo P1 "Smart Mesh"** | Service (Mar 2026) | Service terms | Topology-focused output | An independent review still found hero assets needed cleanup |
 | **Rodin Gen-2 / Gen-2.5** (Hyper3D) | Service, also via aggregators | Service terms of whichever platform you call it through | Quad-dominant meshes *(vendor claim)* | Terms differ between direct and aggregator access |
@@ -49,17 +49,17 @@ prohibited. DeepMotion's 2026 changes are **UNVERIFIED**.
 ### Image generation and local pipelines
 
 General image models (cloud or local ComfyUI graphs) are fine for mood boards and concept
-exploration. For production use, the policy must name the exact model and version, its licence, and
-where its training data is documented. If a model's licence or training-data position is unclear,
+exploration. For production use, the policy must name the exact model and version, its license, and
+where its training data is documented. If a model's license or training-data position is unclear,
 it stays in ideation only.
 
 ---
 
-## 2. Licence check procedure (run before a tool enters the policy)
+## 2. License check procedure (run before a tool enters the policy)
 
 1. **Territory**: list every country the game will be sold or streamed in. Reject any tool whose
-   licence excludes one of them, including exclusions that cover outputs (Hunyuan3D 2.1).
-2. **Scale clauses**: MAU or revenue thresholds that trigger a different licence (Hunyuan3D 2.1 at
+   license excludes one of them, including exclusions that cover outputs (Hunyuan3D 2.1).
+2. **Scale clauses**: MAU or revenue thresholds that trigger a different license (Hunyuan3D 2.1 at
    1M MAU; Stability AI Community License above US$1M revenue for its models).
 3. **Output ownership**: does the plan you pay for grant commercial rights to outputs? Free tiers
    often do not.
@@ -68,7 +68,7 @@ it stays in ideation only.
    Disney/Universal/WBD v. Midjourney is in discovery; Andersen v. Stability has a summary-judgment
    hearing set for Feb 2027.)
 5. **Input rights**: you may only feed the tool images you own or are licensed to transform.
-6. **Record**: tool, version, licence name, URL, date checked, territories cleared, reviewer.
+6. **Record**: tool, version, license name, URL, date checked, territories cleared, reviewer.
 
 ---
 
@@ -83,7 +83,7 @@ Every non-hand-made asset gets an entry in the project's `ai-asset-log.md` (crea
 | ID | 47 |
 | Asset path | `public/assets/models/env_ruins_pillar_broken.glb` |
 | Tool and version | TRELLIS.2-4B, local, commit abc123 |
-| Licence, date checked | MIT, 2026-11-05 |
+| License, date checked | MIT, 2026-11-05 |
 | Input | Concept paintover CP-112 (team-owned) |
 | Prompt or settings | Seed 1842, PBR on, decimation 0.4 |
 | Human edits | Manual retopology, UV layout, albedo repaint, roughness pass |

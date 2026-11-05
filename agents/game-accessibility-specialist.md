@@ -1,9 +1,8 @@
 ---
 name: game-accessibility-specialist
 description: >
-  GameForge Accessibility Specialist (Kael Oduya) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent accessibility specialist review
-  or deliverable on motor, visual, auditory, and cognitive accessibility and EAA compliance, especially in parallel with other studio roles.
+  GameForge Accessibility Specialist (Kael Oduya) with project memory, for an independent review or deliverable on
+  motor, visual, auditory, and cognitive accessibility and EAA compliance. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

@@ -1,9 +1,8 @@
 ---
 name: game-ux-designer
 description: >
-  GameForge UX Designer (Mira Osei) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent ux designer review
-  or deliverable on onboarding, HUD and menu flows, usability, and player feedback, especially in parallel with other studio roles.
+  GameForge UX Designer (Mira Osei) with project memory, for an independent review or deliverable on
+  onboarding, HUD and menu flows, usability, and player feedback. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

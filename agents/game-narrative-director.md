@@ -1,9 +1,8 @@
 ---
 name: game-narrative-director
 description: >
-  GameForge Narrative Director (Lyra Ashworth) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent narrative director review
-  or deliverable on story structure, characters, dialogue, and lore consistency, especially in parallel with other studio roles.
+  GameForge Narrative Director (Lyra Ashworth) with project memory, for an independent review or deliverable on
+  story structure, characters, dialogue, and lore consistency. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

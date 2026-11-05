@@ -38,11 +38,11 @@ in this area change every few months, so re-check the primary pages before a sto
 
 - **Music**: UMG and Sony are still suing Suno; Udio disabled downloads after settling with UMG.
   Treat Suno and Udio output as legally unsettled for shipped games. Eleven Music and Stable Audio 3
-  are trained on licensed data; Stable Audio 3's open-weight models need an Enterprise licence above
+  are trained on licensed data; Stable Audio 3's open-weight models need an Enterprise license above
   US$1M revenue [13].
-- **3D**: the Hunyuan3D 2.1 licence does not apply in the EU, UK or South Korea, and that
+- **3D**: the Hunyuan3D 2.1 license does not apply in the EU, UK or South Korea, and that
   restriction covers outputs; TRELLIS.2 is MIT. Hero meshes still need manual retopology [14].
-- Route tool-by-tool licence checks to `/gameforge:game-ai-assets` and the art and audio directors.
+- Route tool-by-tool license checks to `/gameforge:game-ai-assets` and the art and audio directors.
 
 ### Industry sentiment
 
@@ -116,13 +116,13 @@ to hide the page from players who opted out; that is the honest trade.
 - Change only at a milestone gate or before a public build, never quietly mid-production.
 - Record the change as a creative decision (`CD-NNN`) with the reason and the asset classes affected.
 - Moving up a level (more AI) triggers a disclosure review with `/gameforge:game-launch` and a
-  licence check per tool. Moving down triggers a replacement plan with the producer.
+  license check per tool. Moving down triggers a replacement plan with the producer.
 - Tell the community before the store page changes. Discovered changes read as concealment.
 
 ## 6. Red flags that require a ruling
 
 - "We'll disclose it later" or "it's only placeholder" for anything in a public build.
-- A tool whose licence or training data the team cannot describe.
+- A tool whose license or training data the team cannot describe.
 - Any voice that sounds like a real performer without a signed consent and usage description.
 - Prompts naming a living artist, studio or franchise.
 - Live-generated content without a written guardrail list and a player report path.
@@ -145,7 +145,7 @@ All accessed 2026-11-05 unless dated otherwise.
 11. Holland & Knight, Thaler cert denied (Mar 2026): https://www.hklaw.com/en/insights/publications/2026/03/the-final-word-supreme-court-refuses-to-hear-case-on-ai-authorship
 12. PC Gamer, SAG-AFTRA ratification (Jul 2025): https://www.pcgamer.com/gaming-industry/the-videogame-voice-actors-strike-officially-ends-as-performers-ratify-agreement-between-sag-aftra-and-publishers
 13. Music Business Worldwide on Suno litigation (Oct 2026): https://www.musicbusinessworldwide.com/suno-fights-to-keep-warner-music-settlement-terms-away-from-umg-and-sony/ ; Stability AI, Stable Audio 3: https://stability.ai/stable-audio
-14. Hunyuan3D 2.1 licence: https://huggingface.co/tencent/Hunyuan3D-2.1 ; TRELLIS.2 model card: https://huggingface.co/microsoft/TRELLIS.2-4B
+14. Hunyuan3D 2.1 license: https://huggingface.co/tencent/Hunyuan3D-2.1 ; TRELLIS.2 model card: https://huggingface.co/microsoft/TRELLIS.2-4B
 15. GDC 2026 State of the Game Industry: https://gdconf.com/article/gdc-2026-state-of-the-game-industry-reveals-impact-of-layoffs-generative-ai-and-more/
 16. Engadget, Indie Game Awards rescind *Clair Obscur* awards (Dec 2025): https://www.engadget.com/gaming/the-indie-game-awards-snatches-back-two-trophies-from-clair-obscur-over-its-use-of-generative-ai-164730842.html
 17. Kotaku, *ARC Raiders* re-recorded lines: https://kotaku.com/arc-raiders-replaced-ai-generated-content-human-recorded-dialogue-voices-2000678774

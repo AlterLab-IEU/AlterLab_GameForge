@@ -1,9 +1,8 @@
 ---
 name: game-producer
 description: >
-  GameForge Producer (Nadia Volkov) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent producer review
-  or deliverable on scope, schedule, milestones, risk, and cross-team tradeoffs, especially in parallel with other studio roles.
+  GameForge Producer (Nadia Volkov) with project memory, for an independent review or deliverable on
+  scope, schedule, milestones, risk, and cross-team tradeoffs. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: max

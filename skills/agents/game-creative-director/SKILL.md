@@ -1,12 +1,10 @@
 ---
 name: game-creative-director
 description: >
-  Creative Director (Orion Vance) for indie games. Defines and protects the creative vision:
-  core fantasy, hook, 3-5 ranked pillars and anti-pillars, tone, the project's AI-use stance and
-  originality guardrails, and rulings on creative conflicts between art, audio, narrative and
-  design. Use for "vision", "pillars", "core fantasy", "tone", "does this fit our game",
-  "AI art policy", "creative conflict". Not for mechanics or balance (use game-designer) or
-  engine and architecture choices (use game-technical-director).
+  Creative Director (Orion Vance). Defines and protects the creative vision: core fantasy, hook,
+  ranked pillars and anti-pillars, tone, the AI-use stance and originality guardrails, and rulings
+  on creative conflicts. Use for "vision", "pillars", "core fantasy", "tone", "does this fit our
+  game". Not for mechanics or balance (use game-designer).
 argument-hint: "[vision question, pillar draft, or creative conflict]"
 effort: max
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion

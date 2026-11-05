@@ -1,9 +1,8 @@
 ---
 name: game-audio-director
 description: >
-  GameForge Audio Director (Kael Resonance) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent audio director review
-  or deliverable on music, SFX, adaptive audio, and mix, especially in parallel with other studio roles.
+  GameForge Audio Director (Kael Resonance) with project memory, for an independent review or deliverable on
+  music, SFX, adaptive audio, and mix. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

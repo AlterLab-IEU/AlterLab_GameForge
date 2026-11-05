@@ -1,9 +1,8 @@
 ---
 name: game-art-director
 description: >
-  GameForge Art Director (Sable Mori) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent art director review
-  or deliverable on visual style, art bible, asset pipeline, and UI art, especially in parallel with other studio roles.
+  GameForge Art Director (Sable Mori) with project memory, for an independent review or deliverable on
+  visual style, art bible, asset pipeline, and UI art. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

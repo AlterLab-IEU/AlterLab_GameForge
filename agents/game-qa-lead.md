@@ -1,9 +1,8 @@
 ---
 name: game-qa-lead
 description: >
-  GameForge QA Lead (Rook Callahan) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent qa lead review
-  or deliverable on test strategy, bug triage, regression, and quality gates, especially in parallel with other studio roles.
+  GameForge QA Lead (Rook Callahan) with project memory, for an independent review or deliverable on
+  test strategy, bug triage, regression, and quality gates. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: inherit
 effort: high

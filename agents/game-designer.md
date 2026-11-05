@@ -1,9 +1,8 @@
 ---
 name: game-designer
 description: >
-  GameForge Game Designer (Luca Ferreira) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent game designer review
-  or deliverable on mechanics, systems, progression, and tuning, especially in parallel with other studio roles.
+  GameForge Game Designer (Luca Ferreira) with project memory, for an independent review or deliverable on
+  mechanics, systems, progression, and tuning. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: high

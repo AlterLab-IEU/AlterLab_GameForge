@@ -1,9 +1,8 @@
 ---
 name: game-creative-director
 description: >
-  GameForge Creative Director (Orion Vance) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent creative director review
-  or deliverable on vision, pillars, tone, and creative conflict rulings, especially in parallel with other studio roles.
+  GameForge Creative Director (Orion Vance) with project memory, for an independent review or deliverable on
+  vision, pillars, tone, and creative conflict rulings. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit
 model: inherit
 effort: max

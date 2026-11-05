@@ -1,9 +1,8 @@
 ---
 name: game-technical-director
 description: >
-  GameForge Technical Director (Kira Tanaka) as a delegatable subagent with project memory. Use when the
-  main conversation or /gameforge:game-team-orchestrator needs an independent technical director review
-  or deliverable on architecture, engine choice, performance budgets, and technical risk, especially in parallel with other studio roles.
+  GameForge Technical Director (Kira Tanaka) with project memory, for an independent review or deliverable on
+  architecture, engine choice, performance budgets, and technical risk. Used by /gameforge:game-team-orchestrator for parallel consultations.
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: inherit
 effort: max
