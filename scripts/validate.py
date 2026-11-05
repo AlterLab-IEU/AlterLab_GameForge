@@ -35,7 +35,7 @@ VERBOSE = "--verbose" in sys.argv or "-v" in sys.argv
 
 CATEGORY_MIN_LINES = {"agents": 200, "workflows": 150, "engine-specialists": 200}
 SOFT_MAX_LINES, HARD_MAX_LINES = 500, 550
-DESC_SOFT_MAX, DESC_HARD_MAX = 600, 1024
+DESC_SOFT_MAX, DESC_HARD_MAX = 400, 1024
 
 SKILL_FIELDS = {
     "name", "description", "when_to_use", "argument-hint", "arguments", "allowed-tools",
@@ -227,6 +227,10 @@ for name, f in skills.items():
     tools = split_tools(fm.get("allowed-tools", "")) if isinstance(fm.get("allowed-tools"), str) else fm.get("allowed-tools", [])
     if "Bash" in tools:
         err(f"{name}: allowed-tools pre-approves unrestricted Bash; scope it, e.g. Bash(git log *)")
+    for t in tools:
+        m = re.fullmatch(r"Bash\((python3?|node|bash|sh|zsh|npx|bunx|deno|bun|perl|ruby|eval|sudo|curl|wget)\s*\*\)", t.strip())
+        if m:
+            err(f"{name}: allowed-tools pre-approves '{t.strip()}', which runs arbitrary code; scope it to a script or subcommand, e.g. Bash({m.group(1)} tools/*)")
     if fm.get("context") == "fork":
         if "AskUserQuestion" in tools:
             err(f"{name}: context: fork runs as a subagent, which cannot use AskUserQuestion")

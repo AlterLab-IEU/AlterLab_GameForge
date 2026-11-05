@@ -59,7 +59,7 @@ esac
 case "$REL" in
   node_modules/*|*/node_modules/*) deny "is inside node_modules/. Change package.json or patch the dependency with patch-package instead." ;;
   dist/*|build/*|.vite/*|.next/*|.parcel-cache/*)
-    case "$GF_ENGINE" in threejs|r3f|babylon|playcanvas|phaser|pixi|kaplay|excalibur)
+    case "$GF_ENGINE" in threejs|r3f|babylon|playcanvas|phaser|pixi|kaplay|excalibur|littlejs)
       deny "is build output. Edit the source and rebuild." ;;
     esac ;;
 esac

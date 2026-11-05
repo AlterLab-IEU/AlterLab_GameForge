@@ -9,7 +9,7 @@
 #   GF_INPUT        raw JSON event from Claude Code (stdin)
 #   GF_ROOT         project root ($CLAUDE_PROJECT_DIR, else event cwd, else $PWD)
 #   GF_ENGINE       detected engine id (godot, unity, unreal, threejs, r3f, babylon,
-#                   playcanvas, phaser, pixi, kaplay, excalibur, bevy, gamemaker,
+#                   playcanvas, phaser, pixi, kaplay, excalibur, littlejs, bevy, gamemaker,
 #                   defold, love, web, none)
 #   GF_ENGINE_LABEL human-readable engine + version, e.g. "Godot 4.5"
 #
@@ -125,6 +125,10 @@ gf_detect_engine() {
       GF_ENGINE=kaplay; GF_ENGINE_LABEL="Kaplay $(_gf_pkg_version kaplay)"
     elif _gf_pkg_has excalibur; then
       GF_ENGINE=excalibur; GF_ENGINE_LABEL="Excalibur $(_gf_pkg_version excalibur)"
+    elif _gf_pkg_has littlejsengine; then
+      GF_ENGINE=littlejs; GF_ENGINE_LABEL="LittleJS $(_gf_pkg_version littlejsengine)"
+    elif _gf_pkg_has kaboom; then
+      GF_ENGINE=kaplay; GF_ENGINE_LABEL="Kaboom $(_gf_pkg_version kaboom) (legacy; Kaplay is the maintained successor)"
     fi
   fi
   if [ "$GF_ENGINE" = none ]; then

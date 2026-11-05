@@ -40,7 +40,7 @@ case "$GF_ENGINE" in
   unity) SPECIALIST=game-unity-specialist ;;
   unreal) SPECIALIST=game-unreal-specialist ;;
   threejs|r3f|babylon|playcanvas) SPECIALIST=game-threejs-specialist ;;
-  phaser|pixi|kaplay|excalibur) SPECIALIST=game-web2d-specialist ;;
+  phaser|pixi|kaplay|excalibur|littlejs) SPECIALIST=game-web2d-specialist ;;
   *) SPECIALIST="" ;;
 esac
 

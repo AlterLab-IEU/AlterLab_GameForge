@@ -56,6 +56,8 @@ fixture() {
     threejs) printf '{\n  "dependencies": {\n    "three": "^0.181.0"\n  }\n}\n' > "$d/package.json" ;;
     r3f) printf '{\n  "dependencies": {\n    "@react-three/fiber": "^9.4.0",\n    "three": "^0.181.0"\n  }\n}\n' > "$d/package.json" ;;
     phaser) printf '{ "dependencies": { "phaser": "^4.0.0" } }\n' > "$d/package.json" ;;
+    littlejs) printf '{ "dependencies": { "littlejsengine": "^1.29.1" } }\n' > "$d/package.json" ;;
+    kaboom) printf '{ "dependencies": { "kaboom": "^3000.1.17" } }\n' > "$d/package.json" ;;
     plainweb) printf '{ "dependencies": { "react": "^19.0.0" } }\n' > "$d/package.json" ;;
   esac
   printf '%s' "$d"
@@ -78,6 +80,8 @@ for MODE in full fallback; do
   expect_contains "session-start: routes Three.js specialist" "$out" "game-threejs-specialist"
   d=$(fixture r3f);      expect_contains "session-start: detects R3F" "$(run_hook $MODE session-start.sh "$d" '{"source":"startup"}')" "React Three Fiber 9.4.0 / three 0.181.0"
   d=$(fixture phaser);   expect_contains "session-start: routes 2D web specialist" "$(run_hook $MODE session-start.sh "$d" '{"source":"startup"}')" "game-web2d-specialist"
+  d=$(fixture littlejs); expect_contains "session-start: detects LittleJS" "$(run_hook $MODE session-start.sh "$d" '{"source":"startup"}')" "LittleJS 1.29.1 -> route engine questions to /gameforge:game-web2d-specialist"
+  d=$(fixture kaboom);   expect_contains "session-start: flags legacy Kaboom" "$(run_hook $MODE session-start.sh "$d" '{"source":"startup"}')" "Kaplay is the maintained successor"
 
   d=$(fixture godot); mkdir -p "$d/production/session-state"
   printf 'Snapshot taken earlier.\nBranch: feature/dash\n' > "$d/production/session-state/compact-snapshot.md"
@@ -158,8 +162,13 @@ for MODE in full fallback; do
   run_hook $MODE stop-failure.sh "$d" '{"session_id":"s9","error_type":"rate_limit"}' >/dev/null
   expect_json     "stop-failure: recovery.json is valid JSON with tricky commit" "$(cat "$d/production/session-state/recovery.json" 2>/dev/null)"
   expect_contains "stop-failure: records error type" "$(cat "$d/production/session-state/recovery.json" 2>/dev/null)" '"error": "rate_limit"'
+  printf '{\n  "pipeline": "sprint",\n  "status": "in_progress",\n  "steps": [\n    { "skill": "game-sprint-plan", "status": "completed" }\n  ]\n}\n' > "$d/production/session-state/pipeline-sprint.json"
+  printf '{\n  "pipeline": "release",\n  "status": "completed"\n}\n' > "$d/production/session-state/pipeline-release.json"
   run_hook $MODE pre-compact.sh "$d" '{"trigger":"auto"}' >/dev/null
-  expect_contains "pre-compact: writes snapshot" "$(cat "$d/production/session-state/compact-snapshot.md" 2>/dev/null)" "before auto compaction"
+  snap=$(cat "$d/production/session-state/compact-snapshot.md" 2>/dev/null)
+  expect_contains "pre-compact: writes snapshot" "$snap" "before auto compaction"
+  expect_contains "pre-compact: lists active pipeline" "$snap" "Active pipeline: pipeline-sprint (in_progress)"
+  case "$snap" in *pipeline-release*) bad "pre-compact: skips completed pipeline" ;; *) ok "pre-compact: skips completed pipeline" ;; esac
   run_hook $MODE session-end.sh "$d" '{"session_id":"s9","reason":"logout"}' >/dev/null
   expect_contains "session-end: logs reason" "$(cat "$d/production/session-logs/sessions.log" 2>/dev/null)" "reason=logout"
   d=$(fixture empty)
