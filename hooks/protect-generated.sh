@@ -21,10 +21,16 @@ FILE=$(gf_json_get .tool_input.file_path)
 
 gf_require_game_project
 
-# Normalise to a project-relative path with forward slashes.
-REL=$(printf '%s' "$FILE" | tr '\\' '/')
-ROOT=$(pwd | tr '\\' '/')
-case "$REL" in "$ROOT"/*) REL=${REL#"$ROOT"/} ;; esac
+# Normalise to a project-relative path: forward slashes, no duplicate slashes, and try the
+# project dir as given, the logical cwd and the physical cwd (macOS /var -> /private/var).
+norm() { printf '%s' "$1" | tr '\\' '/' | sed 's#//*#/#g; s#/$##'; }
+REL=$(norm "$FILE")
+for _root in "$GF_ROOT" "$(pwd)" "$(pwd -P)"; do
+  _root=$(norm "$_root")
+  [ -n "$_root" ] || continue
+  case "$REL" in "$_root"/*) REL=${REL#"$_root"/}; break ;; esac
+done
+case "$REL" in /*) exit 0 ;; esac   # outside the project: not ours to guard
 
 deny() { gf_pretool_decision deny "GameForge: $REL $1"; }
 ask() { gf_pretool_decision ask "GameForge: $REL $1"; }
