@@ -205,7 +205,7 @@ Genre packs are evaluated on 5 dimensions, each scored 1-10. The minimum for mer
 | **Integration** | Does it work with existing GameForge skills and use MDA/DDE framework language? |
 | **Originality** | Does it add value beyond what a web search provides? Synthesis and insight, not just lists. |
 
-See `@docs/skill-quality-rubric.md` for the full scoring guide.
+See `skill-quality-rubric.md` for the full scoring guide.
 
 Additional standards:
 
@@ -213,7 +213,7 @@ Additional standards:
 2. **balance-template.md** contains concrete numerical examples derived from shipped games, not empty tables
 3. **brainstorm-variant.md** contains at least 3 core prompts and produces usable output within 5 minutes
 4. All files have valid YAML frontmatter with `name`, `genre`, `version`, `description`
-5. MDA analysis uses the correct 8 aesthetic categories from `@docs/game-design-theory.md`
+5. MDA analysis uses the correct 8 aesthetic categories from `game-design-theory.md`
 6. Anti-patterns follow the Problem/Symptom/Fix/Example structure
 7. No overlap with content already in the base skills -- genre packs ADD, they don't duplicate
 

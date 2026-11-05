@@ -426,7 +426,7 @@ The climax is the highest point of tension where the story's central question is
 
 ## 10. MDA Analysis for Narrative Games
 
-Using the MDA Framework from `@docs/game-design-theory.md`:
+Using the MDA Framework from `../../docs/game-design-theory.md`:
 
 ### Primary Aesthetics
 
@@ -452,4 +452,4 @@ Using the MDA Framework from `@docs/game-design-theory.md`:
 
 ---
 
-*This document is reference material for AlterLab GameForge skills. It enriches `game-narrative-director`, `game-designer`, and `game-brainstorm` with narrative-specific domain knowledge. See `@genre-packs/narrative/balance-template.md` for pacing metrics and `@genre-packs/narrative/brainstorm-variant.md` for ideation prompts.*
+*This document is reference material for AlterLab GameForge skills. It enriches `game-narrative-director`, `game-designer`, and `game-brainstorm` with narrative-specific domain knowledge. See `balance-template.md` for pacing metrics and `brainstorm-variant.md` for ideation prompts.*

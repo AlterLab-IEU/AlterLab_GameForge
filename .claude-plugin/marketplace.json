@@ -1,0 +1,20 @@
+{
+  "name": "alterlab-gameforge",
+  "owner": {
+    "name": "AlterLab (Izmir University of Economics)",
+    "url": "https://github.com/AlterLab-IEU"
+  },
+  "metadata": {
+    "description": "AlterLab GameForge: production-grade game development skills for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "gameforge",
+      "source": "./",
+      "description": "A full indie game studio for Claude Code: studio agents, workflows from idea to launch, and engine specialists for Godot, Unity, Unreal, Three.js and 2D web.",
+      "version": "3.0.0",
+      "category": "game-development",
+      "keywords": ["game-development", "indie-games", "godot", "unity", "unreal-engine", "threejs", "vibe-coding"]
+    }
+  ]
+}

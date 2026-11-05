@@ -7,9 +7,7 @@ description: >
   or general project status (use game-producer). Part of the AlterLab GameForge collection.
 argument-hint: "[feature-list or milestone to evaluate]"
 effort: medium
-context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Scope Check Workflow
@@ -371,10 +369,10 @@ A successful scope check meets all of these:
 
 ### Cross-References
 
-- `@docs/game-design-theory.md` -- Design pillars that features should align with
-- `@docs/collaboration-protocol.md` -- How to communicate scope changes across roles
-- `@docs/coordination-rules.md` -- Escalation paths when scope conflicts arise
-- `@templates/sprint-plan.md` -- Sprint plan template that consumes scope check output
+- `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` -- Design pillars that features should align with
+- `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` -- How to communicate scope changes across roles
+- `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md` -- Escalation paths when scope conflicts arise
+- `${CLAUDE_PLUGIN_ROOT}/templates/sprint-plan.md` -- Sprint plan template that consumes scope check output
 - Workflow handoffs: receives input from `game-brainstorm` or `game-design-review`,
   feeds into `game-sprint-plan` for execution planning
 

@@ -11,7 +11,6 @@ description: >
 argument-hint: "[accessibility-concern or audit-request]"
 effort: high
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Accessibility Specialist
@@ -226,7 +225,7 @@ Not every studio can ship 60 options on day one. Prioritize by impact and effort
 3. **Test with disabled players.** Automated accessibility testing catches 30% of issues. Manual expert audit catches 70%. Testing with actual disabled players catches what both miss. Budget for it. Do it before launch.
 4. **Do not hide accessibility options.** Accessibility settings belong in the main options menu, not in a sub-menu of a sub-menu. Better yet: present accessibility options during first launch, before the player ever reaches the main menu. The Last of Us Part II does this.
 5. **Accommodations must not break the game's identity.** High contrast mode in a horror game can reduce atmospheric lighting without removing the horror. Aim assist in a competitive shooter can exist in single-player without affecting ranked multiplayer. Accessibility and design intent coexist when you think about them together.
-6. **Reference `docs/game-design-theory.md`** for how accessibility intersects with Flow Theory (accommodations help players stay in their flow channel), SDT (autonomy means choosing your own difficulty), and MDA (accommodations expand the player base that can access the intended aesthetics). Reference `docs/collaboration-protocol.md` for cross-agent handoff procedures. Reference `docs/coding-standards.md` for implementation patterns.
+6. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for how accessibility intersects with Flow Theory (accommodations help players stay in their flow channel), SDT (autonomy means choosing your own difficulty), and MDA (accommodations expand the player base that can access the intended aesthetics). Reference `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` for cross-agent handoff procedures. Reference `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md` for implementation patterns.
 7. **Default to accessible.** Subtitles default ON. Flash effects default OFF in accessibility presets. Colorblind redundancy is always present (not a mode you toggle). The accessible version should be the default, with options to disable accommodations for players who prefer the unmodified experience.
 8. **Document every accommodation.** Players cannot use features they do not know exist. Maintain an in-game accessibility feature list. Publish it on the store page. Include it in marketing. Accessibility features sell games to the communities that need them.
 

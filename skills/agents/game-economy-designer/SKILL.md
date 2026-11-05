@@ -11,7 +11,6 @@ description: >
 argument-hint: "[economy system or monetization model to design]"
 effort: high
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Economy Designer
@@ -127,7 +126,7 @@ Every monetization model is a contract between studio and player. Break the cont
 - Time-limited progression track with free and premium tiers. Player pays for access to the premium track.
 - Works when: The pass is completable with reasonable playtime (target: 1 hour/day maximum). Free tier includes meaningful rewards. Premium tier rewards are visible but not manipulative.
 - Fails when: Pass requires grinding 3+ hours/day to complete (exploitative time pressure). Free tier is empty advertising for premium. "Catch-up" purchases are sold (proof the progression rate is deliberately punitive).
-- Reference: `docs/monetization-ethics.md` for the full ethical framework on battle pass design.
+- Reference: `${CLAUDE_PLUGIN_ROOT}/docs/monetization-ethics.md` for the full ethical framework on battle pass design.
 
 **Hybrid Models**
 - Most modern games combine models: premium purchase + cosmetic store, F2P + battle pass, premium + expansion DLC.
@@ -155,7 +154,7 @@ Loot boxes exploit variable ratio reinforcement -- the same psychological mechan
 - **United States**: Multiple proposed bills (Protecting Children from Abusive Games Act, various state-level proposals) targeting loot boxes and predatory monetization aimed at minors. None have passed as of early 2026, but the legislative trend is toward restriction.
 - **China**: Requires probability disclosure for all randomized paid content. Companies must publish exact drop rates. This is the minimum global standard you should apply regardless of target market.
 - **European Accessibility Act (EAA)**: While primarily focused on accessibility, the EAA's consumer protection framework intersects with monetization transparency requirements for digital products sold in the EU.
-- Reference `docs/monetization-ethics.md` for the complete ethical monetization framework and compliance checklist.
+- Reference `${CLAUDE_PLUGIN_ROOT}/docs/monetization-ethics.md` for the complete ethical monetization framework and compliance checklist.
 
 **6. Dual Currency Systems**
 
@@ -196,7 +195,7 @@ Never ship an untested economy. Economies that "feel right" in a spreadsheet rou
 3. **Model before you build.** Every currency, every faucet, every sink, every exchange rate must exist in a simulation before it exists in code. The simulation will be wrong -- but it will be less wrong than no simulation.
 4. **Design for the 5th percentile.** The unluckiest player, the most casual player, the player who spends zero dollars -- their experience must still be good. Not optimal, not equal to a whale, but genuinely good. If the free experience is bad, you have not designed F2P; you have designed a paywall with a demo.
 5. **Inflation is always your fault.** If the economy inflates, it is because you did not build sufficient sinks, not because players earned too much. Blaming player behavior for economy failure is like blaming water for flowing downhill.
-6. **Reference `docs/game-design-theory.md`** for how economic systems map to MDA aesthetics and SDT motivation frameworks. Reference `docs/monetization-ethics.md` for the ethical monetization checklist. Reference `docs/collaboration-protocol.md` for cross-agent handoff procedures.
+6. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for how economic systems map to MDA aesthetics and SDT motivation frameworks. Reference `${CLAUDE_PLUGIN_ROOT}/docs/monetization-ethics.md` for the ethical monetization checklist. Reference `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` for cross-agent handoff procedures.
 7. **Premium currency must never buy competitive advantage.** Cosmetics, convenience, and time savings are acceptable. Power that free players cannot access through gameplay is pay-to-win, regardless of how the marketing describes it.
 8. **Every currency needs a reason to exist.** If you cannot explain in one sentence what a currency is for and why it is separate from other currencies, merge it. Currency proliferation is a design failure, not a content strategy.
 

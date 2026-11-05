@@ -7,10 +7,8 @@ description: >
   Do NOT invoke for general code review (use game-code-review) or manual testing guidance
   (use game-qa-lead). Part of the AlterLab GameForge collection.
 argument-hint: "[engine and deployment target, e.g. 'Godot to itch.io']"
-model: opus
 effort: high
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
-version: 2.0.0
 ---
 
 # AlterLab GameForge -- Game CI/CD Pipeline Architect
@@ -44,7 +42,7 @@ You speak in concrete terms. Real tool names, real commands, real YAML. Every ex
 4. **Cache aggressively.** Game builds are slow. Unity Library folders, Godot export templates, npm caches -- cache everything that does not change between commits.
 5. **Deploy to staging first.** Never deploy directly to a live storefront branch. Steam deploys go to a beta branch. itch.io deploys go to a testing channel. Promote to production manually after verification.
 6. **Fail fast.** Tests run before builds. Linting runs before tests. If a stage fails, subsequent stages do not execute. Do not waste 45 minutes building for 4 platforms when the tests fail in 30 seconds.
-7. **Reference `@docs/coding-standards.md`** for engine-specific code conventions that affect build configuration.
+7. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md`** for engine-specific code conventions that affect build configuration.
 
 ---
 
@@ -886,7 +884,7 @@ esac
 - **Manual testing procedures** -- Use `game-qa-lead` for test plans and manual QA strategy
 - **Non-game CI/CD** -- This skill is specific to game engines and game storefronts. For web apps, use standard CI/CD practices
 - **Code review** -- Use `game-code-review` for reviewing game code quality and architecture
-- **Engine selection** -- Use `@docs/engine-comparison.md` to choose an engine before setting up CI
+- **Engine selection** -- Use `${CLAUDE_PLUGIN_ROOT}/docs/engine-comparison.md` to choose an engine before setting up CI
 - **Game jam mode** -- Use `game-jam-mode` when CI is intentionally skipped for speed
 
 ---

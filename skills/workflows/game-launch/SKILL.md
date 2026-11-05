@@ -8,11 +8,9 @@ description: >
   sprint planning (use game-sprint-plan) or code review (use game-code-review). Part of
   the AlterLab GameForge collection.
 argument-hint: "[platform: steam|itch|epic|console]"
-model: opus
 effort: high
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Pre-Release Launch Pipeline
@@ -45,7 +43,7 @@ Hades did not become a cultural phenomenon on launch day. It became one through 
 4. **Plan for failure.** The launch plan must include a rollback strategy. If the answer to "what if launch goes wrong?" is "panic," your launch plan is incomplete.
 5. **Day-one patches are expected, not shameful.** Between going gold and launch day, new issues will be found. The question is not "will we need one?" but "how fast can we deploy one?"
 6. **Launch day is day one, not the finish line.** Dead Cells shipped its 1.0 and then delivered 6 major content updates over 4 years. Hades had 18 months of Early Access patches before 1.0. Your post-launch strategy matters as much as your pre-launch checklist.
-6. **Reference `docs/game-design-theory.md`** for player psychology considerations in storefront presentation and first-time user experience.
+6. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for player psychology considerations in storefront presentation and first-time user experience.
 
 ### Workflow
 
@@ -254,7 +252,7 @@ Beyond age ratings and privacy policies, the regulatory landscape for games is e
   - **Pre-generated AI content**: AI assets baked into game files (textures, art, voice lines, lore text). Must be flagged in the store page content descriptor.
   - **Live-generated AI content**: AI creating content at runtime (dynamic NPC dialogue, procedural quests). Must have safety guardrails preventing illegal/offensive output AND a player reporting mechanism.
   - **Developer tools**: Code assistants, debugging tools, internal pipeline AI. **Explicitly exempt from disclosure.** Using AI for development workflow does not require storefront disclosure.
-  - Document your AI usage tier in `@templates/ai-content-policy.md` to ensure correct disclosure per storefront.
+  - Document your AI usage tier in `${CLAUDE_PLUGIN_ROOT}/templates/ai-content-policy.md` to ensure correct disclosure per storefront.
 - **itch.io AI Disclosure**: Generative AI content must be tagged explicitly -- this includes hand-edited AI outputs (editing AI-generated art does not exempt it from disclosure). Non-tagged AI content is delisted from browse and search. AI-tagged projects appear on a segregated "AI Assisted" browse page, which effectively reduces discoverability. Mass-produced AI pages are treated as spam. Tag requirements apply to both the game page metadata and the game description.
 - **Console Certification**: Each first-party platform (Sony, Microsoft, Nintendo) requires a dedicated certification pass that takes 2-4 weeks. Plan your submission timeline to include at least one rejection-and-resubmission cycle. First submissions rarely pass on the first attempt. Budget 4-8 weeks total for console certification in your launch timeline.
 

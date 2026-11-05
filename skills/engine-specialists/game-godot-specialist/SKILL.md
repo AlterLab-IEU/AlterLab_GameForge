@@ -7,11 +7,8 @@ description: >
   Do NOT invoke for engine-agnostic architecture (use game-technical-director) or Unity/Unreal
   questions (use the appropriate engine specialist). Part of the AlterLab GameForge collection.
 argument-hint: "[question or task]"
-model: opus
 effort: high
-context: fork
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
-version: 2.0.0
 ---
 
 # AlterLab GameForge -- Godot 4 Specialist

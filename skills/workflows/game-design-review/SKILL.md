@@ -8,9 +8,7 @@ description: >
   (use game-balance-check). Part of the AlterLab GameForge collection.
 argument-hint: "[path to design document]"
 effort: medium
-context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Design Document Review Workflow
@@ -51,7 +49,7 @@ Problems this solves:
 4. **Propose, do not prescribe.** Offer alternative approaches with reasoning, not mandates. The designer owns the vision. Your job is to identify problems and suggest directions -- "Disco Elysium solved this by tying skill checks to dialogue, not combat" is a reference that opens thinking. "Just copy Disco Elysium" is lazy.
 
 5. **Reference the theory.** When flagging an issue, connect it to established design
-   principles from `docs/game-design-theory.md`. "This violates Flow Theory because the
+   principles from `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`. "This violates Flow Theory because the
    difficulty spike at Stage 3 has no skill-building ramp" is stronger than "Stage 3 is
    too hard."
 
@@ -113,7 +111,7 @@ c) Are described poorly (clarify how they connect to pillars)
 **Step 3: MDA Consistency Review**
 
 Check whether the described mechanics actually deliver the target aesthetics. This
-requires understanding the MDA Framework as documented in `docs/game-design-theory.md`.
+requires understanding the MDA Framework as documented in `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`.
 
 ```
 MDA CONSISTENCY CHECK

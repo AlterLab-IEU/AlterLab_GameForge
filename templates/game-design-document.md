@@ -31,7 +31,7 @@ List 3-5 non-negotiable design principles that guide every decision in this proj
 | 2 | [Name] | [Statement] |
 | 3 | [Name] | [Statement] |
 
-Reference `@templates/game-pillars.md` for detailed pillar development, including how to test features against pillars and examples from published games.
+Reference `game-pillars.md` for detailed pillar development, including how to test features against pillars and examples from published games.
 
 ---
 

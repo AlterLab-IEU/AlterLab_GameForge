@@ -128,19 +128,19 @@ design: update combat GDD with parry system spec
 
 GameForge includes templates for common game dev artifacts. Reference them when creating new documents:
 
-- Game Design Document: `@templates/game-design-document.md`
-- Game Concept: `@templates/game-concept.md`
-- Architecture Decision Record: `@templates/architecture-decision-record.md`
-- Sprint Plan: `@templates/sprint-plan.md`
-- Art Bible: `@templates/art-bible.md`
-- Sound Bible: `@templates/sound-bible.md`
-- Character Sheet: `@templates/character-sheet.md`
-- Economy Model: `@templates/economy-model.md`
-- Level Design Document: `@templates/level-design-document.md`
-- Release Checklist: `@templates/release-checklist.md`
-- Game Pillars: `@templates/game-pillars.md`
-- Systems Index: `@templates/systems-index.md`
-- Accessibility Audit: `@templates/accessibility-audit.md`
+- Game Design Document: `../../templates/game-design-document.md`
+- Game Concept: `../../templates/game-concept.md`
+- Architecture Decision Record: `../../templates/architecture-decision-record.md`
+- Sprint Plan: `../../templates/sprint-plan.md`
+- Art Bible: `../../templates/art-bible.md`
+- Sound Bible: `../../templates/sound-bible.md`
+- Character Sheet: `../../templates/character-sheet.md`
+- Economy Model: `../../templates/economy-model.md`
+- Level Design Document: `../../templates/level-design-document.md`
+- Release Checklist: `../../templates/release-checklist.md`
+- Game Pillars: `../../templates/game-pillars.md`
+- Systems Index: `../../templates/systems-index.md`
+- Accessibility Audit: `../../templates/accessibility-audit.md`
 
 ## Project Structure
 

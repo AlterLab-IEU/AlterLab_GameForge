@@ -10,7 +10,6 @@ description: >
 argument-hint: "[milestone-name or 'project']"
 effort: medium
 allowed-tools: Read, Glob, Grep, Edit, Write, Bash
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Post-Mortem Analysis Workflow
@@ -253,15 +252,15 @@ Verification: [how to confirm it was done]
 
 Archival:
 - Store the completed post-mortem in `production/milestones/postmortem-[name].md`
-- Reference `@templates/post-mortem.md` for the output template
+- Reference `${CLAUDE_PLUGIN_ROOT}/templates/post-mortem.md` for the output template
 - Add a summary entry to the project's README or design doc index
-- If lessons affect shared processes, update `@docs/collaboration-protocol.md` or
-  `@docs/coordination-rules.md` accordingly
+- If lessons affect shared processes, update `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` or
+  `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md` accordingly
 
 ### Output Format
 
 The workflow produces a **Post-Mortem Report** structured as follows. Reference
-`@templates/post-mortem.md` for the full template.
+`${CLAUDE_PLUGIN_ROOT}/templates/post-mortem.md` for the full template.
 
 ```markdown
 # Post-Mortem Report: [Project/Milestone Name]
@@ -373,9 +372,9 @@ A successful post-mortem meets all of these:
 
 ### Agentic Protocol
 
-- Load `@docs/collaboration-protocol.md` for interaction standards
-- Load `@docs/coordination-rules.md` for escalation paths
-- Reference `@templates/post-mortem.md` for the output template
+- Load `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` for interaction standards
+- Load `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md` for escalation paths
+- Reference `${CLAUDE_PLUGIN_ROOT}/templates/post-mortem.md` for the output template
 - Store completed post-mortem in `production/milestones/postmortem-[name].md`
 - If sprint retrospective data exists, ingest it during Phase 3
 - If velocity data exists, include it in the quantitative overview

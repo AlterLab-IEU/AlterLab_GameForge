@@ -38,7 +38,7 @@ Disco Elysium, Hades, Outer Wilds, Undertale, Pentiment, Citizen Sleeper, Baldur
 
 ## Contributing
 
-See `@docs/genre-pack-spec.md` for the genre pack format specification and `CONTRIBUTING.md` for the contribution workflow. Improvements to reference games, anti-patterns, and pacing formulas are welcome.
+See `../../docs/genre-pack-spec.md` for the genre pack format specification and `CONTRIBUTING.md` for the contribution workflow. Improvements to reference games, anti-patterns, and pacing formulas are welcome.
 
 ---
 

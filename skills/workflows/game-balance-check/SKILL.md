@@ -10,9 +10,7 @@ description: >
   GameForge collection.
 argument-hint: "[system to analyze]"
 effort: medium
-context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Economy & System Balance Validation
@@ -45,7 +43,7 @@ The goal is controlled asymmetry: every choice has a trade-off, every path is vi
 3. **Perception matters more than math.** A system can be mathematically balanced but FEEL unfair. Player psychology (loss aversion, anchoring, confirmation bias) must be factored into balance analysis. A player who loses a rare item to a 5% failure chance remembers that loss far more vividly than the 95 successes. Balatro understands this -- its pity system and score multiplier transparency make variance feel fair even when the math is brutal.
 4. **Never balance in a vacuum.** Every system interacts with every other system. Changing the warrior's damage output affects healer balance, enemy design, level pacing, and economy. Map the dependency graph before touching any number. Factorio's developers famously trace every balance change through the entire production chain before shipping it.
 5. **Data over intuition.** When you have telemetry, use it. When you do not, use Monte Carlo simulation to generate synthetic data. "It feels about right" is not a balance methodology.
-6. **Reference `docs/game-design-theory.md`** for Flow Theory (challenge-skill balance), SDT (competence feedback loops), and MDA Framework (how balance affects target aesthetics).
+6. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for Flow Theory (challenge-skill balance), SDT (competence feedback loops), and MDA Framework (how balance affects target aesthetics).
 
 ### Workflow
 
@@ -143,7 +141,7 @@ For each level/tier gate in the game:
 
 **Challenge-Skill Balance (Flow Theory)**
 
-Reference the Flow Theory framework from `docs/game-design-theory.md`. For each major section of the game, assess:
+Reference the Flow Theory framework from `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`. For each major section of the game, assess:
 
 - Is the challenge level matched to the expected player skill at that point in the game?
 - Does the difficulty increase in step with the player's growing mastery?

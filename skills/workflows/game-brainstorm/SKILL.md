@@ -8,9 +8,7 @@ description: >
   game-market-research). Part of the AlterLab GameForge collection.
 argument-hint: "[genre or theme, or 'open' for freeform]"
 effort: medium
-context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Structured Ideation Workflow
@@ -70,7 +68,7 @@ Problems this kills:
    team has one artist working part-time, say so. Scope honesty is kindness to your future self.
 
 8. **Reference the theory.** All frameworks referenced here (MDA, SDT, Bartle, Flow) are
-   defined in `docs/game-design-theory.md`. Do not reinvent the definitions. Point there.
+   defined in `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`. Do not reinvent the definitions. Point there.
 
 ### Workflow
 
@@ -244,7 +242,7 @@ gameplay, not just a novelty skin.
 
 Most designers start with mechanics and hope aesthetics emerge. This technique reverses
 the process: choose the target player experience first, then derive mechanics that
-deliver it. Reference `docs/game-design-theory.md` for the full MDA Framework breakdown.
+deliver it. Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for the full MDA Framework breakdown.
 
 ```
 MDA-BACKWARD GENERATION
@@ -490,8 +488,8 @@ Pillars are the load-bearing promises of your design. Every mechanic, feature, a
 of content must trace back to at least one pillar. If a feature does not serve a pillar,
 it is either an orphan that should be cut or evidence that you are missing a pillar.
 
-Reference `docs/game-design-theory.md` for the full pillar methodology and use
-`@templates/game-pillars.md` to document the pillars formally.
+Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for the full pillar methodology and use
+`${CLAUDE_PLUGIN_ROOT}/templates/game-pillars.md` to document the pillars formally.
 
 **Exercise 5.1 -- Define 3-5 Pillars**
 
@@ -570,7 +568,7 @@ psychological motivations, not their demographics.
 
 **Exercise 6.1 -- Bartle Type Mapping**
 
-Map the concept against the four Bartle types (reference `docs/game-design-theory.md`):
+Map the concept against the four Bartle types (reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`):
 
 ```
 BARTLE MAPPING
@@ -720,7 +718,7 @@ Risk              | Probability | Impact | Mitigation
 ### Output Format
 
 The workflow produces a **Game Concept Document** structured as follows.
-Reference `templates/game-concept.md` for the full template.
+Reference `${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md` for the full template.
 
 ```markdown
 # Game Concept Document
@@ -791,7 +789,7 @@ A successful brainstorm session meets all of these:
 - The concept document is complete enough to hand to a developer who was not
   in the brainstorm session and have them understand what to build
 - All framework references (MDA, SDT, Bartle, Flow) are used correctly per
-  the definitions in `docs/game-design-theory.md`
+  the definitions in `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`
 
 ### Example Use Cases
 

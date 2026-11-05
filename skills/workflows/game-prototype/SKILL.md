@@ -10,7 +10,6 @@ description: >
 argument-hint: "[mechanic to prototype]"
 effort: medium
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Hypothesis-Driven Prototyping
@@ -40,7 +39,7 @@ Prototypes are experiments, not demos. Every prototype exists to answer one ques
 4. **Ugly is correct.** Colored rectangles for characters. Placeholder sounds. Programmer art. Comic Sans labels. If anyone comments on the visual quality of a prototype, they have misunderstood its purpose. The Hollow Knight game jam prototype used simple silhouettes -- the atmosphere came later, the feel came first.
 5. **Observe behavior, not opinions.** Players will tell you what they think you want to hear. Watch what they DO. A player who says "yeah it was fine" but leaned forward and played for 20 minutes straight is giving you different data than their words suggest.
 6. **Kill without sentiment.** If the evidence says the hypothesis is false, the prototype dies. It does not matter how clever the idea was, how much you personally like it, or how much time you spent building it. Supergiant kills prototypes constantly -- their GDC talks reveal dozens of dead mechanics that never made it past the test phase because the team trusts evidence over attachment.
-7. **Always reference `docs/game-design-theory.md`** for shared theoretical frameworks (MDA, Flow Theory, SDT) when formulating hypotheses about player experience.
+7. **Always reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for shared theoretical frameworks (MDA, Flow Theory, SDT) when formulating hypotheses about player experience.
 
 ### Workflow
 
@@ -60,7 +59,7 @@ Examples of weak hypotheses (and why):
 - "Players will like the art style" -- this is a content question, not a mechanic question. You do not need a prototype for this.
 - "The game will be better with multiplayer" -- too broad. Which specific multiplayer interaction? What does "better" mean measurably?
 
-Map the hypothesis to the MDA framework from `docs/game-design-theory.md`: which aesthetic are you targeting (Sensation, Fantasy, Narrative, Challenge, Fellowship, Discovery, Expression, Submission)? This grounds the hypothesis in established theory and helps you define what success looks like.
+Map the hypothesis to the MDA framework from `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`: which aesthetic are you targeting (Sensation, Fantasy, Narrative, Challenge, Fellowship, Discovery, Expression, Submission)? This grounds the hypothesis in established theory and helps you define what success looks like.
 
 **Step 2: Scope Ruthlessly**
 
@@ -114,7 +113,7 @@ Observation protocol:
   3. "Was there a moment that felt frustrating?" (identifies friction points)
   4. "Would you play this again?" (blunt retention signal -- their body language while answering matters more than the words)
 
-Apply the Flow Theory lens from `docs/game-design-theory.md`: did the player appear to enter a flow state? Was the challenge-skill balance in the right zone? Did they experience anxiety (challenge too high) or boredom (challenge too low)?
+Apply the Flow Theory lens from `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`: did the player appear to enter a flow state? Was the challenge-skill balance in the right zone? Did they experience anxiety (challenge too high) or boredom (challenge too low)?
 
 **Step 5: Kill or Promote Decision**
 
@@ -210,7 +209,7 @@ When you PROMOTE a prototype:
 
 ### Hypothesis-to-MDA Mapping Reference
 
-Use this quick-reference to ensure your hypothesis targets a specific player aesthetic from the MDA framework (`docs/game-design-theory.md`). Hypotheses that do not map to a named aesthetic are usually either too vague or testing a technical question rather than a design question.
+Use this quick-reference to ensure your hypothesis targets a specific player aesthetic from the MDA framework (`${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`). Hypotheses that do not map to a named aesthetic are usually either too vague or testing a technical question rather than a design question.
 
 | MDA Aesthetic | Prototype Tests For | Example Hypothesis Signal |
 |---------------|--------------------|-----------------------------|

@@ -11,7 +11,6 @@ argument-hint: "[game-concept or genre]"
 effort: medium
 context: fork
 allowed-tools: Read, Glob, Grep, Write, WebSearch, WebFetch
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Market Research Workflow
@@ -151,7 +150,7 @@ Analyze at least:
 - 2-3 indirect competitors
 - 1-2 aspirational competitors
 
-Reference `@templates/competitive-analysis.md` for the full competitive analysis template.
+Reference `${CLAUDE_PLUGIN_ROOT}/templates/competitive-analysis.md` for the full competitive analysis template.
 
 ---
 
@@ -209,7 +208,7 @@ community analysis.
 **Psychographics (using Bartle's taxonomy and motivational frameworks):**
 - What player motivations does this game serve? (Achievement, exploration, social,
   competition, creativity, relaxation)
-- Reference `@docs/game-design-theory.md` for Bartle taxonomy and SDT framework
+- Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for Bartle taxonomy and SDT framework
 - What emotional state are players seeking? (Thrill, calm, mastery, wonder, connection)
 
 **Behavioral patterns:**
@@ -394,8 +393,8 @@ A successful market research brief meets all of these:
 
 ### Agentic Protocol
 
-- Reference `@docs/game-design-theory.md` for player motivation frameworks
-- Reference `@templates/competitive-analysis.md` for competitive analysis template
+- Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for player motivation frameworks
+- Reference `${CLAUDE_PLUGIN_ROOT}/templates/competitive-analysis.md` for competitive analysis template
 - Use WebSearch to retrieve current market data, Steam statistics, and press coverage
 - Use WebFetch to access store pages, review aggregators, and industry reports
 - Store completed research in `design/market-research/`

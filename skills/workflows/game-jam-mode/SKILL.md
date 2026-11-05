@@ -6,10 +6,8 @@ description: >
   "Brackeys Jam", "48 hours", "jam submission". Do NOT invoke for normal development
   timelines (use game-start). Part of the AlterLab GameForge collection.
 argument-hint: "[jam name and duration, e.g. 'GMTK Jam 48 hours']"
-model: opus
 effort: high
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
-version: 2.0.0
 ---
 
 # AlterLab GameForge -- Game Jam Mode
@@ -24,7 +22,7 @@ When this skill is invoked, the following standard GameForge practices are **exp
 
 | Normal GameForge Rule | Jam Mode Override |
 |---|---|
-| Full GDD via `@templates/game-design-document.md` | **Suspended.** Use the one-page jam concept below. A napkin is your design doc. |
+| Full GDD via `${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md` | **Suspended.** Use the one-page jam concept below. A napkin is your design doc. |
 | Code review via `game-code-review` | **Suspended.** Ship it. Spaghetti code is a feature, not a bug. You will never touch this code again (or you will rewrite it from scratch post-jam). |
 | Accessibility audit via `game-accessibility-specialist` | **Suspended.** Basic controls only -- WASD/arrows, mouse click, spacebar. If a player can press buttons, they can play. |
 | Sprint planning via `game-sprint-plan` | **Suspended.** Use the jam task board below with 2-hour check-ins. No velocity tracking. No burndown charts. |
@@ -395,7 +393,7 @@ CUT (do not build):
 ## Transition Steps
 1. [ ] Create new repository (do NOT continue from jam codebase)
 2. [ ] Run `game-start` with proper project scaffolding
-3. [ ] Write a full GDD using `@templates/game-design-document.md`
+3. [ ] Write a full GDD using `${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md`
 4. [ ] Rebuild core mechanic with clean architecture
 5. [ ] Port validated design decisions (not code) from jam version
 6. [ ] Set up proper testing pipeline
@@ -417,7 +415,7 @@ With fresh eyes and community feedback, ask: "Is this worth developing further?"
 If the answer is yes:
 1. **Do NOT continue from the jam codebase.** Start a new project. The jam code served its purpose and it will actively slow you down if you try to build on top of it.
 2. Run `game-start` to set up a proper project with full GameForge scaffolding.
-3. Write a real GDD using `@templates/game-design-document.md`. Use the jam version as a reference implementation, not a starting point.
+3. Write a real GDD using `${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md`. Use the jam version as a reference implementation, not a starting point.
 4. Re-activate ALL suspended GameForge rules: code review, accessibility, sprint planning, testing. The jam exception is over.
 5. Rebuild the core mechanic from scratch with proper architecture. You know exactly how it should work now -- building it clean will be faster than you think.
 6. Use the Post-Jam Transition Plan template above to guide the conversion.

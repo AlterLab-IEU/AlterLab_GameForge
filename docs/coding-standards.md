@@ -99,7 +99,7 @@ Engine specialists must validate that all suggested APIs, classes, and patterns 
 
 ## Accessibility Implementation Standards
 
-These standards go beyond design guidelines (see `@docs/game-design-theory.md`, Section 12) to specify concrete implementation requirements for accessible game code.
+These standards go beyond design guidelines (see `game-design-theory.md`, Section 12) to specify concrete implementation requirements for accessible game code.
 
 - **Screen Reader Metadata**: All interactive UI elements must expose accessibility metadata compatible with platform screen reader APIs. Godot: use `AccessibleNode` properties. Unity: implement `IAccessible` interfaces and UGUI accessibility labels. Unreal: use Slate accessibility API and `FAccessibleWidgetData`. Every button, label, and interactive element must have a programmatic name and role.
 - **Subtitle Rendering Requirements**: Subtitles must support configurable font size (minimum range: 18px to 36px at 1080p equivalent), background opacity (0% to 100%), speaker identification with color coding (using colorblind-safe palette), and text rendering that maintains readability at all supported resolutions. Subtitles must never be baked into video assets -- they must be rendered dynamically from text data.

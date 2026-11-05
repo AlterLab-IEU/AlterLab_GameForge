@@ -10,8 +10,7 @@ description: >
 argument-hint: "[file or directory to review]"
 effort: high
 context: fork
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
-version: 1.3.0
+allowed-tools: Read, Glob, Grep, Write, Edit
 ---
 
 # AlterLab GameForge -- Game Code Review Workflow
@@ -56,7 +55,7 @@ Problems this solves:
 
 4. **Engine idioms matter.** Each engine has conventions. Godot signals are not Unity events are not Unreal delegates. Review code against the conventions of its engine, not against abstract ideals. Noita's pixel physics system works because Nolla Games wrote to the engine's strengths rather than fighting its architecture. Reference the appropriate engine specialist skill for engine-specific standards.
 
-5. **Gameplay values in data, not code.** Any numeric value that a designer might want to tweak (damage, speed, cooldown, spawn rate, drop chance) must live in a config file or data table, not as a constant in source code. This is non-negotiable -- it is a fundamental game architecture requirement documented in `docs/collaboration-protocol.md`.
+5. **Gameplay values in data, not code.** Any numeric value that a designer might want to tweak (damage, speed, cooldown, spawn rate, drop chance) must live in a config file or data table, not as a constant in source code. This is non-negotiable -- it is a fundamental game architecture requirement documented in `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md`.
 
 6. **Test the untestable.** Game systems are notoriously hard to unit test. Push for testable architecture anyway. If a system cannot be tested because it is tightly coupled to the engine, that coupling is a design smell worth flagging. Factorio's developers maintain comprehensive automated tests for their simulation layer by keeping game logic separate from rendering -- that separation is why they ship with confidence.
 
@@ -337,7 +336,7 @@ CHECK 2.10.1 -- Hallucinated APIs:
 
 CHECK 2.10.2 -- Engine-Specific Pattern Violations:
   AI models often generate code that follows generic programming patterns
-  rather than engine-specific idioms. Check against `@docs/coding-standards.md`
+  rather than engine-specific idioms. Check against `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md`
   engine version table.
 
   FLAG: Using generic design patterns where the engine provides a built-in
@@ -372,7 +371,7 @@ CHECK 2.10.4 -- Attribution:
   FLAG: Missing documentation of which AI tool was used, when, and what prompt
         produced the code.
 
-  Follow the project's AI content policy (reference `@templates/ai-content-policy.md`
+  Follow the project's AI content policy (reference `${CLAUDE_PLUGIN_ROOT}/templates/ai-content-policy.md`
   if available). At minimum, add a comment indicating AI-assisted generation for
   any function or class substantially produced by AI tools.
 

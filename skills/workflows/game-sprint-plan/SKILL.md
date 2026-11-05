@@ -7,11 +7,9 @@ description: >
   backlog". Do NOT invoke for scope evaluation (use game-scope-check) or retrospectives
   (use game-retrospective). Part of the AlterLab GameForge collection.
 argument-hint: "[milestone or focus area]"
-model: opus
 effort: high
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Sprint Planning Workflow
@@ -63,7 +61,7 @@ Problems this solves:
 
 6. **Velocity honesty over velocity aspirations.** If the team has completed an average of 30 story points in each of the last 3 sprints, planning 45 points this sprint is not ambition -- it is delusion. Use actual historical velocity, not hoped-for velocity. Larian's milestone-based development for BG3 worked because they tracked velocity obsessively and adjusted scope accordingly -- not because they crunched harder.
 
-7. **Align with pillars.** Every sprint goal traces to a design pillar. If a sprint goal does not serve any pillar, the team is either working on infrastructure (acceptable but call it out) or drifting from the vision (flag for discussion). Supergiant's sprint goals are always framed as player experience statements, not feature lists -- "players feel the weight of their weapon choices" not "implement weapon system." Reference `docs/game-design-theory.md` for pillar methodology and `docs/collaboration-protocol.md` for cross-discipline coordination rules.
+7. **Align with pillars.** Every sprint goal traces to a design pillar. If a sprint goal does not serve any pillar, the team is either working on infrastructure (acceptable but call it out) or drifting from the vision (flag for discussion). Supergiant's sprint goals are always framed as player experience statements, not feature lists -- "players feel the weight of their weapon choices" not "implement weapon system." Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for pillar methodology and `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` for cross-discipline coordination rules.
 
 ### Sprint Context (Auto-populated)
 
@@ -410,7 +408,7 @@ When sprint velocity data suggests the team is consistently completing less than
 
 ### Output Format
 
-The workflow produces a **Sprint Plan Document**. Reference `templates/sprint-plan.md`
+The workflow produces a **Sprint Plan Document**. Reference `${CLAUDE_PLUGIN_ROOT}/templates/sprint-plan.md`
 for the full template.
 
 ```markdown

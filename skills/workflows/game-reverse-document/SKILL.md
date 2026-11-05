@@ -8,8 +8,7 @@ description: >
 argument-hint: "[path to code or 'project' for full scan]"
 effort: medium
 context: fork
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
+allowed-tools: Read, Glob, Grep, Write
 ---
 
 # AlterLab GameForge -- Reverse Documentation Workflow
@@ -258,7 +257,7 @@ ISOLATED SYSTEMS:
 
 *Output: A reverse-engineered Game Design Document.*
 
-Reference `@templates/game-design-document.md` for the canonical GDD template.
+Reference `${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md` for the canonical GDD template.
 
 ```markdown
 # Reverse-Engineered Game Design Document
@@ -309,7 +308,7 @@ Reference `@templates/game-design-document.md` for the canonical GDD template.
 
 *Output: An Architecture Decision Record documenting code patterns and architectural choices.*
 
-Reference `@templates/architecture-decision-record.md` for the canonical ADR template.
+Reference `${CLAUDE_PLUGIN_ROOT}/templates/architecture-decision-record.md` for the canonical ADR template.
 
 ```markdown
 # Architecture Overview: [Project Name]
@@ -367,7 +366,7 @@ Reference `@templates/architecture-decision-record.md` for the canonical ADR tem
 
 *Output: A game concept document extracted from a playable prototype.*
 
-Reference `@templates/game-concept.md` for the canonical concept template.
+Reference `${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md` for the canonical concept template.
 
 ```markdown
 # Game Concept Document: [Project Name]
@@ -434,12 +433,12 @@ QUALITY CHECKLIST
 
 ### Cross-References
 
-- `@templates/game-design-document.md` -- Template for design mode output
-- `@templates/architecture-decision-record.md` -- Template for architecture mode output
-- `@templates/game-concept.md` -- Template for concept mode output
-- `@docs/coding-standards.md` -- Code conventions to check against during analysis
-- `@docs/game-design-theory.md` -- Design vocabulary for describing mechanics
-- `@docs/collaboration-protocol.md` -- How to share reverse-documented findings with team
+- `${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md` -- Template for design mode output
+- `${CLAUDE_PLUGIN_ROOT}/templates/architecture-decision-record.md` -- Template for architecture mode output
+- `${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md` -- Template for concept mode output
+- `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md` -- Code conventions to check against during analysis
+- `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` -- Design vocabulary for describing mechanics
+- `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` -- How to share reverse-documented findings with team
 - Workflow handoffs: output feeds into `game-design-review` for validation,
   `game-code-review` for architecture assessment, or `game-scope-check` for
   scope evaluation of documented systems

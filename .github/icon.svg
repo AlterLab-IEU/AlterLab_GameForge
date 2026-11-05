@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0a3e"/>
+      <stop offset="0.35" stop-color="#2d1b69"/>
+      <stop offset="0.7" stop-color="#1e3a5f"/>
+      <stop offset="1" stop-color="#0d4a6b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.6" cy="0.3" r="0.45">
+      <stop offset="0" stop-color="#E8A817" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#E8A817" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100" height="100" fill="url(#bg)"/>
+  <rect width="100" height="100" fill="url(#glow)"/>
+  <g transform="translate(2.5 2)">
+  <!-- anvil -->
+  <path fill="#ffffff" d="M12 41 C19 41.5 25 39 29.5 35.5 L84 35.5 L84 46.5 C76.5 47.5 70.5 50.5 66.5 55 L66.5 63 L74.5 63 L74.5 72 L33.5 72 L33.5 63 L41.5 63 L41.5 55 C37.5 51 33.5 48.8 29.5 47.8 C22.5 46.3 16.5 45 12 41 Z"/>
+  <rect x="29.5" y="35.5" width="54.5" height="3" fill="#E8A817"/>
+  <!-- spark: four-point star + two embers -->
+  <path fill="#E8A817" d="M58 9 C59.2 17 61 18.8 69 20 C61 21.2 59.2 23 58 31 C56.8 23 55 21.2 47 20 C55 18.8 56.8 17 58 9 Z"/>
+  <rect x="72" y="25" width="3.2" height="3.2" fill="#E8A817" transform="rotate(45 73.6 26.6)"/>
+  <rect x="44" y="27.5" width="2.4" height="2.4" fill="#ffffff" opacity="0.85" transform="rotate(45 45.2 28.7)"/>
+  </g>
+  <!-- floor line -->
+  <rect x="18" y="80" width="68" height="2.4" rx="1.2" fill="#ffffff" opacity="0.18"/>
+</svg>

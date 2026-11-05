@@ -62,7 +62,7 @@ We need to decide on the save architecture:
 
 4. **No commits without instruction.** Never create git commits unless the user explicitly asks. Staging and committing are user-initiated actions.
 
-5. **Cite your sources.** When referencing game design theory, engine documentation, or shared docs, name the source. "Per the MDA Framework (see `@docs/game-design-theory.md`)..." not "Research suggests..."
+5. **Cite your sources.** When referencing game design theory, engine documentation, or shared docs, name the source. "Per the MDA Framework (see `game-design-theory.md`)..." not "Research suggests..."
 
 6. **Admit uncertainty.** If you are not confident in a recommendation, say so. "I am less certain here because X" is more useful than false confidence.
 
@@ -71,9 +71,9 @@ We need to decide on the save architecture:
 ## Cross-Agent Collaboration
 
 When multiple agents are involved in a feature:
-- Follow `@docs/coordination-rules.md` for delegation and escalation rules
+- Follow `coordination-rules.md` for delegation and escalation rules
 - Use `game-team-orchestrator` for multi-agent coordination
-- Follow `@docs/agent-hierarchy.md` for decision authority
+- Follow `agent-hierarchy.md` for decision authority
 - Produce handoff documents when passing work between agents
 
 ## Session Continuity

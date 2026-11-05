@@ -224,4 +224,4 @@ Use this checklist to select an engine for a new project:
 - **Architecture decisions**: Route to `game-technical-director` for engine selection within project context
 - **Performance requirements**: Route to `game-technical-director` for performance profiling and optimization strategy per engine
 - **Project scope vs. engine**: Route to `game-scope-check` to validate that engine choice aligns with project scope and timeline
-- **Coding standards by engine**: Reference `@docs/coding-standards.md` for engine-specific code conventions
+- **Coding standards by engine**: Reference `coding-standards.md` for engine-specific code conventions

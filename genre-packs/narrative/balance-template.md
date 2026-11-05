@@ -222,4 +222,4 @@ Track these during development and playtesting to assess narrative health.
 
 ---
 
-*This template provides structural parameters for narrative game development. Use alongside `@genre-packs/narrative/PATTERNS.md` for design pattern context and `game-balance-check` for automated pacing analysis. Extends `@templates/game-design-document.md` with narrative-specific metrics.*
+*This template provides structural parameters for narrative game development. Use alongside `PATTERNS.md` for design pattern context and `game-balance-check` for automated pacing analysis. Extends `../../templates/game-design-document.md` with narrative-specific metrics.*

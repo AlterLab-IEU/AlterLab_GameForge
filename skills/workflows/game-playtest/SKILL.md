@@ -8,9 +8,7 @@ description: >
   balance tuning (use game-balance-check). Part of the AlterLab GameForge collection.
 argument-hint: "[feature or build to test]"
 effort: medium
-context: fork
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Structured Playtest Analysis
@@ -41,7 +39,7 @@ Playtesting is not asking players if they had fun. It is the disciplined observa
 4. **Never test with the development team.** They know too much. Their muscle memory, mental models, and context make them incapable of experiencing the game as a new player. Nintendo's internal playtesting teams are deliberately kept away from development discussions so they approach each session cold. Your developers are blind to every onboarding problem they have already internalized.
 5. **Behavioral data outranks verbal data.** If a player says "the controls feel fine" but you observed them pressing the wrong button 11 times in a 10-minute session, the behavioral data wins. Always. Larian tracked BG3 playtester behavior at the input level -- they knew which dialogue options players hovered over before choosing, and that hesitation data informed their rewrite of Act 1.
 6. **Separate observation from interpretation.** During the session, record what happened. After the session, interpret what it means. Mixing the two in real-time creates confirmation bias.
-7. **Reference `docs/game-design-theory.md`** for Flow Theory and MDA Framework when analyzing player engagement and emotional responses.
+7. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for Flow Theory and MDA Framework when analyzing player engagement and emotional responses.
 
 ### Workflow
 
@@ -224,7 +222,7 @@ Opening -> [emotion] -> [event] -> [emotion] -> [event] -> [emotion] -> Close
 - Tutorial/hint engagement: [how many players read vs. skipped]
 - First death/failure cause: [most common reason]
 
-### Flow Analysis (per docs/game-design-theory.md)
+### Flow Analysis (per ${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md)
 - Estimated flow channel adherence: [percentage of session time in flow]
 - Anxiety spikes (challenge > skill): [moments]
 - Boredom dips (skill > challenge): [moments]

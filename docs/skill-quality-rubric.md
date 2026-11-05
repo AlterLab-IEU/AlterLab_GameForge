@@ -140,7 +140,7 @@ Genre packs are evaluated on the same 5 dimensions, but the interpretation shift
 |-----------|-------------------------|
 | **Trigger Precision** | Does the pack clearly state when to use it and which skills consume it? Is the genre scope well-defined? |
 | **Domain Depth** | Are design patterns grounded in shipped games? Are balance numbers derived from analysis, not guesswork? |
-| **Output Consistency** | Do all files follow the frontmatter format? Are cross-references valid? Does the pack match the spec in `@docs/genre-pack-spec.md`? |
+| **Output Consistency** | Do all files follow the frontmatter format? Are cross-references valid? Does the pack match the spec in `genre-pack-spec.md`? |
 | **Practical Usefulness** | Can a developer use the balance template to set initial tuning parameters? Do brainstorm prompts produce concepts within 5 minutes? |
 | **Voice & Character** | Is the writing opinionated and grounded? Does it read like genre expertise, not a Wikipedia summary? |
 

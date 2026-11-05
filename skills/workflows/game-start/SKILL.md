@@ -9,7 +9,6 @@ description: >
 argument-hint: "[engine: godot|unity|unreal]"
 effort: medium
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Project Onboarding Workflow
@@ -50,8 +49,8 @@ Problems this solves:
 5. **Scope honesty from minute one.** If someone describes a 200-hour project and says they have 3 weekends, flag it immediately. Kindly, but immediately. The graveyard of abandoned indie games is filled with projects that were "almost done" for two years.
 
 6. **Reference shared standards.** All structural decisions should align with the conventions
-   documented in `docs/collaboration-protocol.md`. All design terminology should follow
-   `docs/game-design-theory.md`.
+   documented in `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md`. All design terminology should follow
+   `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`.
 
 ### Project Detection (Auto-populated)
 
@@ -171,14 +170,14 @@ project-root/
 This structure is a recommendation, not a requirement. GameForge hooks detect source code across multiple conventional locations (`src/`, `scripts/`, `Scripts/`, `Source/`, `Assets/Scripts/`, `lib/`). If your project already has a structure, keep it -- add the `design/`, `docs/`, and `production/` overlays where they make sense.
 
 Step 1.4 -- Generate starter documents:
-- Create a minimal Game Concept Document (reference `templates/game-concept.md`)
+- Create a minimal Game Concept Document (reference `${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md`)
 - Create a Technical Architecture Note with engine choice rationale
 - Create a `TODO.md` with immediate next steps
 - Set up a basic `.gitignore` appropriate for the chosen engine
 
 Step 1.5 -- Suggest next steps:
 - Run `game-brainstorm` to flesh out the concept if it is thin
-- Define 3-5 design pillars (reference `docs/game-design-theory.md` for methodology)
+- Define 3-5 design pillars (reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for methodology)
 - Build the first throwaway prototype to test the core mechanic
 - Estimate scope and plan a first sprint with `game-sprint-plan`
 
@@ -190,7 +189,7 @@ The user has thought about their game but has not started building it yet.
 
 Step 2.1 -- Review existing documentation:
 - Read all design docs and assess completeness
-- Check against the 8 required GDD sections (reference `docs/game-design-theory.md`)
+- Check against the 8 required GDD sections (reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`)
 - Identify what is well-defined and what has gaps
 
 Step 2.2 -- Gap analysis:

@@ -4,7 +4,7 @@ These rules govern how agents communicate, delegate, escalate, and resolve confl
 
 ## 1. Vertical Delegation
 
-Decisions flow downward through the hierarchy defined in `@docs/agent-hierarchy.md`. Tier 1 (leadership) sets direction. Tier 2 (department leads) executes within their domain. Tier 3 (specialists) implements within their engine.
+Decisions flow downward through the hierarchy defined in `agent-hierarchy.md`. Tier 1 (leadership) sets direction. Tier 2 (department leads) executes within their domain. Tier 3 (specialists) implements within their engine.
 
 **Rule**: Never skip tiers for complex decisions. A producer does not tell an engine specialist how to implement a shader. The producer tells the technical director about a performance requirement, and the technical director works with the engine specialist on implementation.
 

@@ -223,7 +223,7 @@
 
 - [ ] **Steam:** AI use disclosed for player-facing content
 - [ ] **itch.io:** Generative AI content tagged (failure = potential delisting)
-- [ ] AI Content Policy document completed (reference: `@templates/ai-content-policy.md`)
+- [ ] AI Content Policy document completed (reference: `ai-content-policy.md`)
 - [ ] Human creative contribution documented for copyright protection
 
 ---

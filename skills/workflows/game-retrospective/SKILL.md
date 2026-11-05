@@ -9,7 +9,6 @@ description: >
 argument-hint: "[sprint-N or milestone-name or 'project']"
 effort: medium
 allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Game Development Post-Mortem
@@ -469,7 +468,7 @@ CARRY FORWARD:
 **FORMAT 3: Project Post-Mortem (90 minutes)**
 
 *The full GDC-style post-mortem. This is a historical document. Write it honestly enough
-that it would be worth publishing. Reference `@templates/post-mortem.md` for the complete
+that it would be worth publishing. Reference `${CLAUDE_PLUGIN_ROOT}/templates/post-mortem.md` for the complete
 template.*
 
 ```
@@ -658,10 +657,10 @@ These kill retrospectives faster than skipping them:
 
 ### Cross-References
 
-- `@docs/collaboration-protocol.md` -- Communication norms for post-mortem discussions
-- `@docs/coordination-rules.md` -- Escalation paths for systemic issues found in retros
-- `@docs/game-design-theory.md` -- Flow Theory, MDA Framework, SDT for lens analysis
-- `@templates/post-mortem.md` -- Extended project post-mortem template
+- `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` -- Communication norms for post-mortem discussions
+- `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md` -- Escalation paths for systemic issues found in retros
+- `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` -- Flow Theory, MDA Framework, SDT for lens analysis
+- `${CLAUDE_PLUGIN_ROOT}/templates/post-mortem.md` -- Extended project post-mortem template
 - Workflow handoffs: follows any sprint or milestone, feeds into `game-sprint-plan` for
   the next cycle and `game-scope-check` if scope issues surface
 

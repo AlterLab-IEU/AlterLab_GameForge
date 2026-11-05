@@ -10,7 +10,6 @@ description: >
 argument-hint: "[analytics-goal or kpi-question]"
 effort: medium
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Analytics Setup
@@ -201,7 +200,7 @@ Supercell is the counter-example. They track everything. They model LTV, retenti
 3. **Privacy is not negotiable.** GDPR consent before tracking. COPPA compliance if minors play. ATT prompt on iOS. Data minimization by default. No PII in event properties. No tracking without consent.
 4. **Data informs, designers decide.** Analytics provides evidence. Design teams interpret evidence in the context of creative intent, player feedback, and design vision. A metric that says "players quit at level 5" does not mean "make level 5 easier." It means "investigate level 5."
 5. **Do not track what you will not analyze.** Storage is cheap. Attention is expensive. Every unanalyzed event is noise that makes the signal harder to find.
-6. **Reference `docs/collaboration-protocol.md`** for cross-agent handoff procedures. Reference `docs/game-design-theory.md` for how analytics connects to Flow Theory (measuring flow state through session patterns) and MDA (measuring whether intended aesthetics reach players). Reference `docs/coding-standards.md` for telemetry implementation patterns.
+6. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md`** for cross-agent handoff procedures. Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for how analytics connects to Flow Theory (measuring flow state through session patterns) and MDA (measuring whether intended aesthetics reach players). Reference `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md` for telemetry implementation patterns.
 7. **Dashboards need owners.** Every dashboard has a named person who reviews it on a defined cadence. An unowned dashboard rots.
 
 ### Workflow Steps

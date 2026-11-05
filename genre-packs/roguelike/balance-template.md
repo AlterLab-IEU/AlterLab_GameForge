@@ -295,4 +295,4 @@ def simulate_run(config):
 
 ---
 
-*This template extends `@templates/economy-model.md` with roguelike-specific parameters. Use alongside `@genre-packs/roguelike/PATTERNS.md` for design context and `game-balance-check` for automated analysis.*
+*This template extends `../../templates/economy-model.md` with roguelike-specific parameters. Use alongside `PATTERNS.md` for design context and `game-balance-check` for automated analysis.*

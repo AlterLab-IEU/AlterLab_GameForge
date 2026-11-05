@@ -8,11 +8,8 @@ description: >
   architecture (use game-technical-director) or Godot/Unreal questions. Part of the
   AlterLab GameForge collection.
 argument-hint: "[question or task]"
-model: opus
 effort: high
-context: fork
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
-version: 2.0.0
 ---
 
 # AlterLab GameForge -- Unity Specialist

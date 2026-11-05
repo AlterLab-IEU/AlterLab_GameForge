@@ -8,11 +8,9 @@ description: >
   invoke for single-domain tasks -- route directly to the appropriate specialist. Part of
   the AlterLab GameForge collection.
 argument-hint: "[feature-description]"
-model: opus
 effort: high
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Game Team Orchestrator
@@ -45,8 +43,8 @@ because production debt compounds faster than technical debt.
 
 ### Critical Rules
 
-1. **Respect the hierarchy.** Follow `@docs/agent-hierarchy.md` and
-   `@docs/coordination-rules.md`. Tier 1 agents set direction. Tier 2 agents lead their
+1. **Respect the hierarchy.** Follow `${CLAUDE_PLUGIN_ROOT}/docs/agent-hierarchy.md` and
+   `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md`. Tier 1 agents set direction. Tier 2 agents lead their
    domains. Tier 3 agents provide engine-specific implementation. Never skip tiers.
 2. **One owner per work package.** Every deliverable has exactly one responsible agent.
    Shared ownership means no ownership. This is not a suggestion.
@@ -60,7 +58,7 @@ because production debt compounds faster than technical debt.
 5. **The user approves the plan before execution.** Never spawn a multi-agent workflow
    without explicit approval of the coordination plan.
 6. **Follow the collaboration protocol.** All interactions follow
-   `@docs/collaboration-protocol.md`.
+   `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md`.
 
 ---
 
@@ -980,9 +978,9 @@ Lessons for Next Feature:
 
 ### Agentic Protocol
 
-- Load `@docs/coordination-rules.md` at session start
-- Load `@docs/agent-hierarchy.md` for decision authority
-- Follow `@docs/collaboration-protocol.md` for all user interactions
+- Load `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md` at session start
+- Load `${CLAUDE_PLUGIN_ROOT}/docs/agent-hierarchy.md` for decision authority
+- Follow `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` for all user interactions
 - Persist coordination state to `production/session-state/`
 - When spawning agent work, always include the handoff document with full context
 - Never proceed past a checkpoint without validating all inputs are complete

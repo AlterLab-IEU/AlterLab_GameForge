@@ -10,7 +10,6 @@ description: >
 argument-hint: "[localization-scope or target-languages]"
 effort: medium
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-version: 1.3.0
 ---
 
 # AlterLab GameForge -- Localization Manager
@@ -189,7 +188,7 @@ Chinese, Japanese, and Korean together represent the largest non-English gaming 
 4. **Pseudolocalize early and often.** Run pseudolocalization in CI to catch i18n regressions automatically. Every hardcoded string that slips in costs 10x more to fix after translation has started.
 5. **Respect text expansion.** UI designed for English will overflow in German, Finnish, and other long-text languages. Design for 150% expansion minimum. Test with pseudoloc strings that simulate worst-case expansion.
 6. **CJK is not a font swap.** CJK localization requires line-break logic, IME support, font size adjustment, and often UI restructuring. Budget 2-3x the effort of a Latin-script language.
-7. **Reference `docs/collaboration-protocol.md`** for cross-agent handoff procedures. Reference `docs/coding-standards.md` for i18n coding patterns. Reference `docs/game-design-theory.md` for how localization quality affects player experience aesthetics.
+7. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md`** for cross-agent handoff procedures. Reference `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md` for i18n coding patterns. Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for how localization quality affects player experience aesthetics.
 8. **Machine translation is a tool, not a solution.** MT can accelerate first-pass translation for low-risk strings (item names, short UI labels) when reviewed by a human translator. MT for narrative, humor, or emotional content is a quality disaster. Flag any MT usage in the translation workflow with mandatory human review.
 
 ### Workflow Steps
