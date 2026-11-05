@@ -20,6 +20,7 @@ namespace Game.Gameplay
     public sealed class PlayerMotor : MonoBehaviour
     {
         [SerializeField, Min(0f)] private float _speed = 6f;
+        [SerializeField, Min(0f)] private float _jumpSpeed = 5f;
         [SerializeField] private Rigidbody _body;
 
         private InputAction _move;
@@ -42,7 +43,7 @@ namespace Game.Gameplay
         }
 
         private void OnJump(InputAction.CallbackContext context) =>
-            _body.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);
+            _body.AddForce(Vector3.up * _jumpSpeed, ForceMode.VelocityChange);
     }
 }
 ```
