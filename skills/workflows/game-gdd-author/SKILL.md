@@ -1,11 +1,10 @@
 ---
 name: game-gdd-author
 description: >
-  Guides section-by-section authoring of a game design document that doubles as an
-  agent-verifiable spec: pillars, core loop, MDA-tagged systems with pass/fail acceptance
-  criteria and named tuning knobs, scope tiers, and an AI-use policy. Use when the user says
-  "write my GDD", "create a game design document", "document my game", "turn my concept into
-  a spec", or "fill in the GDD". Not for critiquing an existing GDD (use game-design-review).
+  Guides section-by-section writing of a game design document that doubles as an agent-verifiable
+  spec: pillars, core loop, MDA-tagged systems with pass/fail acceptance criteria and tuning knobs,
+  scope tiers and an AI-use policy. Use for "write my GDD", "create a game design document", "turn
+  my concept into a spec". Not for critiquing an existing GDD (use game-design-review).
 argument-hint: "[game name, concept, or GDD section to work on]"
 effort: high
 allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
@@ -80,7 +79,7 @@ design out of their head; or when a single GDD section needs writing or rebuildi
    overwrite silently.
 4. Use **one** AskUserQuestion to set the mode (offer defaults):
    - **Full GDD** (all 12 steps) -- commercial project, team, or publisher pitch.
-   - **Lean spec** (Steps 1, 3, 4, 5, 11, 12) -- prototype or solo project built mostly by agents.
+   - **Lean spec** (Steps 1, 3, 4, 5, 6, 11, 12) -- prototype or solo project built mostly by agents.
    - **One section** -- the user names it; still load the pillars first.
 5. If there is no concept at all, route to `/gameforge:game-brainstorm` and stop.
 
@@ -162,7 +161,7 @@ a step before you run it.
 - **Ask:** what the player has after session one that they lacked at the start; horizontal vs
   vertical growth; pacing targets in minutes; every resource with its sources and sinks; any
   real-money monetization and what it may never sell.
-- **Red flags:** progression that trivialises the micro loop; pacing without numbers; sources with no
+- **Red flags:** progression that trivializes the micro loop; pacing without numbers; sources with no
   sinks; more than three currencies without a reason; pay-to-win framed as convenience (check
   `${CLAUDE_PLUGIN_ROOT}/docs/monetization-ethics.md`).
 - **Spec output:** progression arc with pacing targets (time to first reward, first milestone,
@@ -183,7 +182,7 @@ a step before you run it.
   cognitive options are T1; target age rating; any purchase flow or player chat (both are in scope
   of the European Accessibility Act, in force since 2025-06-28, unless the microenterprise
   service exemption applies).
-- **Red flags:** accessibility tiered T3 by default; colour as the only carrier of meaning;
+- **Red flags:** accessibility tiered T3 by default; color as the only carrier of meaning;
   hold-only inputs with no toggle.
 - **Spec output:** the template's §12 tables filled in, plus at least one acceptance check per T1
   option (for example "every action is remappable; verified by rebinding all actions in a test").
@@ -197,13 +196,15 @@ a step before you run it.
   architecture; no named risk.
 - **Spec output:** stack, platforms with tiers, budgets as numbers, risk with mitigation, and the
   project's **check command** (the one command an agent runs to prove the build works). As of
-  November 2026 the current lines are Godot 4.7 (4.8 in beta), Unity 6.3 LTS / 6.6, Unreal 5.8,
-  and on the web Three.js r187, Phaser 4, PixiJS 8 on Vite 8. Architecture depth belongs to
-  `/gameforge:game-technical-director`; netcode to `/gameforge:game-multiplayer`.
+  November 2026 the current lines are Godot 4.7.2 stable (4.8 in beta), Unity 6.3 LTS (supported
+  to Dec 2027) and 6.6, Unreal 5.8 (the last planned UE5 major), and on the web Three.js r187,
+  Phaser 4 and PixiJS 8 on Vite 8. A multi-year project should name its engine-upgrade risk.
+  Architecture depth belongs to `/gameforge:game-technical-director`; netcode to
+  `/gameforge:game-multiplayer`.
 
 ### Step 11: AI use and originality
 - **Ask:** which content may be AI-generated (code, placeholder art, shipped art, music, SFX, voice,
-  localisation, marketing); whether anything is generated live at runtime (AI NPCs, generated
+  localization, marketing); whether anything is generated live at runtime (AI NPCs, generated
   quests); which storefronts are targeted; how originality is protected.
 - **Red flags:** "we'll decide disclosure at launch"; AI voice with no performer consent plan;
   runtime AI with no guardrails; a pitch that is a renamed existing game; ripped or unlicensed assets.

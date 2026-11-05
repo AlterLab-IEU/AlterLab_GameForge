@@ -1,518 +1,352 @@
 ---
-name: "game-balance-check"
+name: game-balance-check
 description: >
-  Invoke when the user needs to validate game balance, tune economy systems, analyze
-  progression curves, evaluate difficulty scaling, or check reward pacing. Includes
-  Monte Carlo simulation and statistical validation. Triggers on: "balance", "economy
-  tuning", "progression curve", "difficulty scaling", "reward pacing", "Monte Carlo",
-  "fairness check". Do NOT invoke for economy/monetization design (use
-  game-economy-designer) or code review (use game-code-review). Part of the AlterLab
-  GameForge collection.
-argument-hint: "[system to analyze]"
-effort: medium
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
+  Validates and tunes game balance: economy faucets and sinks, progression and difficulty curves,
+  reward pacing, win rates and dominant strategies, using agent-runnable simulations (Monte Carlo,
+  AI-vs-AI) and telemetry. Use for "balance", "tuning", "difficulty spike", "Monte Carlo", "win
+  rate". Not for designing currencies or monetization (use game-economy-designer).
+argument-hint: "[system to analyze or tune]"
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(npm run balance*), Bash(npx vitest *), Bash(node tools/balance/*), Bash(python3 tools/balance/*), Bash(godot --headless *), Bash(git log *), Bash(git diff *)
+effort: high
 ---
 
-# AlterLab GameForge -- Economy & System Balance Validation
+# AlterLab GameForge -- Balance Check
 
-Balance is not about making everything equal -- it is about making everything feel fair while keeping decisions meaningful. A perfectly balanced game where every option is identical is a game with no interesting decisions. Into the Breach achieves near-perfect balance not through symmetry but through information transparency -- every option is viable because every consequence is visible. Slay the Spire achieves it through controlled variance -- any card can be powerful in the right deck, and Jorbs' statistical breakdowns prove the math holds across thousands of runs.
+Balance is not making everything equal. It is making every choice feel fair while keeping
+decisions meaningful: every option has a trade-off, every intended playstyle is viable, and no
+single strategy is best everywhere. A perfectly symmetric game has no interesting decisions.
 
-The goal is controlled asymmetry: every choice has a trade-off, every path is viable, and every player feels their preferred playstyle is respected. This workflow provides formal models -- including statistical validation and simulation -- for validating economy, progression, difficulty, and reward systems.
+This workflow validates economy, progression, difficulty and reward systems with explicit models,
+then checks those models against evidence: simulations an agent can build and run in minutes,
+playtest observations, and telemetry from real players. The math tells you what the system does.
+Playtests tell you how it feels. You need both.
 
-### Purpose & Triggers
+## Purpose & Triggers
 
-**Invoke this workflow when:**
-- An in-game economy is producing unintended inflation or deflation
-- Players are gravitating toward a single dominant strategy and ignoring all alternatives
-- Progression feels too fast (trivializing content), too slow (creating grind walls), or uneven (dead zones followed by spikes)
-- Difficulty scaling needs calibration -- either players are breezing through or hitting walls
-- Reward pacing needs analysis to sustain engagement through the mid-game and endgame
-- A new item, character, ability, or system is being introduced and needs integration with existing balance
-- Free-to-play monetization fairness needs auditing -- the gap between paying and non-paying players must be reasonable
-- Pre-release balance pass is needed before a playtest or launch
+**Use this workflow when:**
+- Currency inflates or deflates; players hoard or are always broke.
+- One strategy, build, weapon or character dominates and the rest go unused.
+- Progression feels too fast, too slow, or uneven (dead zones, then spikes).
+- Players breeze through or hit walls; deaths cluster at one encounter.
+- A new item, character, ability or system must fit into existing balance.
+- Reward pacing sags in the mid-game; retention drops at a recognizable point.
+- You need a simulation harness, a Monte Carlo run or an AI-vs-AI tournament.
+- A pre-playtest or pre-launch balance pass.
 
 **Do NOT use this workflow when:**
-- The game has no systems to balance (pure narrative games, walking simulators with no mechanics)
-- You are still in the prototyping phase and systems are not yet defined (use `game-prototype` first)
-- The balance problem is actually a design problem -- if the system is fundamentally broken, tuning numbers will not save it
 
-### Critical Rules
+| Need | Route to |
+|---|---|
+| Designing currencies, pricing, monetization ethics | `game-economy-designer` |
+| Designing or redesigning a mechanic | `game-designer` (if the system is broken, tuning will not save it) |
+| How the balance *feels* to players | `game-playtest` |
+| Bugs, crashes, exploits caused by code defects | `game-qa-lead` |
+| Building the analytics pipeline and dashboards | `game-analytics-setup` |
+| Systems not defined yet | `game-prototype` first |
 
-1. **Balance is relative, not absolute.** A weapon that deals 100 damage is not overpowered or underpowered in isolation. It is only meaningful relative to enemy health pools, other weapon options, ammunition scarcity, and player skill ceiling.
-2. **Dominant strategies kill games.** If one approach is strictly better than all alternatives in all situations, you have a balance failure. Dead Cells handles this by making every weapon viable through situational DPS curves -- a slow broadsword outdamages daggers against single targets but fails against swarms. Every viable strategy must have at least one situation where it is suboptimal.
-3. **Perception matters more than math.** A system can be mathematically balanced but FEEL unfair. Player psychology (loss aversion, anchoring, confirmation bias) must be factored into balance analysis. A player who loses a rare item to a 5% failure chance remembers that loss far more vividly than the 95 successes. Balatro understands this -- its pity system and score multiplier transparency make variance feel fair even when the math is brutal.
-4. **Never balance in a vacuum.** Every system interacts with every other system. Changing the warrior's damage output affects healer balance, enemy design, level pacing, and economy. Map the dependency graph before touching any number. Factorio's developers famously trace every balance change through the entire production chain before shipping it.
-5. **Data over intuition.** When you have telemetry, use it. When you do not, use Monte Carlo simulation to generate synthetic data. "It feels about right" is not a balance methodology.
-6. **Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`** for Flow Theory (challenge-skill balance), SDT (competence feedback loops), and MDA Framework (how balance affects target aesthetics).
+## Inputs I Read First
+- `.gameforge/project.json` (engine, phase), the GDD and economy model in `design/`
+  (`${CLAUDE_PLUGIN_ROOT}/templates/economy-model.md` is the expected shape), prior reports in
+  `design/balance/`, tuning data files, and any playtest or telemetry exports.
+- **Genre templates**: for run-based games read
+  `${CLAUDE_PLUGIN_ROOT}/genre-packs/roguelike/balance-template.md` (run economy, damage curves,
+  rarity and pity, floor scaling, synergy scoring, Monte Carlo setup). For story-driven games read
+  `${CLAUDE_PLUGIN_ROOT}/genre-packs/narrative/balance-template.md` (pacing, branch budgets,
+  choice-consequence weight, playthrough length). Use them as the checklist for that genre.
+- Ask up to three AskUserQuestion items, with defaults:
+  1. **System and symptom** (default: "the one players complain about most").
+  2. **Evidence available**: none (spreadsheet and simulation), playtest notes, live telemetry.
+  3. **Target player**: session length and archetype mix (default: 30-60 minute sessions,
+     average player as the primary target).
 
-### Workflow
+## Critical Rules
 
-**Step 1: System Inventory and Dependency Mapping**
+1. **Balance is relative.** 100 damage means nothing without enemy health, alternatives, ammo
+   scarcity and skill ceiling.
+2. **Dominant strategies kill decisions.** Every viable strategy needs at least one situation where
+   it is the wrong choice.
+3. **Perception beats arithmetic.** A mathematically fair system can feel unfair. Losses weigh
+   roughly twice as much as equal gains (Tversky and Kahneman's 1992 estimate of the loss-aversion
+   coefficient is about 2.25); streaks feel rigged even when they are random.
+4. **Never balance in a vacuum.** Map the dependency graph before changing a number; trace every
+   change through it.
+5. **Evidence hierarchy**: live telemetry > playtest observation > simulation > spreadsheet >
+   intuition. Simulations validate the math, not the fun; a playtest closes the loop.
+6. **Numbers live in data, not code.** Tuning constants sit in data files with units, ranges and a
+   change log, so designers and agents can change them without touching logic.
+7. **Reproducible or it did not happen.** Every simulation result cites its seed, build commit,
+   config file and iteration count.
+8. **Ground the analysis** in Flow, SDT and MDA from
+   `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`.
 
-Before you can balance a system, you must understand what the system contains and how it connects to everything else.
+## Workflow
 
-Create a complete inventory of:
-- **Currencies**: Every resource the player can earn, spend, trade, or lose (gold, XP, stamina, gems, reputation, crafting materials, etc.)
-- **Sinks**: Every place currency leaves the economy (shops, upgrades, repairs, consumables, taxes, etc.)
-- **Faucets**: Every place currency enters the economy (quest rewards, loot drops, selling, daily bonuses, etc.)
-- **Progression tracks**: Every axis of player growth (level, gear score, skill tree, reputation tiers, collection progress, etc.)
-- **Difficulty variables**: Every parameter that affects challenge (enemy stats, spawn rates, AI behavior, environmental hazards, time limits, etc.)
-- **Reward mechanisms**: Every system that gives the player positive feedback (loot, achievements, unlocks, cosmetics, narrative progress, etc.)
+**Step 1: Inventory and Dependency Map**
 
-Build a dependency graph showing how these systems connect. When system A changes, which other systems are affected? This graph is your guard rail -- before changing any number, trace the ripple effects through the dependency graph.
+List every:
+- **Currency**: gold, XP, stamina, crafting materials, reputation, premium currency.
+- **Faucet**: quest rewards, drops, selling, daily bonuses.
+- **Sink**: shops, upgrades, repairs, consumables, fees. Mark **hard sinks** (currency destroyed)
+  versus **soft sinks** (currency changes hands or form). Hard sinks control inflation; soft sinks
+  only slow velocity.
+- **Progression track**: level, gear score, skill tree, unlocks, meta-progression.
+- **Difficulty variable**: enemy stats, spawn rates, AI behavior, timers, hazards.
+- **Reward mechanism**: loot, unlocks, cosmetics, narrative beats, achievements.
 
-**Step 2: Economy Validation**
+Draw the dependency graph (Mermaid is fine). It is your guard rail: before changing any number,
+trace which systems move with it.
 
-**Faucet/Sink Analysis**
+**Step 2: Expose Tuning Constants**
 
-Map every currency source and sink with flow rates:
+If balance numbers are scattered through code (common in agent-built games), the first deliverable
+is moving them into one data source the game, the simulation and a debug panel all read:
+- Godot: a custom `Resource` (`.tres`); Unity: `ScriptableObject` assets; Unreal: Data Assets or
+  Data Tables; web: a typed `tuning.json` (or `tuning.ts`) module with hot reload in dev.
+- Every constant gets a unit, a sane range and a one-line purpose. A debug panel (lil-gui,
+  Tweakpane or Leva on the web; an in-game dev menu in engines) lets designers tune live.
+- Changes go through version control with a line in `design/balance/tuning-changelog.md`.
 
+Read `${CLAUDE_SKILL_DIR}/references/tuning-constants.md` before extracting constants; it has
+per-engine examples, a schema and the change-log format.
+
+**Step 3: Economy Validation**
+
+Map flows per currency:
 ```
-[Source] --[rate/hour]--> [Currency Pool] --[rate/hour]--> [Sink]
-
-Example:
-Quest Rewards  --500g/hr-->  Gold Pool  --300g/hr-->  Equipment Shop
-Monster Drops  --200g/hr-->  Gold Pool  --150g/hr-->  Consumables
-Daily Login    --100g/day->  Gold Pool  --50g/hr--->  Fast Travel
-                                        --100g/hr-->  Crafting
-```
-
-Calculate the net flow: Total Faucet Rate minus Total Sink Rate = Net Accumulation Rate. If net accumulation is positive, the economy inflates over time (currency becomes worthless). If negative, the economy deflates (players feel increasingly poor). Neither extreme is good -- target a slight positive accumulation that is periodically reset by major purchases (new gear tier, base upgrade, etc.).
-
-**Earn-Rate Analysis by Player Archetype**
-
-Not all players play the same way. Model at least three player archetypes:
-
-| Archetype | Play Pattern | Earn Rate | Expected Behavior |
-|-----------|-------------|-----------|-------------------|
-| **Casual** | 30 min/day, focuses on main quests, skips optional content | Lowest | Should progress at a satisfying pace without feeling punished for limited playtime |
-| **Average** | 1-2 hrs/day, completes main + some side content, moderate exploration | Median | The "target" player. Balance primarily for this archetype. |
-| **Hardcore** | 4+ hrs/day, min-maxes everything, optimizes farm routes | Highest | Should have meaningful things to spend surplus on. Currency should never become meaningless. |
-
-**Time-to-X Analysis**
-
-Calculate how long each archetype takes to reach key milestones:
-
-| Milestone | Casual | Average | Hardcore | Target Range |
-|-----------|--------|---------|----------|-------------|
-| First major upgrade | ? hrs | ? hrs | ? hrs | 1-2 sessions |
-| Midgame gear plateau | ? hrs | ? hrs | ? hrs | 10-15 sessions |
-| Endgame entry | ? hrs | ? hrs | ? hrs | 30-50 sessions |
-| Max level/gear | ? hrs | ? hrs | ? hrs | 80-150 sessions |
-
-If the casual-to-hardcore ratio exceeds 5:1 for any milestone, the economy may be too grind-dependent and too punishing for casual players.
-
-**Premium Currency Fairness (if applicable)**
-
-If the game has premium (paid) currency alongside earned currency:
-- Can a free player access ALL gameplay-relevant content at a reasonable rate? ("Reasonable" means the casual archetype reaches endgame within 6 months of regular play.)
-- Are premium purchases time-savers or power advantages? Time-savers are generally accepted by players. Power advantages create pay-to-win perception even if the math says otherwise.
-- Is there a conversion path between earned and premium currency? If so, is the exchange rate fair or exploitative?
-- Are loot boxes or gacha mechanics involved? If so: Are probability tables disclosed? Is there a pity system (guaranteed reward after N attempts)? Is there duplicate protection?
-
-**Step 3: Progression Curve Analysis**
-
-**Power Curve Mapping**
-
-Plot player power (aggregate combat effectiveness, measured as DPS * survivability) against time or content progression. Categorize the curve shape:
-
-- **Linear**: Power grows at a constant rate. Feels predictable and steady but becomes boring after the midpoint because each increment feels identical. Common failure mode: "I leveled up but I don't feel stronger."
-- **Exponential**: Power grows faster and faster. Feels incredible early (every upgrade is huge) but becomes unsustainable -- either the endgame is trivially easy or enemies must scale exponentially to match, creating a numbers treadmill. Common failure mode: "The numbers are meaningless."
-- **Logarithmic**: Power grows quickly early and then plateaus. Front-loads satisfaction but creates a feeling of stagnation in the midgame. Common failure mode: "Nothing I do makes me stronger anymore."
-- **S-Curve (Sigmoid)**: Fast initial growth, gentle middle, satisfying mastery plateau. This is the target for most games. The early phase teaches and rewards rapidly. The middle phase deepens mastery. The endgame rewards optimization and expression rather than raw power. Common success indicator: "I'm not stronger, but I'm BETTER."
-
-**Dead Zone Detection**
-
-Scan the progression curve for flat sections where the player receives no meaningful power increase for an extended period. Dead zones cause churn -- players quit during the midgame slog more than at any other point. Every dead zone should either be eliminated (add a reward) or justified (narrative beat that intentionally strips power for dramatic effect, with a clear promise of restoration).
-
-**Spike Zone Detection**
-
-Scan for sudden jumps in power. A player who doubles in effectiveness by equipping a single item has just made every previous upgrade feel worthless. Spikes should be rare, earned, and narratively justified (legendary weapon, prestige class, transformation).
-
-**Level-Gating Fairness**
-
-For each level/tier gate in the game:
-- Is the XP/resource requirement achievable through normal play within 2-3 sessions?
-- Does the content available at the current level remain engaging while the player works toward the next gate?
-- Is there a clear feedback loop showing progress toward the next gate (progress bars, checklists, milestone indicators)?
-- Does the gate feel like an achievement ("I reached level 10!") or a wall ("I'm stuck at level 9 and there's nothing to do")?
-
-**Step 4: Difficulty Scaling Assessment**
-
-**Challenge-Skill Balance (Flow Theory)**
-
-Reference the Flow Theory framework from `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`. For each major section of the game, assess:
-
-- Is the challenge level matched to the expected player skill at that point in the game?
-- Does the difficulty increase in step with the player's growing mastery?
-- Are there intentional difficulty oscillations (hard encounter followed by easy encounter) that create a breathing rhythm?
-- Does the game avoid the two failure modes: anxiety (challenge vastly exceeds skill) and boredom (skill vastly exceeds challenge)?
-
-**Difficulty Mode Analysis**
-
-If the game offers difficulty settings, evaluate the quality of the implementation:
-
-| Implementation Quality | Description | Verdict |
-|----------------------|-------------|---------|
-| **Lazy** | Enemy HP and damage are multiplied. Nothing else changes. | Poor. Higher difficulty just means longer fights, not harder decisions. |
-| **Adequate** | Enemy stats scale AND enemy count/placement changes. | Acceptable. More tactical consideration required. |
-| **Good** | AI behavior changes. Enemies use more advanced tactics, coordinate, exploit player weaknesses. | Strong. Higher difficulty is a qualitatively different experience. |
-| **Excellent** | Game systems change. New mechanics emerge at higher difficulties. The player must master systems that are optional on lower difficulties. | Outstanding. Each difficulty mode feels like a different game. |
-
-**Rubber Banding Assessment**
-
-Does the game adjust difficulty dynamically based on player performance?
-- If yes: Is it invisible? (Players should never feel the game is going easy on them -- that destroys the sense of accomplishment.) How sensitive is the system? (Adjusting after a single death is too aggressive. Adjusting after 5 deaths in the same encounter is reasonable.)
-- If no: Is the fixed difficulty curve appropriate for the target audience? Are there accessibility options for players who struggle?
-
-**Time-to-Kill (TTK) Analysis**
-
-For combat-focused games, TTK is a core feel parameter:
-- **Fast TTK** (< 1 second): Tactical, punishing, high-stakes. Suits realistic shooters, stealth games. Risk: feels unfair if netcode or AI precision is not flawless.
-- **Medium TTK** (2-5 seconds): Balanced engagement window. Suits action RPGs, hero shooters. Risk: can feel "spongy" if enemies do not react to damage.
-- **Slow TTK** (10+ seconds): Strategic, resource-management focused. Suits boss encounters, MMOs. Risk: feels tedious if the player's actions during the encounter are not varied and interesting.
-
-Is the TTK consistent with genre expectations? Does TTK scale appropriately as player power grows?
-
-**Step 5: Reward Pacing Analysis**
-
-**Reward Schedule Classification**
-
-Identify which reinforcement schedule each reward system uses:
-
-| Schedule Type | Description | Player Behavior | Best For |
-|--------------|-------------|-----------------|----------|
-| **Fixed Ratio** | Reward every N actions (every 10 kills) | Predictable grind. Players optimize toward the threshold. | Crafting, collection |
-| **Variable Ratio** | Reward on average every N actions, but randomized | Compulsive engagement. The "slot machine" schedule. Most engaging but ethically questionable at extremes. | Loot drops, gacha |
-| **Fixed Interval** | Reward every N minutes/hours | Clock-watching behavior. Players log in, collect, log out. | Daily rewards, timers |
-| **Variable Interval** | Reward on average every N minutes, but randomized | Sustained attention. Players keep playing because "it might happen soon." | World events, rare spawns |
-
-**Loot and Reward Fairness**
-
-If randomized rewards are used:
-- Are probability tables clearly communicated to the player (either in-game or in publicly available documentation)?
-- Is there a pity system? After N unsuccessful attempts, is a reward guaranteed? The industry standard pity threshold is generally 50-100 attempts for rare items.
-- Is there duplicate protection? Receiving the same rare item twice should either be impossible or the duplicate should convert to meaningful value (not a trivial amount of common currency).
-- Are "feel-bad" moments minimized? Randomized loss (losing items on death, random stat downgrades) creates stronger negative emotion than randomized gain creates positive emotion. Loss aversion is approximately 2.5x gain satisfaction.
-
-**Milestone Reward Spacing**
-
-Plot all significant rewards on a timeline. Check for gaps longer than 2 play sessions where no meaningful reward occurs. These gaps are churn risk zones. Solutions:
-- Add intermediate rewards (achievement unlocks, cosmetics, lore entries)
-- Break a large reward into multiple smaller rewards distributed across the gap
-- Add progress indicators showing accumulation toward the next big reward
-
-**Endgame Retention**
-
-Does the reward system sustain engagement after the main campaign is complete?
-- Are there endgame-exclusive rewards that provide ongoing goals (prestige systems, seasonal content, mastery challenges)?
-- Does the endgame reward system shift from power growth to lateral progression (cosmetics, alternative playstyles, collection)?
-- Is there social reward (leaderboards, cooperative challenges, player expression) that provides motivation beyond material rewards?
-
-**Step 5B: DDE Framework Lens for Balance Analysis**
-
-When analyzing any game system for balance, apply the Design-Dynamics-Experience (DDE) framework lens alongside the MDA framework. Specifically, ask: "How does this system affect the player Experience layer?" Balance changes that look correct at the Design layer (the numbers) can produce unexpected results at the Dynamics layer (how systems interact) and unintended emotional responses at the Experience layer (what the player actually feels).
-
-For every balance adjustment, trace the impact through all three layers:
-- **Design**: What number changed? (e.g., weapon damage reduced by 15%)
-- **Dynamics**: How does the system behavior change? (e.g., time-to-kill increases, players must engage enemies for longer, ammo consumption increases)
-- **Experience**: How does the player's emotional response change? (e.g., combat feels more deliberate and tactical -- OR -- combat feels tedious and spongy, depending on other variables)
-
-If you can only predict the Design and Dynamics impact but not the Experience impact, you need a playtest, not more math.
-
-**Step 5C: Advanced Simulation and Monitoring**
-
-**ML-Driven Simulation Approaches:**
-For complex economies and progression systems, train reinforcement learning (RL) agents to play your game's economy:
-- Define the player's "optimal" behavior as the RL agent's reward function
-- Let the agent play thousands of iterations to discover exploit paths, degenerate strategies, and equilibrium states that human testing would take months to surface
-- RL agents are particularly effective at finding resource duplication exploits, infinite loops in crafting chains, and arbitrage opportunities in multi-currency economies
-- This approach requires investment but can detect exploits before players do, saving post-launch emergency patches
-
-**Machinations.io:**
-For visualizing and simulating economy flows without writing code, use Machinations.io (machinations.io). It provides a visual node-based editor specifically designed for game economy modeling:
-- Build your faucet/sink diagram as a live simulation
-- Run thousands of iterations to see how currency pools behave over time
-- Test "what if" scenarios (what if drop rates are halved? what if a new sink is added?) without touching game code
-- Particularly useful for pre-implementation validation -- test the economy design before building it
-
-**Hard Sink vs. Soft Sink Distinction:**
-Not all sinks are equal. Distinguish between:
-- **Hard sinks**: Currency is permanently destroyed. Examples: consumable items that are used and gone, repair costs, fast travel fees, crafting materials consumed during crafting. Hard sinks are the primary tool for controlling inflation.
-- **Soft sinks**: Currency changes form but is not destroyed. Examples: trading between players (currency moves, net supply unchanged), cosmetic purchases (currency to the system, cosmetic to the player -- the cosmetic has ongoing value). Soft sinks slow velocity but do not reduce supply.
-
-A healthy economy needs both. Hard sinks control inflation. Soft sinks control velocity. If you only have soft sinks, your economy will inflate over time regardless of flow rates.
-
-**Stock/Flow Monitoring Guidelines:**
-After launch, monitor these metrics continuously:
-- **Currency stock levels** per player segment (new, mid-game, endgame) -- are they growing, stable, or declining?
-- **Flow rates** at each faucet and sink -- which are the highest-volume flows? These are your most impactful tuning levers.
-- **Velocity** -- how quickly does currency circulate? High velocity means currency moves fast through the economy (healthy in moderation, inflationary at extremes). Low velocity means currency is hoarded (indicates sinks are unattractive or faucets are too generous).
-- **Gini coefficient** -- measures wealth inequality across the player population. A high Gini coefficient means a small number of players hold most of the wealth. This is expected (hardcore players accumulate faster) but extreme values indicate the economy is not serving casual players.
-
-**Step 6: Statistical Validation Methods**
-
-Qualitative balance assessment catches the obvious problems. Statistical validation catches the subtle ones -- the economy that inflates 2% per hour until hour 40 when it collapses, the weapon that is balanced on average but has a 3% chance of one-shotting a boss, the matchup that is 50/50 overall but 90/10 at high skill levels.
-
-**6.1 Distribution Analysis**
-
-Every randomized system has an underlying probability distribution. Know which one yours uses and whether it matches your design intent:
-
-```
-DISTRIBUTION TYPE GUIDE
--------------------------------------------------
-Normal (Gaussian):
-  Use for: Damage ranges, stat variation, NPC behavior variance
-  Shape: Bell curve -- most results cluster near the mean
-  Example: Base damage 100, standard deviation 10 → 95% of hits
-  land between 80-120. Players experience consistent damage.
-  Watch for: Tails. A normal distribution with high variance
-  produces occasional extreme outliers that feel like bugs.
-
-Uniform:
-  Use for: Loot table rolls, random map generation, spawn placement
-  Shape: Flat -- every outcome equally likely
-  Example: Drop table with 10 items, each 10% chance.
-  Watch for: Streaks. Uniform random FEELS streaky because humans
-  are terrible at recognizing true randomness. 5 of the same drop
-  in a row is statistically plausible but psychologically devastating.
-  Slay the Spire mitigates this by using weighted shuffle bags
-  instead of pure uniform random for card rewards.
-
-Poisson:
-  Use for: Rare event timing (boss spawns, critical failures, jackpots)
-  Shape: Skewed right -- most intervals are short, occasional long gaps
-  Example: Average 1 legendary drop per 10 hours, but actual gaps
-  range from 2 hours to 30+ hours.
-  Watch for: The long tail. A Poisson process can produce gaps so long
-  that players assume the system is broken.
-
-Weighted Random with Pity Timer:
-  Use for: Gacha, loot boxes, rare reward systems
-  Shape: Weighted random with a guaranteed floor
-  Implementation: Track consecutive failures. After N failures,
-  force a success. Reset the counter.
-  Example: Hades uses pity timers on its boon system -- if you have
-  not received a specific god's boon in N rooms, the probability
-  weight increases until it appears.
-  Industry standard pity thresholds: 50-100 attempts for rare items,
-  10-20 for uncommon. Publish these numbers to build player trust.
--------------------------------------------------
+Quest rewards --500 g/h--> [Gold] --300 g/h--> Equipment (hard sink)
+Monster drops --200 g/h--> [Gold] --150 g/h--> Consumables (hard sink)
+Daily login   --100 g/day->[Gold] --100 g/h--> Player trading (soft sink)
+Net accumulation: +150 g/h before trading -> slow inflation; check against the next gear tier price
 ```
 
-**6.2 Expected Value Calculations**
+Net accumulation = faucets minus hard sinks. Persistent positive accumulation inflates (currency
+stops mattering); negative deflates (players feel poorer over time). A common target is a mild
+surplus periodically reset by large purchases (next gear tier, base upgrade).
 
-For every player decision with multiple outcomes, calculate the Expected Value (EV):
+Model at least three archetypes and the time each takes to reach key milestones:
 
+| Milestone | Casual (30 min/day) | Average (1-2 h/day) | Hardcore (4+ h/day) | Target |
+|---|---|---|---|---|
+| First major upgrade | ? | ? | ? | 1-2 sessions |
+| Mid-game plateau | ? | ? | ? | [design target] |
+| Endgame entry | ? | ? | ? | [design target] |
+
+Rule of thumb: when casual takes more than about five times as many hours as hardcore for the same
+milestone, the economy leans on grind. If premium currency, loot boxes or gacha exist, hand the
+fairness and ethics review to `game-economy-designer` with your numbers attached; note that PEGI
+rates games with paid random items at 16 or higher for submissions from June 2026.
+
+**Step 4: Progression Curves**
+
+Plot player power (for combat games, roughly damage output x survivability) against time or
+content. Name the shape:
+- **Linear**: predictable, flat-feeling after the midpoint ("I leveled but I don't feel stronger").
+- **Exponential**: huge early, forces enemies onto a numbers treadmill ("the numbers mean nothing").
+- **Logarithmic**: front-loaded, then stagnant ("nothing makes me stronger anymore").
+- **S-curve**: fast learning phase, steady middle, mastery plateau where skill and expression
+  matter more than raw power. The usual target.
+
+Then scan for **dead zones** (long stretches with no meaningful gain: add a reward or justify it
+narratively) and **spike zones** (one item doubling effectiveness devalues everything before it).
+For each level gate: reachable through normal play within 2-3 sessions, content stays engaging
+while working toward it, progress is visible, and it feels like an achievement, not a wall.
+
+**Step 5: Difficulty**
+
+- **Challenge-skill fit** per section (Flow): rising difficulty tracks rising mastery, with
+  deliberate oscillation (hard encounter, then a breather). Find anxiety (challenge far above
+  skill) and boredom (skill far above challenge).
+- **Difficulty modes**, from weakest to strongest implementation: stat multipliers only;
+  stats plus enemy count and placement; changed AI behavior; changed systems and mechanics.
+- **Dynamic difficulty**: if present, it should be invisible and slow to react (adjusting after one
+  death is too twitchy; after several deaths at one encounter is reasonable). If absent, offer
+  assist and accessibility options with `game-accessibility-specialist`.
+- **Time to kill**: fast (under 1 s) is tactical and punishing; medium (2-5 s) gives an engagement
+  window; slow (10 s+) suits bosses and needs varied player actions to avoid tedium. Check TTK
+  against genre expectations and how it scales with player power.
+
+**Step 6: Reward Pacing**
+
+Classify each reward system: fixed ratio (every N actions), variable ratio (random per action:
+the most compulsive schedule, so use it with care), fixed interval (timers, dailies), variable
+interval (random events). Then check:
+- Probabilities of randomized rewards are disclosed to players.
+- Bad-luck protection exists for rare rewards; set the threshold from simulation (the 95th and
+  99th percentile wait), not from a number copied from another game.
+- Duplicates convert to meaningful value.
+- Random *losses* (item loss on death, failed upgrades that downgrade) are rare and telegraphed;
+  they hurt about twice as much as equivalent gains feel good.
+- No gap longer than about two sessions without a meaningful reward (rule of thumb); fill gaps with
+  intermediate rewards or visible progress toward the next one.
+- Endgame shifts from power growth to lateral goals (mastery, cosmetics, challenges, social).
+
+**Step 7: Simulate**
+
+Pick the cheapest method that answers the question:
+
+| Question | Method |
+|---|---|
+| Deterministic flows and time-to-X | Spreadsheet, or Machinations for visual flow models |
+| Distribution of outcomes with randomness | Monte Carlo over the game's own rules code |
+| Dominant strategies, build or faction balance | AI-vs-AI tournament with several bot policies |
+| Exploits a clever player would find | Greedy or search-based bots; RL only if cheaper options failed |
+| Frame-level feel (TTK, dodge windows) | Headless sim of the real game loop at fixed time step |
+
+Harness requirements: it runs **the same rules code as the game** (never a parallel
+reimplementation that drifts), headless, seeded, at fixed time step, faster than real time, and
+writes one row per run to CSV or JSONL. Run at least 10,000 iterations per scenario, and 100,000+
+when the event of interest is rarer than 1%. Read
+`${CLAUDE_SKILL_DIR}/references/simulation-harnesses.md` before building or extending a harness:
+it has the architecture, TypeScript and GDScript runners, bot policies, a parity test and a
+determinism checklist.
+
+Interpret distributions, not averages:
+- **Median vs mean**: a wide gap means skew; the median is the typical player.
+- **5th and 95th percentiles**: the unlucky and lucky experiences. A wide band means luck
+  outweighs skill.
+- **Worst 1%**: if those runs are miserable (200 attempts for a "guaranteed" drop, an unwinnable
+  seed), add a safety net.
+- **Outliers above the median**: a choice combination producing 10x the median outcome will be found
+  and will become the meta.
+
+Read `${CLAUDE_SKILL_DIR}/references/statistical-methods.md` for distribution choices, expected
+value, matchup matrices, build win-rate red flags, confidence intervals and sensitivity analysis.
+
+**Step 8: Tune from Telemetry**
+
+Once real players exist (playtest builds, Steam Playtest, early access, live):
+- Compare telemetry with the simulation's predictions. Where they disagree, the model is missing
+  a player behavior; fix the model before tuning.
+- Balance-relevant metrics: deaths and quits per encounter, completion time per level, pick and
+  win rate per build or character, currency stock and flow per player segment, time between
+  rewards, upgrade purchase order.
+- For economies, watch stock levels by segment, faucet and sink volumes, velocity, and inequality
+  (a Gini coefficient across players); extreme concentration means casual players are not served.
+- One change per tuning iteration where possible, with the predicted effect written down *before*
+  the change ships. Remote config makes this cheap; it also makes it tempting to change five
+  things at once.
+- Small samples mislead: report confidence intervals on win and completion rates. Event schemas and
+  dashboards come from `/gameforge:game-analytics-setup`.
+
+**Step 9: Trace Each Change (DDE and Sensitivity)**
+
+For every proposed change, trace three layers:
+- **Design**: what number changes (sword damage 25 -> 22).
+- **Dynamics**: how behavior changes (TTK up, ammo use up, players kite more).
+- **Experience**: how it feels (deliberate and tactical, or spongy and tedious?).
+
+If you can predict Design and Dynamics but not Experience, you need a playtest, not more math.
+Run the sensitivity check at three magnitudes (conservative, proposed, aggressive); if outcomes
+swing wildly within a few percent, the system is brittle there and needs a structural fix.
+
+**Step 10: Report and Hand Off**
+
+Write the Balance Report to `design/balance/YYYY-MM-DD-[system].md`, append accepted changes to
+`design/balance/tuning-changelog.md`, and update `production/session-state/active.md` with the top
+change, its predicted effect and when it will be checked. Hand perception questions to
+`game-playtest` and any code defects found by the sims to `game-qa-lead`.
+
+## Working with AI Coding Agents
+
+Simulation harnesses, bots and debug panels used to be a week of tooling work; with a coding agent
+they are often an afternoon, so build them early. Simon Willison's write-up of *Battle Drones*
+(October 2026), built through agent commits, describes running over 1,200 AI-vs-AI balance matches
+and having Claude build a debug probe he called "effectively free." Treat that as the pattern, not
+a promise of results.
+
+**Delegate**
+- Extracting hard-coded numbers into the tuning data file, with units and ranges.
+- Writing the headless runner, Monte Carlo loop, bot policies, CSV output and summary script.
+- Histograms, percentile tables and matchup matrices from the output.
+- The debug panel that edits tuning values live.
+
+**Verify by hand**
+- **Parity**: the harness imports the game's rules module; it does not re-implement them. Ask for a
+  parity test: same seed and inputs through the game and the harness give the same state.
+- **Determinism**: run the same seed twice and diff the output. Then run on a second machine or
+  browser if the game ships there; floating-point and trig differences between browser engines
+  have desynced agent-built games before.
+- **Sanity**: compare one simulated metric against a hand-computed expected value. If they differ,
+  find out why before reading any other number.
+- **Bot policies**: read them. A bot that never uses a mechanic makes that mechanic look weak.
+- **Goal-seeking**: an agent asked to "make win rates 50%" may edit the simulation, the bots or the
+  test, not the tuning. Lock the harness while tuning and review the diff.
+
+**Prompt that works**: "Read `design/balance/tuning.json` and `src/sim/`. Build
+`tools/balance/montecarlo.ts` that imports the sim, runs 10,000 seeded runs per archetype bot,
+and writes one JSONL row per run (seed, commit, archetype, floor reached, gold earned, deaths).
+Add a parity test against the game loop. Do not change any tuning value or game rule."
+
+Pair this with `/gameforge:game-vibe-code` for the build loop and `/gameforge:game-qa-lead` for
+the determinism and parity tests.
+
+## Output Formats
+
+**Balance Report**
+```markdown
+# Balance Report: [System] -- [YYYY-MM-DD]
+**Build/commit:** [hash] | **Tuning file:** [path @ hash] | **Analyst:** [name / agent session]
+**Evidence used:** [spreadsheet / simulation / playtest round YYYY-MM-DD / telemetry n=___]
+
+## Executive Summary
+[Three sentences: current state, biggest problem, top recommendation with predicted effect.]
+
+## Economy Flows
+| Currency | Faucets (per h, avg player) | Hard sinks | Soft sinks | Net | Verdict |
+|---|---|---|---|---|---|
+| Gold | 700 | 450 | 100 | +250/h | Inflating after hour 6 |
+
+## Time-to-Milestone
+| Milestone | Casual | Average | Hardcore | Target | Status |
+|---|---|---|---|---|---|
+
+## Progression and Difficulty
+- Curve shape: [S-curve / ...]; dead zones: [where]; spike zones: [where]
+- Difficulty hot spots: [encounter, death rate, quit rate]; TTK: [current vs target]
+
+## Simulation Results
+| Scenario | Runs | Seed range | Median | P5 | P95 | Worst 1% | Notes |
+|---|---|---|---|---|---|---|---|
+| Archetype: cautious, floors reached | 10,000 | 1-10000 | 7 | 3 | 11 | 2 | 4% of seeds unwinnable by floor 3 |
+
+## Imbalances
+| ID | System | Issue | Evidence | Severity | Recommendation | Predicted effect |
+|---|---|---|---|---|---|---|
+| B1 | Weapons | Spear 68% pick rate, 61% win rate | Sim + telemetry n=412 | Major | Spear crit 25% -> 18% | Pick rate under 45%, win rate 52-55% |
+
+## Changes Not Made (and why)
+[Proposals rejected after sensitivity or DDE trace]
+
+## Next Check
+[What to measure, when, and what result would reverse the change]
 ```
-EV = Sum of (Probability_i * Value_i) for all outcomes i
 
-EXAMPLE: Upgrade gamble system
-  Success (70%): weapon gains +10 damage (value: +10)
-  Failure (25%): weapon unchanged (value: 0)
-  Catastrophe (5%): weapon loses 5 damage (value: -5)
-
-  EV = (0.70 * 10) + (0.25 * 0) + (0.05 * -5) = 7.0 - 0.25 = 6.75
-
-  The EV is positive, so upgrading is mathematically correct every time.
-  But the 5% catastrophe creates fear disproportionate to its probability
-  (loss aversion factor ~2.5x). The FELT EV is lower than the actual EV.
+**Tuning Change Log entry** (`design/balance/tuning-changelog.md`)
+```markdown
+## 2026-11-05 -- spear crit chance 0.25 -> 0.18 (commit abc123)
+Why: B1 in balance report 2026-11-05; spear dominant in sim and telemetry.
+Predicted: spear pick rate under 45%, overall win rate within 2 points.
+Check: after 200 runs of telemetry or next playtest round. Revert if win rate drops over 5 points.
 ```
 
-Use EV calculations to verify that:
-- No decision has a strictly dominant strategy (one option with highest EV in ALL contexts)
-- Risk-reward tradeoffs are real -- higher-risk options have higher EV to compensate
-- The "safe" option is viable but suboptimal, not optimal (otherwise risk is never rewarded)
-- Currency conversions and trade systems do not create arbitrage loops (buy low, sell high, infinite money)
+## Quality Criteria
+- Every balance dimension relevant to the game is addressed (economy, progression, difficulty,
+  rewards), with genre-template items checked when a genre pack applies.
+- Every claim cites its evidence: simulation (seed, commit, runs), playtest round or telemetry
+  sample size. No "feels about right."
+- Simulations run the game's own rules code, are deterministic, and passed a sanity check against a
+  hand-computed value.
+- At least three player archetypes are modeled; each has a viable experience.
+- Edge cases are covered through percentiles and worst-case runs, not only averages.
+- Every recommendation names a specific value change, a predicted effect and a check date.
+- Tuning constants live in data with units, ranges and a change log.
 
-Into the Breach achieves this brilliantly -- every move has a calculable EV because all information is visible. The tension comes from the tradeoffs between protecting buildings, killing Vek, and positioning for next turn. No move is mathematically dominant because the EV depends entirely on board state.
-
-**6.3 Win Rate Analysis and Matchup Matrices**
-
-For competitive or asymmetric games, build a matchup matrix:
-
-```
-MATCHUP MATRIX (win rates, row vs. column)
--------------------------------------------------
-           | Warrior | Mage    | Rogue   | Ranger
--------------------------------------------------
-Warrior    | 50%     | 55%     | 40%     | 52%
-Mage       | 45%     | 50%     | 58%     | 43%
-Rogue      | 60%     | 42%     | 50%     | 55%
-Ranger     | 48%     | 57%     | 45%     | 50%
--------------------------------------------------
-
-HEALTH THRESHOLDS:
-  45-55% per matchup: Healthy. Rock-paper-scissors dynamic is working.
-  40-60%: Acceptable with awareness. One class counters another, but
-    the disadvantaged class can still win through superior play.
-  Below 40% or above 60%: Imbalanced. The counter is too hard.
-    Either nerf the advantage or give the disadvantaged class tools
-    to outplay the matchup.
-  Any class with ALL matchups above 52%: Overpowered. Nerf directly
-    or buff ALL other classes (usually nerf is cleaner).
-  Any class with ALL matchups below 48%: Underpowered. Buff directly.
-```
-
-For PvE with build diversity (roguelikes, RPGs), replace matchup matrices with build win-rate tracking:
-
-```
-BUILD WIN-RATE ANALYSIS
--------------------------------------------------
-Track across N simulated or observed runs:
-  Build archetype | Win rate | Avg clear time | Pick rate
-  [build A]       | [%]      | [minutes]      | [% of runs]
-  [build B]       | [%]      | [minutes]      | [% of runs]
-
-Red flags:
-- One build with >70% pick rate: it is either overpowered or perceived
-  as overpowered. Either way, the meta is stale.
-- Any build below 30% win rate: it feels unplayable. Buff it or remove it.
-- High win rate + low pick rate: hidden gem. Consider making it more
-  discoverable, not nerfing it.
-- Low win rate + high pick rate: it is fun but weak. Buff it -- players
-  are already drawn to the fantasy; reward them for choosing it.
-
-Slay the Spire's balance: all four characters maintain 40-60% win rates
-at high ascension, but through completely different strategic lenses.
-The Silent's win rate drops at Ascension 18+ while the Defect's rises --
-this is intentional difficulty differentiation, not imbalance.
--------------------------------------------------
-```
-
-**6.4 Sensitivity Analysis**
-
-Before shipping a balance change, test how sensitive the system is to that parameter:
-
-```
-SENSITIVITY ANALYSIS PROTOCOL
--------------------------------------------------
-1. Identify the parameter being changed (e.g., sword damage: 25 → 22)
-2. Model the ripple effects at three magnitudes:
-   - Conservative change: -5% (23.75)
-   - Proposed change: -12% (22.0)
-   - Aggressive change: -20% (20.0)
-3. For each magnitude, trace through the dependency graph:
-   - How does TTK change against each enemy type?
-   - How does the economy shift (repair costs, replacement rate)?
-   - How does the progression curve bend (time to midgame, time to endgame)?
-   - How does the player's PERCEPTION change? (-12% damage may feel like
-     -30% if the weapon already felt weak.)
-4. If the proposed change produces dramatically different outcomes at
-   +/- 2%, the system is brittle at this parameter. Consider a structural
-   fix instead of number tuning.
-
-Dead Cells demonstrates good sensitivity management -- weapon DPS curves
-are designed so that a 10% nerf moves a weapon from "top tier" to "viable"
-rather than from "viable" to "unusable." This is achieved by compressing
-the DPS range: the best weapon deals ~40% more DPS than the worst, not
-400% more.
--------------------------------------------------
-```
-
-**Step 7: Monte Carlo Simulation Guidance**
-
-**When to Simulate**
-
-Use Monte Carlo simulation when:
-- Systems have randomized elements that interact (loot + crafting + upgrade chance)
-- You need to understand the distribution of possible outcomes, not just the average
-- Edge cases could create degenerate player experiences (extremely lucky or unlucky runs)
-- Multiple interdependent systems make analytical solutions intractable
-
-**Simulation Setup**
-
-1. Define all random variables (drop rates, damage ranges, proc chances, critical hit probability)
-2. Define the player decision model (what choices does the simulated player make? Use at least three archetypes: optimal, average, suboptimal)
-3. Run a minimum of 10,000 iterations per scenario. For rare events (< 1% probability), run 100,000+.
-4. Record the full distribution of outcomes, not just the mean.
-
-**Interpreting Results**
-
-- **Median vs. Mean**: If they diverge significantly, your distribution is skewed. The median is what a "typical" player experiences. The mean is distorted by outliers.
-- **Percentile analysis**: Check the 5th and 95th percentiles. The 5th percentile is the "unlucky" player experience. The 95th is the "lucky" player. If the gap between them is too wide, the system feels random rather than skill-based.
-- **Worst-case scenarios**: What happens in the bottom 1%? If the unluckiest 1% of players have a truly miserable experience (200 attempts for a guaranteed drop, zero useful loot in 10 hours of play), you need a safety net.
-- **Exploit detection**: Look for strategies that produce outcomes far above the median. If a specific combination of choices produces 10x the median outcome, players will find it and it will become the only viable strategy.
-
-**Step 8: Compile Balance Report**
-
-Synthesize all analysis into the standardized Balance Report format (see Output Format below). Prioritize findings by impact on player experience and effort to fix.
-
-### Output Format
-
-```
-## Balance Report: [Game / System Name]
-## Version: [Build version analyzed]
-## Date: [YYYY-MM-DD]
-## Analyst: [Name]
-
-### Executive Summary
-[3 sentences: Current balance state, biggest concern, top recommendation]
-
-### Economy Flow Diagram
-[Visual representation of all faucets, sinks, and flow rates]
-[Net accumulation rate and inflation/deflation assessment]
-
-### Earn-Rate Table
-| Currency | Casual Rate | Average Rate | Hardcore Rate | Net Flow |
-|----------|------------|-------------|--------------|----------|
-| [name]   | [rate]     | [rate]      | [rate]       | [+/-]    |
-
-### Progression Curve Assessment
-- Curve Type: [Linear / Exponential / Logarithmic / S-Curve / Mixed]
-- Dead Zones Identified: [list with game progression points]
-- Spike Zones Identified: [list with game progression points]
-- Overall Shape Health: [Healthy / Needs Adjustment / Critical]
-
-### Difficulty Scaling Report
-- Flow Channel Adherence: [percentage estimate]
-- Difficulty Mode Quality: [Lazy / Adequate / Good / Excellent]
-- Rubber Banding Assessment: [Present/Absent, Invisible/Visible]
-- TTK Analysis: [Current TTK, Target TTK, Assessment]
-
-### Reward Pacing Analysis
-- Primary Schedule Type: [Fixed/Variable Ratio/Interval]
-- Longest Reward Gap: [duration and location in game]
-- Pity System Status: [Present/Absent, Threshold if present]
-- Endgame Retention Mechanisms: [list]
-
-### Identified Imbalances
-
-| ID | System | Issue | Severity | Impact | Recommendation | Expected Effect |
-|----|--------|-------|----------|--------|----------------|-----------------|
-| B1 | [sys]  | [desc]| Critical | [desc] | [specific fix]  | [what changes]  |
-| B2 | [sys]  | [desc]| Major    | [desc] | [specific fix]  | [what changes]  |
-
-### Simulation Results (if applicable)
-- Scenarios Simulated: [count]
-- Iterations per Scenario: [count]
-- Key Findings: [percentile analysis, exploit risks, edge cases]
-
-### Tuning Recommendations (Priority Order)
-1. [Recommendation] -- Expected impact: [description]
-2. [Recommendation] -- Expected impact: [description]
-3. [Recommendation] -- Expected impact: [description]
-
-### Next Steps
-- [What to monitor after applying tuning changes]
-- [When to re-run the balance analysis]
-- [Dependencies on other systems or upcoming features]
-```
-
-### Quality Criteria
-
-- **Completeness**: All balance dimensions (economy, progression, difficulty, reward pacing, statistical validation, simulation) are addressed, even if some are brief due to the game's design.
-- **Statistical rigor**: EV calculations for key decisions, distribution analysis for randomized systems, and matchup matrices for competitive/asymmetric elements. No balance claim without supporting math.
-- **Data grounding**: Every finding is supported by either telemetry data, simulation results, or systematic analysis -- not guesswork or "feel."
-- **Actionability**: Every identified imbalance includes a specific tuning recommendation with an expected outcome. "Reduce gold drop rate by 15%" is actionable. "Fix the economy" is not.
-- **Dependency awareness**: Recommendations include sensitivity analysis of ripple effects. No change is proposed in isolation.
-- **Player archetype coverage**: Analysis covers at least three player archetypes (casual, average, hardcore) and verifies all three have a viable experience.
-- **Edge case awareness**: Extreme scenarios (very lucky, very unlucky, degenerate strategies) are identified and addressed through percentile analysis and pity system validation.
-
-### Example Use Cases
-
-1. "Players are accumulating gold faster than they can spend it, and by midgame everything feels trivial. Analyze our economy and recommend sink adjustments."
-2. "We have a gacha system for character unlocks and I need to verify the pity system is fair. Here are the probability tables -- run the numbers and tell me if a free player can reasonably collect all characters."
-3. "Our difficulty curve feels flat in Acts 2 and 3. Players breeze through after struggling in Act 1. Help me analyze the scaling and propose adjustments."
-4. "We're adding a new weapon class to our RPG and need to integrate it without breaking the existing balance. Walk me through the impact analysis."
-5. "Our retention data shows a massive drop-off at the 10-hour mark. I suspect it's a reward pacing problem. Help me map the reward schedule and identify the gap."
+## Example Use Cases
+1. "Gold piles up by mid-game and everything feels trivial. Find the leak and propose sinks."
+2. "Build a Monte Carlo harness for our roguelike's floor economy and tell me how often a run is
+   unwinnable by floor 3."
+3. "Our four factions: run an AI-vs-AI tournament and build the matchup matrix."
+4. "Difficulty flattens in Acts 2 and 3. Analyze the scaling and propose changes."
+5. "Our numbers are hard-coded everywhere because Claude wrote the game fast. Move them into a
+   tuning file with a debug panel."
+6. "Steam Playtest telemetry shows a quit spike at the second boss. Is it balance or readability?"

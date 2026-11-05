@@ -1,389 +1,368 @@
 ---
-name: "game-scope-check"
+name: game-scope-check
 description: >
-  Evaluate project scope against timeline and resources. Triggers on: "scope creep",
-  "feature list", "can we fit this in", "timeline pressure", "resource constraints",
-  "cut list", "scope evaluation". Do NOT invoke for sprint planning (use game-sprint-plan)
-  or general project status (use game-producer). Part of the AlterLab GameForge collection.
-argument-hint: "[feature-list or milestone to evaluate]"
+  Checks scope against time and capacity: feature inventory, MoSCoW with effort caps, impact and
+  risk scores, buffer math, scope-creep signals and a cut list, with velocity calibrated for
+  AI-agent work and vibe debt counted as risk. Use for "scope creep", "can we fit this", "what
+  should we cut", "are we on track". Not for sprint task planning (use game-sprint-plan).
+argument-hint: "[feature list, milestone or deadline to evaluate]"
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(git log *), Bash(git shortlog *), Bash(git diff --stat *)
 effort: medium
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
 ---
 
-# AlterLab GameForge -- Scope Check Workflow
+# AlterLab GameForge -- Scope Check
 
-Scope creep is the number one killer of indie games. Not lack of talent, not bad ideas, not engine limitations. Games die because they grow past the team's capacity to finish them. It happens one "small" addition at a time, each individually reasonable, collectively fatal. The danger is that scope creep feels like progress -- adding a feature feels productive, cutting feels like failure. This workflow exists to invert that psychology: cutting is the skill, and a tight scope is the achievement.
+Games rarely die from one bad decision. They die from a feature list that grows one reasonable
+addition at a time until it no longer fits the team that has to finish it. Adding feels like
+progress and cutting feels like failure; this workflow inverts that. Cutting is the skill, and a
+tight scope is the achievement. **A finished game with eight polished features beats an abandoned
+one with twenty half-built ones.**
 
-Team Cherry shipped Hollow Knight with 3 people. ConcernedApe shipped Stardew Valley alone. Neither project was small in ambition -- they were ruthlessly disciplined about what to include and what to cut. The games that ship are not the ones with the longest feature lists. They are the ones where every feature earned its place through honest scope accounting.
+AI coding agents change the arithmetic but not the principle. They make the first playable and
+the boilerplate dramatically cheaper, which makes it easy to add features. They do not make
+integration, content, QA, polish or review proportionally cheaper, and unreviewed agent code
+creates debt that comes due later. The 2026 Vibe Jam gold winner, built with Claude Code in about
+two weeks (roughly 27k lines, 188+ commits, per Wccftech's July 2026 report on its workflow), was scoped to
+5-10 minutes of play, and its creator built the 3D map by hand. Scope to what the whole pipeline
+can finish, not to how fast the prototype appeared.
 
-The core principle: **a finished game with 8 great features beats an abandoned game with 20 half-built ones.** This workflow enforces that principle with concrete tools, not wishful thinking.
+## Purpose & Triggers
 
-### Purpose & Triggers
+**Use this workflow when:**
+- The feature list has grown since the last check, or nobody has ever done one.
+- Someone says "can we fit this in?" or "it'd only take the agent an hour."
+- A milestone, demo, festival or launch date is approaching and confidence is low.
+- Sprint velocity keeps missing plan, or agent sessions keep re-fixing the same systems.
+- The team feels overwhelmed and cannot say why.
 
-Use this workflow when:
-- The feature list has grown since the last scope check
-- Someone says "can we fit this in?" or "what if we also added..."
-- A milestone deadline is approaching and confidence is low
-- The team feels overwhelmed but cannot articulate why
-- Sprint velocity is consistently below planned capacity
-- Any stakeholder (including yourself) pushes back on cutting features
-- The project has never had a formal scope check
+**Do NOT use this workflow when:**
 
-Problems this solves:
-- Feature lists that only grow, never shrink
-- The "just one more thing" pattern that compounds into missed deadlines
-- All features labeled "Must Have" because nobody wants to prioritize
-- No clear connection between features and available work hours
-- Teams afraid to cut features because they lack a framework for deciding what goes
-- Scope discussions that devolve into opinion battles instead of data-driven decisions
+| Need | Route to |
+|---|---|
+| Turning the agreed scope into sprint tasks | `game-sprint-plan` |
+| Making the final ship-date or scope call, risk register, milestones | `game-producer` (this check feeds its decision) |
+| De-risking one unknown feature before estimating it | `game-prototype` |
+| Scoping a 48-72 hour jam | `game-jam-mode` |
+| Assessing code health and refactor needs in detail | `game-code-review`, `game-technical-director` |
+| Reviewing the design itself | `game-design-review` |
+| Looking back at why scope slipped | `game-retrospective`, `game-postmortem` |
 
-### Critical Rules
+## Inputs I Read First
+- `.gameforge/project.json` (phase, pillars), feature lists and the GDD in `design/`, sprint plans
+  in `production/sprints/`, milestones in `production/milestones/`, previous checks in
+  `production/scope/`, and `production/session-state/active.md`.
+- **Git history as velocity evidence** (read-only): `git log --since="8 weeks ago" --oneline`,
+  `git shortlog -sn --since="8 weeks ago"`, `git diff --stat <last-milestone-tag>..HEAD`, and the
+  share of commits with agent co-author trailers. Real throughput beats remembered throughput.
+- Ask up to three AskUserQuestion items, with defaults:
+  1. **Deadline and what it is**: demo or festival, early access, 1.0 launch, publisher milestone.
+  2. **Capacity**: people x honest hours per week (default: one person, 15 h/week, part-time).
+  3. **How the code gets written**: mostly by agents, mixed (default), mostly by hand.
 
-1. **One In, One Out.** Adding a feature requires cutting a feature of equivalent effort. No exceptions. No "we'll work harder." No "we'll figure it out." The budget is fixed. Moving a feature from Won't Have to Should Have means moving something from Should Have to Won't Have. Team Cherry cut entire areas from Hollow Knight to ship on time -- and the game is better for it because every surviving area is polished to a mirror shine.
+## Critical Rules
 
-2. **Percentages are law.** MoSCoW allocation must hold: Must Have occupies 60% of total
-   effort, Should Have 25%, Could Have 15%. If Must Have exceeds 60%, the project is at
-   risk regardless of how important each individual feature feels.
+1. **One in, one out.** Adding a feature means cutting one of equal effort. No "we'll work harder."
+2. **Effort caps.** Must Haves take no more than 60% of estimated effort, with about 20% in Could
+   Haves as contingency (the DSDM/Agile Business Consortium MoSCoW guidance); Should Haves fill the
+   rest. If Must Haves exceed 60%, the plan is at risk however important each feature feels.
+3. **Score, don't debate.** Disagreements challenge individual scores, not the outcome.
+4. **Buffer is not optional.** Below 20% buffer, expect to miss the date (rule of thumb). Buffer is
+   for surprises, never for features.
+5. **Freeze dates are real.** No new features in the final days before a milestone (default three
+   working days; a week before a festival or store submission).
+6. **Estimate the whole feature.** Design + code + content + integration + QA + polish + review.
+   Agents speed up some of these and not others; estimate each part separately.
+7. **Velocity comes from evidence.** Plan from measured throughput on finished work, not from how
+   fast a prototype appeared.
+8. **Vibe debt is scope.** Agent-written code nobody has reviewed, tested or understood is work
+   that has not been done yet. Put its stabilization cost in the plan.
+9. **Write the cut list before you need it.** Decide what goes first while everyone is calm.
 
-3. **Score, don't debate.** The Feature Scoring Matrix replaces opinion with arithmetic.
-   Features are scored on Impact, Feasibility, and Risk. The math decides. If a team member
-   disagrees, they challenge the individual scores, not the outcome.
+## Workflow
 
-4. **Buffer is not optional.** A schedule with less than 20% buffer is a schedule that will
-   miss its deadline. Buffer absorbs the unexpected, and in game development, the unexpected
-   is the expected. Treat buffer as sacred -- it is not "extra time for features."
+**PHASE 1: Feature Inventory**
 
-5. **Freeze dates are real.** Feature additions freeze 3 days before any milestone. After
-   the freeze, only bug fixes and polish are permitted. Breaking the freeze requires
-   Producer-level sign-off and a corresponding cut elsewhere.
-
-6. **Honest estimates only.** If you have never built a system like this before, double
-   the estimate. If the tech is unfamiliar, triple it. Optimistic estimates are the
-   fertilizer that scope creep grows in.
-
-### Workflow
-
----
-
-🧠 **PHASE 1: Feature Inventory**
-
-*Goal: Catalog every feature currently planned, in progress, or requested.*
-
-Before you can assess scope, you need a complete picture. This phase produces an exhaustive
-list. Do not filter yet -- even features you suspect will be cut go on the list.
+Catalog everything planned, in progress, requested or assumed. Do not filter yet.
 
 ```
 FEATURE INVENTORY
--------------------------------------------------
-ID   | Feature             | Status        | Requestor    | Est. Hours
--------------------------------------------------
-F01  | [feature name]      | [planned/     | [who asked]  | [honest
-F02  | [feature name]      |  in-progress/ |              |  estimate]
-F03  | [feature name]      |  complete/    |              |
-...  |                     |  requested]   |              |
--------------------------------------------------
-
-Capture rules:
-- Include features already in progress (sunk cost does not protect them)
-- Include features someone mentioned casually ("wouldn't it be cool if...")
-- Include features assumed but never written down (save system, settings menu)
-- Estimate in hours, not days. Hours force specificity.
-- If you cannot estimate a feature, mark it [UNKNOWN] -- that is itself a red flag
+ID   | Feature                 | Status       | Requested by | Pillar served
+F01  | Grapple traversal       | in progress  | design       | "fluid movement"
+F02  | Online co-op            | requested    | Discord      | --
+F03  | Settings + rebinding    | assumed      | --           | (table stakes)
 ```
 
-Ask the user to walk through every planned feature. Probe for hidden features: "Is there
-a settings menu? A save system? A tutorial? An options screen? Controller support?" These
-assumed features often consume significant time but never appear on lists.
+Probe for the hidden features that never make lists but always take time: settings, rebinding,
+save/load and save migration, controller support, pause and quit flows, basic accessibility
+options, localization hooks, tutorial or onboarding, credits, crash reporting, store page assets
+and trailer, demo build, platform builds (Steam Deck, web, mobile), achievements, AI-use
+disclosure and the asset provenance log, analytics consent. Read
+`${CLAUDE_SKILL_DIR}/references/cut-list-playbook.md` for the full hidden-feature checklist and
+the cut techniques used in Phase 8.
 
----
+**PHASE 2: Estimate by Work Type, Calibrated for AI Agents**
 
-🎯 **PHASE 2: MoSCoW Classification**
+Estimate each feature in hours, split by work type, then apply the team's velocity ratios:
 
-*Goal: Sort every feature into four priority tiers with enforced percentages.*
+| Work type | With coding agents (planning assumption until measured) |
+|---|---|
+| Boilerplate, scaffolding, menus, data plumbing, debug tools | Much faster |
+| First prototype of one mechanic | Much faster |
+| Integration with other systems, cross-system bugs | Little or no speedup; often slower if the code is unreviewed |
+| Content: levels, writing, art direction, audio | Little speedup; AI assets add review, cleanup and provenance work |
+| QA and playtesting | No speedup; more code shipped faster means more to test |
+| Polish, juice, feel | Bound by human iteration and playtest cycles |
+| Review of agent output | New cost that hand-written code did not have |
 
-MoSCoW is not a wishlist exercise. It is a resource allocation framework. The percentages
-are constraints, not guidelines.
+Read `${CLAUDE_SKILL_DIR}/references/ai-velocity-calibration.md` before estimating a project
+built with agents: it explains the evidence behind each row, gives starting multipliers explicitly
+labeled as assumptions, and shows how to replace them with ratios measured from the project's own
+git history after two sprints.
 
-```
-MoSCoW CLASSIFICATION
--------------------------------------------------
-MUST HAVE (60% of total effort)
-  The game literally does not function or ship without these.
-  Test: "If this feature is missing, is the product broken?"
-  - F01: [feature] -- [hours] -- Reason: [why it's essential]
-  - F03: [feature] -- [hours] -- Reason: [why it's essential]
-  Subtotal: [X hours] / Target: [60% of total hours]
+If you have never built something like a feature before, double its estimate; if the engine or
+domain is new to the team, add 25-50% on top (rules of thumb). Mark anything you cannot estimate
+as UNKNOWN: an unknown is a prototype task, not a number.
 
-SHOULD HAVE (25% of total effort)
-  Significantly improves the game but it ships without them.
-  Test: "Would a reviewer notice this is missing?"
-  - F04: [feature] -- [hours] -- Reason: [why it matters]
-  Subtotal: [X hours] / Target: [25% of total hours]
-
-COULD HAVE (15% of total effort)
-  Nice to have. First to be cut when time runs short.
-  Test: "Would anyone outside the team notice this?"
-  - F07: [feature] -- [hours] -- Reason: [what it adds]
-  Subtotal: [X hours] / Target: [15% of total hours]
-
-WON'T HAVE (0% -- explicitly deferred)
-  Documented and deferred. Not forgotten, just not now.
-  These protect the team from revisiting already-made decisions.
-  - F09: [feature] -- Reason: [why it's deferred]
-  - F10: [feature] -- Reason: [why it's deferred]
--------------------------------------------------
-
-RED FLAGS:
-- Won't Have is empty --> Every feature cannot be essential. Be honest.
-- Must Have exceeds 60% --> Either the game is too ambitious or the
-  classification is too generous. Demote features.
-- All features are "Must Have" --> This is not prioritization. Start over.
-  Force-rank the Must Haves against each other.
-```
-
----
-
-🚨 **PHASE 3: Feature Scoring Matrix**
-
-*Goal: Replace subjective debate with a quantified score for each feature.*
-
-Every feature above the Won't Have line gets scored. The formula is:
-**Score = (Impact x Feasibility) / Risk**
+**PHASE 3: MoSCoW with Effort Caps**
 
 ```
-FEATURE SCORING MATRIX
--------------------------------------------------
-Feature    | Impact | Feasibility | Risk  | Score  | Verdict
-           | (1-5)  | (1-5)       | (1-5) |        |
--------------------------------------------------
-[F01]      | [  ]   | [  ]        | [  ]  | [  ]   | [Keep/Evaluate/Cut]
-[F02]      | [  ]   | [  ]        | [  ]  | [  ]   | [Keep/Evaluate/Cut]
-...        |        |             |       |        |
--------------------------------------------------
+MUST HAVE (cap: 60% of effort) -- the game does not function or ship without it
+  F01 Grapple traversal ........ 60 h  core verb, pillar "fluid movement"
+  F03 Settings + rebinding ..... 18 h  table stakes; accessibility
+  Subtotal: [X h] of [total] = [Y%]   -> OK / OVER
 
-SCORING GUIDE:
-  Impact (1-5):
-    5 = Core loop depends on it. Game is broken without it.
-    4 = Major enhancement to player experience.
-    3 = Noticeable improvement. Reviewers would mention it.
-    2 = Minor polish. Players might notice if told.
-    1 = Developer-facing. Players never see it directly.
-
-  Feasibility (1-5):
-    5 = Team has built this exact thing before. Hours are certain.
-    4 = Similar to past work. Minor unknowns.
-    3 = New territory but understood conceptually. Moderate unknowns.
-    2 = Significant unknowns. Requires research or prototyping.
-    1 = Nobody on the team has done this. Major technical risk.
-
-  Risk (1-5):
-    5 = Could derail the project if it goes wrong.
-    4 = Could delay the milestone significantly.
-    3 = Could cause a sprint to slip.
-    2 = Might need rework but recoverable.
-    1 = Low consequence if it fails.
-
-VERDICT THRESHOLDS:
-  Score >= 3.0  -->  KEEP. Feature earns its place.
-  Score 2.0-3.0 -->  EVALUATE. Discuss. Can risk be reduced? Can scope shrink?
-  Score < 2.0   -->  CUT. Move to Won't Have. Do not negotiate.
+SHOULD HAVE -- notably better; a reviewer would notice it missing
+  ...
+COULD HAVE (about 20%: the contingency pool, first to go)
+  ...
+WON'T HAVE (this release) -- written down so it stops coming back
+  F02 Online co-op ............. reason: networking risk, no pillar, 200+ h
 ```
 
----
+Red flags: Won't Have is empty; Must Have over 60%; everything is Must Have (force-rank the Must
+Haves against each other and start again).
 
-📋 **PHASE 4: Timeline Sanity Check**
+**PHASE 4: Feature Scoring Matrix**
 
-*Goal: Compare remaining work to remaining time. Calculate buffer.*
-
-This is where optimism meets arithmetic. The numbers do not care about ambition.
-
-```
-TIMELINE SANITY CHECK
--------------------------------------------------
-CAPACITY CALCULATION:
-  Team members:           [N]
-  Available hours/week:   [X hours per person]
-  Weeks remaining:        [Y weeks to milestone]
-  Gross capacity:         [N x X x Y] hours
-  Overhead deduction:     [-15% for meetings, admin, context switching]
-  Net capacity:           [result] hours
-
-WORK REMAINING:
-  Must Have (incomplete):  [hours]
-  Should Have (planned):   [hours]
-  Could Have (planned):    [hours]
-  Total planned work:      [hours]
-
-BUFFER CALCULATION:
-  Available buffer:        [Net capacity - Total planned work]
-  Buffer percentage:       [buffer / net capacity x 100]%
-
-  >= 30% buffer  🟢  HEALTHY. Room for surprises. Ship with confidence.
-  20-30% buffer  🟡  CAUTION. Tight but manageable if no major surprises.
-  10-20% buffer  🟠  WARNING. One surprise away from missing the deadline.
-  < 10% buffer   🔴  CRITICAL. The deadline will be missed. Cut scope now.
-  Negative buffer 💀  OVER-COMMITTED. The math says this is impossible.
-                      Cut aggressively or extend the deadline.
--------------------------------------------------
-
-REALITY ADJUSTMENTS:
-  - Solo dev? Multiply estimates by 1.5 (context-switching overhead)
-  - First game? Multiply estimates by 2.0 (learning curve)
-  - Part-time team? Use actual committed hours, not aspirational hours
-  - Unfamiliar engine? Add 15-25% to all estimates
-```
-
----
-
-📊 **PHASE 5: Scope Creep Detection**
-
-*Goal: Identify patterns that signal scope is growing uncontrolled.*
-
-Scope creep has telltale symptoms. Check for these warning signs:
+**Score = (Impact x Feasibility) / Risk**, each 1-5.
 
 ```
-SCOPE CREEP DETECTION CHECKLIST
--------------------------------------------------
-Signal                                          | Present?
--------------------------------------------------
-Feature list has grown since last check         | [Y/N]
-No items in Won't Have category                 | [Y/N]
-All features are classified "Must Have"         | [Y/N]
-"Just one more thing" has been said recently    | [Y/N]
-Features added without equivalent cuts          | [Y/N]
-Estimates trending upward on existing features  | [Y/N]
-New features appearing from casual conversation | [Y/N]
-Buffer percentage decreasing sprint over sprint | [Y/N]
-Team morale declining despite "progress"        | [Y/N]
-Milestone dates have shifted more than once     | [Y/N]
--------------------------------------------------
-
-SEVERITY:
-  0-2 signals  🟢  Healthy scope management.
-  3-4 signals  🟡  Early warning. Address now before it compounds.
-  5-7 signals  🟠  Active scope creep. Immediate intervention needed.
-  8-10 signals 🔴  Project at risk. Full scope reset required.
+Feature | Impact | Feasibility | Risk | Score | Verdict
+F01     | 5      | 4           | 2    | 10.0  | KEEP
+F02     | 3      | 1           | 5    | 0.6   | CUT
 ```
 
----
+- **Impact**: 5 core loop depends on it; 4 major experience gain; 3 reviewers would mention it;
+  2 minor polish; 1 players never see it.
+- **Feasibility**: 5 built this exact thing before; 3 understood but new; 1 nobody has done it.
+  Score feasibility of *shipping and maintaining* it, not of the agent scaffolding it. "Claude
+  wrote a netcode prototype in an evening" is feasibility 4 for the prototype and often 1-2 for
+  shipped, server-authoritative multiplayer.
+- **Risk**: 5 could derail the project; 3 could slip a sprint; 1 low consequence.
 
-🛠️ **PHASE 6: Change Freeze Protocol**
+Verdicts: 3.0 or higher KEEP; 2.0-3.0 EVALUATE (can risk drop or scope shrink?); below 2.0 CUT to
+Won't Have.
 
-*Goal: Establish hard boundaries around milestone deadlines.*
-
-Feature additions freeze 3 days before any milestone. This is not optional.
+**PHASE 5: Timeline and Buffer**
 
 ```
-CHANGE FREEZE PROTOCOL
--------------------------------------------------
-Milestone:          [name]
-Milestone date:     [date]
-Freeze date:        [milestone date - 3 days]
+CAPACITY
+  People x honest hours/week x weeks remaining     = gross hours
+  minus overhead (admin, community, marketing, ~15-25%) = net hours
 
-AFTER FREEZE, PERMITTED:
-  - Bug fixes for existing features
-  - Polish on existing features (animation, juice, audio)
-  - Documentation and store page updates
-  - Build and deployment pipeline work
+WORK REMAINING (calibrated, Phase 2)
+  Must + Should + Could                           = planned hours
+  plus vibe-debt stabilization budget (Phase 6)   = total planned
 
-AFTER FREEZE, PROHIBITED:
-  - New features of any size
-  - "Small" additions ("it'll only take an hour")
-  - Scope changes to existing features
-  - New art assets for unreleased features
-
-FREEZE BREAK PROCEDURE (emergency only):
-  1. Producer (or project lead) formally approves
-  2. Equivalent-effort feature is cut simultaneously
-  3. Decision is documented with rationale
-  4. This counts as a scope creep signal in the next detection check
--------------------------------------------------
+BUFFER = net - total planned        BUFFER % = buffer / net
+  30%+    GREEN   room for surprises
+  20-30%  YELLOW  tight; no new features
+  10-20%  ORANGE  one surprise from missing; execute the cut list's first tier
+  <10%    RED     the date will be missed; cut now or move the date
+  <0%     OVER    impossible as planned
 ```
 
-### Output Format
+Add external lead times as fixed blocks, not buffer: store and portal review (Engadget reported
+on 2026-11-04 that Steam build reviews were taking up to 12 business days against a 3-5 day
+target), console certification and resubmission, festival demo deadlines, localization turnaround.
 
-The workflow produces a **Scope Assessment Report**:
+**PHASE 6: Vibe-Debt Assessment**
+
+Count agent-built debt as scope risk. Score each signal 0 (absent), 1 (some) or 2 (severe):
+
+| Signal | How to see it |
+|---|---|
+| Unreviewed agent code in core systems | Commits with agent co-author trailers touching core files that no human reviewed |
+| Rework loop | Many `fix:` commits on the same files; agent sessions re-fixing earlier fixes |
+| Monolith growth | One file or scene holding most of the game (single-file web games past a few thousand lines are a common warning sign) |
+| Thin tests | Feature count rising faster than test count; no smoke test (see `game-qa-lead`) |
+| Hard-coded tuning | Balance numbers scattered through code (see `game-balance-check`) |
+| Nobody can explain it | The team cannot describe how a core system works without asking the agent |
+| Client-trusted state | Multiplayer or leaderboards that trust the client |
+
+0-3: normal; 4-7: add a stabilization budget (rule of thumb: 10-20% of remaining code hours);
+8+: stop adding features until a stabilization sprint lands. Structural refactors are a
+Technical Director decision; route the evidence to `game-technical-director` and
+`game-code-review`.
+
+**PHASE 7: Scope-Creep Detection**
+
+```
+Signal                                                        | Y/N
+Feature list grew since last check                            |
+Won't Have is empty                                           |
+Everything is Must Have                                       |
+Features added without an equal cut                           |
+Estimates on existing features trending up                    |
+Features arriving from casual chat or "the agent can do it"   |
+Prototypes promoted to production without a rewrite decision  |
+Buffer shrinking sprint over sprint                           |
+Milestone date moved more than once                           |
+Team morale falling despite visible "progress"                |
+0-2 healthy | 3-4 early warning | 5-7 active creep | 8-10 full scope reset
+```
+
+**PHASE 8: Cut List**
+
+Write an ordered cut list now, in tiers with triggers, so cuts happen on schedule rather than in
+a panic: Tier 1 executes when buffer drops below 20%, Tier 2 below 10%, Tier 3 if the date is
+fixed and buffer goes negative. For each candidate, prefer the cheapest technique that keeps the
+pillar: cut, shrink, fake, reuse, or defer to post-launch. Never cut save integrity, crash fixes,
+basic settings and accessibility, or compliance and disclosure work. The playbook reference has
+the techniques and template.
+
+**PHASE 9: Change Freeze**
+
+```
+Milestone: [name] on [date]          Freeze: [date minus 3 working days; a week for festivals/submission]
+After freeze, allowed:   bug fixes, polish on existing features, store assets, build pipeline
+After freeze, banned:    new features of any size, scope changes, new assets for unbuilt features,
+                         "quick" agent-generated additions
+Breaking the freeze:     Producer approval + equal cut + written rationale; counts as a creep signal
+```
+
+**PHASE 10: Report and Hand Off**
+
+Write the Scope Assessment Report to `production/scope/YYYY-MM-DD-scope-check.md`, hand the
+agreed scope to `game-sprint-plan`, send decisions needing authority to `game-producer`, and update
+`production/session-state/active.md` with the traffic-light status, the cuts made and the next
+check date.
+
+## Working with AI Coding Agents
+
+**What to delegate to the agent during a scope check**
+- Building the feature inventory from the GDD, TODOs, issues and code (`grep` for TODO/FIXME,
+  stubbed functions, feature flags).
+- Splitting estimates by work type and filling the scoring matrix as a first draft.
+- Summarizing git history: commits per week, fix-vs-feature ratio, files touched most often.
+
+**What the human decides**
+- Impact scores and pillar fit. The agent does not know what makes the game worth playing.
+- Whether a prototype gets promoted, rewritten or thrown away.
+- What gets cut. The agent will happily keep everything.
+
+**Planning guardrails for agent-built games**
+- **The ten-minute feature is not ten minutes.** A feature that took ten minutes to prompt still
+  needs integration, content, tests, polish, review and support. Estimate those parts.
+- **Prototype speed is not production velocity.** Re-measure after two sprints of finished,
+  reviewed, tested work; replace the starting multipliers with the measured ones.
+- **Budget review time explicitly**, as its own line, for every agent-built system that ships.
+- **Keep the game original.** Claude Code declines to recreate specific existing games (since
+  late October 2026); scope features as your own design and genre mechanics, not as "X from game Y."
+- **Distribution is scope too.** With stores and portals flooded with fast-made games, budget real
+  hours for store page, trailer, demo and community, not just features.
+
+Pair with `/gameforge:game-vibe-code` for the build loop and `/gameforge:game-ai-assets` when AI
+assets are part of the content estimate.
+
+**Prompt that works**: "Read `design/` and `production/sprints/`, list every feature (including
+assumed ones like settings and save), and split each into design, code, content, integration, QA,
+polish and review hours. Use the multipliers in `production/sprints/velocity.md`. Mark anything you
+cannot estimate UNKNOWN. Do not classify or cut anything."
+
+## Output Format
 
 ```markdown
-# Scope Assessment Report
-
-## Traffic Light Status
-[🟢 HEALTHY / 🟡 CAUTION / 🟠 WARNING / 🔴 CRITICAL]
+# Scope Assessment Report -- [Project] -- [YYYY-MM-DD]
+**Status:** [GREEN / YELLOW / ORANGE / RED / OVER] | **Milestone:** [name] on [date] | **Freeze:** [date]
 
 ## Summary
-[2-3 sentences: overall assessment, key concern, recommended action]
+[2-3 sentences: overall assessment, key concern, recommended action.]
 
-## Feature Inventory
-[Total features: N | Scored: N | Cut: N | Deferred: N]
+## Capacity and Buffer
+| Net capacity | Planned work | Vibe-debt budget | External lead times | Buffer | Buffer % |
+|---|---|---|---|---|---|
+| 420 h | 290 h | 30 h | Steam review 12 business days | 100 h | 24% (YELLOW) |
+
+## Velocity Basis
+- Measured over [N] weeks: [x] features done, estimate accuracy [actual/estimate = 1.4],
+  agent-assisted commits [y%], fix:feature commit ratio [z]
+- Multipliers used: [measured / starting assumptions from the calibration reference]
 
 ## MoSCoW Breakdown
-| Category    | Features | Hours | % of Total | Target % | Status |
-|-------------|----------|-------|------------|----------|--------|
-| Must Have   | [N]      | [X]   | [Y%]       | 60%      | [OK/OVER] |
-| Should Have | [N]      | [X]   | [Y%]       | 25%      | [OK/OVER] |
-| Could Have  | [N]      | [X]   | [Y%]       | 15%      | [OK/OVER] |
-| Won't Have  | [N]      | --    | --         | --       | [populated/empty] |
+| Category | Features | Hours | % | Cap | Status |
+|---|---|---|---|---|---|
+| Must | 6 | 170 | 59% | <= 60% | OK |
+| Should | 4 | 70 | 24% | -- | -- |
+| Could | 3 | 50 | 17% | ~20% | OK |
+| Won't | 5 | -- | -- | >= 2 items | OK |
 
-## Feature Scores
-[Sorted by score descending. Features below 2.0 marked for cut.]
+## Feature Scores (descending)
+| ID | Feature | I | F | R | Score | Verdict |
+|---|---|---|---|---|---|---|
 
-## Timeline Assessment
-- **Net capacity:** [hours]
-- **Planned work:** [hours]
-- **Buffer:** [hours] ([X%])
-- **Buffer status:** [🟢/🟡/🟠/🔴]
+## Vibe-Debt Score: [n]/14 -- [normal / stabilization budget / stop and stabilize]
+[Top signals with evidence]
 
-## Scope Creep Signals
-[N of 10 signals detected. List active signals.]
+## Scope-Creep Signals: [n]/10
+[Active signals]
 
-## Change Freeze
-- **Next milestone:** [name] on [date]
-- **Freeze date:** [date]
-- **Days until freeze:** [N]
+## Cut List
+| Tier | Trigger | Feature | Technique | Hours saved | Pillar impact |
+|---|---|---|---|---|---|
+| 1 | Buffer < 20% | Weather system | Cut to post-launch | 26 h | none |
+| 2 | Buffer < 10% | Boss 3 | Reuse boss 2 arena + new pattern | 30 h | low |
 
-## Recommended Actions
-1. [Most urgent action]
-2. [Second priority]
-3. [Third priority]
+## Decisions Needed (owner)
+1. [Decision] -- `game-producer`
 
-## Features to Cut (Recommended)
-[List with rationale for each cut]
-
-## Features to Keep (Confirmed)
-[List with score and pillar alignment for each]
+## Next Check
+[Date or trigger, e.g. end of sprint 6 or any new feature request]
 ```
 
-### Quality Criteria
+## Quality Criteria
+- Every feature has an hour estimate split by work type, or is explicitly UNKNOWN with a
+  prototype task.
+- Velocity is grounded in measured history when history exists; starting multipliers are labeled.
+- Must Haves at or under 60% of effort; Won't Have has at least two items.
+- Buffer is calculated with external lead times and the vibe-debt budget included.
+- No feature scoring under 2.0 remains in Must or Should.
+- A tiered cut list with triggers exists, and nothing on the never-cut list is on it.
+- A freeze date is set for the next milestone.
+- Every decision traces to scores, capacity math or a pillar, not to who argued hardest.
 
-A successful scope check meets all of these:
-- Every planned feature has an honest hour estimate
-- MoSCoW percentages are within 5% of targets (60/25/15)
-- Won't Have category contains at least 2 items (if it is empty, the check was not honest)
-- Buffer percentage is calculated and reported with traffic light status
-- No feature scored below 2.0 remains in Must Have or Should Have
-- The One In, One Out rule was enforced for any additions during the session
-- Scope creep signals were checked and the count is reported
-- A change freeze date is established for the next milestone
-- The report is actionable -- the team knows exactly what to build and what to skip
-- All scope decisions trace back to scores and capacity math, not opinions
+## Anti-Patterns
+- **The Rubber Stamp**: nothing gets cut because nobody wants the conflict. A check that cuts
+  nothing was probably not honest.
+- **The Hostage Feature**: "we already started it." Sunk cost is not a reason; remaining cost
+  versus value is.
+- **The Stealth Add**: features slip in without going through the matrix, often as "the agent
+  already did a version of it."
+- **The Ten-Minute Feature**: prompt time mistaken for feature cost.
+- **The Infinite Must Have**: "I want this" confused with "the game needs this."
+- **The Missing Buffer**: "we'll just work harder." Buffer is reality insurance.
 
-### Cross-References
+## Cross-References
+- `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`: pillar alignment for Impact scores
+- `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md`: escalation when scope conflicts arise
+- `${CLAUDE_PLUGIN_ROOT}/templates/sprint-plan.md`: consumes this check's agreed scope
+- `${CLAUDE_PLUGIN_ROOT}/templates/game-pillars.md`: the pillars features must serve
+- Receives input from `game-brainstorm`, `game-design-review` and `game-gdd-author`; feeds
+  `game-sprint-plan` and `game-producer`.
 
-- `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` -- Design pillars that features should align with
-- `${CLAUDE_PLUGIN_ROOT}/docs/collaboration-protocol.md` -- How to communicate scope changes across roles
-- `${CLAUDE_PLUGIN_ROOT}/docs/coordination-rules.md` -- Escalation paths when scope conflicts arise
-- `${CLAUDE_PLUGIN_ROOT}/templates/sprint-plan.md` -- Sprint plan template that consumes scope check output
-- Workflow handoffs: receives input from `game-brainstorm` or `game-design-review`,
-  feeds into `game-sprint-plan` for execution planning
-
-### Anti-Patterns
-
-Scope checks fail when they exhibit these patterns:
-
-- **The Rubber Stamp:** Everything passes because nobody wants conflict. If the check does not cut at least one feature, it was not rigorous enough.
-- **The Hostage Feature:** "We already started this so we can't cut it." Sunk cost is not a reason to continue. If the remaining work exceeds the feature's value, cut it. Supergiant killed the original shield mechanic in Hades mid-development and replaced it with the cast system. The shield had months of work behind it. The cast made the game better.
-- **The Stealth Add:** Features sneak in without going through MoSCoW classification. Every feature, no matter how small, goes through the matrix.
-- **The Infinite Must Have:** All features are "Must Have" because the team conflates "I want this" with "the game needs this." Force-rank ruthlessly.
-- **The Missing Buffer:** "We don't need buffer, we'll just work harder." Buffer is not laziness insurance. It is reality insurance. ConcernedApe's multi-year Stardew Valley development timeline included massive buffer -- and he used every hour of it.
-
-Part of the AlterLab GameForge -- Indie Game Development Skills suite.
+## Example Use Cases
+1. "Here's my feature list for a Steam Next Fest demo in 6 weeks. Can I fit it?"
+2. "Claude built most of the game in a month. Now everything takes forever. Are we over scope?"
+3. "We want to add online co-op. What do we cut to make room, and is it even feasible?"
+4. "Write us a tiered cut list for the 1.0 launch before we need it."
+5. "Measure our real velocity from git and tell me whether the March date is realistic."

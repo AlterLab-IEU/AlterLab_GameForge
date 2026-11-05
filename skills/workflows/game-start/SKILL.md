@@ -2,11 +2,9 @@
 name: game-start
 description: >
   Sets up a game project for GameForge: detects engine and project state, writes
-  .gameforge/project.json and production/session-state/, merges the engine starter CLAUDE.md,
-  configures Git and Git LFS per engine, and connects coding agents to the engine (MCP servers,
-  llms.txt). Use for "start a new game", "set up my project", "onboard me to this codebase",
-  "initialize GameForge". Not for finding an idea (use game-brainstorm) or getting something
-  playable tonight (use game-vibe-code).
+  .gameforge/project.json and session state, merges the engine starter CLAUDE.md, configures Git and
+  Git LFS, and connects coding agents to the engine (MCP, llms.txt). Use for "start a new game",
+  "set up my project", "initialize GameForge". Not for finding an idea (use game-brainstorm).
 argument-hint: "[engine: godot|unity|unreal|threejs|web2d] [working title]"
 effort: high
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(git init *), Bash(git lfs *), Bash(git status *), Bash(git log *), Bash(git rev-parse *), Bash(mkdir *)
@@ -104,11 +102,12 @@ suboptimal first choice. For anything beyond these defaults, route to
 | Unity | **6.3 LTS** (supported to Dec 2027) | 6.6 is the current Update release. 6.0 LTS left standard support on 2026-10-16. Unity 7.0 alpha is the first CoreCLR editor: not for production. Personal is free under US$200K revenue or funding; the Runtime Fee is gone. In 6.6, Fast Enter Play Mode is on by default, so static fields no longer reset. |
 | Unreal | **5.8** (2026-06-17) | The last planned UE5 major; UE6 early access is targeted for late 2027 (Verse, Scene Graph). 5% royalty above US$1M lifetime gross (3.5% under Launch Everywhere). No official browser export. |
 | Three.js | **r187** (`three@0.187.0`) | `WebGLRenderer` is the default; `WebGPURenderer` is opt-in with automatic WebGL 2 fallback. ESM-only: pin the exact version. React Three Fiber 9.8 is stable; v10 is alpha. |
-| Phaser | **4.2.1** | Phaser 4 is stable (MIT). The Canvas renderer is deprecated. Phaser AE is a separate, commercially licensed product. |
+| Phaser | **4.2.1** | Phaser 4 is stable (MIT). The Canvas renderer is deprecated. Phaser AE is a separate agent-oriented product under the PolyForm Shield licence with paid tiers. |
 | PixiJS | **8.22** | `await app.init()` is async; WebGL is the default renderer. |
 | Web tooling | **Vite 8** | Rolldown is the only bundler; needs Node 20.19+ or 22.12+. |
 
-Record the exact version you detect or install in `engine_version`.
+Record the version you detect or install in `engine_version` (major.minor, or `r187` for Three.js);
+note the exact patch version in the setup report.
 
 ## Step 2: Wire GameForge into the project
 
@@ -187,9 +186,10 @@ production/session-logs/
 
   Where the user's rules conflict with the starter (commit format, folder layout, naming), keep the
   user's and list the conflict in the report.
-- Make sure the first lines of `CLAUDE.md` say how to run and check the game (the build or test
-  command). Claude Code's own best-practice guidance is to keep `CLAUDE.md` short and lead with the
-  check command; a long `CLAUDE.md` is read less carefully, not more.
+- If `CLAUDE.md` does not already say how to run and check the game near the top, add a short
+  `## Run and check` section as its first section (example in the agent-setup reference). Claude
+  Code's own best-practice guidance is to keep `CLAUDE.md` short and lead with the check command; a
+  long `CLAUDE.md` is followed less reliably, not more.
 
 ### 2d. Optional `.claude/settings.json`
 
@@ -229,7 +229,7 @@ check command per engine, and the security notes. Summary:
 | Unreal | Unreal MCP plugin, UE 5.8, **experimental, editor-only, unauthenticated**, on `127.0.0.1:8000` | chongdashu/unreal-mcp (community) |
 | Godot | None. No official MCP server or `llms.txt`. | Coding-Solo/godot-mcp (community). Godot's text `.tscn` and `.gd` files are easy for agents to edit directly. |
 | Three.js / R3F | No MCP server | `threejs.org/llms.txt`, `threejs.org/docs/llms-full.txt`, `r3f.docs.pmnd.rs/llms.txt` |
-| 2D web | No MCP server | `phaser.io/llms.txt` (it steers agents to the commercial Phaser AE; Phaser 4 is the MIT framework) |
+| 2D web | No MCP server | `phaser.io/llms.txt` (it steers agents to Phaser AE, a separate PolyForm Shield product; Phaser 4 is the MIT framework) |
 | Any web game | Playwright MCP for screenshots and input | `claude mcp add playwright npx @playwright/mcp@latest` |
 
 Rules: show the command and let the user run or approve it; every server stays on localhost; review a

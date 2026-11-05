@@ -20,10 +20,10 @@ can be handed to a coding agent and the result can be judged by something that r
 | Field | Rule |
 |---|---|
 | ID | `AC-<system number>-<n>`, stable once code references it |
-| Given / When / Then | One behaviour per check; no "and also" |
+| Given / When / Then | One behavior per check; no "and also" |
 | Threshold | A number, an exact state, or a ratio of testers |
 | Check type | **Auto: unit**, **Auto: sim** (game stepped N frames), **Auto: browser** (Playwright), **Manual: playtest**, **Manual: review** |
-| How it is observed | Which state field, log line, screenshot or tester behaviour decides it |
+| How it is observed | Which state field, log line, screenshot or tester behavior decides it |
 
 Write knob names, not values, in the Then clause ("advances DASH_DISTANCE"), so retuning never
 breaks the check. Keep the threshold in the Threshold column.

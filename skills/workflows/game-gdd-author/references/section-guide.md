@@ -210,7 +210,7 @@ roguelike deckbuilder in which you play a public defender in a corrupt fantasy c
 > **Setting (T1):** Ashenmere, an overcast fantasy-noir city where noble houses use trials as
 > political weapons. Absurd bureaucracy over real tragedy.
 > **Delivery (T1):** dialogue during investigation and arguments in court; no cutscenes.
-> **Art (T1):** hand-painted 2D, deep shadows with pools of warm light. Accent colours carry
+> **Art (T1):** hand-painted 2D, deep shadows with pools of warm light. Accent colors carry
 > meaning and are always paired with an icon: amber evidence, crimson danger, teal truth.
 > **Audio (T1/T2):** solo piano during investigation, ensemble layers in as trial tension rises
 > (T2 adaptive); two seconds of silence before the court reacts to decisive evidence (T1).
@@ -230,7 +230,7 @@ roguelike deckbuilder in which you play a public defender in a corrupt fantasy c
 
 **Good**
 > **Session:** 30-45 min; every case end is a save point with a session summary.
-> **T1 options:** full remapping; toggle for every hold; text size 100-200%; colour never the only
+> **T1 options:** full remapping; toggle for every hold; text size 100-200%; color never the only
 > carrier of meaning; subtitles with speaker names; trial timer can be disabled.
 > **Checks:** AC-ACC-1 every action rebindable (Auto: input map test); AC-ACC-2 all evidence
 > categories distinguishable in greyscale screenshots (Manual review).
@@ -253,7 +253,7 @@ roguelike deckbuilder in which you play a public defender in a corrupt fantasy c
 
 **Good**
 > **Engine (T1):** Godot 4.7 (current stable as of November 2026), GDScript. Chosen for 2D tooling,
-> plain-text scenes an agent can edit, and no licence cost.
+> plain-text scenes an agent can edit, and no license cost.
 > **Platforms:** Windows/Linux on Steam (T1); Steam Deck verified (T2); a web demo (T2); no mobile.
 > **Budgets:** 60 fps on integrated graphics (Intel UHD 620 class); scene loads under 2 s; 2 GB RAM.
 > **Risk:** generated trials producing incoherent evidence chains. Mitigation: hand-authored cases
@@ -271,7 +271,7 @@ Use `ai-use-policy.md` (next to this file) for the section template and facts.
 
 **Questions**
 1. "Which content types will use generative AI: code, placeholder art, shipped art, music, SFX,
-   voice, localisation, store page and marketing?"
+   voice, localization, store page and marketing?"
 2. "Will anything be generated while the game runs?"
 3. "Which storefronts and regions are you targeting?"
 4. "What makes this design yours rather than a variation of one specific game?"
@@ -280,7 +280,7 @@ Use `ai-use-policy.md` (next to this file) for the section template and facts.
 **Good**
 > Code: agent-assisted, reviewed by a human (no Steam disclosure required for code assistants).
 > Placeholder art: generated, replaced before beta. Shipped art: hand-painted, no AI. Music:
-> commissioned. Voice: none. Localisation: machine draft plus human review, disclosed on Steam.
+> commissioned. Voice: none. Localization: machine draft plus human review, disclosed on Steam.
 > Runtime AI: none. Originality: courtroom-as-combat with evidence decks; no assets, names or
 > rules taken from existing courtroom games.
 

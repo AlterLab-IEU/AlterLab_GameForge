@@ -1,404 +1,323 @@
 ---
-name: "game-market-research"
+name: game-market-research
 description: >
-  Conduct market research for a game concept -- competitive landscape, market sizing,
-  audience analysis, trend detection, and positioning strategy. Triggers on: "market
-  research", "competitive analysis", "market sizing", "audience analysis", "is this game
-  viable", "similar games", "market validation". Do NOT invoke for brainstorming ideas
-  (use game-brainstorm) or economy monetization design (use game-economy-designer). Part
-  of the AlterLab GameForge collection.
-argument-hint: "[game-concept or genre]"
-effort: medium
+  Researches the market for a game concept as a forked analyst: genre health, comparable titles with
+  sourced numbers, market sizing, audience, 2026 store conditions, positioning and a go/no-go call,
+  saved to design/market-research/. Use for "market research", "competitive analysis", "is this game
+  viable", "will this sell". Not for generating ideas (use game-brainstorm).
+argument-hint: "[game concept, genre, or path to a concept doc]"
+effort: high
 context: fork
 allowed-tools: Read, Glob, Grep, Write, WebSearch, WebFetch
 ---
 
 # AlterLab GameForge -- Market Research Workflow
 
-Making a game nobody wants to play is easy. Making a game that finds its audience requires
-understanding where that audience lives, what they are already playing, what they wish
-existed, and how saturated the space is. Market research for games is not about copying
-what sells -- it is about finding the gap between what players want and what currently
-exists, then positioning your game to fill that gap.
+Making a game nobody wants is easy. Finding the audience requires knowing where those players are,
+what they already play, what they wish existed, and how crowded the space is, in the market as it is
+now rather than as it was when the last famous indie hit launched. Market research is not about
+copying what sells; it is about the gap between what players want and what exists, and whether this
+team can reach those players through a channel it can actually win.
 
-The indie games that succeed commercially almost always have a clear answer to "who is this
-for and why would they choose this over the alternatives?" Hollow Knight launched into a
-crowded Metroidvania market but differentiated on atmosphere, difficulty curve, and sheer
-content density. Vampire Survivors created an entirely new micro-genre by stripping the
-bullet-hell formula down to its most addictive core. Balatro took the poker roguelike concept
-that nobody knew they wanted and executed it with such precision that it outsold games with
-100x the budget.
+**How this skill runs.** It runs as a forked background analyst: no access to the conversation that
+launched it, and no way to ask questions. It works from the argument, the project's files and the
+web, states every assumption it had to make, and writes a sourced brief to disk. The person who
+launched it reads the brief and re-runs with corrections if an assumption was wrong.
 
-None of these were accidents. Each team understood their market position, even if
-informally. This workflow makes that understanding systematic.
+## When NOT to use me
 
-### Purpose and Triggers
+| The user wants... | Route to |
+|---|---|
+| New game ideas, or turning "a game like X" into an original concept | `/gameforge:game-brainstorm` |
+| Currency design, store pricing inside the game, monetization ethics | `/gameforge:game-economy-designer` |
+| Store page, launch checklist, platform submission | `/gameforge:game-launch` (Steam, consoles, mobile) or `/gameforge:game-web-publish` (web) |
+| Whether the scope fits the deadline | `/gameforge:game-scope-check` |
+| Analytics and KPIs after launch | `/gameforge:game-analytics-setup` |
 
-Use this workflow when:
-- A developer has a game concept and wants to validate its market viability
-- A team is choosing between multiple game concepts and needs data to decide
-- A studio wants to understand the competitive landscape before committing to production
-- A solo dev wants to know if their niche has an audience large enough to sustain them
-- After `game-brainstorm` produces a concept and before `game-start` commits to building it
-- A game is approaching launch and needs positioning against current competitors
+## Critical Rules
 
-Problems this solves:
-- Building a game in an oversaturated genre without differentiation
-- Underestimating or overestimating the target audience size
-- Missing competitor moves that change the market during development
-- Pricing the game incorrectly for the genre and audience expectations
-- Launching without a clear positioning statement for store pages and marketing
-- Spending 2+ years on a game concept that has no viable commercial audience
+1. **Truth over validation.** The goal is an accurate picture, not confirmation that the idea is
+   brilliant. "Saturated", "tiny audience" and "no-go" are valid findings.
+2. **Every number has a source and a date,** or is labeled as an estimate or a rule of thumb. Never
+   invent sales figures, revenues, conversion rates, eCPMs or player counts. If a number cannot be
+   found, say so and give a labeled range or leave the cell empty.
+3. **Research, do not recall.** Use WebSearch and WebFetch for current data. The baseline in
+   `${CLAUDE_SKILL_DIR}/references/market-context-2026.md` is dated 2026-11-05; refresh any line the
+   recommendation depends on.
+4. **Recency.** Prefer data from the last 12 months. 2025-2026 changed the market: record-high Steam
+   release volume, AI-content flooding, crowded festivals and a wave of layoffs.
+5. **Indie scale.** Size the market for this team's budget, price and reach, not for a 200-person
+   studio.
+6. **Positioning is not a feature list.** "A Metroidvania with combat" is not positioning; "a
+   Metroidvania where every ability is a musical instrument" is.
+7. **State assumptions; never ask.** This skill cannot ask questions. When information is missing,
+   pick a sensible default, write it in the Assumptions table, and say how the conclusion would
+   change if it were wrong.
+8. **Channel is part of the market.** Steam, itch.io, web portals, Discord and others have different
+   audiences, gates and money models. Research the channels this game can realistically use.
 
-### Critical Rules
+## Step 0: Inputs and assumptions
 
-1. **Research is not validation bias.** The goal is to find the truth about the market, not
-   to confirm that the developer's idea is brilliant. If the research reveals a saturated
-   market or a tiny audience, that is a valuable finding -- not a failure of the research.
+Read, in this order, whatever exists:
 
-2. **Quantitative where possible.** Steam revenue estimates, player counts, wishlists,
-   review volumes, and similar games' performance data are more useful than subjective
-   market assessments. Use tools like SteamDB, itch.io trending, and App Store charts
-   to ground the analysis in numbers.
+1. The argument (concept text, genre, or a path to a concept document).
+2. `.gameforge/project.json` (name, engine, phase, pillars).
+3. `design/concept.md`, `design/concepts/`, `design/gdd/`, and earlier briefs in
+   `design/market-research/`.
+4. `production/session-state/active.md` for the current focus.
 
-3. **Recency matters.** A genre that was hot 3 years ago may be oversaturated now. A genre
-   that was dead 3 years ago may be experiencing a revival. Always check the publication
-   dates of market data and prioritize data from the last 12 months.
+Then fill the Assumptions table. Defaults when nothing says otherwise:
 
-4. **Indie scale, not AAA scale.** Market sizing for a solo dev making a $15 game is
-   fundamentally different from market sizing for a 200-person studio making a $70 game.
-   Always contextualize findings to the team's actual scale, budget, and timeline.
+| Assumption | Default | Why it matters |
+|---|---|---|
+| Team | Solo developer or 2-5 people, possibly with coding agents | Break-even and reach |
+| Budget | Self-funded, near-zero marketing spend | Realistic share of the market |
+| Primary channel | PC on Steam for premium games; web portals plus itch.io for short web games | Audience and money model |
+| Price | Premium PC: within the range of the closest comparables found; web: free with ads | Revenue model |
+| Timeline | 12-18 months to launch (premium); weeks (web) | Which trends will still matter |
+| Languages | English at launch | Addressable market |
+| Generative AI in shipped content | None unless the concept says so | Disclosure and audience sentiment |
 
-5. **Positioning is not features.** A game's market position is defined by what it does
-   differently, not by what it does at all. "A Metroidvania with combat" is not
-   positioning. "A Metroidvania where every ability is a musical instrument" is positioning.
+If the concept is too vague to research (no genre, no platform, no player), say so in the brief,
+research the most likely interpretation, and list the two or three alternatives that should be run
+separately.
 
-### Workflow
+## Phase 1: Genre analysis
 
----
+Questions:
+- Primary and secondary genres; the defining expectations players bring.
+- Lifecycle stage: emerging, growing, mature, oversaturated. Evidence, not vibes.
+- Sub-genres and hybrids forming in the space.
+- The last notable commercial success in the genre, and how recent it is.
 
-**Phase 1: Genre Analysis**
+Method: search "[genre] games 2026" and "[genre] steam 2026"; read the Steam tag page and SteamDB tag
+data (count of games, recent releases, review distribution); check itch.io tags and, for short games,
+portal categories; check whether creators and press cover the genre now.
 
-Define the genre space and its current state.
-
-Questions to answer:
-- What genre(s) does this game concept belong to? (Primary and secondary)
-- What are the defining characteristics of this genre that players expect?
-- What is the genre's current lifecycle stage? (Emerging, growing, mature, oversaturated)
-- What sub-genres or hybrid genres exist within this space?
-- What was the last major commercial success in this genre? How recent was it?
-
-Research methodology:
-- Search for "[genre] games [current year]" to find recent releases
-- Check Steam tag pages for the relevant genre tags -- note total game counts
-- Look at itch.io genre categories for indie-specific saturation data
-- Review recent gaming press coverage: is this genre being talked about?
-- Check YouTube and Twitch viewership for the genre: are people watching?
-
-Output:
 ```
 GENRE ANALYSIS
 ---------------------------------------------------------------
-Primary genre: [genre]
-Secondary genre(s): [genre, genre]
-Lifecycle stage: [emerging | growing | mature | oversaturated]
-Key genre expectations: [what players assume the game will have]
-Recent notable releases: [game (year), game (year), game (year)]
-Genre health signals: [viewer interest, press coverage, release volume]
+Primary genre: [genre]          Secondary: [genre, genre]
+Lifecycle stage: [emerging | growing | mature | oversaturated]  Evidence: [source, date]
+Player expectations: [what the game must have to be taken seriously]
+Recent notable releases: [title (year, source for performance)] x3
+Health signals: [release volume, review distribution, creator interest, press] with sources
 ---------------------------------------------------------------
 ```
 
----
+## Phase 2: Competitive landscape
 
-**Phase 2: Competitive Landscape**
+Three tiers:
+- **Direct:** same genre, same audience, similar mechanics and price.
+- **Indirect:** same player need through a different genre or format.
+- **Aspirational:** the execution or market position this team is aiming for.
 
-Map the competitive field using three tiers of competitors.
-
-**Direct competitors** -- Games in the same genre targeting the same audience with similar
-mechanics and price points. These are the games your potential players are already playing
-or considering. A direct competitor to a cozy farming sim is another cozy farming sim.
-
-**Indirect competitors** -- Games that satisfy the same player need through different
-mechanics or genres. An indirect competitor to a cozy farming sim might be a cozy life
-sim or a relaxing crafting game. These compete for the same emotional niche.
-
-**Aspirational competitors** -- Games that achieved the quality bar or market position
-you are aiming for, even if they are not in the same genre. These set the benchmark for
-execution quality and help calibrate expectations.
-
-For each competitor, analyze:
+Analyze at least 3-5 direct, 2-3 indirect and 1-2 aspirational competitors, and include a few median
+or underperforming titles from the same tag so the picture is not a highlight reel. Use
+`${CLAUDE_PLUGIN_ROOT}/templates/competitive-analysis.md` for the full structure.
 
 ```
-COMPETITOR ANALYSIS
+COMPETITOR
 ---------------------------------------------------------------
-Game: [name]
-Type: [direct | indirect | aspirational]
-Platform: [Steam, console, mobile, etc.]
-Price: [$]
-Release date: [date]
-Review score: [Steam %, Metacritic, etc.]
-Review volume: [total reviews — proxy for sales]
-Estimated revenue: [use SteamDB estimates or review-to-sales multipliers]
-Differentiator: [what makes this game stand out in the market]
-Weakness: [what players commonly criticize]
-Relevance: [why this game matters for your positioning]
+Game: [name]   Type: [direct | indirect | aspirational]   Channel: [Steam / web / ...]
+Price: [$]   Release: [date]   Reviews: [count, % positive] (Steam, [date checked])
+Estimated sales/revenue: [range] ([Gamalytic / VG Insights / review-multiplier rule of thumb])
+Differentiator: [what makes it stand out]
+Common complaints: [from reviews or communities, quoted]
+Relevance: [what it means for this concept's positioning]
 ---------------------------------------------------------------
 ```
 
-Analyze at least:
-- 3-5 direct competitors
-- 2-3 indirect competitors
-- 1-2 aspirational competitors
+## Phase 3: Market sizing
 
-Reference `${CLAUDE_PLUGIN_ROOT}/templates/competitive-analysis.md` for the full competitive analysis template.
+- **TAM:** players of this genre on any platform.
+- **SAM:** players reachable on the target channels, at the price, in the supported languages.
+- **SOM:** what this team can realistically capture in year one given marketing reach and
+  competition. Build it from comparables, not from a percentage of TAM.
 
----
+Methods (rules of thumb are labeled; see the reference for caveats):
+- **Comparable titles:** 5-10 titles closest in genre, scope, price and team size, including medians
+  and misses; estimates from Gamalytic or VG Insights where available.
+- **Review multiplier (rule of thumb):** roughly 30-50 lifetime sales per Steam review; varies widely.
+  Always show low, middle and high cases.
+- **Wishlists:** if the project has wishlist data, use current published conversion ranges (search
+  for them; cite source and date) and show low/middle/high cases.
+- **Web channels:** no public sales data; size with plays, chart positions and the portal's published
+  money model. Do not invent ad revenue per play.
 
-**Phase 3: Market Sizing**
+Break-even: development cost (time valued honestly) against net revenue after the store cut, tax and
+VAT, refunds, regional pricing and discounts, and engine terms (Unity Personal free below US$200K;
+Unreal 5% above US$1M lifetime gross, 3.5% under Launch Everywhere; Godot free).
 
-Estimate the addressable market for the game concept.
-
-**Total Addressable Market (TAM):** All players who play games in this genre on any
-platform. Use Steam tag player estimates, mobile download data, and console install bases.
-
-**Serviceable Addressable Market (SAM):** Players who play this genre on the platforms
-you are targeting, at your price point, in your supported languages. This is TAM minus
-the players you cannot reach.
-
-**Serviceable Obtainable Market (SOM):** The realistic subset of SAM you can capture
-given your marketing budget, launch visibility, and competitive positioning. For most
-indie games, this is 0.1-1% of SAM in the first year.
-
-Estimation methods:
-- **Review multiplier method:** Steam reviews x 30-80 (varies by genre and price) gives
-  approximate unit sales. Apply this to similar games to estimate genre demand.
-- **Wishlist conversion method:** If you have wishlist data, typical conversion rates
-  are 10-20% within the first week of launch.
-- **Comparable title method:** Find 3-5 games most similar to yours. Average their
-  estimated sales. Discount by 50% for a conservative estimate (survivorship bias).
-
-Output:
 ```
 MARKET SIZING
 ---------------------------------------------------------------
-TAM: [estimate] players across all platforms
-SAM: [estimate] players on target platforms at target price
-SOM: [estimate] realistic year-1 capture
-Revenue estimate (conservative): SOM x price x 0.7 (platform cut)
-Revenue estimate (moderate): SOM x 1.5 x price x 0.7
-Break-even requirement: [units at price point after platform cut]
-Comparable titles' performance:
-  - [game]: [estimated units] at [$price]
-  - [game]: [estimated units] at [$price]
-  - [game]: [estimated units] at [$price]
+TAM: [estimate] ([method, sources])
+SAM: [estimate] ([channels, price, languages])
+SOM year 1: low [N] / middle [N] / high [N] units or plays ([method])
+Net revenue per unit after cuts: [$] ([assumptions listed])
+Break-even: [units] at [$price]; middle case covers it: [yes / no]
+Comparables used: [title: estimate (source, date)] x5+
 ---------------------------------------------------------------
 ```
 
----
+## Phase 4: Audience profile
 
-**Phase 4: Audience Profiling**
+- **Motivations** (Bartle types, Self-Determination Theory; definitions in
+  `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`) and the emotional state players seek.
+- **Behavior:** where they discover games (Steam browse, festivals, creators, TikTok, Reddit, Discord,
+  portals), what convinces them (demo, trailer, reviews, price), tolerance for early access, typical
+  session length.
+- **Community signals:** active subreddits and servers; what they say they want and cannot find;
+  the most common complaints about existing games (quote them with links).
+- **AI sentiment in this audience:** whether these players filter or criticize AI-made content
+  (itch.io's "no AI" filter, review threads, community rules). Matters if the game ships generated
+  art, audio or voice.
 
-Define who the target player is with enough specificity to guide design and marketing
-decisions.
-
-**Demographics:** Age range, platform preference, spending habits, session length
-expectations. Use Steam hardware survey data, platform demographics reports, and genre
-community analysis.
-
-**Psychographics (using Bartle's taxonomy and motivational frameworks):**
-- What player motivations does this game serve? (Achievement, exploration, social,
-  competition, creativity, relaxation)
-- Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for Bartle taxonomy and SDT framework
-- What emotional state are players seeking? (Thrill, calm, mastery, wonder, connection)
-
-**Behavioral patterns:**
-- Where does this audience discover new games? (Steam browse, YouTube, TikTok, Reddit,
-  Discord, word-of-mouth, streamers)
-- What influences their purchase decision? (Reviews, trailers, demos, price, streamer
-  coverage, friend recommendations)
-- What is their tolerance for early access, bugs, and incomplete content?
-- How long do they typically engage with a game in this genre?
-
-**Community signals:**
-- Are there active subreddits, Discord servers, or forums for this genre?
-- What do players in those communities say they want but cannot find?
-- What are the most common complaints about existing games in the genre?
-
-Output:
 ```
 AUDIENCE PROFILE
 ---------------------------------------------------------------
-Primary audience: [description in 1-2 sentences]
-Age range: [range]
-Platform preference: [platforms in order]
-Session length: [typical session]
-Motivations: [Bartle type(s) + emotional needs]
-Discovery channels: [where they find new games]
-Purchase drivers: [what convinces them to buy]
-Community hubs: [where they gather online]
-Unmet needs: [what they want but current games don't provide]
+Primary audience: [1-2 sentences]
+Motivations: [Bartle types + SDT needs]
+Discovery channels: [ranked, with evidence]
+Purchase drivers: [ranked]
+Session length: [typical]
+Community hubs: [links]
+Unmet needs: [quoted, linked]
+AI sentiment: [neutral / wary / hostile, with evidence]
 ---------------------------------------------------------------
 ```
 
----
+## Phase 5: 2026 market conditions and trends
 
-**Phase 5: Trend Detection**
+Read `${CLAUDE_SKILL_DIR}/references/market-context-2026.md` now. Summarize the conditions that touch
+this concept, refreshed where the recommendation depends on them:
 
-Identify market trends that will affect the game during its development and launch window.
+- **Volume:** about 19,000 Steam releases in 2025, about half with 10 or fewer reviews (SteamDB via
+  GamingOnLinux, Dec 2025); October 2026 Next Fest had about 7,300 demos (vs. about 4,400 in June).
+- **Flooding and cleanup:** itch.io new pages doubled in two months, mostly AI-made; on 2026-11-03
+  itch.io deleted terabytes of AI uploads and extended its "no AI" filter to search. Steam added
+  pre-review checks on 2026-11-04 with build review taking up to 12 business days.
+- **Cloning:** AI clones and clone-extortion emails were reported in October 2026; Valve does not
+  want to gatekeep. Weigh public demos of an easily copied mechanic against the visibility they buy.
+- **Sentiment:** 52% of GDC 2026 respondents say generative AI is harming the industry; Steam
+  disclosure of player-facing AI content is public. Position on the game, not on the tooling.
+- **Labor:** 10,977 layoffs in 2026 by 2026-10-20; more experienced developers are going indie.
+- **Genre and platform trends** specific to this concept, with sources: hybrids forming, Steam Deck
+  verification, mobile or web shifts, upcoming releases in the same window, seasonal patterns.
 
-**Genre trends:**
-- Is this genre growing or contracting? What is the trajectory?
-- Are there emerging sub-genres or hybrid genres forming?
-- What mechanics or themes are gaining traction?
+## Phase 6: Channels
 
-**Platform trends:**
-- Is the target platform growing or stable?
-- Are there platform-specific opportunities (Steam Deck portability, mobile cross-play)?
-- Are platform policies changing in ways that affect this game?
+Read `${CLAUDE_SKILL_DIR}/references/channels-and-portals.md` when the game is short, browser-based,
+social, or could ship on more than one channel. For each realistic channel, record fit, technical
+gate, money model, competition on that channel, risk and a verdict (primary, secondary, skip).
 
-**Technology trends:**
-- Are there new tools or engines making this genre easier to develop?
-- Are AI-generated content tools changing player expectations?
-- Are there hardware trends that affect the game (VR adoption, haptic feedback)?
+## Phase 7: Positioning, price and timing
 
-**Cultural trends:**
-- Are there cultural moments that could boost or harm this genre?
-- Is there media (movies, TV, books) creating interest in related themes?
-- Are there political or social sensitivities that affect the game's theme?
-
-**Timing analysis:**
-- What games are launching in the same window? (Check Steam upcoming releases)
-- Are there major platform sales events to align with or avoid?
-- Is there a seasonal pattern for this genre? (e.g., cozy games peak in Q4)
-
----
-
-**Phase 6: Positioning Strategy**
-
-Synthesize all previous phases into a clear market positioning statement and strategy.
-
-**Positioning statement format:**
 ```
-For [target audience] who want [core need/desire],
-[game name] is a [genre] that [unique value proposition].
+For [target audience] who want [core need],
+[game] is a [genre] that [unique value].
 Unlike [primary competitor], it [key differentiator].
 ```
 
-**Positioning validation checklist:**
-- Does the positioning statement pass the "so what?" test? Would a player care?
-- Is the differentiator real and defensible, or is it a feature that competitors could
-  easily add?
-- Does the positioning align with the game's design pillars?
-- Can the positioning be communicated in a single store page screenshot?
-- Would a streamer be able to explain the positioning in one sentence?
+Check the statement: Would a player care? Is the differentiator defensible, or easy to copy (and in
+2026, easy for someone to clone with an agent)? Does it match the design pillars? Can one screenshot
+or a five-second clip show it? Could a creator explain it in one sentence?
 
-**Pricing strategy:**
-- What do direct competitors charge?
-- What is the price expectation for this genre and content volume?
-- Should the game launch at a discount, full price, or use early access pricing?
-- What is the minimum price that sustains development at the estimated SOM?
+- **Price:** what direct comparables charge for similar content; the minimum price that reaches
+  break-even in the middle case; free-with-ads only where the channel supports it.
+- **Timing:** avoid launching within two weeks of a major competitor in the same tag; plan around
+  Steam Next Fest (taking part requires a playable demo) and seasonal sales; pad for slower build
+  review.
 
-**Launch window recommendation:**
-- Based on competitor release schedules and seasonal patterns
-- Avoid launching within 2 weeks of a major competitor
-- Consider platform sales calendar (Steam seasonal sales)
+## AI-Assisted Workflow
 
-### Output Format
+This skill is itself an AI research agent; the rules below keep it honest.
 
-The workflow produces a **Market Research Brief** structured as follows:
+- **Search wide, then fetch primary.** Use WebSearch to find candidates, then WebFetch the store
+  page, SteamDB page, developer post or platform documentation before quoting a number. Quote
+  secondary coverage only with its outlet and date.
+- **Mark confidence.** Each figure is Sourced (primary or reputable press, dated), Estimated (a named
+  estimation tool or method), Rule of thumb (labeled), or UNVERIFIED (one weak source). The executive
+  summary may rest only on the first two.
+- **Never fill gaps from memory.** A model's recollection of a game's revenue is not data. If search
+  fails, say "not found" and widen the range.
+- **Check for clones and AI-flooded categories.** Search the store for the concept's hook; if many
+  low-effort AI-made games already occupy it, say so and explain what would make this one visibly
+  different.
+- **Disclosure as positioning input.** If the concept ships generated art, audio, voice or
+  localization, note the Steam and itch.io disclosure it will carry and the audience's likely
+  reaction; route asset decisions to `/gameforge:game-ai-assets`.
+- **Hand-off.** End the brief with the exact follow-up runs: `/gameforge:game-brainstorm` to sharpen
+  the hook, `/gameforge:game-prototype` to test it, `/gameforge:game-web-publish` or
+  `/gameforge:game-launch` for the chosen channel.
+
+## Output Format
+
+Save as `design/market-research/<concept-slug>-<YYYY-MM-DD>.md`. If
+`production/session-state/active.md` exists, append one line under **Next:** pointing to the brief.
 
 ```markdown
-# Market Research Brief: [Game Concept]
-
-**Date:** [date]
-**Concept:** [1-2 sentence description]
-**Primary genre:** [genre]
-**Target platforms:** [platforms]
-
-## Executive Summary
-[3-5 sentences: Is this concept viable? What is the opportunity? What are the risks?]
-
-## Genre Analysis
-[Phase 1 output]
-
-## Competitive Landscape
-### Direct Competitors
-[Competitor analyses]
-### Indirect Competitors
-[Competitor analyses]
-### Aspirational Competitors
-[Competitor analyses]
-
-## Market Sizing
-[Phase 3 output with TAM/SAM/SOM]
-
-## Audience Profile
-[Phase 4 output]
-
-## Trend Analysis
-[Phase 5 output]
-
-## Positioning Strategy
-**Positioning statement:** [formatted statement]
-**Key differentiator:** [what makes this game different]
-**Pricing recommendation:** [$X based on analysis]
-**Launch window recommendation:** [timing]
-
-## Risk Assessment
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| [market risk] | H/M/L | H/M/L | [plan] |
+# Market Research Brief: [Concept]
+**Date:** [YYYY-MM-DD]   **Analyst:** game-market-research (forked)   **Data as of:** [date range]
+**Concept:** [1-2 sentences]   **Genre:** [primary / secondary]   **Channels:** [primary, secondary]
 
 ## Recommendation
-[Go / Go with modifications / Pivot / No-go — with supporting rationale]
+**[Go / Go with changes / Pivot / No-go]** -- [3-5 sentences: the opportunity, the main risk, the
+condition under which the call flips]
+
+## Assumptions (stated because this ran without a conversation)
+| Assumption | Value used | Source | If wrong... |
+|---|---|---|---|
+| Team | [solo + agents] | [project.json] | [break-even changes to ...] |
+
+## Genre analysis
+## Competitive landscape
+### Direct   ### Indirect   ### Aspirational
+## Market sizing (low / middle / high)
+## Audience profile
+## 2026 conditions that affect this concept
+## Channels
+| Channel | Fit | Gate | Money | Verdict |
+|---|---|---|---|---|
+
+## Positioning
+**Statement:** [...]   **Differentiator:** [...]   **Price:** [...]   **Window:** [...]
+
+## Risks
+| Risk | Probability | Impact | Mitigation |
+|---|---|---|---|
+| [Clone risk after public demo] | M | H | [...] |
+
+## Sources
+| # | Claim | Source (URL) | Published | Accessed | Confidence |
+|---|---|---|---|---|---|
+| 1 | [About 19,000 Steam releases in 2025] | [link] | [2025-12-12] | [YYYY-MM-DD] | Sourced |
+
+## Next runs
+- [/gameforge:game-brainstorm to sharpen ...]
 ```
 
-### Quality Criteria
+## Quality Criteria
 
-A successful market research brief meets all of these:
-- At least 5 direct or indirect competitors analyzed with real data
-- Market sizing uses at least one quantitative estimation method
-- Audience profile is specific enough to guide marketing decisions
-- Positioning statement passes the "so what?" test
-- Trend analysis covers the expected development timeline
-- The recommendation is honest, even if it is "no-go"
-- All data sources are recent (within 12 months where possible)
-- The brief is calibrated to indie scale, not AAA assumptions
+- At least five direct or indirect competitors, each with a dated source; medians included.
+- Sizing uses at least one quantitative method and shows low, middle and high cases.
+- Every number in the executive summary is Sourced or Estimated, never recalled.
+- Assumptions are explicit, with the effect of each being wrong.
+- The 2026 conditions section is specific to this concept, not boilerplate.
+- Channels are evaluated, including web portals for short games.
+- The recommendation is honest, including "no-go".
+- Calibrated to indie scale.
 
-### Example Use Cases
+## Example Use Cases
 
-1. **"I want to make a roguelike deckbuilder. Is the market too crowded?"**
-   Full 6-phase analysis focused on saturation risk. Direct competitor analysis
-   includes Slay the Spire, Balatro, Inscryption, Monster Train. Market sizing
-   reveals a large but increasingly crowded SAM. Positioning must be sharp.
-
-2. **"We're choosing between a farming sim and a horror game. Which is more viable?"**
-   Run the workflow twice (abbreviated) for each concept. Compare market sizes,
-   competition levels, and development costs. Present a side-by-side comparison
-   with a recommendation.
-
-3. **"Our game launches in 3 months. Help us position against competitors."**
-   Emphasis on Phase 2 (competitive landscape) and Phase 6 (positioning). Check
-   competitor release schedules for the launch window. Produce a positioning
-   statement and pricing recommendation.
-
-4. **"I'm a solo dev making a niche game. Is there enough audience?"**
-   Market sizing calibrated to solo dev break-even ($20K-50K revenue). Audience
-   profiling focused on niche community detection. SOM estimation at indie scale.
-
-5. **"What genres are trending for indie games right now?"**
-   Abbreviated workflow focused on Phase 1 (genre analysis) and Phase 5 (trend
-   detection). Survey multiple genres rather than deep-diving one. Produce a
-   trend report rather than a full market brief.
-
-### Agentic Protocol
-
-- Reference `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` for player motivation frameworks
-- Reference `${CLAUDE_PLUGIN_ROOT}/templates/competitive-analysis.md` for competitive analysis template
-- Use WebSearch to retrieve current market data, Steam statistics, and press coverage
-- Use WebFetch to access store pages, review aggregators, and industry reports
-- Store completed research in `design/market-research/`
-- When run before `game-start`, pass the positioning statement as context
-- When run before `game-brainstorm`, use trend data to inform ideation directions
-
-Part of the AlterLab GameForge -- Indie Game Development Skills suite.
+1. **"Roguelike deckbuilder: is the market too crowded?"** Saturation focus: tag volume, review
+   distribution of the last 12 months' releases, medians beside the hits, a sharp positioning test.
+2. **"Farming sim or horror game: which is more viable for a two-person team?"** Two abbreviated
+   runs side by side, with the same assumptions table, then a comparison.
+3. **"Our game launches in three months; position us."** Phases 2 and 7, release-window scan, Next
+   Fest timing, price check.
+4. **"A 5-minute browser game: where should it live?"** Channel-first research: Poki, CrazyGames,
+   YouTube Playables, Discord Activities, itch.io; gates and money models from the platforms' docs.
+5. **"What genres are working for small indies right now?"** Phases 1 and 5 across several genres;
+   a trend report rather than a full brief.

@@ -1,12 +1,9 @@
 ---
 name: game-launch
 description: >
-  Pre-release launch pipeline for Steam, Epic, console and mobile: build gates, store page and
-  review lead times, Next Fest and wishlists, a dated compliance checklist (Steam AI disclosure,
-  Microsoft Store 11.16, EU AI Act Art. 50, EAA, IARC age ratings, US copyright), day-one patch,
-  go/no-go and post-launch operations. Use for "launch checklist", "store submission", "release
-  readiness", "go/no-go", "day-one patch". Not for browser games (use game-web-publish) or sprint
-  planning (use game-sprint-plan).
+  Runs the pre-release launch pipeline for Steam, Epic, consoles and mobile: build gates, store page
+  and review lead times, Next Fest and wishlists, a dated compliance checklist (AI disclosure, EU AI
+  Act, EAA, IARC), day-one patch and go/no-go. Not for browser games (use game-web-publish).
 argument-hint: "[platform: steam|epic|console|mobile] [target date YYYY-MM-DD]"
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, WebSearch, WebFetch, Bash(git log *), Bash(git status *), Bash(git describe *)
 effort: high
@@ -79,9 +76,10 @@ several places. Plan for both from day one of launch prep, not the week before.
 
 Read silently first:
 - `.gameforge/project.json` (engine, phase, pillars) and `production/session-state/active.md`
-- Any existing `production/release/` checklist, `design/` store copy, `CHANGELOG`, crash or bug reports
-- The AI asset provenance log if the project has one (kept by `/gameforge:game-ai-assets`) and the
-  AI content policy (`${CLAUDE_PLUGIN_ROOT}/templates/ai-content-policy.md` describes its format)
+- Any existing `production/releases/` checklist, `design/` store copy, `CHANGELOG`, crash or bug reports
+- The AI asset provenance log `design/ai-asset-log.md` (format:
+  `${CLAUDE_PLUGIN_ROOT}/templates/ai-asset-log.md`, maintained by `/gameforge:game-ai-assets`) and
+  the project's AI content policy (`${CLAUDE_PLUGIN_ROOT}/templates/ai-content-policy.md`)
 - `git describe --tags` and `git log` for the release candidate and recent churn
 
 Then ask one AskUserQuestion round (up to four questions, each with a recommended default):
@@ -177,9 +175,9 @@ accuracy, one for appeal); store page and build submitted inside the backplan's 
 - Valve's November 2026 review-process changes respond to a submission backlog; expect slower
   reviews around festivals and seasonal sales.
 - itch.io deleted "a couple terabytes" of AI-generated uploads on 2026-11-03 and extended its "no AI"
-  filter to search. Undisclosed AI content is a delisting risk there, disclosed AI content is
+  filter to search. Undisclosed AI content is a delisting risk there; disclosed AI content is
   filterable by players.
-- Players and juries punish hidden AI use: the Indie Game Awards rescinded *Clair Obscur*'s awards in
+- Players and juries punish undisclosed or careless AI use: the Indie Game Awards rescinded *Clair Obscur*'s awards in
   December 2025 over generative-AI placeholder textures that had already been patched out.
 
 **Marketing deliverables** (detail in the release checklist template):
@@ -203,11 +201,11 @@ every row; mark it "N/A because ..." when it does not apply.
 | # | Item | Applies when | Key dates | Action |
 |---|---|---|---|---|
 | C1 | **Steam AI disclosure** (Content Survey) | Any AI-generated content that ships and players consume: art, sound, narrative, localization, plus store page and marketing assets. Code assistants and other efficiency tools are exempt. | Required since Jan 2024; rewritten 2026-01-16; checked at pre-release review | Answer Pre-Generated and Live-Generated sections from the asset log. Live-Generated needs a description of your guardrails; live-generated adult sexual content is not allowed. |
-| C2 | **Microsoft Store policy 11.16** (covers Xbox-branded stores) | Content generated live by AI in response to user input | Policy current as of Sep 2026 | Disclose in metadata and in Partner Center; keep output within Store policy; provide in-game reporting and act on reports. Pre-generated assets are not covered. |
+| C2 | **Microsoft Store policy 11.16** (covers Xbox-branded stores) | Content generated live by AI in response to user input | Store Policies v7.20 (updated 2026-09-14) | Disclose in metadata and in Partner Center; keep output within Store policy; provide in-game reporting and act on reports. Pre-generated assets are not covered. |
 | C3 | **EU AI Act Article 50** | Sold in the EU and the game has AI systems players interact with (AI NPCs) or generates synthetic content at runtime | Applies from 2026-08-02; machine-readable marking (50(2)) grace to 2026-12-02 for generative systems already on the market | Tell players they are talking to an AI unless obvious; mark runtime-generated output; deepfake notices for artistic works must not hamper the work. Fines up to EUR 15M or 3% of turnover. |
 | C4 | **European Accessibility Act** | EU sales with in-game purchase flows (e-commerce) or player communication (chat, voice); consoles are in scope as hardware | In force since 2025-06-28 | Scope it with `/gameforge:game-accessibility-specialist`. Microenterprises (under 10 staff and no more than EUR 2M turnover) are exempt for services. |
 | C5 | **US copyright and AI** | Any AI-generated content you want to own | Copyright Office Part 2, 2025-01-29; *Thaler* cert. denied 2026-03-02 | Human authorship is required; prompts alone are not enough. Document human selection, arrangement and modification; disclaim AI-generated material when registering. |
-| C6 | **Age ratings via IARC** | Microsoft Store/Xbox, PlayStation Store, Nintendo eShop, Google Play, Epic Games Store, Meta Horizon Store | At submission; PEGI criteria change for games submitted from June 2026 | Answer the IARC questionnaire accurately and keep it current. Under PEGI's 2026 criteria, paid random items default to PEGI 16, time-limited offers to PEGI 12, NFTs to PEGI 18. Steam uses its own Content Survey; Apple uses its own questionnaire (13+/16+/18+ tiers since 2025). Japan's CERO is not part of IARC. |
+| C6 | **Age ratings via IARC** | Microsoft Store/Xbox, PlayStation Store, Nintendo eShop, Google Play, Epic Games Store, Meta Horizon Store | At submission; PEGI criteria change for games submitted from June 2026 | Answer the IARC questionnaire accurately and keep it current. Under PEGI's 2026 criteria, paid random items default to PEGI 16, time-limited offers to PEGI 12, NFTs to PEGI 18. Steam uses its own Content Survey; Apple uses its own questionnaire (13+/16+/18+ tiers since July 2025). Japan's CERO is not part of IARC. |
 | C7 | **Children's privacy (COPPA)** | Child-directed game, or actual knowledge of under-13 players in the US | Amended rule: compliance required since 2026-04-22 | Parental consent before collecting personal data; separate consent for non-integral third-party disclosure; written security program. |
 | C8 | **Privacy, EULA, store privacy labels** | Any analytics, crash reports, accounts, cloud saves | Ongoing (GDPR, Apple privacy details, Google Play Data safety) | Privacy policy reachable in game and on the store page; EULA for online features; labels match what the SDKs actually collect. |
 | C9 | **Licences and provenance** | Every third-party and AI-generated asset, middleware, font, OSS library | Before gold | Verify commercial-use terms per asset, including AI tool licences (some exclude regions or outputs); credits and OSS notices complete. |
@@ -218,11 +216,13 @@ every row; mark it "N/A because ..." when it does not apply.
 PlayStation and Nintendo publish no public AI-specific store rule as of November 2026; follow their
 partner documentation. For browser and itch.io HTML5 disclosure, use `/gameforge:game-web-publish`.
 
-**Generate disclosures from the asset log.** Ask `/gameforge:game-ai-assets` (or read the log
-directly) for every AI-touched asset: tool, licence, where it ships (game, store page, trailer,
-localization), human edits. Map each entry to C1/C2/C3/C5/C9/C10 and draft the Steam survey answers
-from that mapping. Code written with Claude Code or other assistants is not disclosable on Steam;
-the art, audio, text and translations it helped generate can be.
+**Generate disclosures from the asset log.** Run `/gameforge:game-ai-assets` to produce its
+disclosure draft (`production/releases/ai-disclosure-<build>.md`), or read `design/ai-asset-log.md`
+directly: tool, licence, where each asset ships (game, store page, trailer, localization), human
+edits. Map each entry to C1/C2/C3/C5/C9/C10 and draft the Steam survey answers from that mapping.
+If there is no log, build one before submission; do not reconstruct AI use from memory. Code
+written with Claude Code or other assistants is not disclosable on Steam; the art, audio, text and
+translations it helped generate can be.
 
 **Gate:** every row resolved or marked N/A with a reason; ratings obtained; privacy policy live;
 licences verified; AI disclosures drafted from evidence and reviewed by the Creative Director.
@@ -317,16 +317,16 @@ makes verification non-negotiable.
   repository, not only in a chat history.
 
 **Prompts that work:**
-- "Read `production/release/` and the asset log. For each Steam Content Survey AI question, draft an
-  answer and cite the log entries it relies on. Flag anything you cannot evidence."
+- "Read `design/ai-asset-log.md` and `production/releases/`. For each Steam Content Survey AI
+  question, draft an answer and cite the log rows it relies on. Flag anything you cannot evidence."
 - "List every commit since tag v1.0.0-rc2 with a one-line risk rating; mark anything that touches
   save data, input or networking as needs-retest."
 
 ## Output Format
 
 Write the checklist from `${CLAUDE_PLUGIN_ROOT}/templates/release-checklist.md` to
-`production/release/<version>-checklist.md` and the report below to
-`production/release/<version>-launch-readiness.md`. The template predates some late-2026 rules;
+`production/releases/<version>-checklist.md` and the report below to
+`production/releases/<version>-launch-readiness.md`. The template predates some late-2026 rules;
 add the compliance table from Phase 4 to it rather than relying on its older compliance section.
 
 ```markdown

@@ -101,7 +101,7 @@ C# projects cannot be exported to the web in 4.6/4.7; the 4.8 beta's .NET build 
 | Option | Install | Notes |
 |---|---|---|
 | **Playwright MCP** | as above | |
-| **Phaser docs for LLMs** | `https://phaser.io/llms.txt` | It tells agents to start with **Phaser AE**, Phaser's separate commercially licensed agent-oriented engine. Treat that as a vendor steer: Phaser 4 is the MIT open-source framework. Tell the agent which one the project uses. |
+| **Phaser docs for LLMs** | `https://phaser.io/llms.txt` | It tells agents to start with **Phaser AE**, Phaser's separate agent-oriented engine (PolyForm Shield licence, credits and Pro tiers). Treat that as a vendor steer: Phaser 4 is the MIT open-source framework. Tell the agent which one the project uses. |
 
 ## Allowing documentation fetches
 

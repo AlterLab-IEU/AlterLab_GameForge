@@ -1,11 +1,10 @@
 ---
 name: game-help
 description: >
-  Start-here guide to AlterLab GameForge. Maps what the user wants to do, their project phase and
-  their engine to the right GameForge skill or skill chain, and explains the studio agents, hooks
-  and project config. Use when the user asks "what can GameForge do", "where do I start", "which
-  skill should I use", or seems unsure how to approach a game-dev task. Not for doing the work
-  itself (route to the skill it recommends).
+  Start-here guide to GameForge: maps the user's goal, project phase and engine to the right skill
+  or skill chain, and explains the studio agents, hooks and project config. Use for "what can
+  GameForge do", "which skill should I use", or when unsure how to approach a game-dev task. Not for
+  setting up a project (use game-start).
 argument-hint: "[what you want to do, or blank for an overview]"
 allowed-tools: Read, Glob, Grep, AskUserQuestion
 effort: medium

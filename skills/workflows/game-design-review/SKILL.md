@@ -1,11 +1,10 @@
 ---
 name: game-design-review
 description: >
-  Reviews an existing game design document or feature spec with a severity-rated rubric:
-  pillar alignment, MDA and player-psychology fit, internal consistency, scope, testability for
-  agent-built games, originality and IP risk, AI-content disclosure, and accessibility hooks.
-  Ends in a build-readiness verdict. Use for "review my GDD", "design feedback", "critique this
-  spec", "is this design ready to build". Not for writing a GDD from scratch (use game-gdd-author).
+  Reviews an existing GDD or feature spec with a severity-rated rubric: pillar alignment, MDA and
+  player-psychology fit, consistency, scope, testability for agent-built games, originality, AI
+  disclosure and accessibility hooks, ending in a build-readiness verdict. Use for "review my GDD",
+  "design feedback", "critique this spec". Not for writing a GDD (use game-gdd-author).
 argument-hint: "[path to design document or section]"
 effort: high
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
@@ -49,7 +48,7 @@ the team disagrees about what the game is.
 2. **Severity is explicit.** Critical, Major, Minor or Suggestion on every finding, with a reason.
    A missing core loop is Critical; a vague art reference is Minor.
 3. **Specific, cited, actionable.** "Combat could be better" is useless. "§5.1 specifies player
-   attacks but no enemy behaviour, so difficulty cannot be tuned" is a finding. Name the problem,
+   attacks but no enemy behavior, so difficulty cannot be tuned" is a finding. Name the problem,
    cite the section, propose a fix.
 4. **Propose, do not prescribe.** The designer owns the vision. Offer directions with reasons; do
    not rewrite their sections. Route rewrites to `/gameforge:game-gdd-author`.
@@ -72,7 +71,7 @@ the team disagrees about what the game is.
    - **Full review** -- all thirteen dimensions.
    - **Build-readiness gate** -- dimensions 1, 2, 5, 10, 11, 12, 13 on the sections about to be built.
    - **Focused** -- the user names the concern (scope, pillars, psychology, playtest diagnosis, compliance).
-3. Note the phase. A concept-phase GDD is not penalised for missing §13 numbers; a GDD about to go
+3. Note the phase. A concept-phase GDD is not penalized for missing §13 numbers; a GDD about to go
    into production is.
 
 ## The Review Rubric
@@ -148,7 +147,7 @@ acceptance criteria vs rules. Quote both passages for every conflict.
 
 Count systems and content volume (levels, enemies, items, lines of dialogue, assets), compare with
 team, availability and date. Flag hidden complexity: pathfinding, procedural generation, netcode,
-physics-driven gameplay, save systems, localisation, runtime AI. When the team builds with coding
+physics-driven gameplay, save systems, localization, runtime AI. When the team builds with coding
 agents, credit them for boilerplate and plumbing only; content, tuning, playtesting, review and
 platform work do not compress the same way. Deep timeline analysis goes to `/gameforge:game-scope-check`.
 
@@ -166,7 +165,7 @@ players who skip tutorials? Does it teach through play rather than text walls?
 
 Name the three closest comparables. For each, what is different at the experience level, not the
 feature level? Is the difference mechanical or cosmetic? Can the hook be shown in a 30-second
-trailer and understood in about five seconds of play?
+trailer and grasped in the first seconds of play (jam guides commonly aim for about five)?
 
 ### 10. Testability for agent-built games
 
@@ -180,7 +179,7 @@ Applies to every system that a coding agent will build or modify. Check:
 - [ ] The design specifies state observation for tests: a state snapshot (on the web, a
       `render_game_to_text()`-style hook), deterministic stepping (`advanceTime(ms)`-style), seeded RNG.
 - [ ] A project check command is named (test run, headless engine run, or Playwright suite).
-- [ ] Each system has an out-of-scope list or build brief, so the agent does not add neighbours.
+- [ ] Each system has an out-of-scope list or build brief, so the agent does not add neighbors.
 - [ ] No rule is defined only by reference to another game ("works like X").
 
 A T1 system that an agent will build with no Auto checks is Critical: nobody can verify it between
@@ -191,7 +190,7 @@ playtests. Missing knobs are Major: every retune becomes another agent session a
 - [ ] The pitch stands without naming another game; comparisons stay in the overview.
 - [ ] No character names, logos, level layouts, UI trade dress, music or assets taken from
       existing games; no ripped, exported or decompiled material.
-- [ ] Licensed IP and fan-game status are explicit, with the licence or permission named.
+- [ ] Licensed IP and fan-game status are explicit, with the license or permission named.
 - [ ] Asset sources are named for every content category (made, licensed, generated).
 
 A design that is a renamed recreation of a specific existing game is Critical on two counts: it
@@ -204,12 +203,12 @@ mechanic the designer loves plus their own twist.
 Read `${CLAUDE_SKILL_DIR}/references/compliance-and-ip.md` before scoring this dimension; it maps
 design features to platform and legal obligations with dates. Check that the design states:
 
-- [ ] Which player-facing content may be AI-generated (art, audio, voice, text, localisation,
+- [ ] Which player-facing content may be AI-generated (art, audio, voice, text, localization,
       store and marketing assets), with a review owner and a provenance log.
 - [ ] For anything generated at runtime (AI NPCs, generated quests or images): guardrails,
       player-facing disclosure, a report mechanism, and cost per player-hour, all tiered T1.
 - [ ] A voice plan that covers performer consent if any synthetic or cloned voice is used.
-- [ ] No reliance on tools whose licence excludes target regions or whose legal status is
+- [ ] No reliance on tools whose license excludes target regions or whose legal status is
       unsettled for shipped content.
 
 Runtime AI with no guardrails or disclosure is Critical. Undecided disclosure for shipped AI
@@ -219,7 +218,7 @@ content is Major. Code written with agents is not a disclosure issue on Steam.
 
 - [ ] Input: full remapping, toggle alternatives to holds, no required simultaneous presses
       without an alternative, adjustable timing windows.
-- [ ] Visual: colour never the only carrier of meaning, scalable text, readable contrast,
+- [ ] Visual: color never the only carrier of meaning, scalable text, readable contrast,
       reduced motion and flash options.
 - [ ] Audio: subtitles with speaker names, visual equivalents for gameplay-critical sounds.
 - [ ] Cognitive: objective reminders, pausable or adjustable timers, difficulty options.
@@ -254,7 +253,7 @@ How the review fits a build that uses Claude Code or similar agents.
   check that returns pass or fail; dimension 10 is that check applied to the spec.
 - **Use an agent for the mechanical sweep, then judge yourself.** Delegate: listing every number
   without a knob, every rule without a check, every term used two ways, every reference to another
-  game. Keep human: severity calls, pillar and fun judgements, anything legal.
+  game. Keep human: severity calls, pillar and fun judgments, anything legal.
 - **Independent reviewer.** A fresh session or subagent that reads only the GDD (not the
   conversation that produced it) catches assumptions the author's session absorbed. Tell it to
   check against the spec and skip prose style.

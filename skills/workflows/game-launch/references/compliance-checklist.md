@@ -37,8 +37,9 @@ involved. Owners refer to GameForge roles; on a solo project they are all you.
   the classic failure: the Indie Game Awards rescinded *Clair Obscur*'s awards in December 2025 over
   generative-AI placeholder textures that had been patched out. Grep the build for placeholder
   asset names before gold.
-- **Evidence:** asset provenance log (tool, version, licence, date, where used, human edits) and the
-  submitted survey text.
+- **Evidence:** the asset provenance log `design/ai-asset-log.md` (tool, version, licence, date,
+  where used, human edits), the disclosure draft from `/gameforge:game-ai-assets`, and the submitted
+  survey text.
 - **Owner:** Producer submits; Creative Director approves wording.
 - **Source:** Steamworks "Content Survey" (accessed 2026-11-05); Game Developer, 2026-01-16.
 
@@ -62,7 +63,7 @@ involved. Owners refer to GameForge roles; on a solo project they are all you.
 - **Applies when:** the game is offered in the EU and (a) players interact with an AI system such as
   an LLM-driven NPC or companion, or (b) the game generates synthetic text, images, audio or video at
   runtime, or (c) the game presents AI-generated deepfakes of real people, places or events.
-- **Dates:** obligations apply from **2026-08-02**. The Digital Omnibus (Regulation (EU) 2026/1744)
+- **Dates:** obligations apply from **2026-08-02**. The Omnibus amendment (Regulation (EU) 2026/1744)
   gives only the Art. 50(2) marking duty a grace period, to **2026-12-02**, and only for generative
   systems already on the market before 2026-08-02. Detection-interoperability measures follow on
   2027-02-02. Not retroactive for media generated before 2026-08-02.
@@ -229,7 +230,7 @@ Pre-generated content:
 Live-generated content: [none | NPC dialogue via [model] with guardrails: system prompt limits,
   blocklist, output classifier, report button, server kill switch].
 Player-facing notice (EU Art. 50(1)): [where it appears, exact text].
-Evidence: production/release/ai-asset-log.md rows [n-m].
+Evidence: design/ai-asset-log.md rows [ids]; survey text archived in production/releases/.
 ```
 
 Adapt the same facts to each store's form; keep them consistent across stores.

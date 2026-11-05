@@ -13,15 +13,15 @@ replicas, licensed IP, runtime AI aimed at minors) for professional review.
 ## 16. AI Use & Originality
 
 ### 16.1 Policy by content type
-| Content | AI allowed? | Tool and licence | Human review owner | Ships to players? | Disclosure |
+| Content | AI allowed? | Tool and license | Human review owner | Ships to players? | Disclosure |
 |---|---|---|---|---|---|
 | Game code | Yes, agent-assisted | Claude Code | Lead dev reviews every diff | No (code) | Not required on Steam (code assistants exempt) |
-| Placeholder art | Yes | [tool, licence] | Art lead | No; replaced before [milestone] | None if fully replaced; track in log |
-| Shipped 2D/3D art | [No / Yes with review] | [tool, licence, region limits] | Art lead | Yes | Steam pre-generated; itch.io AI tag |
+| Placeholder art | Yes | [tool, license] | Art lead | No; replaced before [milestone] | None if fully replaced; track in log |
+| Shipped 2D/3D art | [No / Yes with review] | [tool, license, region limits] | Art lead | Yes | Steam pre-generated; itch.io AI tag |
 | Music | [No / Yes] | [licensed-data model or composer] | Audio lead | Yes | Steam pre-generated if AI |
 | SFX | [..] | [..] | [..] | [..] | [..] |
 | Voice | [No / Yes with written consent] | [..] | Audio lead + producer | Yes | Steam; performer consent and disclosure |
-| Localisation | [MT draft + human review] | [..] | Loc lead | Yes | Steam counts AI localisation as disclosable |
+| Localization | [MT draft + human review] | [..] | Loc lead | Yes | Steam counts AI localization as disclosable |
 | Store page and marketing | [..] | [..] | Producer | Yes | Steam counts marketing assets |
 | Runtime generation (AI NPCs etc.) | [None / describe] | [model, on-device or cloud] | Design + tech leads | Yes, live | Steam live-generated + guardrails; EU AI Act Art. 50 |
 
@@ -33,21 +33,21 @@ replicas, licensed IP, runtime AI aimed at minors) for professional review.
 
 ### 16.3 Provenance and disclosure plan
 - Provenance log location: [path]; one row per AI-assisted asset (tool, version, prompt,
-  human changes, licence, date).
+  human changes, license, date).
 - Disclosure text owner: [role]; reviewed at each milestone and before store submission.
 
 ### 16.4 Originality
 - What is ours: [the twist, the rules, the world, the assets].
 - Comparisons used in pitching: [X meets Y]; no names, assets, characters, level layouts or
   UI trade dress taken from them.
-- Asset sources: made by the team, licensed (licence recorded), or generated (logged).
+- Asset sources: made by the team, licensed (license recorded), or generated (logged).
 ```
 
 ## Facts the section depends on (as of 2026-11-05)
 
 **Steam** (rules rewritten 2026-01-16)
 - Disclosure covers AI-generated content that ships and is consumed by players (artwork, sound,
-  narrative, localisation) and marketing assets on the store page.
+  narrative, localization) and marketing assets on the store page.
 - Efficiency tools such as code assistants are exempt. Agent-written code with hand-made assets
   needs no AI disclosure.
 - Two categories: **pre-generated** (reviewed like other content) and **live-generated**
@@ -93,9 +93,9 @@ use. Treat any cloned or synthetic performer voice as a consent-and-contract tas
 legally unsettled for shipped games. Prefer a composer or models trained on licensed data.
 
 **3D asset generators**
-- Hunyuan3D 2.1: the licence does not apply in the EU, UK or South Korea, and the restriction
+- Hunyuan3D 2.1: the license does not apply in the EU, UK or South Korea, and the restriction
   covers outputs. Do not use it for a game sold there.
-- TRELLIS.2: MIT licence.
+- TRELLIS.2: MIT license.
 - Auto-retopology and auto-rigging are fine for props and background pieces; hero meshes still
   need manual retopology.
 
@@ -116,7 +116,7 @@ used assets exported from the original games (October 2026).
 2. If anything is generated at runtime, §16.2 is T1, not T2: guardrails, disclosure and reporting
    ship with the feature or the feature does not ship.
 3. AI voice needs a consent plan before a single line is generated for the shipped game.
-4. Region-restricted licences (Hunyuan3D) are incompatible with a worldwide release.
+4. Region-restricted licenses (Hunyuan3D) are incompatible with a worldwide release.
 5. If the pitch only works as "[existing game] but [small change]", return to Step 1 and find the
    design's own pillar.
 6. Hand asset generation to `/gameforge:game-ai-assets` and store compliance to
