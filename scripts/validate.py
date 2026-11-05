@@ -315,14 +315,16 @@ md_files = [p for p in ROOT.rglob("*.md") if ".git" not in p.parts and "node_mod
             and not str(p.relative_to(ROOT)).startswith("skills/")]
 for p in md_files:
     text = p.read_text()
-    for m in re.finditer(r"\]\(([^)#\s]+)(?:#[^)]*)?\)", text):
+    prose = re.sub(r"```.*?```", "", text, flags=re.S)       # fenced code blocks
+    prose = re.sub(r"`[^`\n]*`", "", prose)                    # inline code spans
+    for m in re.finditer(r"\]\(([^)#\s]+)(?:#[^)]*)?\)", prose):
         link = m.group(1)
         if re.match(r"^[a-z]+:", link) or link.startswith("#"):
             continue
         target = (ROOT / link.lstrip("/")) if link.startswith("/") else (p.parent / link)
         if not target.exists():
             err(f"{rel(p)}: broken link {link}")
-    if re.search(r"(?<![\w/])@(docs|templates)/", text) and p.name not in ("CHANGELOG.md", "ROADMAP.md"):
+    if re.search(r"(?<![\w/])@(docs|templates)/", prose) and p.name not in ("CHANGELOG.md", "ROADMAP.md"):
         warn(f"{rel(p)}: uses @docs/@templates shorthand that only resolves inside this repo")
 ok("relative links checked")
 

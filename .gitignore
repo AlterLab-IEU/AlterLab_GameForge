@@ -95,3 +95,6 @@ out/
 *.apk
 *.aab
 *.unitypackage
+
+# === Claude Code (local) ===
+.claude/settings.local.json

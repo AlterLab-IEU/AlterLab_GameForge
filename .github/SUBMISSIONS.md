@@ -13,7 +13,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 **Draft entry:**
 ```markdown
 ### Game Development
-- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - 34 production-grade skills for indie game development — 11 studio agents, 20 workflow skills, 3 engine specialists (Godot, Unity, Unreal)
+- [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) - A full indie game studio as a Claude Code plugin — 11 studio agents with subagent memory, 25 workflows, 5 engine specialists (Godot, Unity, Unreal, Three.js, 2D web), vibe-coding and AI-asset workflows
 ```
 
 ---
@@ -38,7 +38,7 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 
 **Draft entry:**
 ```markdown
-- **[AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge)** — A comprehensive game development skill suite with 34 skills organized as studio agents (Creative Director, Producer, Game Designer, etc.), structured workflows (sprint planning, code review, playtesting, launch prep), and deep engine specialists for Godot 4, Unity 6, and Unreal Engine 5. Grounded in MDA Framework, Flow Theory, and Self-Determination Theory.
+- **[AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge)** — A Claude Code plugin with 41 game development skills: studio agents (Creative Director, Producer, Game Designer, etc.) that also run as parallel subagents with project memory, structured workflows (vibe coding, sprint planning, code review, playtesting, web publishing, launch prep), and engine specialists for Godot 4.7, Unity 6.3 LTS, Unreal Engine 5.8, Three.js and 2D web frameworks. Grounded in MDA Framework, Flow Theory, and Self-Determination Theory.
 ```
 
 ---
@@ -73,11 +73,11 @@ Reference file for submitting GameForge to curated skill lists once the repo is 
 1. **Phase 1 (immediate after going public):** Submit to BehiSecc and hesreallyhim (lower star thresholds)
 2. **Phase 2 (after 10+ stars):** Submit to travisvn (auto-rejects <10 stars)
 3. **Phase 3 (after 25+ stars):** Submit to VoltAgent and ComposioHQ (higher quality bars)
-4. **Parallel:** Ensure SkillsMP.com auto-indexes us (requires 2+ stars and correct marketplace.json)
+4. **Parallel:** Ensure SkillsMP.com auto-indexes us (requires 2+ stars and a valid .claude-plugin/marketplace.json)
 
 ## Web Directory Listings
 
-- **SkillsMP.com** — Auto-indexes from GitHub. Ensure marketplace.json is valid.
+- **SkillsMP.com** — Auto-indexes from GitHub. Ensure .claude-plugin/marketplace.json passes `claude plugin validate --strict`.
 - **skillsdirectory.com** — Manual submission form
 - **awesomeclaude.ai** — Auto-indexes from awesome lists
 - **awesomeskills.dev** — Auto-indexes from awesome lists

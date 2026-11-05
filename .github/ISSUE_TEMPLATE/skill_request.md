@@ -25,7 +25,7 @@ labels: ["skill-request"]
 
 ## How Does It Fit with Existing Skills?
 
-<!-- How would this skill interact with or complement the current 31 skills? Would it be used before/after a specific workflow? Would it collaborate with certain agents? -->
+<!-- How would this skill interact with or complement the existing GameForge skills? Would it be used before/after a specific workflow? Would it collaborate with certain agents? -->
 
 ## Example Use Case
 

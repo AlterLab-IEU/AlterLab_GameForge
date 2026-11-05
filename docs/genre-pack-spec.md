@@ -187,8 +187,8 @@ description: One-line description of the file's purpose
 ## Cross-Reference Conventions
 
 - Reference other genre pack files: `@genre-packs/{genre}/filename.md`
-- Reference shared docs: `@docs/filename.md`
-- Reference templates: `@templates/filename.md`
+- Reference shared docs and templates with relative links from the pack file, e.g. `[game-design-theory.md](../../docs/game-design-theory.md)`
+- Skills that load a pack refer to it as `${CLAUDE_PLUGIN_ROOT}/genre-packs/<pack>/<file>.md`
 - Reference skills by their frontmatter name: `game-designer`, `game-brainstorm`, etc.
 
 ---

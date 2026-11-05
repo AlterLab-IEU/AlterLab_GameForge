@@ -12,10 +12,11 @@
 
 ## Checklist
 
-- [ ] Follows AlterLab skill format (if skill change)
-- [ ] Meets minimum line count for category (agents: 200, workflows: 150, engine specialists: 200)
-- [ ] All frontmatter fields present (`argument-hint`, `allowed-tools`, etc.)
-- [ ] Tested with 3+ prompts in Claude Code
+- [ ] `python3 scripts/validate.py` passes (frontmatter, sizes, references, counts)
+- [ ] `bash tests/hooks.test.sh` passes (if hooks changed)
+- [ ] `claude plugin validate . --strict` passes
+- [ ] Tested with 3+ prompts in Claude Code via `claude --plugin-dir .`
+- [ ] Versions, policies and claims about real games are sourced and dated
 - [ ] No secrets or personal data included
 - [ ] Commit messages follow convention (`feat:`, `improve:`, `fix:`, `docs:`, `chore:`)
 

@@ -1,6 +1,6 @@
 # AlterLab GameForge Roadmap
 
-Current version: **v2.0.0** (34 skills, 20 templates, 15 docs, 11 hooks, 9 starters, 2 genre packs)
+Current version: **v3.0.0**. See [CHANGELOG.md](CHANGELOG.md) for what each release contains.
 
 ---
 
@@ -212,67 +212,40 @@ Current version: **v2.0.0** (34 skills, 20 templates, 15 docs, 11 hooks, 9 start
 
 ---
 
-## v2.1.0 — Intelligence & Integrations (Next)
+## v3.0.0 — Plugin Rebuild (SHIPPED)
 
-### Smart Skills
+| Area | What shipped |
+|---|---|
+| Packaging | Spec-compliant `.claude-plugin/` manifests; one-step marketplace install; plugin icon |
+| Skills | 7 new (`game-vibe-code`, `game-ai-assets`, `game-web-publish`, `game-multiplayer`, `game-help`, `game-threejs-specialist`, `game-web2d-specialist`); every existing skill upgraded with progressive disclosure |
+| Subagents | 11 studio roles as plugin subagents with project memory |
+| Hooks | Rewritten and tested; engine-file protection and Git LFS guard |
+| Validation | Plugin-aware validator, hook test suite on Linux and macOS, `claude plugin validate --strict` in CI |
 
-| Feature | What | Why |
-|---------|------|-----|
-| File-type rules | `shader-code`, `narrative`, `gameplay-code`, `engine-code` rules | Production quality gates that enforce different standards per file type |
-| Team composition profiles | Skills adapt output based on declared team size (solo, small team, studio) | Solo dev doesn't need delegation advice; studio needs coordination protocols |
-| Adaptive output depth | Skills detect project maturity and adjust verbosity | Prototype phase: brief. Production phase: exhaustive |
-
-### Engine Deep Integration
-
-| Feature | What | Why |
-|---------|------|-----|
-| Engine project scaffolding | `game-start` creates actual `project.godot`, `.csproj`, `.uproject` files | Transform from documentation tool to project bootstrapper |
-| Live code analysis mode | Engine specialists give file-specific advice after reading actual game code | "Your `player.gd` has 400 lines — here's how to decompose it using composition" |
-| Build system hooks | Skills trigger engine builds and report results | Close the feedback loop between design and execution |
-
-### Genre Pack Expansion
-
-| Pack | What | Why |
-|------|------|-----|
-| Survival-Crafting | Resource loops, crafting trees, base building, threat escalation | 3rd most requested genre after roguelike and narrative |
-| Metroidvania | Ability gating, map interconnection, backtracking rewards, boss design | Strong indie presence, distinct design patterns |
-| Tower Defense | Wave design, tower economy, pathing, difficulty curves | Underserved in game design tooling |
-
-### Community & Marketplace
-
-| Feature | What | Why |
-|---------|------|-----|
-| Marketplace listing | Publish to Claude Code marketplace for one-click install | Remove friction from adoption |
-| Awesome list submissions | PRs to 5 major lists (drafts ready in `.github/SUBMISSIONS.md`) | Visibility is the #1 growth lever |
-| SkillsMP / MCPMarket indexing | Ensure listing on major skill directories | 87K+ skills indexed, GameForge should be there |
+Delivered from the earlier wishlist: marketplace listing (one-command install), project memory
+(subagent memory plus `production/session-state/`), engine plugin bridges (documented MCP integrations
+with security guidance), multiplayer architecture (`game-multiplayer`), asset pipeline automation
+(`game-ai-assets`).
 
 ---
 
-## v3.0.0 — Platform (Long-Term Vision)
-
-### AI-Native Game Development
+## v3.1 — Next
 
 | Feature | What | Why |
-|---------|------|-----|
-| Playtesting simulation | AI simulates player behavior patterns to predict balance issues | Catch problems before human playtesting — highest-value AI application |
-| Procedural content review | Skills evaluate proc-gen output for quality, variety, fairness | Close the loop on procedural generation quality |
-| Design pattern recognition | Skills detect game design patterns in code and suggest improvements | Bridge between code architecture and game design theory |
+|---|---|---|
+| Skill evals | `evals/` cases for `claude plugin eval`: trigger precision per skill and output-format graders | Measure routing quality instead of asserting it |
+| Genre packs | Survivors-like, survival-crafting, metroidvania | The most requested genres; survivors-likes dominate web and jam play |
+| Mobile skill | Touch controls, thermal and battery budgets, store specifics | Recurring request; mobile web is already a target |
+| Console porting checklist | Platform requirements for Switch, PlayStation, Xbox | Indies increasingly port after a PC launch |
+| Team composition profiles | Skills adapt output to solo, small team or studio | A solo developer does not need delegation advice |
 
-### Platform Features
+## Later
 
-| Feature | What | Why |
-|---------|------|-----|
-| Skill composition | Skills can declare dependencies and auto-chain | "Run balance-check after every designer session" without manual orchestration |
-| Project memory | Cross-session persistence of game design decisions, balance parameters, milestone status | Skills pick up where you left off without re-explaining context |
-| Visual dashboard | Web-based overview of project health, skill usage, quality metrics | Make the invisible visible |
-
-### Ecosystem
-
-| Feature | What | Why |
-|---------|------|-----|
-| Community genre packs | Contribution pipeline for third-party genre packs with automated quality validation | Scale genre coverage beyond what the core team can produce |
-| Skill marketplace | Third-party skills that extend GameForge with specialized expertise | Open the platform to domain experts |
-| Engine plugin bridges | MCP servers that connect GameForge skills to live engine editors | Real-time collaboration between Claude and the game engine |
+| Feature | What |
+|---|---|
+| XR skill | Spatial interaction, comfort, locomotion |
+| Live engine loops | Engine specialists that drive headless builds and tests through engine CLIs and MCP servers end to end |
+| Community genre packs | Contribution pipeline with automated validation |
 
 ---
 
@@ -287,12 +260,12 @@ Current community interests (from indie dev forums and game jam feedback):
 - ~~**Multiplayer architecture**~~ — ✅ SHIPPED in v2.0.0 (networking sections in all 3 engine specialists)
 - ~~**Narrative branching tool**~~ — ✅ SHIPPED in v2.0.0 (narrative genre pack with branching architecture patterns)
 - ~~**Steam integration**~~ — ✅ SHIPPED in v2.0.0 (`game-ci-pipeline` includes Steam deployment)
-- **Mobile optimization skill** — Touch controls, battery life, thermal management, app store specifics
+- **Mobile optimization skill** — planned for v3.1
 - **VR/XR game skill** — Spatial interaction, comfort settings, locomotion design
-- **Asset pipeline automation** — Sprite sheet packing, texture atlasing, LOD generation guidance
+- ~~**Asset pipeline automation**~~ — ✅ SHIPPED in v3.0.0 (`game-ai-assets`, engine specialists)
 - **Console porting checklist** — Platform-specific requirements for Switch, PlayStation, Xbox
 - **Survival-crafting genre pack** — Resource loops, crafting trees, base building patterns
-- **Multiplayer lobby system** — Matchmaking, lobby management, session persistence
+- ~~**Multiplayer lobby system**~~ — ✅ SHIPPED in v3.0.0 (`game-multiplayer`)
 
 ---
 
@@ -300,6 +273,7 @@ Current community interests (from indie dev forums and game jam feedback):
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v3.0.0 | 2026-11 | Plugin rebuild: installable plugin, 41 skills (7 new), 11 subagents, rewritten and tested hooks, every skill upgraded, plugin-aware validation |
 | v2.0.0 | 2026-03-26 | 34 skills (+game-ci-pipeline, +game-jam-mode, +game-gdd-author), engine deepening (networking, animation, VFX, AI, materials in all 3 specialists), 2 genre packs (roguelike 888 lines, narrative 943 lines), CI validation (486 checks via validate.sh + GitHub Actions), 3 new docs (ai-native-gamedev, genre-pack-spec, skill-quality-rubric), 3 new templates (jam-concept, jam-submission, ci-pipeline-config), genre pack contribution guide in CONTRIBUTING.md |
 | v1.4.0 | 2026-03-25 | Starters directory (9 files: base config, Godot, Unity, Unreal), documentation overhaul (README rewrite, workflow-examples, FAQ, directory-conventions, CONTRIBUTING), flexibility pass (all 11 hooks rewritten, hardcoded paths removed, bash arrays eliminated), community infrastructure (3 issue templates, PR template, CODE_OF_CONDUCT, SECURITY, .gitignore expansion, awesome-list submission drafts), docs count 9 to 12 |
 | v1.3.0 | 2026-03-25 | 31 skills (+game-postmortem, +game-market-research), MCP integration doc with 34 verified servers, MCP sections in 7 skills, 5 new hooks (post-compact, subagent-track, instructions-validate, stop-failure, config-change), shell preprocessing in game-start and game-sprint-plan, named pipelines in game-team-orchestrator, all 31 skills frontmatter modernized (version, model, effort, context, memory), trigger optimization on all descriptions, engine updates (Godot 4.6.1, Unity 6.3 Havok/pricing, UE 5.7 Nanite/SWRT), regulatory freshness (COPPA April 2026, Steam 3-tier AI, PEGI June 2026, App Store iOS 26 SDK), accessibility updates (EAA enforcement, ESA 24 tags, Apple Nutrition Label), AI content policy template aligned to Steam framework |
