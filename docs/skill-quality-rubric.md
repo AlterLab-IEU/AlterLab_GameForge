@@ -1,12 +1,28 @@
 ---
 name: skill-quality-rubric
-version: "2.0"
+version: "3.0"
 description: Public 5-dimension quality scoring system for evaluating GameForge skills and genre packs
 ---
 
 # Skill Quality Rubric
 
-The 5-dimension quality scoring system used to evaluate every GameForge skill and genre pack. All contributions must score **8+ on every dimension** before merge.
+The 5-dimension quality scoring system used to evaluate every GameForge skill and genre pack. All contributions must pass the automated structural gate and then score **8+ on every dimension** before merge.
+
+---
+
+## Structural Gate (automated)
+
+`python3 scripts/validate.py` and `claude plugin validate . --strict` must pass before anyone scores a skill. The validator enforces:
+
+| Check | Rule |
+|---|---|
+| Frontmatter | Only documented Claude Code skill fields; `name` matches the directory; no `version`, `model` or `memory` |
+| Description | Third person, triggers plus a "Not for" boundary, at most 400 characters (it is loaded in every session) |
+| Tool pre-approval | `allowed-tools` never pre-approves unscoped `Bash`; use patterns such as `Bash(git diff *)` |
+| Forked context | `context: fork` only for report-style skills, never combined with `AskUserQuestion` (subagents cannot ask) |
+| Size | `SKILL.md` at least 200 lines (agents, engine specialists) or 150 (workflows), at most 550 (target 500); deep material lives in `references/` |
+| References | Every `${CLAUDE_PLUGIN_ROOT}/...` and `${CLAUDE_SKILL_DIR}/...` path resolves; every `references/` file is linked from `SKILL.md`; every named skill exists |
+| Docs | Relative links resolve; skill, template and hook counts quoted in docs match the repository |
 
 ---
 
@@ -40,11 +56,13 @@ Does the skill demonstrate genuine expertise or just surface-level advice?
 | 4 | Generic advice that could come from any AI assistant; no frameworks, no references, no specifics |
 | 6 | Some specialized knowledge but inconsistent depth; references frameworks without applying them |
 | 8 | Deep, opinionated expertise with real frameworks, concrete examples, and production experience; references real games and tools |
-| 10 | World-class expertise -- the kind of advice a 15-year veteran would give; every recommendation backed by evidence from shipped titles |
+| 10 | World-class expertise -- the kind of advice a 15-year veteran would give; recommendations backed by documented evidence (postmortems, GDC talks, official engine docs) and current to the engine versions it names |
 
 **What to check:**
-- Does it reference real games, tools, and frameworks by name?
-- Are code examples complete and runnable (not pseudocode)?
+- Does it reference real games, tools, and frameworks by name -- and are claims about real games publicly documented and attributed?
+- Are code examples complete, runnable, and correct for the engine versions the skill names?
+- Are version numbers, policies and dates current and dated (for example "as of Godot 4.7")?
+- Does it cover working with AI coding agents for this role: what to delegate, what to verify by hand?
 - Does it go beyond "best practices" to explain WHY and WHEN?
 - Would a senior game developer learn something from this skill?
 
@@ -109,7 +127,7 @@ Does the skill have a distinct, memorable personality?
 
 ## Scoring Process
 
-1. Read the entire SKILL.md file
+1. Confirm the structural gate passes, then read the entire SKILL.md file and every `references/` file it links
 2. Score each dimension independently (1-10)
 3. Note specific evidence for each score (quote lines)
 4. A skill with any dimension below 8 needs revision
@@ -129,6 +147,12 @@ Does the skill have a distinct, memorable personality?
 | All theory, no code | Practical Usefulness (U) |
 | Inconsistent formatting | Output Consistency (C) |
 | No "When NOT to Use Me" section | Trigger Precision (T) |
+| Anecdotes about named games that are not public record | Domain Depth (D) |
+| Deprecated engine APIs in examples (e.g. Godot 3 syntax, Phaser 3 pipelines) | Domain Depth (D) |
+| Statistics without a source or a "rule of thumb" label | Domain Depth (D) |
+| Persona claims memory the plugin does not provide | Voice & Character (V) |
+| Forked skill that tries to ask the user questions | Practical Usefulness (U) |
+| Everything in one 900-line file instead of `references/` | Practical Usefulness (U) |
 
 ---
 
@@ -140,7 +164,7 @@ Genre packs are evaluated on the same 5 dimensions, but the interpretation shift
 |-----------|-------------------------|
 | **Trigger Precision** | Does the pack clearly state when to use it and which skills consume it? Is the genre scope well-defined? |
 | **Domain Depth** | Are design patterns grounded in shipped games? Are balance numbers derived from analysis, not guesswork? |
-| **Output Consistency** | Do all files follow the frontmatter format? Are cross-references valid? Does the pack match the spec in `@docs/genre-pack-spec.md`? |
+| **Output Consistency** | Do all files follow the frontmatter format? Are cross-references valid? Does the pack match the spec in `genre-pack-spec.md`? |
 | **Practical Usefulness** | Can a developer use the balance template to set initial tuning parameters? Do brainstorm prompts produce concepts within 5 minutes? |
 | **Voice & Character** | Is the writing opinionated and grounded? Does it read like genre expertise, not a Wikipedia summary? |
 

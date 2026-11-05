@@ -81,26 +81,28 @@ When AI tools (LLMs, code assistants, copilot-style tools) are used during devel
 
 - **Hallucinated API Detection**: AI models frequently generate calls to APIs, methods, or engine functions that do not exist. Every AI-suggested function call must be verified against the engine's official documentation for the target version. Pay particular attention to parameter order, return types, and deprecated methods.
 - **Engine-Specific Pattern Validation**: AI-generated code must follow the target engine's idiomatic patterns. GDScript uses signals and `@export`, not C# events. Unity uses `MonoBehaviour` lifecycle methods, not arbitrary `update()` naming. Unreal uses `UFUNCTION`/`UPROPERTY` macros. Code that compiles but violates engine idioms must be refactored.
-- **Attribution Requirements**: Any code block generated substantially by AI must include a comment noting AI assistance: `# AI-assisted: reviewed and modified by [developer]`. This is not about blame -- it flags code that may need extra scrutiny during debugging since the original author may not fully understand every line.
+- **Attribution Requirements**: Provenance lives in version control and the asset log, not in code comments. Commits written with a coding agent keep the agent's `Co-Authored-By:` trailer (Claude Code adds one by default), so `git log` can separate agent-written changes for review and retrospectives; generated assets are recorded in `design/ai-asset-log.md`. Every agent-written change gets a human review before merge, and `/gameforge:game-code-review` audits agent changes for outdated or invented APIs, duplicated systems and client-trusted state.
 - **License Compliance**: AI models trained on open-source code may reproduce copyleft-licensed patterns. When AI suggests a non-trivial algorithm or implementation, verify it does not closely replicate GPL/LGPL/AGPL-licensed code unless the project's license is compatible.
 - **Security Pattern Validation**: AI-generated networking code, file I/O, and user input handling must be reviewed for security vulnerabilities. AI models frequently omit input sanitization, generate insecure deserialization patterns, and suggest hardcoded credentials in example code. Never ship AI-generated security-sensitive code without explicit security review.
 
 ## Engine Version Requirements
 
-All GameForge engine specialists target these minimum engine versions. Code suggestions, API references, and architecture patterns must be valid for these versions or newer.
+GameForge engine specialists target these engine lines. Code suggestions, API references, and architecture patterns must be valid for these versions or newer.
 
-| Engine | Minimum Version | Release Date | Key Features |
+| Engine | Target line (Nov 2026) | Released | Notes |
 |---|---|---|---|
-| **Godot** | 4.6 | 2025 | GDExtension stability, improved 3D renderer, typed dictionaries |
-| **Unity** | 6.3 (6000.3) | 2025 | Entities 1.0 stable, Sentis ML runtime, GPU Resident Drawer |
-| **Unreal Engine** | 5.7 | 2025 | Nanite foliage, MegaLights, Enhanced Input system maturity |
+| **Godot** | 4.7 (4.7.2 stable) | 2026-06-18 | 4.8 in beta; its .NET build requires .NET 10. Web export is WebGL 2 only; C# cannot export to web |
+| **Unity** | 6.3 LTS (6000.3) | supported to Dec 2027 | 6.6 is the current Update release; 6.0 LTS left standard support on 2026-10-16; 7.0 alpha moves the editor to CoreCLR |
+| **Unreal Engine** | 5.8 | 2026-06-17 | Last planned UE5 major; UE6 early access targeted for late 2027 |
+| **Three.js** | r187 | 2026-10-30 | ESM only; WebGLRenderer default, WebGPURenderer opt-in with WebGL 2 fallback |
+| **Phaser** | 4.x | 4.0.0 on 2026-04-10 | Phaser 3 pipelines and FX replaced by RenderNodes and Filters |
 
 Engine specialists must validate that all suggested APIs, classes, and patterns exist in the target version. If a feature was introduced in a later version, note the minimum version requirement explicitly.
 
 ## Accessibility Implementation Standards
 
-These standards go beyond design guidelines (see `@docs/game-design-theory.md`, Section 12) to specify concrete implementation requirements for accessible game code.
+These standards go beyond design guidelines (see `game-design-theory.md`, Section 12) to specify concrete implementation requirements for accessible game code.
 
-- **Screen Reader Metadata**: All interactive UI elements must expose accessibility metadata compatible with platform screen reader APIs. Godot: use `AccessibleNode` properties. Unity: implement `IAccessible` interfaces and UGUI accessibility labels. Unreal: use Slate accessibility API and `FAccessibleWidgetData`. Every button, label, and interactive element must have a programmatic name and role.
+- **Screen Reader Metadata**: All interactive UI elements expose a programmatic name and role to the platform screen reader through the engine's accessibility layer. The integration differs per engine and version, so take the current API from the engine specialist skill rather than from memory, and verify it against the engine docs for your version.
 - **Subtitle Rendering Requirements**: Subtitles must support configurable font size (minimum range: 18px to 36px at 1080p equivalent), background opacity (0% to 100%), speaker identification with color coding (using colorblind-safe palette), and text rendering that maintains readability at all supported resolutions. Subtitles must never be baked into video assets -- they must be rendered dynamically from text data.
 - **Input Abstraction**: All input handling must go through an abstraction layer that supports full remapping. No hardcoded key bindings in gameplay code. The input abstraction must support simultaneous gamepad, keyboard/mouse, and touch input. Switch access and single-button play modes must be achievable through the remapping system without code changes.

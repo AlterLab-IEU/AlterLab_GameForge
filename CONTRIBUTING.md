@@ -40,7 +40,7 @@ Open an issue first describing the skill's purpose, target user, and how it fits
 
 Starters are engine-specific configuration files in the `starters/` directory. To contribute:
 
-1. **New engine starter:** Create a directory under `starters/` with at minimum a `CLAUDE.md` (engine conventions) and a `.gitignore` (engine-specific ignores). Follow the pattern in the existing Godot/Unity/Unreal starters.
+1. **New engine starter:** Create a directory under `starters/` with a `CLAUDE.md` (engine conventions, commands, `.gitignore` and Git LFS blocks, the agent verification loop). Starters are copied into users' projects, so refer to skills as `/gameforge:<skill>` and never link to files in this repository. Follow the existing Godot, Unity, Unreal, Three.js and 2D web starters.
 2. **Improving existing starters:** Update conventions to match the latest engine version. Keep configurations opinionated but not rigid -- starters are starting points, not mandates.
 3. **Test your starter** by copying it into an actual game project and running several GameForge skills to verify they produce engine-appropriate output.
 
@@ -56,7 +56,8 @@ Documentation lives in three places:
 
 When contributing docs:
 - Keep answers direct. 3--5 sentences per FAQ entry. No fluff.
-- Workflow examples must show real commands (`/game-start`) and concrete outputs, not abstract descriptions.
+- Workflow examples must show real commands (`/gameforge:game-start`) and concrete outputs, not abstract descriptions.
+- Docs use ordinary relative links (`[hooks](hooks.md)`); `${CLAUDE_PLUGIN_ROOT}` is only substituted inside `SKILL.md` and `agents/*.md`.
 - Reference existing skills and templates by their actual names and paths.
 
 ---
@@ -84,82 +85,108 @@ chore: add validation script for skill frontmatter
 
 ---
 
-## Quality Bar (v2.0.0)
+## Quality Bar (v3.0)
 
-Every skill must meet these minimums before merge:
+Two layers: an automated gate that must pass, and the [5-dimension rubric](docs/skill-quality-rubric.md)
+(8+ on every dimension) applied in review.
 
-- **Agent skills**: 200+ lines of substantive content (no filler, no stubs)
-- **Workflow skills**: 150+ lines of substantive content
-- **Engine specialist skills**: 200+ lines with engine-specific code examples
-- **Starters**: Must include `CLAUDE.md` and `.gitignore` at minimum
-- **No stubs**: Every section referenced in the table of contents must have real content
-- **Frontmatter**: Valid YAML frontmatter with `name`, `category`, `version`, `description`, `argument-hint`, `allowed-tools`
-- **Emoji headers**: Follow the AlterLab header convention (see format reference below)
-- **Agent skills** should include `effort` level (max for directors, high for leads) and `context: fork` for isolated contexts
+**Automated gate** (`python3 scripts/validate.py`, `bash tests/hooks.test.sh`,
+`claude plugin validate . --strict`):
+
+- `SKILL.md` length: 200+ lines for agents and engine specialists, 150+ for workflows, **at most 500**
+  (hard cap 550). Long code samples, catalogs and per-engine variants go in `references/*.md` inside
+  the skill directory, each linked from `SKILL.md` with an instruction saying when to read it.
+- Frontmatter uses only documented Claude Code fields. Required: `name` (equals the directory),
+  `description` (at most 400 characters), `argument-hint`, `allowed-tools`. Usual: `effort` (`max`
+  for the three directors, `high` for leads, specialists and heavy workflows, `medium` otherwise).
+  Not allowed: `version`, `model`, `memory`.
+- `allowed-tools` pre-approves tools while the skill runs, so never list bare `Bash`; scope it, for
+  example `Bash(git diff *)` or `Bash(godot --headless *)`.
+- `context: fork` only for report generators that need no conversation; a forked skill runs as a
+  subagent and cannot use `AskUserQuestion`.
+- Every `${CLAUDE_PLUGIN_ROOT}/...` and `${CLAUDE_SKILL_DIR}/...` path resolves, every skill you name
+  exists, and every count you quote in docs matches the repository.
+
+**Content** (reviewed):
+
+- Versions, policies and dates are current and dated ("as of Unity 6.3 LTS"), with sources for
+  anything non-obvious.
+- Claims about named games or studios are public record and attributed. Statistics are sourced or
+  labelled as rules of thumb.
+- Code is correct for the engine versions it names.
+- Each skill has a "When NOT to use me" boundary list, a section on working with AI coding agents for
+  its role, and at least one concrete output template.
+- Skills help users make original games; none helps recreate a specific existing game.
 
 ---
 
-## AlterLab Skill Format Reference
-
-Every SKILL.md follows this structure:
+## Skill Format Reference
 
 ```markdown
 ---
-name: skill-name
-category: agents | workflows | engine-specialists
-version: "1.4"
-description: One-line description
-argument-hint: "brief usage hint"
-allowed-tools: [list, of, tools]
+name: game-example
+description: >
+  What the skill does, when to use it, its strongest trigger phrases, and one
+  "Not for X (use game-y)" boundary. Third person, at most 400 characters.
+argument-hint: "[what to pass]"
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(git diff *)
+effort: high
 ---
 
-# Emoji Skill Title
+# AlterLab GameForge -- Skill Title
 
-## Role & Identity (agents) or Purpose (workflows)
-## Core Capabilities / Workflow Steps
-## Frameworks & Methodologies
-## Output Templates / Deliverables
+You are **Persona Name**, ... (agents and specialists)
+
+### When NOT to Use Me
+## Process / Core Capabilities
+## Frameworks & Methods
+## Working with AI Coding Agents
+## Output Templates
 ## Quality Standards
-## Integration Points
 ```
 
-Key conventions:
-- Use emoji prefixes in H1 headers to signal skill type
-- Reference shared docs with `@docs/filename.md` notation
-- Include concrete output templates, not abstract descriptions
-- Specify which other skills this one collaborates with
-- Include a "When NOT to Use Me" section for agent skills
+Path conventions inside `SKILL.md`:
+
+| Refer to | Write |
+|---|---|
+| A shared doc | `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` |
+| A template | `${CLAUDE_PLUGIN_ROOT}/templates/sprint-plan.md` |
+| A genre pack file | `${CLAUDE_PLUGIN_ROOT}/genre-packs/roguelike/PATTERNS.md` |
+| This skill's reference file | `${CLAUDE_SKILL_DIR}/references/topic.md` |
+| Another skill, for the user to run | `/gameforge:game-designer` |
+| A file in the user's game project | plain relative path, e.g. `design/gdd/combat.md` |
+
+Never use `@docs/...`; that import syntax only works in a CLAUDE.md.
 
 ---
 
 ## Testing Your Changes
 
-Before submitting a PR, validate your skill works in practice:
-
-1. **Load into Claude Code**: Copy the SKILL.md content into a Claude Code session as a custom instruction or slash command.
-2. **Run 3+ test prompts** that exercise different sections of the skill:
-   - A basic prompt that triggers the skill's primary function
-   - An edge case or complex scenario
-   - A prompt that tests collaboration references with other skills
-3. **Check output quality**: Does the agent produce structured, actionable output? Does it follow the frameworks described in the skill?
-4. **Run validation** (if available):
+1. **Run the checks:**
    ```bash
-   npm run validate
+   python3 scripts/validate.py
+   bash tests/hooks.test.sh
+   claude plugin validate . --strict
    ```
+2. **Load your working copy** in Claude Code: `claude --plugin-dir /path/to/AlterLab_GameForge`.
+3. **Run 3+ prompts** that exercise the skill: its primary job, an edge case, and a request that
+   should route to a sibling skill instead (it should not trigger).
+4. **Check the cost:** after installing locally, `claude plugin details gameforge` shows the always-on
+   and on-invoke token cost of each skill.
+5. **Hooks:** add a case to `tests/hooks.test.sh` for any behaviour change. Hooks must parse under
+   `dash` and stay silent outside game projects.
 
 ---
 
 ## Pull Request Checklist
 
-Before requesting review, confirm:
-
-- [ ] Skill meets the minimum line count for its category
-- [ ] All sections have substantive content (no TODOs or placeholders)
-- [ ] Frontmatter is valid YAML with required fields
-- [ ] Tested with 3+ prompts in Claude Code or Claude Projects
+- [ ] `python3 scripts/validate.py` passes
+- [ ] `bash tests/hooks.test.sh` passes (if hooks changed)
+- [ ] `claude plugin validate . --strict` passes
+- [ ] Tested with 3+ prompts in Claude Code via `--plugin-dir`
+- [ ] Versions, policies and claims about real games are sourced and dated
 - [ ] Commit messages follow the convention above
-- [ ] No secrets, API keys, or personal data included
-- [ ] Links to shared docs use `@docs/` notation correctly
+- [ ] No secrets, API keys or personal data
 - [ ] Starters tested in an actual game project (if applicable)
 
 ---

@@ -1,6 +1,6 @@
 # Workflow Examples
 
-Three end-to-end walkthroughs showing how GameForge skills chain together in real indie dev scenarios.
+Four end-to-end walkthroughs showing how GameForge skills chain together in real indie dev scenarios. Not sure which applies? Run `/gameforge:game-help`.
 
 ---
 
@@ -11,22 +11,22 @@ You have a vague idea -- "a roguelike where spells have weight." Here's how to g
 ### Step 1: Bootstrap the project
 
 ```
-claude> /game-start
+claude> /gameforge:game-start
 ```
 
-**What it does:** Asks you 5--8 questions about your game (genre, target platform, team size, timeline). Then generates:
+**What it does:** Asks you 5--8 questions about your game (genre, target platform, team size, timeline). Then sets up `.gameforge/project.json`, copies the engine starter `CLAUDE.md`, configures Git LFS, and generates:
 - A GDD skeleton with your concept, pillars, and scope
 - A tech stack recommendation (engine, tools, version control)
 - A 3-milestone plan with deliverables and dates
 
 **What you get:** A `game-design-document.md` file in your project and a clear picture of what you're building.
 
-**Tip:** If you already know your engine, say so up front -- "Start a Godot 4 roguelike about weighted spells." The skill adapts.
+**Tip:** If you already know your engine, say so up front -- "Start a Godot 4.7 roguelike about weighted spells." The skill adapts.
 
 ### Step 2: Explore and refine the concept
 
 ```
-claude> /game-brainstorm
+claude> /gameforge:game-brainstorm
 ```
 
 **What it does:** Runs a structured ideation session in two phases:
@@ -38,7 +38,7 @@ claude> /game-brainstorm
 ### Step 3: Lock in the design
 
 ```
-claude> /game-designer
+claude> /gameforge:game-designer
 ```
 
 **What it does:** Takes your chosen concept and designs the core systems:
@@ -52,7 +52,7 @@ claude> /game-designer
 ### Step 4: Build the minimal playable
 
 ```
-claude> /game-prototype
+claude> /gameforge:game-prototype
 ```
 
 **What it does:** Scopes your prototype to the absolute minimum needed to test the core loop:
@@ -63,7 +63,7 @@ claude> /game-prototype
 
 **What you get:** A focused prototype plan. Build it, play it, and you'll know within a week if the core idea works.
 
-**Next steps:** Once the prototype is playable, run `/game-playtest` to structure a feedback session, or `/game-code-review` to clean up the code before building on it.
+**Next steps:** Once the prototype is playable, run `/gameforge:game-playtest` to structure a feedback session, or `/gameforge:game-code-review` to clean up the code before building on it.
 
 ---
 
@@ -74,7 +74,7 @@ You have a working prototype and a 2-week sprint ahead. Here's how to plan, exec
 ### Step 1: Plan the sprint
 
 ```
-claude> /game-sprint-plan
+claude> /gameforge:game-sprint-plan
 ```
 
 **What it does:** Analyzes your project state (reads your repo if available) and helps you plan:
@@ -89,14 +89,14 @@ claude> /game-sprint-plan
 
 This is the part where you write code, make art, compose music. GameForge doesn't build your game for you -- but when you get stuck:
 
-- `/game-godot-specialist` -- "How do I structure this scene tree for my inventory?"
-- `/game-designer` -- "Is this progression curve too steep?"
-- `/game-narrative-director` -- "Write dialogue for this NPC encounter"
+- `/gameforge:game-godot-specialist` -- "How do I structure this scene tree for my inventory?"
+- `/gameforge:game-designer` -- "Is this progression curve too steep?"
+- `/gameforge:game-narrative-director` -- "Write dialogue for this NPC encounter"
 
 ### Step 3: Review the code
 
 ```
-claude> /game-code-review
+claude> /gameforge:game-code-review
 ```
 
 **What it does:** Reviews your game code (point it at specific files or let it scan) for:
@@ -110,7 +110,7 @@ claude> /game-code-review
 ### Step 4: Playtest the build
 
 ```
-claude> /game-playtest
+claude> /gameforge:game-playtest
 ```
 
 **What it does:** Structures a playtest session:
@@ -124,7 +124,7 @@ claude> /game-playtest
 ### Step 5: Reflect
 
 ```
-claude> /game-retrospective
+claude> /gameforge:game-retrospective
 ```
 
 **What it does:** Runs a GDC-format retrospective:
@@ -134,7 +134,7 @@ claude> /game-retrospective
 - Kill list review -- which features should be cut entirely?
 - Single-lesson forcing function -- "If you could only take one lesson from this sprint, what is it?"
 
-**What you get:** A retrospective report that feeds directly into your next `/game-sprint-plan`. The cycle continues.
+**What you get:** A retrospective report that feeds directly into your next `/gameforge:game-sprint-plan`. The cycle continues.
 
 ---
 
@@ -145,7 +145,7 @@ Your game is feature-complete. You have 3--4 weeks before release. Here's the fi
 ### Step 1: Check the balance
 
 ```
-claude> /game-balance-check
+claude> /gameforge:game-balance-check
 ```
 
 **What it does:** Audits your game's balance using statistical methods:
@@ -159,7 +159,7 @@ claude> /game-balance-check
 ### Step 2: QA pass
 
 ```
-claude> /game-qa-lead
+claude> /gameforge:game-qa-lead
 ```
 
 **What it does:** Builds a comprehensive test plan:
@@ -173,7 +173,7 @@ claude> /game-qa-lead
 ### Step 3: Prepare the launch
 
 ```
-claude> /game-launch
+claude> /gameforge:game-launch
 ```
 
 **What it does:** Prepares everything around the release:
@@ -188,7 +188,7 @@ claude> /game-launch
 ### Step 4: Know your market
 
 ```
-claude> /game-market-research
+claude> /gameforge:game-market-research
 ```
 
 **What it does:** Analyzes your competitive landscape:
@@ -199,13 +199,55 @@ claude> /game-market-research
 
 **What you get:** A market research report that informs your store page copy, pricing, and marketing spend.
 
-**After launch:** Use `/game-analytics-setup` to track KPIs, `/game-postmortem` to review what worked, and `/game-retrospective` for ongoing sprint cycles.
+**After launch:** Use `/gameforge:game-analytics-setup` to track KPIs, `/gameforge:game-postmortem` to review what worked, and `/gameforge:game-retrospective` for ongoing sprint cycles.
+
+---
+
+## Example 4: A Browser Game in a Weekend with an AI Agent
+
+You want a small, original 3D browser game you can share on itch.io by Sunday night: "a lighthouse keeper guiding ships through fog with a sweeping beam."
+
+### Step 1: Spec before code
+
+```
+claude> /gameforge:game-vibe-code a lighthouse keeper guides ships through fog with a sweeping beam
+```
+
+**What it does:** Interviews you briefly, then writes a one-page spec (core loop, win/lose, controls, what "fun" means for this game, a pass/fail check for each feature) and a short `CLAUDE.md` with the run and test commands first. It proposes the stack (Three.js with Vite and TypeScript here) and pins versions.
+
+### Step 2: Playable in the first hour, verified at every step
+
+The loop runs one feature at a time: implement, run the Playwright check that plays the game and screenshots it, read the `render_game_to_text()` state dump, fix, commit. Tuning constants (beam speed, fog density, ship spawn rate) live in one file so the "make it more fun" passes are quick. `progress.md` records what works, what is next and what is fragile, so a fresh session can pick up cleanly.
+
+When the agent reaches for an outdated API, ask the specialist:
+
+```
+claude> /gameforge:game-threejs-specialist the fog looks banded on mobile; WebGPU or WebGL here?
+```
+
+### Step 3: Art and sound without losing coherence
+
+```
+claude> /gameforge:game-ai-assets low-poly lighthouse, three ship types, foghorn and waves
+```
+
+**What you get:** A style reference sheet, generated assets run through a glTF optimization pass, audio normalized and looped, and every asset recorded in `ai-asset-log.md` with tool, date, licence and your edits.
+
+### Step 4: Ship it
+
+```
+claude> /gameforge:game-web-publish itch.io
+```
+
+**What it does:** Production build within a size budget, a mobile and iOS audio check, the itch.io page settings, a `butler push` command, and the AI disclosure text drafted from your asset log.
+
+**What you get:** A playable link, a repository you can keep building, and nothing you would be embarrassed to open on Monday.
 
 ---
 
 ## What's Next?
 
-- **Full skill catalog:** [README.md](../README.md#skill-catalog)
+- **Full skill catalog:** [README.md](../README.md#-skill-catalog)
 - **FAQ:** [docs/FAQ.md](FAQ.md)
 - **Contributing:** [CONTRIBUTING.md](../CONTRIBUTING.md)
 

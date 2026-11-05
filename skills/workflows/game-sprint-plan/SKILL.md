@@ -1,524 +1,369 @@
 ---
-name: "game-sprint-plan"
+name: game-sprint-plan
 description: >
-  Invoke when the user needs to plan a development sprint, break down tasks, schedule
-  game work, or organize a sprint with cross-discipline dependencies. Triggers on:
-  "sprint plan", "task breakdown", "development planning", "scheduling", "sprint
-  backlog". Do NOT invoke for scope evaluation (use game-scope-check) or retrospectives
-  (use game-retrospective). Part of the AlterLab GameForge collection.
-argument-hint: "[milestone or focus area]"
-model: opus
+  Builds a sprint plan for a team or solo developer: one pillar-aligned goal, day-sized tasks that
+  each end in a check, dependencies, capacity with buffer, AI-agent estimates with review budgets
+  and vibe-debt paydown, written to production/sprints/. Not for whole-project scope (use
+  game-scope-check).
+argument-hint: "[sprint number, milestone, or focus area]"
 effort: high
 disable-model-invocation: true
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(git log *), Bash(git status *), Bash(git branch *), Bash(gh issue list *)
 ---
 
-# AlterLab GameForge -- Sprint Planning Workflow
+# AlterLab GameForge -- Sprint Planning
 
-Game development sprints fail for different reasons than software sprints. A SaaS team struggles with unclear requirements and shifting priorities. A game team struggles with cross-discipline dependencies and the fundamental unpredictability of "fun." You can spec out an inventory system perfectly, build it to spec, and discover in playtest that it makes the game worse. Supergiant's sprint model (documented in their GDC talks) accounts for this by reserving explicit "discovery time" in every sprint -- time allocated to test whether what they built actually feels good, not just whether it works.
+Game sprints fail for different reasons than software sprints. A business-app team struggles with
+unclear requirements; a game team struggles with cross-discipline dependencies and the
+unpredictability of fun. You can build an inventory system exactly to spec and discover in the
+playtest that it makes the game worse. So a game sprint plans discovery time (spikes, feel passes,
+playtests) as real work, not as leftovers.
 
-Sprint planning for games must build in structured discovery time, explicit scope tiers that flex without chaos, and a dependency model that respects the sequential nature of art-to-integration pipelines. This workflow produces a concrete sprint plan document a team can execute against.
+There is a newer failure mode. With Claude Code or a similar agent, code arrives fast, and it is
+easy to plan a sprint as if generation were the whole job. It is not. Someone still has to run the
+checks, read the diff, play the change and notice what the agent added that nobody asked for.
+This workflow budgets that verification on every task, and reserves capacity to pay down the
+"vibe debt" that accumulates when agent-written code is accepted faster than it is understood.
 
-### Purpose & Triggers
+The output is a sprint plan file in `production/sprints/` that a team, a solo developer, or a
+coding agent working from task cards can execute against.
 
-Use this workflow when:
-- A team is about to start a new development sprint
-- A solo developer wants to structure their next 1-2 weeks of work
-- After a sprint retrospective, when planning the next iteration
-- When a milestone is approaching and work needs to be decomposed
-- The user finished `game-brainstorm` or `game-design-review` and needs to turn
-  design decisions into executable tasks
+## When to Use / When Not To
 
-Problems this solves:
-- Sprints with vague goals that cannot be evaluated as done or not done
-- Tasks estimated at "a few days" that actually take two weeks
-- Art and code tasks planned in parallel when art must finish first
-- Teams that commit to more work than their capacity allows every sprint
-- Risks that were obvious in retrospect but invisible in planning
-- No velocity tracking, so every sprint's estimates are guesses
-- Scope creep disguised as small additions that accumulate into missed deadlines
+Use before a new sprint, when a solo developer wants to structure the next one or two weeks,
+right after a retrospective, when a milestone needs decomposing, or when design work from
+`game-gdd-author` or `game-design-review` must become executable tasks.
 
-### Critical Rules
+| Instead of this skill... | Use |
+|---|---|
+| Is the whole project too big for the date? | `/gameforge:game-scope-check` |
+| Reviewing how the last sprint went | `/gameforge:game-retrospective` |
+| Milestone dates, risk and publisher-facing schedule | `/gameforge:game-producer` |
+| Moment-to-moment agent build loop for one task | `/gameforge:game-vibe-code` |
+| Coordinating several studio roles on one problem | `/gameforge:game-team-orchestrator` |
+| A 48-72 hour jam schedule | `/gameforge:game-jam-mode` |
 
-1. **One goal per sprint.** The sprint goal is a single sentence that defines success. If the sprint achieves this goal and nothing else, it was a successful sprint. If the sprint ships everything on the task list but misses the goal, it failed. Hades' sprint goals during Early Access were experience-focused: "players feel the narrative progressing even when they die." That clarity prevents the "we did a lot of stuff but nothing feels finished" anti-pattern.
+## Critical Rules
 
-2. **Tasks max 1 day.** Any task estimated at more than 1 day must be decomposed further. Large tasks hide complexity and create false confidence in estimates. If a task seems irreducible at more than 1 day, it is either too vague or the developer does not yet understand the work well enough (which is itself a discovery task). Dead Cells' development at Motion Twin used day-sized tasks for everything -- even major features like new biomes were decomposed into dozens of single-day tasks with clear done criteria.
+1. **One goal per sprint.** A single sentence that defines success, framed as a player or project
+   outcome ("testers can finish one full run"), not a feature list. Ship everything but miss the
+   goal and the sprint failed.
+2. **Tasks are at most one day and end in a check.** More than 8 hours of human time means
+   decompose further. Every task names how "done" is decided: acceptance check IDs from the GDD, a
+   test command and its expected result, or a playtest observation.
+3. **Every agent-built task carries a verify budget.** Estimate build time and verify time
+   separately. A task whose verification was skipped is not done, whatever the agent reported.
+4. **Buffer after estimating.** Subtract 20% of capacity for teams and 30% for solo developers
+   (rules of thumb) for meetings, build breaks, hardware, and "I'll just refactor this one thing".
+5. **Dependencies are first-class.** A blocked task is not ready. Map chains, find the critical
+   path, schedule blockers first.
+6. **Scope tiers flex the sprint.** Must / Should / Could / Won't. Cutting a Could on Wednesday is
+   healthy; cutting a Must on Friday is a crisis.
+7. **Velocity honesty.** Plan from measured completion in `production/sprints/velocity.md`, not from
+   hope. If agents doubled your commits but not your completed Musts, your velocity did not double.
+8. **Pay down vibe debt every sprint.** A fixed slot, sized from the last retrospective, not
+   whatever is left over.
+9. **Trace the goal to a pillar.** Infrastructure sprints are fine; call them out. A goal that serves
+   no pillar and no infrastructure need is drift; flag it.
 
-3. **The 20% buffer is non-negotiable.** After calculating raw capacity, subtract 20%. This
-   covers meetings, code reviews, unexpected bugs, build issues, hardware problems, and the
-   general friction of collaborative work. Teams that skip the buffer consistently
-   overcommit and consistently underdeliver. Solo devs are not exempt; context switching,
-   research tangents, and "I'll just refactor this one thing" all eat time.
+## Step 0: Gather Context
 
-4. **Dependencies are first-class concerns.** A task that is blocked by another task is not
-   ready to be worked. Map dependencies explicitly, identify the critical path, and ensure
-   blocking tasks are scheduled first. The most common game-dev dependency chain:
-   design spec --> art/audio asset creation --> code integration --> QA verification.
-
-5. **Scope tiers enable flexibility.** Not everything in a sprint has equal priority. Use
-   Must/Should/Could/Won't tiers so the team knows what to cut first when reality intrudes.
-   Cutting a Could-Have on Wednesday is healthy scope management. Cutting a Must-Have on
-   Friday is a crisis.
-
-6. **Velocity honesty over velocity aspirations.** If the team has completed an average of 30 story points in each of the last 3 sprints, planning 45 points this sprint is not ambition -- it is delusion. Use actual historical velocity, not hoped-for velocity. Larian's milestone-based development for BG3 worked because they tracked velocity obsessively and adjusted scope accordingly -- not because they crunched harder.
-
-7. **Align with pillars.** Every sprint goal traces to a design pillar. If a sprint goal does not serve any pillar, the team is either working on infrastructure (acceptable but call it out) or drifting from the vision (flag for discussion). Supergiant's sprint goals are always framed as player experience statements, not feature lists -- "players feel the weight of their weapon choices" not "implement weapon system." Reference `docs/game-design-theory.md` for pillar methodology and `docs/collaboration-protocol.md` for cross-discipline coordination rules.
-
-### Sprint Context (Auto-populated)
-
-These values are injected automatically via shell preprocessing before the skill content
-reaches Claude. They provide real-time project data so sprint planning starts from the
-actual state of the codebase, not from memory or assumption.
-
-- Recent commits: !`git log --oneline -20 2>/dev/null || echo "No git history"`
-- Open issues: !`gh issue list --limit 10 --state open 2>/dev/null || echo "No GitHub issues accessible"`
-- Last sprint: !`cat production/session-state/last-sprint.json 2>/dev/null || echo "No previous sprint data"`
-- Team velocity: !`cat production/session-state/velocity.json 2>/dev/null || echo "No velocity data"`
-- Active branches: !`git branch --list 2>/dev/null | head -10 || echo "No branches detected"`
-- Uncommitted changes: !`git status --short 2>/dev/null | wc -l || echo "0"`
-- Days since last tag: !`git log --tags --simplify-by-decoration --pretty="format:%ar" 2>/dev/null | head -1 || echo "No tags — no milestone history"`
-- Current milestone files: !`ls production/milestones/ 2>/dev/null | tail -3 || echo "No milestone directory"`
-
-Use this auto-populated data to inform sprint planning decisions. The recent commits reveal
-what work was recently completed and what areas of the codebase are active. Open issues
-provide the backlog candidates. Previous sprint data and velocity JSON enable data-driven
-capacity planning (see Step 5 and Step 7). Active branches reveal work in progress that may
-carry over into this sprint. Days since last tag indicates how long since the last formal
-milestone, which helps calibrate sprint scope.
-
-If velocity data is unavailable (first sprint), plan conservatively and use this sprint to
-establish a baseline. If last sprint data is available, compare planned vs. completed to
-calibrate this sprint's commitments.
-
-### Workflow
-
-**Step 1: Sprint Goal Definition**
-
-A sprint goal is not a task list summary. It is the strategic purpose of the sprint,
-connected to the game's design pillars and current milestone.
+Run these (a failure just means "no data"; note it and continue):
 
 ```
-SPRINT GOAL FRAMEWORK
--------------------------------------------------
-Format: "By the end of this sprint, [specific deliverable] is [specific state]
-         so that [specific value to the project]."
-
-GOOD EXAMPLES:
-- "By the end of this sprint, the core combat loop is playable with 3 enemy
-   types so that we can run our first combat-focused playtest."
-- "By the end of this sprint, the save/load system handles all current game
-   state so that playtesters can resume sessions."
-- "By the end of this sprint, the tutorial sequence covers movement, combat,
-   and inventory so that new players can learn without external instructions."
-
-BAD EXAMPLES:
-- "Work on combat stuff." (vague, not evaluable)
-- "Fix bugs and add features." (two goals, not one)
-- "Make the game better." (not falsifiable)
-
-PILLAR ALIGNMENT:
-Sprint goal: [goal statement]
-Serves pillar: [which pillar this advances]
-Milestone: [which milestone this contributes to]
--------------------------------------------------
+git log --oneline -20
+git status --short
+git branch --list
+gh issue list --limit 15 --state open
 ```
 
-**Step 2: Task Decomposition**
+Read when present:
+- `.gameforge/project.json` -- phase, engine, pillars.
+- `production/session-state/active.md` -- current focus, decisions, blockers.
+- The latest `production/sprints/sprint-NN.md` and `production/sprints/sprint-NN-retro.md` --
+  carry-over, retro actions, the AI lens findings (vibe debt, review cost).
+- `production/sprints/velocity.md` -- planned vs completed history.
+- `design/gdd.md` §13 (acceptance criteria) and §17 (milestones); `design/systems-index.md`.
+- `production/milestones/` -- the current milestone's definition of done.
 
-Break the sprint goal into implementable tasks. Each task must be small enough for one
-person to complete in one day or less.
+Then ask **one** AskUserQuestion with up to four questions, offering defaults:
+1. Sprint length -- **1 week** (solo default) or 2 weeks (team default).
+2. Who is available, and for how many days (note PTO, part-time, contractors).
+3. How will most work be built -- by hand, **agent-assisted** (a human drives, the agent drafts),
+   or agent-led (the agent implements from task cards, the human verifies).
+4. Which milestone this sprint serves, if `production/milestones/` does not make it obvious.
 
-```
-TASK DECOMPOSITION PROCESS
--------------------------------------------------
-Step 2.1: List features needed to achieve the sprint goal
-Step 2.2: For each feature, list the technical tasks
-Step 2.3: For each technical task, break into sub-tasks until each is <= 1 day
-Step 2.4: Add non-feature tasks (bug fixes, tech debt, reviews, meetings)
-Step 2.5: Identify tasks that require discovery/research (estimate separately)
+If velocity data is missing, say this sprint establishes the baseline and plan conservatively.
 
-TASK FORMAT:
-- ID: [SPRINT-001]
-- Title: [clear, action-oriented name]
-- Description: [what "done" looks like for this task]
-- Estimate: [hours, max 8 for a full day]
-- Owner: [person responsible]
-- Discipline: [code / art / audio / design / QA]
-- Dependencies: [list of task IDs this is blocked by]
-- Scope tier: [Must / Should / Could]
-
-ESTIMATION GUIDELINES:
-- 1-2 hours: small, well-understood change (fix a known bug, add a config value)
-- 3-4 hours: moderate task with clear requirements (implement a simple system)
-- 5-6 hours: significant task with some unknowns (new feature with defined spec)
-- 7-8 hours: full-day task at the complexity ceiling (decompose further if possible)
-- > 8 hours: must be broken down into smaller tasks
-
-DISCOVERY TASKS:
-When a task involves unknown technology or untested approaches, create a
-discovery task first: "Spike: determine if [approach] is feasible (max 4h)."
-The spike produces information, not features. Schedule it before the
-implementation task it informs.
--------------------------------------------------
-```
-
-**Step 3: Dependency Mapping**
-
-Dependencies in game development are more complex than in most software because multiple
-disciplines contribute to a single feature.
+## Step 1: Sprint Goal
 
 ```
-DEPENDENCY CHAIN ANALYSIS
--------------------------------------------------
-TYPICAL GAME DEV DEPENDENCY CHAINS:
+Format: "By the end of this sprint, [deliverable] is [state] so that [value]."
 
-Design --> Art:
-  Game designer defines enemy behavior --> Artist creates enemy sprite/model
-  Level designer creates layout --> Environment artist builds the space
+GOOD: "By the end of this sprint, the core combat loop is playable with 3 enemy types so that
+       we can run the first combat playtest on Friday."
+GOOD: "By the end of this sprint, save/load round-trips all current game state so that
+       playtesters can resume sessions."
+BAD:  "Work on combat stuff."            (not evaluable)
+BAD:  "Fix bugs and add features."       (two goals)
 
-Art --> Code:
-  Artist delivers character sprites --> Programmer integrates animations
-  UI artist creates mockups --> Programmer implements interactive UI
-
-Design --> Code:
-  Designer specifies mechanic --> Programmer implements system
-  Designer tunes values --> Programmer exposes tuning parameters
-
-Code --> QA:
-  Programmer completes feature --> QA verifies correct behavior
-  Programmer fixes bug --> QA confirms fix and checks for regressions
-
-Audio --> Code:
-  Audio designer creates sounds --> Programmer integrates audio triggers
-
-MAPPING FORMAT:
-[SPRINT-001] Design enemy patrol pattern
-  |
-  v (blocks)
-[SPRINT-005] Create enemy patrol animation
-  |
-  v (blocks)
-[SPRINT-009] Implement enemy patrol AI
-  |
-  v (blocks)
-[SPRINT-012] QA: verify enemy patrol behavior
-
-CRITICAL PATH:
-The longest dependency chain determines the minimum sprint duration for
-that feature. If the critical path is longer than the sprint, the feature
-cannot be completed this sprint. Either rescope or split across sprints.
--------------------------------------------------
+Serves pillar: [name]  |  Milestone: [name]  |  Goal check: [how we will know on the last day]
 ```
 
-**Step 4: Scope Tiering**
+## Step 2: Task Decomposition
 
-Assign every task to a scope tier. This is the pressure-release valve that keeps
-sprints from failing when reality diverges from plans.
-
-```
-SCOPE TIER DEFINITIONS
--------------------------------------------------
-MUST-HAVE (sprint goal depends on this)
-- If these tasks are not done, the sprint goal is not met
-- These are scheduled first and protected from cuts
-- Estimated effort for Must-Haves should not exceed 60% of capacity
-
-SHOULD-HAVE (significantly enhances the sprint goal)
-- The sprint goal is technically met without these, but weakened
-- These are scheduled second and cut only under real pressure
-- Estimated effort: up to 25% of remaining capacity after Must-Haves
-
-COULD-HAVE (polish, nice-to-have, opportunistic improvements)
-- Scheduled last, cut first, no guilt
-- These are stretch goals for productive sprints
-- Estimated effort: fills remaining capacity
-
-WON'T-HAVE (explicitly deferred)
-- Tasks that were considered and deliberately rejected for this sprint
-- Writing these down prevents relitigating scope decisions mid-sprint
-- "We already decided not to do that this sprint" is a powerful sentence
--------------------------------------------------
-```
-
-**Step 5: Capacity Calculation**
-
-Determine how much work the team can actually do, not how much you wish they could do.
+Break the goal into features, features into tasks, tasks into sub-tasks until each is at most one
+day of human time (build plus verify). Add non-feature work: bug fixes, retro actions, vibe-debt
+items, reviews, playtests.
 
 ```
-CAPACITY CALCULATION
--------------------------------------------------
-For each team member:
-  Available days in sprint:     [total days minus PTO, holidays, sick days]
-  Minus overhead (20%):         [meetings, reviews, admin, build issues]
-  Effective person-days:        [available * 0.8]
-  Effective person-hours:       [person-days * productive hours per day]
-
-  Note: productive hours per day is typically 5-6, not 8.
-  The remaining 2-3 hours go to email, Slack, context switching,
-  and the unavoidable friction of being a human with a job.
-
-TEAM CAPACITY:
-  Total effective hours: [sum of all team members]
-  Must-Have tasks:       [total hours]  ([%] of capacity)
-  Should-Have tasks:     [total hours]  ([%] of capacity)
-  Could-Have tasks:      [total hours]  ([%] of capacity)
-  Buffer (20%):          [hours reserved]
-  Remaining:             [positive or negative]
-
-  If remaining is negative: cut Could-Haves first, then Should-Haves
-  If still negative after cuts: the sprint goal itself is too ambitious.
-  Rescope the goal, do not just "try harder."
-
-SOLO DEV ADJUSTMENTS:
-  Solo developers face unique overhead:
-  - No parallelism (all dependency chains are sequential)
-  - Every discipline switch has context-switching cost
-  - No rubber-ducking available (allocate more time for debugging)
-  - Apply an additional 10% buffer (30% total instead of 20%)
--------------------------------------------------
+TASK CARD
+ID:          S07-03
+Title:       Dash: implement cooldown and stamina cost
+Done when:   AC-002-2 and AC-002-4 pass (`npm run check`), dash capture attached
+Build mode:  H (by hand) | A (agent-assisted) | AL (agent-led)
+Build est:   2h      Verify est: 1.5h      Total: 3.5h
+Owner:       Sam            Discipline: code
+Depends on:  S07-01         Tier: Must          Spike: no
+Out of scope: air dash, dash VFX
 ```
 
-**Step 6: Risk Identification**
+Sizing (total human hours):
 
-Name the top 3-5 risks for this specific sprint and define mitigations.
+| Total | Typical task |
+|---|---|
+| 1-2 h | Known bug with a repro, a config change, one knob added to a tuning file |
+| 3-4 h | Small system with a clear spec and checks |
+| 5-6 h | Significant task with some unknowns |
+| 7-8 h | At the ceiling; decompose if at all possible |
+| > 8 h | Must be split |
 
-```
-RISK ASSESSMENT
--------------------------------------------------
-COMMON GAME DEV SPRINT RISKS:
+**Spikes.** Unknown technology or an untested approach gets a time-boxed spike first ("Spike:
+can Jolt handle 200 stacked crates at 60 fps on the Steam Deck? max 4h"). A spike produces a
+decision and a note, not shippable code. Agents make spikes cheap; keep the time box anyway.
 
-Technical risks:
-- "We've never built [system X] before and don't know the real complexity"
-  Mitigation: Schedule a spike task early in the sprint
-- "The engine update might break existing functionality"
-  Mitigation: Pin the engine version for the sprint duration
-- "Performance on target hardware is unknown"
-  Mitigation: Schedule a profiling session mid-sprint
+**Feel passes.** Anything whose success is "it feels right" gets an explicit tuning task with a
+playtest check. These do not compress with agents.
 
-Content risks:
-- "The art assets won't be ready when code needs them"
-  Mitigation: Establish placeholder assets, code against placeholders
-- "Level design iteration may require multiple art passes"
-  Mitigation: Use blocking geometry first, polish in a later sprint
+## Step 3: Dependency Mapping
 
-Scope risks:
-- "Stakeholder feedback mid-sprint could change requirements"
-  Mitigation: Define a change freeze date within the sprint
-- "A Must-Have task is harder than estimated"
-  Mitigation: Identify which Should-Have to cut if Must-Have expands
-
-Team risks:
-- "Key person might be unavailable for part of the sprint"
-  Mitigation: Ensure no single-person bottlenecks on critical path
-- "New team member ramp-up time is unpredictable"
-  Mitigation: Pair them with a senior member, reduce their capacity estimate
-
-RISK FORMAT:
-| Risk | Probability | Impact | Mitigation | Trigger (when to act) |
-|------|------------|--------|------------|----------------------|
-| [description] | H/M/L | H/M/L | [plan] | [observable signal] |
--------------------------------------------------
-```
-
-**Step 7: Velocity Tracking**
-
-Compare planned work against actual completion from previous sprints to calibrate
-future estimates.
+The usual chain is design spec -> art/audio asset -> code integration -> QA verification, with
+placeholders letting code start before final assets land.
 
 ```
-VELOCITY TRACKING
--------------------------------------------------
-PREVIOUS SPRINT DATA:
-| Sprint | Planned (pts/hrs) | Completed | Completion Rate | Notes |
-|--------|-------------------|-----------|-----------------|-------|
-| N-3    | [amount]          | [amount]  | [%]             | [context] |
-| N-2    | [amount]          | [amount]  | [%]             | [context] |
-| N-1    | [amount]          | [amount]  | [%]             | [context] |
-| Avg    |                   |           | [avg %]         |       |
-
-CALIBRATION RULES:
-- If average completion rate is below 80%: you are chronically overcommitting.
-  Reduce this sprint's planned work by the gap percentage.
-- If average completion rate is above 95%: you are undercommitting.
-  You can safely add a Should-Have or Could-Have item.
-- If completion rate swings wildly (50% one sprint, 95% the next):
-  your estimation process is unreliable. Focus on improving estimates
-  before increasing velocity.
-- First sprint (no history): plan conservatively. It is always better
-  to finish early and pull in stretch goals than to miss commitments.
-
-ESTIMATION IMPROVEMENT:
-After each sprint, compare estimated hours to actual hours for each task.
-Track the ratio. Over time, you will learn your personal/team estimation
-bias and can pre-correct for it.
--------------------------------------------------
+S07-01 Design dash rules (§5.2 locked)
+  -> S07-03 Implement cooldown + stamina (AL)
+       -> S07-06 Integrate dash SFX (needs S07-04 audio)
+            -> S07-09 QA: regression run + playtest check AC-002-5
+CRITICAL PATH: S07-01 -> S07-03 -> S07-06 -> S07-09 = 11h across 3 people
 ```
 
-**📋 Solo Dev / Kanban Mode**
+If the critical path is longer than the sprint, rescope or split across sprints. For solo
+developers every chain is sequential. Discipline-by-discipline chains and a fuller risk catalog
+are in `${CLAUDE_SKILL_DIR}/references/planning-catalogs.md`; read it for team sprints with art,
+audio and QA hand-offs, or when the user asks for Kanban.
 
-Not every project needs Scrum. For solo developers or teams of two, the overhead of sprint ceremonies (planning meetings, standups, retrospectives with yourself) often exceeds their value. Kanban provides the same workflow discipline with less process friction.
+## Step 4: Estimating with AI Agents
 
-**When to use Kanban instead of Scrum:**
-- Solo developer or team of 2 where sprint ceremonies would be a conversation with yourself
-- Projects with unpredictable task sizes (creative work, R&D-heavy prototyping)
-- Maintenance phases where work arrives continuously rather than in planned batches
-- When the overhead of sprint planning consistently takes longer than the sprint itself
+Agents change which work is cheap, not how much judgment a game needs. Read
+`${CLAUDE_SKILL_DIR}/references/agent-estimation.md` before estimating any A or AL task; it has
+the evidence behind this table, per-task-type verify checklists and a calibration worksheet.
 
-**Kanban Board Structure:**
+| Speeds up a lot | Speeds up somewhat | Barely speeds up |
+|---|---|---|
+| Boilerplate, UI wiring, menus | Gameplay systems with a written spec and checks | Game feel and tuning (needs playing) |
+| Save/load and data plumbing | Bug fixes with a reliable repro | Level and content authoring that needs taste |
+| Editor tools, debug overlays, cheat menus | Shader and VFX tweaks judged by screenshot | Art direction, hero assets, audio mix |
+| Test harnesses, AI-vs-AI balance simulators | Porting between frameworks with tests | Playtests and synthesizing feedback |
+| Greybox prototypes and spikes | Refactors covered by tests | Performance on real target devices |
+| Converting literals to tuning files | Localization plumbing | Multiplayer authority and anti-cheat |
+| | | Architecture changes; platform certification and store submission |
+
+**Verify budget (GameForge rules of thumb, replace with your own ratios after three sprints):**
+
+| Build mode | Verify estimate | Verification includes |
+|---|---|---|
+| H | normal review time | check command, review by a second person on teams |
+| A | about 30-50% of build time | check command, read the diff, play the change |
+| AL | at least equal to build time | check command, read the diff or a targeted review, play the change, look for out-of-scope additions, confirm knobs not literals |
+
+**Parallel agent sessions** multiply the verify queue, not capacity. The 2026 Vibe Jam winner ran
+two or three Claude Code sessions on separate subsystems and spent most of the human time on
+planning and playing. Plan no more concurrent AL tasks than the owner can verify the same day.
+
+## Step 5: Vibe-Debt Paydown Slot
+
+Reserve **10-15% of capacity** every sprint (rule of thumb; use the high end after an agent-led
+sprint or when the last retro's AI lens flagged debt). Candidates:
+
+- Agent commits merged without review in the last sprint (count them in the retro).
+- Duplicate code paths for the same behavior; dead code; leftover debug hooks.
+- Oversized files (single-file web games grow past a few thousand lines quickly); split them.
+- Gameplay literals that never moved into tuning files.
+- Systems with no tests around agent-written logic; flaky tests from unseeded randomness.
+- Stale `CLAUDE.md` or project notes the agent relies on.
+- Findings from `/gameforge:game-code-review`, `TODO`/`FIXME` markers, high-churn files.
+
+Paydown tasks get checks like any other ("dash.gd under 300 lines; tests green; no literal in
+movement code").
+
+## Step 6: Scope Tiering
+
+| Tier | Rule | Share of capacity (rule of thumb) |
+|---|---|---|
+| **Must** | The goal fails without it; scheduled first, protected | at most 60% |
+| **Should** | Strengthens the goal; cut only under real pressure | about 25% |
+| **Could** | Polish and stretch; cut first, no guilt | about 15% |
+| **Won't** | Considered and deferred; written down so it is not relitigated | 0% |
+
+## Step 7: Capacity
+
 ```
-Backlog --> In Progress (WIP limit: 2-3) --> Testing --> Done
+Per person:  available days  x  productive hours/day (5-6, rule of thumb)  =  raw hours
+Team raw hours                                                [ ]
+- Buffer (20% team / 30% solo)                                [ ]
+- Vibe-debt slot (10-15%)                                     [ ]
+- Ceremonies, playtests, reviews not already in task cards    [ ]
+= Plannable hours                                             [ ]
+
+Planned task totals (build + verify):  Must [ ] | Should [ ] | Could [ ] | Remaining [ ]
 ```
-The WIP (Work In Progress) limit is the critical constraint. For solo devs, a WIP limit of 2-3 prevents the "10 things started, nothing finished" anti-pattern. For a pair, WIP limit of 3-4 is appropriate. If you are tempted to increase the WIP limit, you are avoiding the discipline that makes Kanban work.
 
-**Discipline Swimlanes:**
-Organize your board with horizontal swimlanes by discipline: Code, Art, Audio, Design, Business. This makes context-switching visible. If your "In Progress" column has one card in Code, one in Art, and one in Business, you are paying three context-switching penalties simultaneously. Try to batch work by discipline when possible.
+If Remaining is negative: cut Coulds, then Shoulds. Still negative: the goal is too ambitious.
+Rescope the goal; do not "try harder". Verify hours count against the person who verifies, which
+on a solo project is always the developer.
 
-**Weekly Review Cadence:**
-Instead of sprint retrospectives, hold a weekly review (even if it is just 15 minutes of self-reflection for solo devs):
-- What moved to Done this week?
-- What has been stuck in In Progress for more than 3 days? Why?
-- Is the WIP limit being respected, or are you cheating?
-- Does the Backlog still reflect actual priorities, or has it drifted?
+## Step 8: Risks
 
-**Tool Recommendations:**
-- **HacknPlan** -- purpose-built for game development, understands discipline categories
-- **Codecks** -- uses a card game metaphor, visually engaging, good for small teams
-- **GitHub Projects** -- free, integrates with your repository, good for code-heavy projects
-- **Notion** -- flexible, good for solo devs who want kanban + documentation in one place
+Name three to five risks for this sprint with an observable trigger.
 
-**MoSCoW Enforcement Percentages**
+| Risk | Prob | Impact | Mitigation | Trigger (when to act) |
+|---|---|---|---|---|
+| Agent-built dash regresses movement | M | H | Movement tests in the check command; revert, do not patch over | Any movement AC goes red |
+| Audio for S07-06 late | M | M | Placeholder SFX; integrate final in S08 | Not delivered by Wednesday |
+| Engine or tool update mid-sprint | L | H | Pin engine and tool versions for the sprint | Update prompt appears |
+| Verify queue backs up | M | M | Cap concurrent AL tasks at 2 | More than 2 AL tasks awaiting verify |
 
-Every sprint (or weekly kanban review) should verify that the planned work distribution follows these proportions:
+## Step 9: Velocity Calibration
 
-| Priority | Target Percentage | Purpose |
-|----------|------------------|---------|
-| **Must** | 60% of capacity | Core deliverables that define sprint success |
-| **Should** | 25% of capacity | High-value enhancements that strengthen the sprint goal |
-| **Could** | 15% of capacity | Polish and stretch goals, cut first under pressure |
-| **Won't** | 0% of capacity | Explicitly deferred -- not in this sprint, no exceptions |
+Append one planned row to `production/sprints/velocity.md` now; the retrospective fills in actuals.
 
-If your Must-Have tasks exceed 60% of capacity, you are overcommitting on critical work and leaving no room for the unexpected. If Could-Have tasks creep above 15%, you are spending too much time on polish before the foundations are solid. Track these percentages explicitly in your sprint plan and review them during retrospectives.
+```
+| Sprint | Dates | Planned h | Done h | Rate | Verify plan h | Verify actual h | AL/A/H tasks | Agent-traced defects | Notes |
+|--------|-------|-----------|--------|------|---------------|-----------------|--------------|----------------------|-------|
+| S07 | 11-09..11-13 | 26 | -- | -- | 9 | -- | 3/4/2 | -- | first sprint with AL tasks |
+```
 
-**Scope-Check Integration**
+- Average completion under 80%: overcommitting; cut planned hours by the gap.
+- Over 95%: room for one more Should or Could.
+- Wild swings (50% then 95%): fix estimation before raising scope.
+- Verify actual far above plan: your verify ratios are wrong; raise them before adding AL tasks.
+- Completion under 75% for three sprints running: run `/gameforge:game-scope-check` before
+  planning the next sprint.
 
-When sprint velocity data suggests the team is consistently completing less than planned (completion rate below 75% for 3+ consecutive sprints), this is a scope creep signal. Before planning the next sprint:
-- Run `/game-scope-check` to assess whether the overall project scope has grown beyond the original estimate
-- Compare the current feature list against the original vertical slice definition
-- Identify features that were added after the initial plan without corresponding scope reduction elsewhere
-- Make an explicit cut/keep decision for each added feature before the next planning session
+## Solo Developer and Kanban Mode
 
-### Output Format
+For one or two people, sprint ceremonies can cost more than they return. Offer Kanban: Backlog ->
+In Progress (WIP limit 2-3 solo, 3-4 for a pair) -> Verify -> Done, with a 15-minute weekly
+review. Keep the Verify column: with agents it is where work piles up. Details, swimlanes and
+tool options are in `${CLAUDE_SKILL_DIR}/references/planning-catalogs.md`.
 
-The workflow produces a **Sprint Plan Document**. Reference `templates/sprint-plan.md`
-for the full template.
+## Working with AI Coding Agents
+
+How to run the planned sprint when tasks are built with Claude Code or a similar agent.
+
+- **Task card = prompt.** Hand the agent the card, the GDD sections it references and the
+  project's `CLAUDE.md`. Fresh session per task; one long-lived session only for context-heavy bugs.
+- **Check command first.** The card's "Done when" names a command that returns pass or fail
+  (`npm run check`, a headless Godot test run, Unity `-runTests`, an Unreal automation filter).
+  Ask the agent for evidence (test output, screenshot) before you accept "done".
+- **One task, one commit.** Small diffs; when a change regresses, revert it rather than patching
+  on top. Commits from agent sessions keep their co-author trailer so the retrospective can count them.
+- **Keep the plan live.** At the end of each working session, update
+  `production/session-state/active.md` (Now = current card, Next = next card, Blocked on) and the
+  card's status in the sprint file.
+- **Log what the retro will need.** Per task: build mode, actual verify hours, and whether a
+  later defect traced back to it. Without this the AI lens in `/gameforge:game-retrospective` is
+  guesswork.
+- **Route the work.** Build loops go through `/gameforge:game-vibe-code`; generated art, audio or
+  voice go through `/gameforge:game-ai-assets` so provenance is logged as it is made.
+
+Prompt pattern for an AL task:
+```
+Implement task S07-03 from production/sprints/sprint-07.md. Read only the card, GDD §5.2 and §9,
+and CLAUDE.md. Read knobs from data/tuning/dash.tres; no literals. Stop when AC-002-2 and
+AC-002-4 pass under `godot --headless -s addons/gut/gut_cmdln.gd -gexit`, show me the output,
+and list every file you changed. Do not touch anything listed under "Out of scope".
+```
+
+## Output
+
+Write `production/sprints/sprint-NN.md` (ask before overwriting), following
+`${CLAUDE_PLUGIN_ROOT}/templates/sprint-plan.md` with the AI columns below. Append the planned row
+to `production/sprints/velocity.md` and update `production/session-state/active.md`.
 
 ```markdown
-# Sprint Plan
+# Sprint 07 -- 2026-11-09 to 2026-11-13 (5 working days)
+**Goal:** By the end of this sprint, dash is playable with cooldown, stamina cost and SFX so that
+Friday's playtest can judge movement feel.
+**Pillar:** Read the current | **Milestone:** M1 Prototype | **Goal check:** 4/5 testers chain two dashes unprompted
 
-## Sprint Identity
-- **Sprint Number:** [N]
-- **Dates:** [start] to [end]
-- **Duration:** [number of working days]
-- **Sprint Goal:** [single sentence, pillar-aligned]
-- **Milestone:** [which milestone this sprint serves]
+## Capacity
+| Person | Role | Days | Raw h | Notes |
+|---|---|---|---|---|
+| Sam | code + design | 5 | 27 | solo; 30% buffer |
 
-## Team Capacity
-| Team Member | Role | Available Days | Effective Hours |
-|-------------|------|---------------|----------------|
-| [name] | [discipline] | [days] | [hours] |
-| **Total** | | | **[total hours]** |
+Raw 27 h - buffer 8 h - vibe-debt slot 3 h (S07-08) = **16 h plannable** for Must/Should/Could.
 
-## Task Board
+## Tasks
+| ID | Task | Mode | Build h | Verify h | Owner | Depends | Tier | Done when | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| S07-01 | Lock dash rules (§5.2) | H | 1 | 0.5 | Sam | -- | Must | §5.2 reviewed, knobs in §9 | Not started |
+| S07-03 | Cooldown + stamina | AL | 2 | 2 | Sam | S07-01 | Must | AC-002-2, AC-002-4 green | Not started |
+| S07-05 | Dash debug overlay | AL | 1 | 0.5 | Sam | S07-03 | Should | overlay toggles with F3 | Not started |
+| S07-08 | Split player.gd (900 lines) | A | 2 | 1 | Sam | -- | Debt slot | tests green, no file > 300 lines | Not started |
 
-### Must-Have
-| ID | Task | Owner | Estimate | Dependencies | Status |
-|----|------|-------|----------|-------------|--------|
-| SPRINT-001 | [task] | [name] | [hours] | -- | Not Started |
+## Won't (this sprint)
+- Air dash -- needs the stamina tuning from Friday's playtest first.
 
-### Should-Have
-| ID | Task | Owner | Estimate | Dependencies | Status |
-|----|------|-------|----------|-------------|--------|
+## Dependency map
+S07-01 -> S07-03 -> S07-05 ; S07-08 independent
 
-### Could-Have
-| ID | Task | Owner | Estimate | Dependencies | Status |
-|----|------|-------|----------|-------------|--------|
-
-### Won't-Have (Explicitly Deferred)
-- [feature/task] -- deferred because [reason]
-
-## Dependency Map
-[Visual or textual representation of blocking chains]
-
-## Capacity Summary
-| Tier | Estimated Hours | % of Capacity |
-|------|----------------|--------------|
-| Must-Have | [hours] | [%] |
-| Should-Have | [hours] | [%] |
-| Could-Have | [hours] | [%] |
-| Buffer (20%) | [hours] | 20% |
-| **Total** | **[hours]** | **[%]** |
-
-## Risk Register
+## Risks
 | Risk | Prob | Impact | Mitigation | Trigger |
-|------|------|--------|-----------|---------|
-| [risk] | H/M/L | H/M/L | [plan] | [signal] |
+|---|---|---|---|---|
 
-## Definition of Done (Sprint Level)
-- [ ] Sprint goal is achieved and demonstrable
-- [ ] All Must-Have tasks are complete and verified
-- [ ] No new Critical bugs introduced
-- [ ] Updated tasks reflected in project tracking
-- [ ] Sprint retrospective notes captured
+## Definition of Done (every task)
+- [ ] Its "Done when" check passes and the evidence is linked or pasted
+- [ ] Diff read (or targeted review for AL tasks); nothing out of scope added
+- [ ] No gameplay literals; knobs live in the tuning file
+- [ ] Played in a build, not only tested
+- [ ] AI-generated assets, if any, logged with provenance
+- [ ] Status and verify hours updated in this file
 
-## Definition of Done (Task Level)
-- [ ] Code compiles and runs without errors
-- [ ] Feature matches specification / acceptance criteria
-- [ ] Tests pass (where testing infrastructure exists)
-- [ ] Code reviewed by at least one other developer (teams of 2+)
-- [ ] No hardcoded gameplay values (data-driven per coding standards)
-- [ ] Known issues documented if task is completed with caveats
+## Carry-over from Sprint 06
+| Task | Reason |
+|---|---|
 ```
 
-### Quality Criteria
+## Quality Criteria
 
-A successful sprint plan meets all of these:
-- The sprint goal is a single sentence that is clearly evaluable as done or not done
-- Every task is estimated at 8 hours or less
-- Dependencies are mapped and blocking tasks are scheduled before dependent tasks
-- Must-Have tasks do not exceed 60% of effective capacity
-- The 20% buffer is applied after all estimation, not before
-- At least 3 risks are identified with specific mitigation plans
-- The plan references previous sprint velocity data (if available)
-- Scope tiers are assigned to every task, not just labeled on the categories
-- The Definition of Done is specific to this sprint, not a generic template
-- A solo developer or any team member can look at the plan and know exactly
-  what they should work on first, second, and third
+- The goal is one evaluable sentence with a pillar, a milestone and a goal check.
+- Every task is at most 8 hours total and has a "Done when" check.
+- Every A or AL task has a separate verify estimate that follows the ratios (or calibrated ones).
+- A vibe-debt slot exists and is filled with named tasks.
+- Must stays at or under about 60% of plannable hours; the buffer is applied after estimating.
+- Dependencies are mapped and blockers scheduled first; at least three risks have triggers.
+- The plan cites velocity history when it exists and appends a row to `velocity.md`.
+- Anyone, including an agent reading the file, can tell what to do first, second and third.
 
-### Example Use Cases
+## Example Requests
 
-1. **"We need to plan our next 2-week sprint."**
-   Full 7-step workflow. Start by defining the sprint goal against the current
-   milestone, decompose into tasks, map dependencies, calculate capacity, tier
-   scope, identify risks, and produce the sprint plan document.
-
-2. **"I'm a solo dev. Help me plan my next week."**
-   Abbreviated workflow: define a focused goal, list 5-8 tasks, apply the solo
-   dev buffer (30%), and identify 1-2 risks. Solo sprints should be shorter
-   (1 week) to maintain focus and enable frequent course correction.
-
-3. **"We keep missing our sprint commitments. What's wrong?"**
-   Focus on Step 7 (velocity tracking). Compare planned vs. actual across the
-   last 3-5 sprints. The pattern will reveal whether the problem is estimation,
-   scope creep, dependency blocking, or capacity overcommitment.
-
-4. **"We just finished brainstorming. How do we turn this concept into work?"**
-   Use the concept document from `game-brainstorm` as input. The vertical slice
-   plan becomes the first sprint goal. Feature tiers from the concept map directly
-   to sprint scope tiers.
-
-5. **"Our artist is only available 2 days this sprint. How do we plan around that?"**
-   Capacity calculation with constrained resources. Map art dependencies explicitly,
-   front-load art tasks to the artist's available days, ensure code tasks that depend
-   on art are scheduled after art delivery, and prepare placeholder assets as a
-   fallback mitigation.
+| Request | Approach |
+|---|---|
+| "Plan our next two-week sprint." | Full Steps 0-9 and the output file. |
+| "Solo dev, plan my week." | 1-week sprint, 5-8 cards, 30% buffer, one debt task, one or two risks. |
+| "We keep missing commitments." | Step 9 first: planned vs done and verify plan vs actual over 3-5 sprints. |
+| "Claude builds most of our code now. How do we plan?" | Step 4 and 5 in depth; set AL verify ratios; cap concurrent AL tasks. |
+| "Our artist has two days this sprint." | Front-load art on those days, placeholders as mitigation, code after delivery. |
+| "Turn the GDD milestone into tasks." | Pull §13 checks and §17 done criteria straight into "Done when". |

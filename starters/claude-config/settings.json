@@ -1,42 +1,44 @@
 {
-  "description": "Claude Code settings for a GameForge-powered game project. Copy to .claude/settings.json in your project root.",
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "extraKnownMarketplaces": {
+    "alterlab-gameforge": {
+      "source": { "source": "github", "repo": "AlterLab-IEU/AlterLab_GameForge" }
+    }
+  },
+  "enabledPlugins": {
+    "gameforge@alterlab-gameforge": true
+  },
   "permissions": {
     "allow": [
-      "Read",
-      "Glob",
-      "Grep",
-      "Write",
-      "Edit",
-      "Bash(git status)",
-      "Bash(git log*)",
-      "Bash(git diff*)",
-      "Bash(git add*)",
-      "Bash(git commit*)",
-      "Bash(git branch*)",
-      "Bash(git checkout*)",
-      "Bash(git switch*)",
-      "Bash(git stash*)",
-      "Bash(git merge*)",
-      "Bash(ls*)",
-      "Bash(cat*)",
-      "Bash(mkdir*)",
-      "Bash(cp*)",
-      "Bash(mv*)",
-      "Bash(find*)",
-      "Bash(head*)",
-      "Bash(tail*)",
-      "Bash(wc*)"
+      "Bash(git status *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git switch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git lfs track *)",
+      "Bash(git lfs ls-files *)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(git checkout *)",
+      "Bash(git stash *)"
     ],
     "deny": [
-      "Bash(git push --force*)",
-      "Bash(git reset --hard*)",
-      "Bash(git clean -f*)",
-      "Bash(rm -rf*)",
-      "Bash(rm -r /)*",
-      "Bash(sudo*)",
-      "Bash(curl*|*sh)",
-      "Bash(wget*|*sh)"
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(rm -rf *)",
+      "Bash(sudo *)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/*.keystore)",
+      "Read(./**/*.p12)"
     ]
-  },
-  "hooks_note": "To add custom hooks (e.g., pre-commit validation, session logging), add a 'hooks' key here. See GameForge hooks/ directory for examples of session-start, validate-commit, and other lifecycle hooks."
+  }
 }

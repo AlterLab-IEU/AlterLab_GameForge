@@ -188,4 +188,4 @@ Use these prompts to explore specific roguelike subgenres.
 
 ---
 
-*This document extends `game-brainstorm` with roguelike-specific prompts. Use after the initial brainstorm session to deepen the concept with genre-appropriate constraints. See `@genre-packs/roguelike/PATTERNS.md` for design pattern reference.*
+*This document extends `game-brainstorm` with roguelike-specific prompts. Use after the initial brainstorm session to deepen the concept with genre-appropriate constraints. See `PATTERNS.md` for design pattern reference.*

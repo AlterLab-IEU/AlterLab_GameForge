@@ -1,82 +1,59 @@
 # GameForge Starters
 
-Ready-to-copy configuration files that make GameForge skills work in your actual game project.
+Files you copy into your **game project** so Claude Code knows your engine, your conventions and how
+to verify its own work. The GameForge plugin provides the skills; a starter provides the project
+context.
 
-## What Are Starters?
+The easiest path is `/gameforge:game-start`, which picks the right starter, copies it, creates
+`.gameforge/project.json`, sets up Git LFS and the `.gitignore` entries GameForge needs. Use this page
+if you prefer to do it by hand.
 
-After you install GameForge (`claude install github:AlterLab-IEU/AlterLab_GameForge`), the skills are available as slash commands. But Claude Code does not know anything about *your* game project -- your engine, your conventions, your file structure. Starters bridge that gap.
+## Pick your starter
 
-Each starter is a configuration file you copy into your game project. Once in place, Claude Code understands your project context and routes GameForge skills correctly.
-
-## How to Use Them
-
-### Step 1: Pick Your Engine
-
-| Your Engine | Copy From |
-|---|---|
-| Any engine (start here) | `starters/claude-config/` |
-| Godot 4.x | `starters/godot/` |
-| Unity 6.x | `starters/unity/` |
-| Unreal Engine 5.x | `starters/unreal/` |
-
-### Step 2: Copy the Base Config
-
-Every project needs the base config. Copy these into your game project root:
-
-```bash
-# Copy CLAUDE.md to your project root
-cp starters/claude-config/CLAUDE.md /path/to/your-game/CLAUDE.md
-
-# Copy settings.json to your project's .claude/ directory
-mkdir -p /path/to/your-game/.claude
-cp starters/claude-config/settings.json /path/to/your-game/.claude/settings.json
-```
-
-### Step 3: Add Your Engine Config
-
-Copy the engine-specific CLAUDE.md content and append it to your project's CLAUDE.md, or use it as a reference to add engine-specific sections.
-
-```bash
-# Option A: Append engine config to your CLAUDE.md
-cat starters/godot/CLAUDE.md >> /path/to/your-game/CLAUDE.md
-
-# Option B: Use the engine CLAUDE.md standalone (if you prefer a clean start)
-cp starters/godot/CLAUDE.md /path/to/your-game/CLAUDE.md
-```
-
-Copy the engine-specific .gitignore if you do not already have one:
-
-```bash
-cp starters/godot/.gitignore /path/to/your-game/.gitignore
-```
-
-### Step 4: Fill in Placeholders
-
-Open your CLAUDE.md and replace the `[BRACKETED PLACEHOLDERS]` with your game's details. There are only a few -- project name, genre, and a one-liner description. Everything else works out of the box.
-
-## What Each File Does
-
-| File | Purpose | Goes Where |
+| Your project | Copy | To |
 |---|---|---|
-| `claude-config/CLAUDE.md` | Tells Claude about your game, routes skills, sets coding standards | Project root |
-| `claude-config/settings.json` | Permissions and safety rules for Claude Code | `.claude/settings.json` |
-| `godot/CLAUDE.md` | Godot 4.x conventions, GDScript standards, scene patterns | Append to project CLAUDE.md |
-| `godot/.gitignore` | Godot-specific ignore rules | Project root |
-| `unity/CLAUDE.md` | Unity 6.x conventions, C# standards, assembly definitions | Append to project CLAUDE.md |
-| `unity/.gitignore` | Unity-specific ignore rules | Project root |
-| `unreal/CLAUDE.md` | UE 5.x conventions, C++/Blueprint standards, GAS patterns | Append to project CLAUDE.md |
-| `unreal/.gitignore` | Unreal-specific ignore rules | Project root |
+| Godot 4.7 / 4.8 | `starters/godot/CLAUDE.md` | `CLAUDE.md` |
+| Unity 6.3 LTS / 6.6 | `starters/unity/CLAUDE.md` | `CLAUDE.md` |
+| Unreal Engine 5.8 | `starters/unreal/CLAUDE.md` | `CLAUDE.md` |
+| Three.js / React Three Fiber (Vite) | `starters/threejs/CLAUDE.md` | `CLAUDE.md` |
+| Phaser 4 / PixiJS / Kaplay (Vite) | `starters/web2d/CLAUDE.md` | `CLAUDE.md` |
+| Anything else | `starters/claude-config/CLAUDE.md` | `CLAUDE.md` |
+| Any project, shared with a team | `starters/claude-config/settings.json` | `.claude/settings.json` |
+
+Each engine starter is self-contained: stack and versions, run/build/test commands, folder layout,
+coding rules, `.gitignore` and Git LFS blocks, the commit convention GameForge's hook checks, the
+verification loop for AI agents, and which `/gameforge:` skills to use for what. Fill in the
+`[BRACKETED PLACEHOLDERS]` (name, genre, one-line pitch) and adjust anything that does not fit.
+
+```bash
+# Example: a Godot project
+cp AlterLab_GameForge/starters/godot/CLAUDE.md my-game/CLAUDE.md
+mkdir -p my-game/.claude
+cp AlterLab_GameForge/starters/claude-config/settings.json my-game/.claude/settings.json
+```
+
+If your project already has a `CLAUDE.md`, merge the starter's sections into it rather than
+overwriting it.
+
+## What `settings.json` does
+
+- Declares the `alterlab-gameforge` marketplace and enables the `gameforge` plugin, so teammates who
+  open the repository in Claude Code are prompted to install it.
+- Allows routine read-only git commands without prompts, asks before pushes, merges, rebases,
+  checkouts and stashes, and denies force-pushes, `git reset --hard`, `git clean`, `rm -rf`, `sudo`,
+  and reading `.env` files or signing keys.
+
+Edit the lists to match how your team works.
 
 ## FAQ
 
-**Do I need all the files?**
-No. You need the base config (`claude-config/`) plus your engine's files. A Godot developer copies `claude-config/CLAUDE.md`, `claude-config/settings.json`, `godot/CLAUDE.md`, and `godot/.gitignore`.
+**Do these replace installing GameForge?**
+No. Install the plugin for the skills (`/plugin install gameforge --marketplace AlterLab-IEU/AlterLab_GameForge`);
+the starter configures your project for them.
 
-**Can I modify these files?**
-Absolutely. These are starting points. Customize them for your project -- add your own conventions, remove sections that do not apply, adjust permissions.
+**Why do starters never link to GameForge files?**
+They live in your repository, not in the plugin. They refer to skills by name
+(`/gameforge:game-designer`), which works wherever the plugin is installed.
 
-**Do these replace GameForge installation?**
-No. You still need to install GameForge for the skills. These files configure your *game project* to work well with those skills.
-
-**What if I use a custom engine or framework?**
-Use the base config (`claude-config/`). The engine-agnostic CLAUDE.md works with any technology. Add your own engine-specific section following the pattern in the engine starters.
+**A custom engine or framework?**
+Start from `claude-config/CLAUDE.md` and add an engine section modelled on the closest starter.

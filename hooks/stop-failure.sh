@@ -1,113 +1,36 @@
-#!/usr/bin/env bash
-# GameForge Stop Failure Hook
-# Event: StopFailure
-# Purpose: Graceful handling of API errors that end a turn mid-session.
+#!/bin/sh
+# GameForge -- StopFailure
 #
-# When Claude Code encounters an API error (rate limit, authentication failure,
-# billing error, or server error), this hook logs the failure, saves current
-# session state for recovery, and outputs guidance for the user on how to proceed.
-#
-# This prevents the frustrating pattern of losing work context when an API error
-# occurs during a long multi-agent orchestration or complex skill execution.
-#
-# Input: JSON via stdin with error type details
-# Output: JSON to stdout with systemMessage containing recovery guidance
-# Exit 0: success, Exit 2: blocking error
+# When a turn ends on an API error (rate_limit, overloaded, billing_error, ...), record a
+# recovery note so the next SessionStart can offer to resume. Writes valid JSON with
+# escaped fields. Only runs in opted-in projects.
 
-# Read input from stdin
-INPUT=$(cat)
+. "${CLAUDE_PLUGIN_ROOT:-$(dirname "$0")/..}/hooks/lib/common.sh"
+gf_read_input
+gf_require_opt_in
 
-# Ensure state directories exist
-if [ ! -d "production/session-state" ]; then
-  mkdir -p production/session-state 2>/dev/null || true
-fi
-if [ ! -d "production/session-logs" ]; then
-  mkdir -p production/session-logs 2>/dev/null || true
+ERR=$(gf_json_get .error_type)
+[ -n "$ERR" ] || ERR=$(gf_json_get .error)
+[ -n "$ERR" ] || ERR=$(gf_json_get .reason)
+[ -n "$ERR" ] || ERR=unknown
+
+BRANCH=""; LAST=""
+if gf_in_git; then
+  BRANCH=$(gf_git rev-parse --abbrev-ref HEAD)
+  LAST=$(gf_git log -1 --pretty='%h %s')
 fi
 
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-
-# Try to extract the error type from input
-ERROR_TYPE="unknown"
-if echo "$INPUT" | grep -q '"error_type"'; then
-  ERROR_TYPE=$(echo "$INPUT" | sed -n 's/.*"error_type"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)
-fi
-if [ "$ERROR_TYPE" = "unknown" ] && echo "$INPUT" | grep -q '"matcher"'; then
-  ERROR_TYPE=$(echo "$INPUT" | sed -n 's/.*"matcher"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -1)
-fi
-
-# Log the error event
-echo "[$TIMESTAMP] StopFailure: error_type=$ERROR_TYPE" \
-  >> production/session-logs/sessions.log 2>/dev/null || true
-
-# Save recovery state
-# Capture what we can about the current project state for session recovery
-RECOVERY_FILE="production/session-state/recovery.json"
-
-# Detect engine
-ENGINE="unknown"
-if [ -f "project.godot" ]; then
-  ENGINE="Godot"
-elif ls *.unity 2>/dev/null | head -1 > /dev/null 2>&1; then
-  ENGINE="Unity"
-elif ls *.uproject 2>/dev/null | head -1 > /dev/null 2>&1; then
-  ENGINE="Unreal"
-fi
-
-# Get recent git state for context
-LAST_COMMIT=""
-if git rev-parse --git-dir > /dev/null 2>&1; then
-  LAST_COMMIT=$(git log --oneline -1 2>/dev/null || echo "none")
-fi
-
-# Check for active pipeline state
-ACTIVE_PIPELINE="none"
-if [ -d "production/session-state" ]; then
-  for pipeline_file in production/session-state/pipeline-*.json; do
-    if [ -f "$pipeline_file" ]; then
-      ACTIVE_PIPELINE=$(basename "$pipeline_file" .json)
-      break
-    fi
-  done
-fi
-
-# Write recovery JSON
-cat > "$RECOVERY_FILE" <<RECOVERY
+mkdir -p production/session-state production/session-logs 2>/dev/null || exit 0
+cat > production/session-state/recovery.json <<EOF
 {
-  "timestamp": "$TIMESTAMP",
-  "error_type": "$ERROR_TYPE",
-  "engine": "$ENGINE",
-  "last_commit": "$LAST_COMMIT",
-  "active_pipeline": "$ACTIVE_PIPELINE",
-  "recovery_hint": "Resume session and check production/session-state/ for prior context."
-}
-RECOVERY
-
-# Build user-facing guidance based on error type
-case "$ERROR_TYPE" in
-  rate_limit)
-    GUIDANCE="API rate limit reached. Wait 1-2 minutes before retrying. Your session state has been saved to $RECOVERY_FILE. When you resume, the session-start hook will detect the recovery file."
-    ;;
-  authentication_failed)
-    GUIDANCE="Authentication error. Check your API key configuration. Session state saved to $RECOVERY_FILE. Re-authenticate and resume -- your project context will be restored."
-    ;;
-  billing_error)
-    GUIDANCE="Billing error encountered. Check your account billing status. Session state saved to $RECOVERY_FILE."
-    ;;
-  server_error)
-    GUIDANCE="Server error from the API. This is typically transient. Wait 30 seconds and retry. Session state saved to $RECOVERY_FILE."
-    ;;
-  *)
-    GUIDANCE="Unexpected API error ($ERROR_TYPE). Session state saved to $RECOVERY_FILE. Try restarting the session -- the recovery file will help restore context."
-    ;;
-esac
-
-# Output JSON response with recovery guidance
-cat <<EOF
-{
-  "continue": true,
-  "systemMessage": "[GameForge] $GUIDANCE"
+  "timestamp": "$(gf_now)",
+  "error": "$(gf_json_escape "$ERR")",
+  "session_id": "$(gf_json_escape "$(gf_json_get .session_id)")",
+  "engine": "$(gf_json_escape "$GF_ENGINE_LABEL")",
+  "branch": "$(gf_json_escape "$BRANCH")",
+  "last_commit": "$(gf_json_escape "$LAST")"
 }
 EOF
+printf '%s StopFailure error=%s\n' "$(gf_now)" "$ERR" >> production/session-logs/sessions.log 2>/dev/null
 
 exit 0

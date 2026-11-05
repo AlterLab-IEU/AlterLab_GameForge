@@ -215,4 +215,4 @@ These prompts define the emotional and thematic foundation of your narrative gam
 
 ---
 
-*This document extends `game-brainstorm` with narrative-specific prompts. Use after the initial brainstorm session to deepen the concept with genre-appropriate emotional and structural constraints. See `@genre-packs/narrative/PATTERNS.md` for design pattern reference.*
+*This document extends `game-brainstorm` with narrative-specific prompts. Use after the initial brainstorm session to deepen the concept with genre-appropriate emotional and structural constraints. See `PATTERNS.md` for design pattern reference.*

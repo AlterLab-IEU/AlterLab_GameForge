@@ -106,10 +106,14 @@
 ### Typography
 | Usage | Font | Weight | Size Range | Notes |
 |-------|------|--------|-----------|-------|
-| Headings | [Font name] | [Bold/Regular] | [24-48px] | [Used for menu titles, section headers] |
-| Body text | [Font name] | [Regular] | [14-18px] | [Dialogue, descriptions, tooltips] |
-| UI labels | [Font name] | [Medium] | [12-16px] | [Button labels, stat names] |
-| Numbers | [Font name] | [Bold] | [16-32px] | [Damage numbers, counters, timers] |
+| Headings | [Font name] | [Bold/Regular] | [36-64px] | [Used for menu titles, section headers] |
+| Body text | [Font name] | [Regular] | [18-28px] | [Dialogue, descriptions, tooltips] |
+| UI labels | [Font name] | [Medium] | [18-24px] | [Button labels, stat names] |
+| Numbers | [Font name] | [Bold] | [18-40px] | [Damage numbers, counters, timers] |
+
+Sizes are at 1080p. Check minimums against the [accessibility audit](accessibility-audit.md): the
+Xbox Accessibility Guidelines (XAG 101) recommend default text of at least 18 px on PC and 26 px on
+console at 1080p, scalable to 200%.
 
 ### Menu Design
 [Navigation pattern, background treatment, transition style between screens.]
@@ -164,8 +168,48 @@ Examples:
 
 ## 7. Technical Constraints
 
-- **Render pipeline:** [URP / HDRP / Godot Forward+ / UE5 Nanite+Lumen]
+- **Render pipeline:** [URP / HDRP / Godot Forward+ or Compatibility / UE 5.8 Nanite+Lumen / three.js WebGLRenderer or WebGPURenderer]
 - **Target framerate:** [30 / 60 / 120 fps]
 - **Draw call budget:** [Per frame estimate]
 - **Memory budget:** [Texture memory, mesh memory]
-- **Platform-specific notes:** [Mobile texture compression, console resolution targets]
+- **Platform-specific notes:** [Mobile texture compression, console resolution targets, web download budget]
+
+---
+
+## 8. AI Asset Policy
+
+> Owned by the Art Director. Mirrors the project's AI content policy
+> ([template](ai-content-policy.md)); changing the stance level is a Creative Director decision.
+> Pipeline and disclosure help: `/gameforge:game-ai-assets`.
+
+- **Stance level:** [0 Hand-made / 1 Tool-assisted / 2 Assisted assets / 3 AI as feature], copied
+  from the AI content policy with its one-sentence stance.
+- **Allowed asset classes:**
+
+| Asset class | AI allowed? | Allowed use | Human finishing required |
+|-------------|-------------|-------------|--------------------------|
+| Concept art, mood boards | [Yes, internal only] | Ideation; never shipped or used in marketing | — |
+| Background props | [Yes / No] | [Generate, then bring to budget and palette] | [Retopology, UVs, repaint to palette, LODs] |
+| Textures and materials | [Yes / No] | [Base maps an artist finishes] | [Repaint; check tiling edges, since "seamless" output does not always tile] |
+| Player character, named characters, logo, key art | **No** | Identity assets stay human-made | — |
+
+- **Approved tools** (one row per tool and model version; record terms in the
+  [AI asset log](ai-asset-log.md) Tools register):
+
+| Tool + model/version | Use | Licence / terms (date read) | Restrictions |
+|----------------------|-----|-----------------------------|--------------|
+| [e.g. Meshy 6] | [Background props] | [terms URL, YYYY-MM-DD] | [None noted] |
+| [e.g. TRELLIS.2-4B, local] | [Props] | [MIT, model card read YYYY-MM-DD] | [Needs a 24 GB+ GPU] |
+| [tool] | [use] | [terms, date] | [e.g. Hunyuan3D 2.1's licence does not cover the EU, UK or South Korea, outputs included] |
+
+- **Style lock:** generation inputs come from this bible: the color palette (§1), material palette
+  (§3) and reference board (§6), plus [style-trained model / reference image set in
+  `design/art/refs/`]. Prompts never name living artists, existing characters, brands or other games.
+- **Hero-asset rule:** auto-retopology and auto-rigging are acceptable for props and background
+  characters only. Hero meshes (player, named characters, bosses, anything seen in close-up) get
+  manual retopology with hand-placed edge loops, or are modeled by hand.
+- **Provenance:** every generated asset gets a row in `design/ai-asset-log.md` (from the
+  [AI asset log template](ai-asset-log.md)) when it is generated, not when it ships. Store
+  disclosures are drafted from that log.
+- **Review gate:** the Art Director signs off style, licence and log entry before an AI-assisted
+  asset is merged.

@@ -122,11 +122,15 @@
 
 ### Console Certification Timeline
 
-| Platform | Typical Duration | Notes |
-|----------|-----------------|-------|
-| PlayStation | 2-3 weeks | |
-| Xbox | 1-2 weeks | Faster with ID@Xbox program |
-| Nintendo Switch | 2-4 weeks | |
+Certification durations are set in each platform holder's partner documentation (under NDA) and
+change over time. Record the current figures from those documents, and plan at least one failed
+submission and resubmission into the schedule.
+
+| Platform | Duration from current partner docs | Resubmission buffer planned | Notes |
+|----------|-----------------------------------|-----------------------------|-------|
+| PlayStation | [from partner docs] | [ ] | |
+| Xbox | [from partner docs] | [ ] | |
+| Nintendo Switch | [from partner docs] | [ ] | |
 
 ### Mobile (if applicable)
 - [ ] Touch controls responsive and well-sized
@@ -221,9 +225,18 @@
 
 ### AI Content Disclosure
 
-- [ ] **Steam:** AI use disclosed for player-facing content
-- [ ] **itch.io:** Generative AI content tagged (failure = potential delisting)
-- [ ] AI Content Policy document completed (reference: `@templates/ai-content-policy.md`)
+Draft every disclosure from the provenance log (`design/ai-asset-log.md`, from the
+[AI asset log template](ai-asset-log.md)), not from memory.
+
+- [ ] **Provenance log complete:** every generated asset has a row, tool terms re-read and dated
+- [ ] **Steam content survey:** pre-generated content disclosed (in-game, store page, marketing,
+      localization); live-generated content disclosed with guardrails described (rules rewritten 2026-01-16)
+- [ ] **Microsoft Store 11.16** (if live generative AI): disclosed in metadata and Partner Center;
+      in-game reporting works
+- [ ] **itch.io:** generative-AI disclosure set on the project (it drives itch.io's "no AI" filter)
+- [ ] **EU AI Act Art. 50** (if sold in the EU): AI NPCs identify as AI unless obvious; runtime
+      generation is machine-marked (applies from 2026-08-02)
+- [ ] AI content policy current and matches what shipped ([template](ai-content-policy.md))
 - [ ] Human creative contribution documented for copyright protection
 
 ---

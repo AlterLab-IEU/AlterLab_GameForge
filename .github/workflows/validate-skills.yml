@@ -1,45 +1,52 @@
-name: Validate Skills
+name: Validate Plugin
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  validate:
-    name: Skill Validation Suite
+  repository:
+    name: Repository validator
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Validate skills, agents, manifests, references and counts
+        run: python3 scripts/validate.py --verbose
 
-      - name: Run validation suite
-        run: bash scripts/validate.sh --verbose
+  hooks:
+    name: Hook test suite (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run hooks under POSIX sh (jq and fallback parsers)
+        run: bash tests/hooks.test.sh -v
 
-      - name: Check markdown links (soft)
-        if: always()
-        continue-on-error: true
-        run: |
-          # Check for obviously broken internal links
-          BROKEN=0
-          for md_file in $(find . -name "*.md" -not -path "./.git/*" -not -path "./.research/*"); do
-            # Extract relative links like [text](path/to/file.md)
-            links=$(grep -oE '\]\([^)]+\.md\)' "$md_file" | grep -v 'http' | sed 's/\](//' | sed 's/)//' | sed 's/#.*//')
-            for link in $links; do
-              dir=$(dirname "$md_file")
-              resolved="$dir/$link"
-              # Normalize path
-              if [[ ! -f "$resolved" && ! -f "$link" ]]; then
-                echo "::warning file=$md_file::Broken link: $link"
-                ((BROKEN++))
-              fi
-            done
-          done
-          echo "Found $BROKEN potentially broken markdown links"
+  claude-code:
+    name: Claude Code plugin validate --strict
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate plugin and marketplace manifests
+        run: claude plugin validate . --strict

@@ -306,7 +306,7 @@ Entropy is the measure of randomness and chaos within a run. Too little entropy 
 
 ## 8. MDA Analysis for Roguelikes
 
-Using the MDA Framework from `@docs/game-design-theory.md`:
+Using the MDA Framework from `../../docs/game-design-theory.md`:
 
 ### Primary Aesthetics
 
@@ -355,4 +355,4 @@ Example: If your aesthetics are Challenge + Narrative (Hades model), you need dy
 
 ---
 
-*This document is reference material for AlterLab GameForge skills. It enriches `game-designer`, `game-brainstorm`, and `game-balance-check` with roguelike-specific domain knowledge. See `@genre-packs/roguelike/balance-template.md` for tuning parameters and `@genre-packs/roguelike/brainstorm-variant.md` for ideation prompts.*
+*This document is reference material for AlterLab GameForge skills. It enriches `game-designer`, `game-brainstorm`, and `game-balance-check` with roguelike-specific domain knowledge. See `balance-template.md` for tuning parameters and `brainstorm-variant.md` for ideation prompts.*

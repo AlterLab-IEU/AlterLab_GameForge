@@ -1,0 +1,15 @@
+{
+  "name": "gameforge",
+  "version": "3.0.0",
+  "description": "A full indie game studio for Claude Code: 11 studio agents, workflow skills from first idea to launch, engine specialists for Godot, Unity, Unreal, Three.js and 2D web, plus vibe-coding and AI-asset workflows.",
+  "author": {
+    "name": "Cem Ipek",
+    "email": "cem.ipek@ieu.edu.tr",
+    "url": "https://github.com/AlterLab-IEU"
+  },
+  "homepage": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+  "repository": "https://github.com/AlterLab-IEU/AlterLab_GameForge",
+  "license": "MIT",
+  "keywords": ["game-development", "indie-games", "game-design", "godot", "unity", "unreal-engine", "threejs", "webgpu", "vibe-coding", "game-jam"],
+  "skills": ["./skills/agents", "./skills/workflows", "./skills/engine-specialists"]
+}

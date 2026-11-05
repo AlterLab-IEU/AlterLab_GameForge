@@ -4,7 +4,7 @@
 
 - **Game**: [YOUR GAME NAME]
 - **Genre**: [YOUR GENRE -- e.g., Action Roguelike, Turn-Based RPG, Puzzle Platformer]
-- **Engine**: [YOUR ENGINE -- Godot 4.x / Unity 6.x / Unreal Engine 5.x]
+- **Engine**: [YOUR ENGINE -- Godot 4.7 / Unity 6.3 LTS / Unreal Engine 5.8 / Three.js / Phaser 4]
 - **Description**: [ONE SENTENCE -- what the player does and why it is fun]
 - **Target Platforms**: PC (Steam)
 - **Team Size**: Solo developer
@@ -12,50 +12,52 @@
 
 ## GameForge Skill Routing
 
-This project uses AlterLab GameForge skills. Route requests to the correct skill based on intent.
+This project uses the AlterLab GameForge plugin. Skills run as `/gameforge:<skill>`; describing
+the task in plain language also works. Unsure which one fits? Run `/gameforge:game-help`.
 
-### Starting & Planning
+### Starting and planning
 | I need to... | Use |
 |---|---|
-| Start or scaffold the project | `/game-start` |
-| Brainstorm ideas or mechanics | `/game-brainstorm` |
-| Research the market or competitors | `/game-market-research` |
-| Plan a sprint | `/game-sprint-plan` |
-| Check scope against timeline | `/game-scope-check` |
+| Find direction | `/gameforge:game-help` |
+| Brainstorm original concepts | `/gameforge:game-brainstorm` |
+| Research the market | `/gameforge:game-market-research` |
+| Set up the project (config, starter, LFS) | `/gameforge:game-start` |
+| Write the GDD section by section | `/gameforge:game-gdd-author` |
+| Plan a sprint / check scope | `/gameforge:game-sprint-plan`, `/gameforge:game-scope-check` |
 
-### Design & Content
+### Design and content
 | I need to... | Use |
 |---|---|
-| Design mechanics, systems, or balance | `/game-designer` |
-| Define creative vision or pillars | `/game-creative-director` |
-| Write story, dialogue, or lore | `/game-narrative-director` |
-| Design art style or asset pipeline | `/game-art-director` |
-| Design music, SFX, or audio systems | `/game-audio-director` |
-| Design virtual economy or monetization | `/game-economy-designer` |
+| Vision, pillars, tone | `/gameforge:game-creative-director` |
+| Mechanics, systems, tuning | `/gameforge:game-designer` |
+| Economy and monetization | `/gameforge:game-economy-designer` |
+| Story, dialogue, lore | `/gameforge:game-narrative-director` |
+| Art style and asset pipeline | `/gameforge:game-art-director` |
+| Music, SFX, voice | `/gameforge:game-audio-director` |
+| Generate art or audio with AI (logged) | `/gameforge:game-ai-assets` |
 
-### Engineering & Quality
+### Building and quality
 | I need to... | Use |
 |---|---|
-| Review code or architecture | `/game-code-review` |
-| Get engine-specific help | `/game-godot-specialist` or `/game-unity-specialist` or `/game-unreal-specialist` |
-| Review a design document | `/game-design-review` |
-| Build a prototype fast | `/game-prototype` |
-| Set up testing or bug tracking | `/game-qa-lead` |
-| Improve UX or player experience | `/game-ux-designer` |
-| Audit accessibility | `/game-accessibility-specialist` |
+| Build with an AI agent, verified step by step | `/gameforge:game-vibe-code` |
+| Throwaway prototype for one question | `/gameforge:game-prototype` |
+| Engine help | `/gameforge:game-godot-specialist`, `/gameforge:game-unity-specialist`, `/gameforge:game-unreal-specialist`, `/gameforge:game-threejs-specialist`, `/gameforge:game-web2d-specialist` |
+| Architecture and performance | `/gameforge:game-technical-director` |
+| Online play | `/gameforge:game-multiplayer` |
+| Review code (especially agent-written) | `/gameforge:game-code-review` |
+| Tests and release gates | `/gameforge:game-qa-lead` |
+| UX and accessibility | `/gameforge:game-ux-designer`, `/gameforge:game-accessibility-specialist` |
+| CI builds and deploys | `/gameforge:game-ci-pipeline` |
 
-### Production & Launch
+### Testing, shipping and reflecting
 | I need to... | Use |
 |---|---|
-| Run a playtest session | `/game-playtest` |
-| Check balance and tuning | `/game-balance-check` |
-| Prepare for store submission | `/game-launch` |
-| Coordinate multiple concerns | `/game-team-orchestrator` |
-| Generate docs from existing code | `/game-reverse-document` |
-| Set up localization | `/game-localization-manager` |
-| Set up analytics and KPIs | `/game-analytics-setup` |
-| Run a retrospective | `/game-retrospective` |
-| Run a post-mortem | `/game-postmortem` |
+| Playtest / balance | `/gameforge:game-playtest`, `/gameforge:game-balance-check` |
+| Localize / analytics | `/gameforge:game-localization-manager`, `/gameforge:game-analytics-setup` |
+| Steam, console or mobile launch | `/gameforge:game-launch` |
+| Browser release (itch.io, portals) | `/gameforge:game-web-publish` |
+| Several roles on one problem | `/gameforge:game-team-orchestrator` |
+| Retrospective / post-mortem | `/gameforge:game-retrospective`, `/gameforge:game-postmortem` |
 
 ## Coding Standards
 
@@ -93,69 +95,58 @@ These rules apply to all game code in this project. They are non-negotiable.
 ### Documentation
 - Public methods have doc comments explaining what, parameters, return value, and side effects.
 - Inline comments explain "why" not "what."
-- AI-assisted code includes attribution: `# AI-assisted: reviewed and modified by [developer]`
+- AI-assisted code is reviewed by a person before merge; generated assets are recorded in `design/ai-asset-log.md` (see `/gameforge:game-ai-assets`).
 
 ## Commit Convention
 
-Every commit follows this format:
+GameForge's commit hook checks this format once `.gameforge/project.json` exists:
+`<type>(<optional scope>): <summary>`, under 72 characters.
 
-| Prefix | Use |
+| Type | Use |
 |---|---|
-| `feat(system):` | New gameplay feature or system |
-| `fix(system):` | Bug fix |
-| `balance(system):` | Tuning and balance changes |
-| `art:` | Art asset additions or changes |
-| `audio:` | Audio asset additions or changes |
-| `design:` | Design document changes |
-| `ui:` | UI/UX changes |
-| `perf:` | Performance optimization |
-| `refactor(system):` | Code restructuring without behavior change |
-| `test:` | Test additions or changes |
-| `chore:` | Build, config, tooling changes |
-| `docs:` | Documentation only |
+| `feat` | New gameplay feature or system |
+| `fix` | Bug fix |
+| `balance` | Tuning and balance changes |
+| `art`, `audio` | Asset additions or changes |
+| `design`, `level`, `narrative` | Design, level and story documents or data |
+| `ui` | UI/UX changes |
+| `loc` | Localization |
+| `perf`, `refactor`, `test` | Performance, restructuring, tests |
+| `build`, `ci`, `chore`, `docs` | Build, pipeline, tooling, documentation |
 
 Examples:
 ```
-feat(combat): add dash attack with iframes [GDD-012]
-fix(inventory): prevent stack overflow on full inventory
+feat(combat): add dash attack with i-frames
+fix(inventory): prevent overflow on full stacks
 balance(enemies): reduce boss phase 2 health by 15%
-art: add tileset for forest biome
-audio: add ambient wind loops for exterior scenes
-design: update combat GDD with parry system spec
+art: forest tileset pass 2
+design(combat): specify parry window and feedback
 ```
 
 ## Templates
 
-GameForge includes templates for common game dev artifacts. Reference them when creating new documents:
-
-- Game Design Document: `@templates/game-design-document.md`
-- Game Concept: `@templates/game-concept.md`
-- Architecture Decision Record: `@templates/architecture-decision-record.md`
-- Sprint Plan: `@templates/sprint-plan.md`
-- Art Bible: `@templates/art-bible.md`
-- Sound Bible: `@templates/sound-bible.md`
-- Character Sheet: `@templates/character-sheet.md`
-- Economy Model: `@templates/economy-model.md`
-- Level Design Document: `@templates/level-design-document.md`
-- Release Checklist: `@templates/release-checklist.md`
-- Game Pillars: `@templates/game-pillars.md`
-- Systems Index: `@templates/systems-index.md`
-- Accessibility Audit: `@templates/accessibility-audit.md`
+GameForge bundles templates for the GDD, concept, pillars, ADRs, sprint plans, art and sound bibles,
+character sheets, economy models, level docs, accessibility audits, playtest surveys, release
+checklists, post-mortems and the AI asset log. You do not copy them by hand: the skill that owns each
+document fills in its template (for example `/gameforge:game-gdd-author` for the GDD,
+`/gameforge:game-sprint-plan` for sprint plans).
 
 ## Project Structure
 
 ```
 [YOUR GAME NAME]/
-  docs/              -- Design documents (GDD, art bible, etc.)
-  assets/            -- Game assets (art, audio, fonts)
-  config/            -- External gameplay data (balance values, loot tables)
-  tests/             -- Automated tests
-  CLAUDE.md          -- This file
-  .claude/           -- Claude Code configuration
-    settings.json    -- Permissions and safety rules
+  .gameforge/project.json  -- GameForge config: engine, phase, pillars, conventions
+  design/                  -- GDD, pillars, level docs, balance data, ai-asset-log.md
+  docs/                    -- Architecture, ADRs
+  production/              -- Sprints, milestones; session-state/ and session-logs/ are gitignored
+  assets/                  -- Source art, audio, fonts (large binaries tracked with Git LFS)
+  config/                  -- External gameplay data (balance values, loot tables)
+  tests/                   -- Automated tests
+  CLAUDE.md                -- This file
+  .claude/settings.json    -- Permissions and the GameForge marketplace for teammates
 ```
 
-Adapt this structure to your engine's conventions. See the engine-specific starter for recommended layouts.
+Adapt this to your engine's conventions; the engine starters show recommended layouts.
 
 ## Design Document Requirements
 

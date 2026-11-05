@@ -9,7 +9,7 @@
 | Field | Value |
 |-------|-------|
 | **Game Name** | [Your game name] |
-| **Engine** | [Godot 4.x / Unity 6.x / Unreal 5.x] |
+| **Engine** | [Godot 4.7 / Unity 6.3 LTS or 6.6 / Unreal 5.8 / Web: Vite + Three.js, Phaser 4 or PixiJS 8] |
 | **Repository** | [GitHub / GitLab / Bitbucket] |
 | **Team Size** | [Solo / 2-5 / 5+] |
 
@@ -32,9 +32,11 @@
 
 | Store | Branch/Channel | Auto-Deploy? | Secrets Needed |
 |-------|---------------|-------------|----------------|
-| Steam | default | [Yes/No] | `STEAM_USERNAME`, `STEAM_PASSWORD`, `STEAM_TOTP_SECRET` |
-| Steam (beta) | beta | [Yes/No] | Same as above |
-| itch.io | html5/windows/mac/linux | [Yes/No] | `BUTLER_API_KEY` |
+| Steam (beta) | beta | [Yes/No] (on tags, behind a required reviewer) | `STEAM_USERNAME`, `STEAM_CONFIG_VDF` (base64 of an authorized SteamCMD `config.vdf`); variable `STEAM_APP_ID` |
+| Steam (default) | default | No: a human sets it live in Steamworks after testing | None in CI |
+| itch.io | html5/windows/linux/mac | [Yes/No] | `BUTLER_API_KEY`; variable `ITCH_TARGET` (`user/game`) |
+| Cloudflare Pages (web) | branch preview / production | [Yes/No] | `CLOUDFLARE_API_TOKEN` (scoped to Pages edit on one account), `CLOUDFLARE_ACCOUNT_ID`; project name as a variable |
+| Netlify (web) | draft deploy per PR / `--prod` on tags | [Yes/No] | `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID` |
 | Epic Games | default | [Yes/No] | BuildPatchTool credentials |
 | Google Play | production/internal | [Yes/No] | Service account JSON |
 | App Store | TestFlight/production | [Yes/No] | API key, certificates |
@@ -45,9 +47,9 @@
 
 | Test Type | Framework | Runs In CI? | Notes |
 |-----------|----------|------------|-------|
-| Unit Tests | [GUT/gdUnit4 / Unity Test Framework / UE Automation] | [Yes/No] | |
+| Unit Tests | [GUT/gdUnit4 / Unity Test Framework / UE Automation / Vitest] | [Yes/No] | |
 | Integration Tests | [Custom] | [Yes/No] | |
-| Build Smoke Test | [Launch and exit cleanly] | [Yes/No] | |
+| Build Smoke Test | [Launch and exit cleanly / Playwright load-and-play for web builds] | [Yes/No] | |
 
 ---
 
@@ -77,10 +79,16 @@
 
 | Secret Name | Where Stored | Used By |
 |-------------|-------------|---------|
-| [STEAM_USERNAME] | GitHub Secrets | Steam deployment |
+| [STEAM_USERNAME], [STEAM_CONFIG_VDF] | GitHub Secrets (protected `steam` environment) | Steam deployment to the beta branch |
 | [BUTLER_API_KEY] | GitHub Secrets | itch.io deployment |
+| [CLOUDFLARE_API_TOKEN], [CLOUDFLARE_ACCOUNT_ID] | GitHub Secrets | Cloudflare Pages deployment |
+| [NETLIFY_AUTH_TOKEN], [NETLIFY_SITE_ID] | GitHub Secrets | Netlify deployment |
 | [UNITY_LICENSE] | GitHub Secrets | Unity build activation |
 | [GODOT_EXPORT_TEMPLATES] | Cache / download | Godot export |
+
+Deploy tokens are used only in deploy jobs, never in build jobs. Web builds: anything prefixed
+`VITE_` is compiled into the client bundle, so no secret ever goes through it; grep `dist/` for key
+patterns before deploying.
 
 ---
 
@@ -96,4 +104,4 @@
 
 ---
 
-*Template from [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) -- use with `/game-ci-pipeline`*
+*Template from [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) -- use with `/gameforge:game-ci-pipeline`*

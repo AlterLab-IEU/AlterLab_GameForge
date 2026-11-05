@@ -38,4 +38,4 @@ Hades, Slay the Spire, Dead Cells, Balatro, Enter the Gungeon, Risk of Rain 2, S
 
 ## Contributing
 
-See `@docs/genre-pack-spec.md` for the genre pack format specification and `CONTRIBUTING.md` for the contribution workflow. Improvements to reference games, anti-patterns, and balance formulas are welcome.
+See `../../docs/genre-pack-spec.md` for the genre pack format specification and `CONTRIBUTING.md` for the contribution workflow. Improvements to reference games, anti-patterns, and balance formulas are welcome.

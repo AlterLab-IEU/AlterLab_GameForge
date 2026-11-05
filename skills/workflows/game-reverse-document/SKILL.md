@@ -1,473 +1,311 @@
 ---
-name: "game-reverse-document"
+name: game-reverse-document
 description: >
-  Generate documentation from existing code or prototypes. Triggers on: "document this",
-  "reverse document", "generate docs from code", "onboard to codebase", "document existing
-  system". Do NOT invoke for writing new design docs from scratch (use game-brainstorm or
-  game-design-review). Part of the AlterLab GameForge collection.
-argument-hint: "[path to code or 'project' for full scan]"
-effort: medium
+  Generates docs from an existing game codebase as a forked report writer: reverse-engineered GDD,
+  architecture overview with ADR drafts, concept document, or a one-page brief for new teammates and
+  coding agents (Godot, Unity, Unreal, web). Use for "document this codebase", "generate docs from
+  code", "onboard me to this codebase". Not for new designs (use game-gdd-author).
+argument-hint: "[design|architecture|concept|brief] [path, default project root]"
+effort: high
 context: fork
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
+allowed-tools: Read, Glob, Grep, Write, Bash(git log *), Bash(git diff *), Bash(git show *), Bash(git status *)
 ---
 
-# AlterLab GameForge -- Reverse Documentation Workflow
+# AlterLab GameForge -- Reverse Documentation
 
-Most game projects start with passion, not paperwork. A developer prototypes, iterates, and builds. Weeks later, the codebase works but nobody -- including the original author -- can explain its architecture without reading every file. There is no design document because the design emerged from code. There is no architecture decision record because decisions were made in the moment and never written down. This is the normal state of indie development, and pretending otherwise is dishonest.
+Most games start with passion, not paperwork. A prototype works, then grows, and weeks later nobody,
+including its author, can explain its architecture without reading every file. In 2026 add a new
+twist: much of that code was written by coding agents across dozens of sessions, each of which knew
+only what its prompt told it. The design lives in the code and in commit messages, nowhere else.
 
-This workflow reverses the traditional documentation flow. Instead of document-then-build, it reads existing code and produces the documentation that should have existed from the start. The output is not auto-generated API docs -- it is human-readable design documentation that captures intent, architecture, and game systems in the language of game development, not the language of code.
+This workflow reads the code and writes the documents that should have existed: a design document
+in the language of game design, an architecture overview in the language of systems, a concept
+document that captures what the prototype is really about, or a one-page brief that lets a new
+teammate (human or agent) work safely on day one. It is not an API-doc generator.
 
-Reverse documentation serves three critical needs: onboarding (a new team member understands the project in hours, not weeks of code archaeology), preservation (the original developer's decisions are captured before they forget why), and diagnosis (inconsistencies between systems become visible when documented side by side).
+Reverse documentation serves three needs: **onboarding** (hours of reading instead of weeks of
+archaeology), **preservation** (decisions captured before anyone forgets why), and **diagnosis**
+(systems that disagree become visible when documented side by side).
 
-### Purpose & Triggers
+## How this skill runs
 
-Use this workflow when:
-- A prototype works but has zero documentation
-- A new team member needs to understand an existing codebase
-- The original developer is leaving and knowledge must be transferred
-- The project has grown complex enough that the author loses track of systems
-- Someone says "document this" or "what does this code do?"
-- A game jam prototype is being promoted to a full project and needs formal docs
-- An existing project needs a design document for publishers, investors, or team alignment
+This skill runs as a **forked subagent**: no conversation history, no questions to the user,
+read access to the repository plus `git log/diff/show/status`, and permission to write new
+documentation files. Therefore:
 
-Problems this solves:
-- Working code that nobody can explain or safely modify
-- Onboarding that takes weeks of code-reading instead of hours of doc-reading
-- Architectural decisions that are invisible -- embedded in code but never recorded
-- Game mechanics that exist in code but are not described in any design document
-- Systems that contradict each other because nobody mapped their interactions
-- Orphaned code that does nothing but nobody is confident enough to delete
+- **Never ask.** Choose the mode and scope with the rules below and list every assumption at the top
+  of the document under "Assumptions and limits".
+- **Never edit code or existing documents.** Write new files only. If the target file exists, write
+  a dated sibling (`...-2026-11-05.md`) and note it.
+- **Finish with a summary message:** mode, files written, systems documented, the three most
+  important inconsistencies or gaps, and the count of UNVERIFIED items the team should confirm.
 
-### Critical Rules
+### Resolving `$ARGUMENTS`
 
-1. **Read before writing.** Do not generate documentation from assumptions. Scan the actual
-   codebase first. Every claim in the output must trace back to a specific file or code
-   pattern. Include file paths and line references.
+| First word | Mode | Output file |
+|---|---|---|
+| `design` | Reverse-engineered GDD | `design/gdd-reverse-YYYY-MM-DD.md` |
+| `architecture` | Architecture overview plus ADR drafts | `docs/architecture/overview-YYYY-MM-DD.md`, `docs/architecture/adr-draft-NNN-<slug>.md` |
+| `concept` | Concept document from a prototype | `design/concept-reverse-YYYY-MM-DD.md` |
+| `brief` | One-page orientation for humans and coding agents | `docs/project-brief.md` |
+| anything else or empty | Pick by the defaults below | as above |
 
-2. **Intent over implementation.** Capture WHY the code does something, not just WHAT it does. A function that applies gravity is not "applies downward force" -- it is "enforces the movement constraint that prevents infinite jumping." Celeste's codebase is full of intent-documenting comments like "coyote time: player can still jump for 6 frames after leaving a ledge." That level of intent documentation is the target.
+The rest of the argument is the path (default: project root). When no mode is given, take the
+first rule that matches: (1) a directory or system path below the root means **architecture**;
+(2) a `.gameforge/project.json` phase of `concept` or `prototype`, or a jam-sized build, means
+**concept**; (3) no GDD in `design/` means **design**; (4) otherwise **architecture**. State the
+choice in Assumptions.
 
-3. **Flag uncertainty.** When the code's intent is ambiguous, say so. Mark sections with `[UNVERIFIED]` and ask the developer to clarify. Guessing intent and documenting the guess as fact is worse than leaving a gap.
+## Critical rules
 
-4. **Systems, not files.** Organize documentation around game systems (movement, combat, inventory, UI), not around file structure. A movement system might span 5 files across 3 directories. The documentation describes the system, then lists the files. Dead Cells' internal documentation organized everything by game system -- combat, biomes, progression, enemies -- because that is how designers think about the game, not how the file tree is structured.
+1. **Read before writing.** Every claim traces to a file and line, a commit, or a config key. Cite
+   them inline (`player/dash.gd:14`, commit `a3f9b2c`).
+2. **Intent over implementation.** "Applies downward force" is code; "the player gets about six
+   frames of coyote time after leaving a ledge, so jumps feel forgiving" is design. Write the second
+   and cite the first.
+3. **Label every intent claim.**
+   - **STATED** -- intent is written down: a code comment, commit message, test name, existing doc.
+   - **INFERRED** -- strongly implied by behavior and naming.
+   - **UNVERIFIED** -- plausible but unsupported; the team must confirm.
+   Guessing intent and presenting it as fact is worse than leaving a gap.
+4. **Systems, not files.** Organize by game system (movement, combat, economy, UI). A system that
+   spans five files across three folders is one section with a file list.
+5. **Surface inconsistencies.** If movement assumes tiles and collision assumes continuous space, or
+   two save systems exist, that is a headline finding, not a footnote.
+6. **Know what you cannot read.** Unreal Blueprints and `.uasset`/`.umap` files are binary; Unity and
+   Godot scenes are text but carry tuned values and wiring. Document what is visible and list the
+   binary or editor-only logic as a limit.
+7. **One pipeline, four outputs.** The analysis below is shared; only the output format changes.
 
-5. **Detect, do not ignore, inconsistencies.** If the movement code assumes tile-based movement but the collision code assumes continuous movement, that is a documentation finding, not something to paper over. Flag it. Factorio's codebase is a model of internal consistency -- every system agrees on what a "tick" means, what a "belt" can carry, and how entities interact. When your documentation reveals that two systems disagree on fundamentals, you have found the bug before it ships.
+## Phase 1: Project scan
 
-6. **Three modes, one pipeline.** The code analysis pipeline is shared across all three
-   modes. The output format changes, not the analysis depth.
+1. **Engine and version.** `.gameforge/project.json`; else `project.godot`,
+   `ProjectSettings/ProjectVersion.txt`, `*.uproject`, or `package.json` dependencies (`three`,
+   `@react-three/fiber`, `phaser`, `pixi.js`, `kaplay`, `excalibur`, `babylonjs`, `playcanvas`),
+   `Cargo.toml` with `bevy`. Note the language mix (GDScript/C#, C#, C++/Blueprint, TS/JS).
+2. **Entry points.** Godot `run/main_scene` and `[autoload]` in `project.godot`; Unity scenes in
+   `ProjectSettings/EditorBuildSettings.asset`; Unreal `GameDefaultMap` and `GlobalDefaultGameMode`
+   in `Config/DefaultEngine.ini`; web `index.html` -> `src/main.*`.
+3. **Shape and scale.** Annotated directory tree (two levels), counts of scripts, scenes, assets and
+   tests from Glob. Classify: small (under ~50 scripts), medium, large. For large projects, document
+   the core loop systems fully and the rest at inventory depth; say so.
+4. **Existing knowledge.** README, `CLAUDE.md`, `design/`, `docs/`, `progress.md`, `SPEC.md`,
+   `production/session-state/active.md`, code comment density, test presence.
+5. **History.** `git log --oneline -50` for the arc of development; `git log --stat` to find churn
+   hotspots (files changed most often are the fragile ones); `git log --format='%h %s%n%b'` for
+   `Co-Authored-By:` trailers that show which systems were agent-written. Commit messages are often
+   the only STATED intent a vibe-coded project has.
 
-### Workflow
+## Phase 2: System detection
 
----
+Game systems leave recognizable fingerprints in every engine. Read
+`${CLAUDE_SKILL_DIR}/references/system-fingerprints.md` before this phase: it lists the signals for
+movement, combat, inventory, UI, audio, save/load, AI, progression, physics, camera, economy,
+networking, localization and analytics, plus engine-specific registration points (autoloads,
+ScriptableObjects, subsystems, stores and ECS worlds).
 
-🧠 **PHASE 1: Project Scan**
-
-*Goal: Understand the project structure, engine, and organization before reading code.*
-
-```
-PROJECT SCAN PROTOCOL
--------------------------------------------------
-Step 1: Detect engine and framework
-  Scan for:
-  - project.godot, *.gd, *.tscn         --> Godot
-  - *.unity, *.cs, ProjectSettings/      --> Unity
-  - *.uproject, *.cpp/*.h with UE macros --> Unreal Engine
-  - package.json with game libs          --> Web/JS game framework
-  - Cargo.toml with game crates          --> Rust game framework
-  - None of the above                    --> Custom engine or unknown
-
-Step 2: Map directory structure
-  Produce a tree of the project with annotations:
-  /project-root/
-    /src/ or /scripts/    -- Game logic
-    /assets/ or /art/     -- Visual and audio assets
-    /scenes/ or /levels/  -- Level/scene data
-    /ui/                  -- User interface
-    /data/ or /config/    -- Game data, settings
-    /tests/               -- Test files (if any)
-    /docs/                -- Existing documentation (if any)
-
-Step 3: Measure project scale
-  - Total source files: [N]
-  - Total lines of code: [approximate]
-  - Number of scenes/levels: [N]
-  - Number of asset files: [N]
-  - Estimated project complexity: [small / medium / large]
-
-Step 4: Check for existing documentation
-  - README present: [Y/N]
-  - Design document present: [Y/N]
-  - Inline comments density: [sparse / moderate / thorough]
-  - Architecture docs present: [Y/N]
--------------------------------------------------
-```
-
----
-
-🎯 **PHASE 2: System Detection**
-
-*Goal: Identify distinct game systems from code patterns.*
-
-Game systems leave recognizable fingerprints in code regardless of engine or language. This
-phase identifies which systems exist by scanning for characteristic patterns.
-
-```
-SYSTEM DETECTION HEURISTICS
--------------------------------------------------
-MOVEMENT SYSTEM:
-  Signals: velocity variables, position updates per frame, input axis
-  reading, acceleration/deceleration curves, ground detection, gravity
-  application, jump state machines, character controller references
-  Common files: Player.*, CharacterController.*, Movement.*, Locomotion.*
-
-COMBAT SYSTEM:
-  Signals: damage calculation functions, health/HP variables, hit detection,
-  attack state machines, weapon data structures, damage types/resistances,
-  invincibility frames, knockback vectors
-  Common files: Combat.*, Weapon.*, DamageSystem.*, Health.*, Attack.*
-
-INVENTORY SYSTEM:
-  Signals: item data structures, add/remove item functions, capacity limits,
-  item stacking logic, equipment slots, item categories/types
-  Common files: Inventory.*, Item.*, Equipment.*, ItemDatabase.*
-
-UI SYSTEM:
-  Signals: UI element references, menu state machines, HUD update functions,
-  button callbacks, screen transition logic, UI animation triggers
-  Common files: UIManager.*, HUD.*, Menu.*, Screen.*, Panel.*
-
-AUDIO SYSTEM:
-  Signals: sound effect triggers, music track management, volume controls,
-  audio bus routing, spatial audio positioning, adaptive music states
-  Common files: AudioManager.*, SoundManager.*, Music.*, SFX.*
-
-SAVE/LOAD SYSTEM:
-  Signals: serialization logic, file I/O operations, data persistence,
-  save slot management, auto-save triggers, data migration
-  Common files: SaveManager.*, SaveLoad.*, GameData.*, Persistence.*
-
-AI SYSTEM:
-  Signals: state machines (enemy states), pathfinding calls, behavior trees,
-  decision-making logic, perception/detection systems, patrol patterns
-  Common files: AI.*, Enemy.*, Behavior.*, StateMachine.*, NPC.*
-
-PROGRESSION SYSTEM:
-  Signals: XP/level calculations, unlock conditions, skill trees,
-  achievement tracking, milestone checks, difficulty scaling
-  Common files: Progression.*, Level.*, Unlock.*, Achievement.*, XP.*
-
-PHYSICS/COLLISION:
-  Signals: collision callbacks, physics material references, raycast
-  usage, trigger zones, force application, rigid body management
-  Common files: Physics.*, Collision.*, Trigger.*, WorldInteraction.*
-
-CAMERA SYSTEM:
-  Signals: camera follow logic, zoom controls, screen shake, camera
-  bounds, cinematic camera paths, split-screen management
-  Common files: Camera.*, CameraController.*, CameraManager.*
--------------------------------------------------
-```
-
-For each detected system, record:
+Record the inventory:
 
 ```
 SYSTEM INVENTORY
--------------------------------------------------
-System          | Files Involved     | Complexity | Dependencies
--------------------------------------------------
-[Movement]      | [file1, file2]     | [low/med/  | [depends on Physics,
-[Combat]        | [file1, file2]     |  high]     |  Input, etc.]
-[UI]            | [file1, file2]     |            |
-...             |                    |            |
--------------------------------------------------
-
-ORPHANED CODE (files that do not belong to any detected system):
-  - [file] -- Purpose: [unclear / deprecated / utility / unknown]
-
-MISSING SYSTEMS (expected but not found):
-  - [e.g., "No save system detected -- game state is not persisted"]
-  - [e.g., "No audio management -- sounds may be ad-hoc or missing"]
+---------------------------------------------------------------------------------
+System       | Files                              | Complexity | Depends on        | Agent-written?
+---------------------------------------------------------------------------------
+Movement     | player/player.gd, player/dash.gd   | medium     | Input, Physics    | mostly
+Scoring      | systems/score.gd, net/board.gd     | low        | Combat, Net       | yes
+Save/Load    | autoload/save.gd, systems/persist.gd | medium   | all stateful      | mixed  <- two systems
+---------------------------------------------------------------------------------
+ORPHANED: tools/old_spawner.gd (no references; last changed 2026-08-02)
+MISSING:  no audio bus setup; no localization (strings hardcoded in 31 files)
 ```
 
----
+## Phase 3: Mechanics extraction
 
-🚨 **PHASE 3: Mechanics Extraction**
-
-*Goal: Identify game mechanics from code behavior, not just structure.*
-
-A mechanic is a rule that governs interaction. Code implements mechanics, but the mechanic
-itself is a design concept. This phase bridges the gap.
+A mechanic is a rule that governs interaction. For each system, extract:
 
 ```
-MECHANICS EXTRACTION
--------------------------------------------------
-For each identified system, extract:
-
-MECHANIC: [name, e.g., "Double Jump"]
-  Implementation: [file:line -- brief code description]
-  Rule: [the game design rule, e.g., "Player may jump once in the air
-         after a ground jump. Air jump has 80% of ground jump force."]
-  Parameters: [tunable values -- jump force, gravity, cooldown, etc.]
-  Interactions: [how this mechanic connects to other mechanics]
-  Design intent: [VERIFIED: developer confirmed / INFERRED: based on
-                  code behavior / UNVERIFIED: unclear, needs clarification]
--------------------------------------------------
+MECHANIC: Air dash
+  Implementation: player/dash.gd:14-62 (state DASH in player/states.gd:40)
+  Rule: one dash per airtime; 0.18 s at 3x run speed; refreshes on landing or wall contact
+  Parameters: dash_time 0.18, dash_mult 3.0, refresh_on_wall true (dash_tuning.tres)
+  Interactions: cancels attack wind-up; disables gravity while active
+  Intent: STATED (commit 8c1d2e0 "dash should refresh on walls for flow") / feel goal INFERRED
 ```
 
-Look for:
-- **State machines** -- Each state is likely a distinct player or enemy behavior
-- **Input handlers** -- Each input binding reveals a player action
-- **Collision responses** -- Each collision callback reveals an interaction rule
-- **Timers and cooldowns** -- Each timer reveals a pacing or balance decision
-- **Constants and config values** -- Each tunable number reveals a balance parameter
+Look in: state machines (each state is a behavior), input handlers (each action is a verb),
+collision callbacks (each is an interaction rule), timers and cooldowns (pacing decisions), constants
+and data files (balance parameters), and tests (the closest thing to a written spec).
 
----
-
-📋 **PHASE 4: Dependency Mapping**
-
-*Goal: Visualize how systems interact with each other.*
+## Phase 4: Dependency mapping
 
 ```
 DEPENDENCY MAP
--------------------------------------------------
-[Movement] ---uses---> [Physics/Collision]
-[Movement] ---reads--> [Input]
-[Combat]   ---uses---> [Physics/Collision]
-[Combat]   ---modifies-> [Health (in Movement entity)]
-[UI]       ---reads--> [Health]
-[UI]       ---reads--> [Inventory]
-[Save]     ---reads--> [all systems with persistent state]
--------------------------------------------------
+[Movement] --reads--> [Input]          [Combat] --modifies--> [Health]
+[Movement] --uses---> [Physics]        [UI]     --reads-----> [Health, Inventory]
+[Save]     --reads--> [all stateful]   [Score]  --trusts----> [client values]   <- flag
 
-TIGHT COUPLINGS (potential refactoring targets):
-  - [System A] directly modifies internal state of [System B]
-    instead of using events/signals. Fragile if either changes.
-
-CIRCULAR DEPENDENCIES:
-  - [System A] depends on [System B] which depends on [System A].
-    May cause initialization order bugs.
-
-ISOLATED SYSTEMS:
-  - [System X] has no dependencies and nothing depends on it.
-    Verify: is this intentional or orphaned code?
+TIGHT COUPLINGS: Combat writes Player.hp directly instead of a damage signal/event
+CIRCULAR:        GameManager <-> UIManager (initialization order risk)
+ISOLATED:        WeatherSystem (nothing depends on it; intentional or abandoned?)
 ```
 
----
+## Phase 5: Write the output
 
-🛠️ **MODE 1: Design Document Generation (design)**
+Full templates for the design and architecture modes, and the ADR draft format, are in
+`${CLAUDE_SKILL_DIR}/references/output-templates.md`; read it before writing either. They follow
+`${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md` and
+`${CLAUDE_PLUGIN_ROOT}/templates/architecture-decision-record.md`.
 
-*Output: A reverse-engineered Game Design Document.*
-
-Reference `@templates/game-design-document.md` for the canonical GDD template.
+Every output starts with the same header:
 
 ```markdown
-# Reverse-Engineered Game Design Document
+# [Title]
+*Reverse-documented from code by GameForge on 2026-11-05. Source: [path], commit [short hash].*
 
-## Project Overview
-- **Project name:** [from project config or directory name]
-- **Engine:** [detected engine and version]
-- **Genre:** [inferred from mechanics -- e.g., platformer, RPG, puzzle]
-- **Estimated scope:** [small/medium/large based on file count and systems]
-
-## Core Mechanics
-[For each mechanic extracted in Phase 3, described in design language]
-
-### [Mechanic Name]
-**What the player experiences:** [description from player perspective]
-**How it works:** [design-level explanation, not code]
-**Tunable parameters:** [list of values that affect feel/balance]
-**Design intent:** [VERIFIED/INFERRED/UNVERIFIED]
-
-## Game Systems
-[For each system detected in Phase 2]
-
-### [System Name]
-**Purpose:** [what this system contributes to the player experience]
-**Components:** [files and classes involved]
-**Key behaviors:** [bullet list of what this system does]
-**Dependencies:** [what it needs from other systems]
-**Provides to others:** [what other systems consume from it]
-
-## System Interaction Map
-[Dependency map from Phase 4, in readable format]
-
-## Identified Gaps
-[Missing systems, orphaned code, inconsistencies]
-
-## Balance Parameters
-[All tunable values extracted from code, organized by system]
-
-## Recommendations
-[Suggestions for design documentation that should be written manually
- to supplement what code analysis can provide -- narrative design,
- art direction, audio design, player onboarding]
+## Assumptions and limits
+- Mode chosen: design (no GDD found in design/).
+- Blueprint logic in Content/Blueprints/ is binary and was not analyzed; 14 assets listed by name only.
+- 9 intent claims are UNVERIFIED; they are marked inline and listed at the end.
 ```
 
----
+### Mode: concept (inline template)
 
-📊 **MODE 2: Architecture Decision Record (architecture)**
-
-*Output: An Architecture Decision Record documenting code patterns and architectural choices.*
-
-Reference `@templates/architecture-decision-record.md` for the canonical ADR template.
+Use for jam builds and prototypes being promoted to real projects. It follows
+`${CLAUDE_PLUGIN_ROOT}/templates/game-concept.md`.
 
 ```markdown
-# Architecture Overview: [Project Name]
+# Game Concept: [Project Name] (reverse-documented)
 
-## Technology Stack
-- **Engine:** [name and version]
-- **Language:** [primary language]
-- **Key libraries/plugins:** [detected dependencies]
+## Core
+- **Pitch (inferred):** A one-room roguelite where every dash leaves a trail that damages enemies.
+- **Core verb:** dash. **Core loop:** clear room -> pick one of three trail upgrades -> next room.
+- **Session shape:** 6-10 minute runs (run timer default 600 s in run_config.tres).
 
-## Project Structure
-[Annotated directory tree from Phase 1]
+## What the player experiences
+- Moment to moment: [from mechanics] -- Intent: INFERRED
+- What makes it interesting: [the mechanical interaction that is genuinely novel]
 
-## Architectural Patterns Detected
+## Mechanics summary
+| Mechanic | Rule (design language) | Key parameters | Evidence |
+|---|---|---|---|
+| Dash trail | Trail lasts 1.2 s, 4 dmg/tick | trail_life, trail_dps | dash.gd:30, STATED in commit |
 
-### Pattern: [e.g., "Singleton Manager Pattern"]
-**Where:** [files using this pattern]
-**Purpose:** [why this pattern was likely chosen]
-**Trade-offs:** [benefits and risks of this pattern in this context]
-**ADR:** We use [pattern] for [reason]. This was likely chosen because
-[inferred rationale]. Alternative approaches include [alternatives].
+## Presentation
+- Art approach: [pixel / low-poly / vector; resolution, palette files]
+- Audio: [present/absent; placeholder or final; AI-generated assets listed in provenance log?]
 
-### Pattern: [e.g., "Component-Based Architecture"]
-[Same structure]
+## Scope assessment
+- Current state: prototype -- 3 room types, 5 enemies, 9 upgrades counted in data/
+- Missing for a shippable game: save system, settings menu, audio mix, localization, onboarding
 
-## System Architecture
-[For each system, describe its internal architecture]
-
-### [System Name]
-**Architecture:** [pattern used -- state machine, event-driven, etc.]
-**Entry points:** [where execution starts for this system]
-**Data flow:** [how data moves through the system]
-**Extension points:** [where new behavior can be added]
-**Coupling assessment:** [tight/loose, and to what]
-
-## Cross-Cutting Concerns
-- **State management:** [how game state is managed globally]
-- **Event system:** [how systems communicate -- direct calls, signals, events]
-- **Error handling:** [how errors are handled -- or not]
-- **Configuration:** [how game parameters are stored and loaded]
-- **Testing:** [test coverage, testability of architecture]
-
-## Technical Debt Register
-[Issues identified during code analysis]
-| Area | Issue | Severity | Suggested Fix |
-|------|-------|----------|---------------|
-| [system] | [problem] | [high/med/low] | [recommendation] |
-
-## Recommendations
-[Architectural improvements, refactoring opportunities, scalability concerns]
+## Strengths and gaps (from code evidence)
+## Recommended next steps
 ```
 
----
+### Mode: brief (inline template)
 
-🎭 **MODE 3: Concept Document Generation (concept)**
-
-*Output: A game concept document extracted from a playable prototype.*
-
-Reference `@templates/game-concept.md` for the canonical concept template.
+A one-page orientation that a new teammate, or a fresh coding-agent session, reads first. Keep it
+under 80 lines. It does not replace `CLAUDE.md`; it ends with a suggested snippet the team may paste
+into it.
 
 ```markdown
-# Game Concept Document: [Project Name]
-*Reverse-engineered from playable prototype*
+# Project Brief: [Project Name]
+**Engine:** Godot 4.7.2 (GDScript) | **Phase:** prototype | **Updated:** 2026-11-05 from commit a3f9b2c
 
-## Core Concept
-**One-sentence pitch:** [inferred from core mechanics and theme]
-**Core verb:** [the primary action the player performs]
-**Core loop:** [the repeating cycle of play identified from code]
+## Run and check
+- Run: `godot --path .` | Tests: `godot --headless --script res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit`
+- Web build: `npm run build` (if present) | CI: .github/workflows/godot-ci.yml
 
-## Player Experience
-**What the player does:** [moment-to-moment gameplay from mechanics]
-**What the player feels:** [inferred emotional experience]
-**What makes it interesting:** [unique mechanical interactions found]
+## Systems map (one line each)
+| System | Lives in | Owns | Talk to it via |
+|---|---|---|---|
+| Movement | player/ | velocity, dash state | InputMap actions |
+| Save | autoload/save.gd | save.json v3 | SaveManager.save()/load() |
 
-## Mechanics Summary
-[Condensed from Phase 3 -- design-language descriptions only]
+## Invariants (do not break)
+- Gameplay values live in *.tres resources, never literals (see data/).
+- Scores are computed server-side in net/board.gd; the client sends events only.
+- One save system: autoload/save.gd. systems/persist.gd is legacy (see Known problems).
 
-## Visual Style
-**Art approach:** [inferred from assets -- pixel art, 3D, vector, etc.]
-**Color palette:** [extracted from art assets or UI if present]
-**Visual complexity:** [minimalist / moderate / detailed]
+## Do not touch
+- .godot/, *.uid (commit, never hand-edit), export_presets.cfg credentials
 
-## Audio Profile
-**Music:** [present/absent, style if detectable]
-**SFX:** [present/absent, coverage of mechanics]
-**Audio completeness:** [placeholder / partial / complete]
+## Known problems
+- Two save paths (autoload/save.gd and systems/persist.gd); dash tuning duplicated in dash.gd and dash_tuning.tres.
 
-## Scope Assessment
-**Current state:** [prototype / alpha / beta / near-complete]
-**Content volume:** [levels, items, enemies, etc. counted from data]
-**Estimated completion:** [what remains to be built for a shippable game]
-
-## Strengths (from code evidence)
-[What the prototype does well -- tight mechanics, clean architecture, etc.]
-
-## Gaps (from code evidence)
-[What is missing or incomplete -- no save system, no audio, no UI, etc.]
-
-## Recommendations for Full Development
-[What to prioritize if taking this prototype to a full game]
+## Suggested CLAUDE.md snippet
+> Check command: `godot --headless --script res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit`.
+> One system per job: reuse SaveManager, AudioBus, InputMap actions; ask before adding dependencies.
 ```
 
-### Quality Checks
+## Working with AI Coding Agents
 
-Every reverse documentation pass must verify:
+Reverse documentation is the antidote to vibe debt: agents write code faster than anyone writes
+down why.
+
+- **Run it at phase changes.** After a jam, after a vibe-coded prototype proves fun, before
+  onboarding anyone, and before a big refactor. `/gameforge:game-reverse-document brief` is cheap
+  enough to run weekly on an agent-built project.
+- **Give agents the brief, not the codebase.** A fresh session that reads `docs/project-brief.md`
+  first stops re-inventing existing systems, the most expensive agent habit. Keep the brief and the
+  project `CLAUDE.md` short and lead with the check command.
+- **Use git as the intent record.** Agent sessions leave rationale in commit messages, `progress.md`
+  and `SPEC.md`; cite them as STATED intent. If commits say nothing ("update files"), say so in
+  limits and recommend the team adopt descriptive commit subjects.
+- **Verify by hand:** every UNVERIFIED claim, every design rule that drives balance, and every
+  architecture invariant the brief asks agents to respect. A wrong invariant in a brief is worse
+  than none, because agents follow it.
+- **Mark agent-written systems.** The inventory's "Agent-written?" column tells reviewers where to
+  apply `/gameforge:game-code-review` with the full AI-change audit.
+- **Track asset provenance too.** If the scan finds AI-generated art, audio or voice without a
+  provenance log, list it under gaps and route to `/gameforge:game-ai-assets`.
+- For the agent build loop itself, use `/gameforge:game-vibe-code`.
+
+## Quality checklist
 
 ```
-QUALITY CHECKLIST
--------------------------------------------------
-[ ] Every documented system traces to specific source files
-[ ] Ambiguous intent is marked [UNVERIFIED], not guessed
-[ ] Orphaned code is identified and listed
-[ ] System dependencies are mapped, including circular dependencies
-[ ] Inconsistencies between systems are flagged (not hidden)
-[ ] All tunable parameters are extracted and listed
-[ ] The documentation is organized by game system, not file structure
-[ ] Missing expected systems are noted (no save, no audio, etc.)
-[ ] The output matches the requested mode (design/architecture/concept)
-[ ] File paths are absolute and accurate
-[ ] The documentation is useful to someone who has never seen the code
--------------------------------------------------
+[ ] Mode, scope and every assumption stated at the top
+[ ] Every system traces to files; every mechanic cites file:line or a commit
+[ ] Every intent claim labelled STATED / INFERRED / UNVERIFIED, with UNVERIFIED items listed at the end
+[ ] Orphaned code, duplicate systems and missing systems listed
+[ ] Dependencies mapped, including circular and client-trusting edges
+[ ] All tunable parameters extracted, grouped by system, with their data file or literal location
+[ ] Organized by game system, not by folder
+[ ] Binary and editor-only logic listed as a limit, not silently skipped
+[ ] No code or existing document modified; new files only
+[ ] Readable by someone who has never opened the project
 ```
 
-### Cross-References
+## Hand-offs
 
-- `@templates/game-design-document.md` -- Template for design mode output
-- `@templates/architecture-decision-record.md` -- Template for architecture mode output
-- `@templates/game-concept.md` -- Template for concept mode output
-- `@docs/coding-standards.md` -- Code conventions to check against during analysis
-- `@docs/game-design-theory.md` -- Design vocabulary for describing mechanics
-- `@docs/collaboration-protocol.md` -- How to share reverse-documented findings with team
-- Workflow handoffs: output feeds into `game-design-review` for validation,
-  `game-code-review` for architecture assessment, or `game-scope-check` for
-  scope evaluation of documented systems
+| Next step | Skill |
+|---|---|
+| Validate the reverse-engineered design against pillars and player experience | `game-design-review` |
+| Audit the code quality and AI-written changes the inventory flagged | `game-code-review` |
+| Turn the reverse GDD into a maintained, section-by-section GDD | `game-gdd-author` |
+| Decide what to cut or keep given the documented scope | `game-scope-check` |
+| Architecture decisions the overview surfaced | `game-technical-director` |
 
-### Example Use Cases
+Shared vocabulary: `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md` (MDA, loops, flow) for design
+language and `${CLAUDE_PLUGIN_ROOT}/docs/coding-standards.md` for the architecture standards the
+technical debt register measures against.
 
-1. **"I have a game jam prototype and want to turn it into a real project."**
-   Run in **concept** mode. Scan the prototype, extract the core concept, identify what
-   works and what is missing, produce a concept document that can guide full development.
+## When NOT to use me
 
-2. **"A new developer is joining and needs to understand the codebase."**
-   Run in **architecture** mode. Produce an architecture overview that maps systems,
-   patterns, dependencies, and extension points. The new developer reads the doc instead
-   of spelunking through every file.
+- Writing new design from a blank page: `game-gdd-author` or `game-brainstorm`.
+- Reviewing code for bugs and AI debt: `game-code-review`.
+- Planning the next sprint from what you find: `game-sprint-plan`.
+- Engine how-to questions: the engine specialist for your stack.
 
-3. **"We've been building for months but never wrote a design doc."**
-   Run in **design** mode. Extract mechanics, systems, and parameters from code. Produce
-   a GDD that captures the current state of the game's design, including gaps and
-   inconsistencies that emerged from building without a document.
+## Example requests
 
-4. **"Document this module so I can refactor it safely."**
-   Run in **architecture** mode on a specific path. Map the module's internal structure,
-   dependencies, and coupling points. The resulting ADR tells you what is safe to change
-   and what will break if touched.
-
-5. **"I forgot why I built this system this way."**
-   Run in **design** mode on the specific system path. Extract the mechanics and parameters
-   to reconstruct the design intent. Flag anything marked [UNVERIFIED] for the developer
-   to confirm or correct while the memory is still partially fresh.
-
-Part of the AlterLab GameForge -- Indie Game Development Skills suite.
+1. **"I have a jam prototype and want to turn it into a real project."** Concept mode on the root:
+   pitch, loop, mechanics with parameters, honest scope gap list.
+2. **"A new developer joins Monday."** Brief mode first (one page), then architecture mode for the
+   systems they will own.
+3. **"We built for months with Claude Code and never wrote a design doc."** Design mode; expect a
+   STATED-heavy document from commit messages and an "Agent-written?" inventory.
+4. **"Document `src/combat/` so I can refactor it safely."** Architecture mode on that path: entry
+   points, data flow, coupling, and the invariants a refactor must keep.
+5. **"I forgot why the economy works this way."** Design mode on `systems/economy/`: rules, faucets
+   and sinks, parameters, and every UNVERIFIED intent listed for you to confirm.

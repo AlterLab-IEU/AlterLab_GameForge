@@ -1,84 +1,104 @@
 # AI Content Policy
 
+> Owned by the Creative Director (stance) and Technical Director (tooling and security).
+> Every generated asset is recorded in the provenance log (`design/ai-asset-log.md`, from the
+> [AI asset log template](ai-asset-log.md)); store disclosures are drafted from that log.
+> Facts below are current as of November 2026. Re-check each platform's own pages before filing.
+
 ## Project
 - **Studio/Developer**: [name]
 - **Game Title**: [name]
 - **Date**: [date]
 - **Policy Version**: [number]
+- **Owners**: Creative Director [name], Technical Director [name]
 
-## AI Usage Inventory (Three-Tier Classification)
+## Stance Level
 
-Categorize ALL AI usage in your project according to Steam's January 2026 three-tier framework. This classification determines disclosure obligations per storefront.
+Pick one and state it in a sentence. Changing the level is a creative decision record.
 
-### Tier 1: Developer Tools (EXEMPT from disclosure)
-AI tools used during development that do not produce player-facing content.
+| Level | What AI may touch | Chosen |
+|---|---|---|
+| 0 Hand-made | Nothing player-facing. Code assistants allowed | [ ] |
+| 1 Tool-assisted (default) | Code, tools, internal ideation; placeholders logged and replaced before any public build | [ ] |
+| 2 Assisted assets | Level 1 plus named asset classes a human finishes, all disclosed | [ ] |
+| 3 AI as feature | Level 2 plus live-generated runtime content with guardrails, reporting and disclosure | [ ] |
 
-| Tool | Use Case | Quality Gate |
-|------|----------|-------------|
-| [e.g., Claude Code] | [implementation assistance, debugging] | Code review required |
-| [e.g., GitHub Copilot] | [code completion] | Code review required |
-| [e.g., internal LLM] | [test case generation, documentation] | None required for disclosure |
+**Stance in one sentence:** [e.g. "Level 1: agents help write code and tools; everything players see
+or hear is made by our team."]
 
-### Tier 2: Pre-Generated AI Content (DISCLOSE on store page)
-AI-generated assets baked into game files that players consume directly.
+## AI Usage Inventory
 
-| Category | Tool | License | Use Case | Quality Gate |
-|----------|------|---------|----------|-------------|
-| Visual Art | [e.g., Scenario] | [license] | [concept art, texture generation] | Art Director approval required |
-| Music | [e.g., Suno] | [license] | [prototype only / production] | Audio Director approval required |
-| Voice | [e.g., ElevenLabs] | [license] | [PROTOTYPE ONLY -- not for shipping] | SAG-AFTRA compliance check |
-| 3D Assets | [e.g., Meshy] | [license] | [props, environment pieces] | Technical art review |
-| Narrative | [e.g., local LLM] | [license] | [pre-written dialogue, lore text] | Narrative Director review |
+Steam's content survey (rewritten 2026-01-16) distinguishes **pre-generated** and
+**live-generated** AI content and exempts efficiency tools such as code assistants. The three
+groups below map onto that.
 
-### Tier 3: Live-Generated AI Content (DISCLOSE + GUARDRAILS required)
-AI creating content at runtime that players interact with dynamically.
+### Development tools (exempt from Steam disclosure)
+Tools that never produce player-facing content.
 
-| Feature | Model/Service | Guardrails | Reporting Mechanism |
-|---------|--------------|------------|-------------------|
-| [e.g., dynamic NPC dialogue] | [model/API] | [content filter, blocklist, safety layer] | [player report button location] |
-| [e.g., procedural quest generation] | [model/API] | [output validation, content bounds] | [player report mechanism] |
+| Tool | Use case | Guardrail |
+|------|----------|-----------|
+| [e.g. Claude Code] | [implementation, debugging, tests] | Human review of every merged change |
+| [e.g. engine MCP server] | [editor automation] | Localhost only; commit before each session |
 
-**Guardrail requirements for Tier 3 (Steam):**
-- Safety system preventing illegal, offensive, or harmful output
-- Player reporting mechanism for AI-generated content
-- Content filtering and moderation pipeline
-- Logging of AI outputs for review
+### Pre-generated content (disclose)
+Generated during development and shipped or shown to players, including store-page and marketing
+assets and localization.
 
-## Prohibited Uses
-- [ ] No AI-generated content shipped without human review
-- [ ] No AI voice acting in shipping product without performer consent (SAG-AFTRA IMA)
-- [ ] No training AI models on copyrighted work without license
-- [ ] No AI-generated content presented as human-created without disclosure
+| Asset class | Tool and model | Licence / terms (date read) | Human finishing | Approver |
+|---|---|---|---|---|
+| [e.g. background props] | [tool, model version] | [terms, YYYY-MM-DD] | [retopology, repaint] | Art Director |
+| [e.g. ambient SFX] | [tool] | [terms] | [edit, mix, loop] | Audio Director |
+| [e.g. localization drafts] | [tool] | [terms] | [native-speaker review] | Localization lead |
 
-## Quality Gates (5-Stage)
-1. **AI Generation**: Tool produces raw output
-2. **Automated QA**: Technical validation (resolution, format, performance)
-3. **Domain Expert Review**: Art/Audio/Narrative Director approves quality and fit
-4. **Integration Testing**: Asset works correctly in-engine
-5. **Playtest Validation**: Players don't perceive quality gap
+### Live-generated content (disclose and add guardrails)
+Content an AI system generates while the game runs.
+
+| Feature | Model / service | Guardrails | Player reporting | Logging |
+|---|---|---|---|---|
+| [e.g. NPC dialogue] | [model, on-device or API] | [content filter, topic bounds, prompt-injection hardening] | [in-game report button] | [what is logged, retention] |
+
+Requirements for live generation:
+- Steam: describe your guardrails in the content survey; live-generated adult-only sexual content is
+  not allowed.
+- Microsoft Store policy 11.16: disclose live generative AI in metadata and Partner Center, keep
+  output within Store policy, and provide a way to report content and act on reports.
+- EU AI Act Article 50 (applies from 2026-08-02): AI NPCs and agents must tell players they are AI
+  unless that is obvious; runtime generative systems need machine-readable marking (grace to
+  2026-12-02 only for systems already on the market). This is our reading, not legal advice.
+
+## Prohibited Without a Written Exception and Legal Review
+- [ ] A real performer's voice or likeness (SAG-AFTRA 2025 Interactive Media Agreement: consent and
+      disclosure for digital replicas)
+- [ ] Music from services whose training data is in active litigation
+- [ ] Prompts naming living artists, existing characters, brands, or other games
+- [ ] AI output as the final logo, key art or main characters (keep identity assets human-made)
+- [ ] Shipping any generated content without human review and a log entry
+
+## Quality Gates
+1. **Generate** with the approved tool; log it immediately.
+2. **Technical check**: resolution, format, topology, loudness, performance budget.
+3. **Domain review**: the owning director approves fit and quality.
+4. **In-engine test**: the asset works in the build.
+5. **Disclosure check**: the log entry has its disclosure category.
 
 ## Copyright Documentation
-For each AI-generated asset, record:
-- Tool used and version
-- Prompt or input provided
-- Human modifications made (describe creative decisions)
-- Final human authorship percentage estimate
-- NOTE: Purely AI-generated content cannot be copyrighted (U.S. Copyright Office). Document human creative contribution.
+For each generated asset the log records the tool and version, inputs, and the human modifications
+made. The US Copyright Office's Part 2 report (2025-01-29) found prompts alone insufficient for
+protection while human selection, arrangement and modification can be protected; the Supreme
+Court declined *Thaler* on 2026-03-02, so human authorship remains required.
 
-## Per-Storefront Disclosure Requirements
+## Per-Platform Disclosure
 
-| Storefront | Tier 1 (Dev Tools) | Tier 2 (Pre-Generated) | Tier 3 (Live-Generated) |
-|------------|-------------------|----------------------|------------------------|
-| **Steam** | Exempt -- no disclosure required | Flag in store page content descriptor | Flag in content descriptor + document guardrails + player reporting mechanism |
-| **itch.io** | Exempt | Tag as AI content (hand-edited outputs STILL must be tagged; non-tagged = delisted from browse/search; tagged projects appear on segregated "AI Assisted" browse page) | Tag as AI content + document guardrails |
-| **App Store** | Exempt | Enhanced privacy disclosures if AI shares personal data with third parties | Enhanced privacy disclosures + explicit user permission for AI data sharing |
-| **Google Play** | Exempt | Data safety section must reflect AI data usage | Data safety section + content policy compliance |
-| **Epic Games Store** | Exempt | No specific AI policy announced (follow general content policies) | No specific AI policy announced |
-| **Credits** | Optional | List AI tools in game credits under "AI-Assisted Production" | List AI tools and disclose live generation in credits |
-| **Marketing** | N/A | Do not claim AI-generated content as hand-crafted | Do not claim AI-generated content as hand-crafted |
+| Platform | Development tools | Pre-generated | Live-generated |
+|---|---|---|---|
+| **Steam** | Exempt | Disclose in the content survey (in-game, store page, marketing, localization) | Disclose plus describe guardrails |
+| **Microsoft Store / Xbox** | Not covered | Not covered by 11.16 | Disclose in metadata and Partner Center; reporting mechanism |
+| **itch.io** | Not required | Generative-AI disclosure on the project; it feeds itch.io's "no AI" filter, which covers search since 2026-11-03 | Disclose |
+| **EU players (AI Act Art. 50)** | Not covered | Fictional and artistic works: disclosure must not hamper the work | AI interaction notice; machine-readable marking |
+| **PlayStation, Nintendo, Epic** | No public AI-specific store rule found as of Nov 2026; follow general content policies and check current partner documentation | | |
+| **Credits** | Optional | List AI tools and what they were used for | List tools and the live features |
+| **Marketing** | — | Never present generated content as hand-made | Never present generated content as hand-made |
 
-## SAG-AFTRA Compliance (if using AI voice)
-- [ ] Informed consent obtained from any performers whose voice/likeness is used
-- [ ] Disclosure of AI usage in credits
-- [ ] Usage reports filed as required
-- [ ] Fair compensation provided per IMA terms (15.17% increase over base)
+## Review
+- **Last reviewed**: [date] by [name]
+- **Next review**: before each public build and each store submission

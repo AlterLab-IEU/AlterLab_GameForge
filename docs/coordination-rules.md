@@ -4,7 +4,7 @@ These rules govern how agents communicate, delegate, escalate, and resolve confl
 
 ## 1. Vertical Delegation
 
-Decisions flow downward through the hierarchy defined in `@docs/agent-hierarchy.md`. Tier 1 (leadership) sets direction. Tier 2 (department leads) executes within their domain. Tier 3 (specialists) implements within their engine.
+Decisions flow downward through the hierarchy defined in `agent-hierarchy.md`. Tier 1 (leadership) sets direction. Tier 2 (department leads) executes within their domain. Tier 3 (specialists) implements within their engine.
 
 **Rule**: Never skip tiers for complex decisions. A producer does not tell an engine specialist how to implement a shader. The producer tells the technical director about a performance requirement, and the technical director works with the engine specialist on implementation.
 
@@ -29,6 +29,8 @@ Conflicts between agents are normal and expected. Different domains have legitim
 | Creative vs. Technical | Producer mediates | Creative and technical directors negotiate. Producer ensures scope and schedule are respected. |
 | Scope vs. Schedule | Producer | Producer evaluates trade-offs, presents options to user, executes user's decision. |
 | Quality vs. Ship Date | Producer + QA Lead | QA presents risk assessment. Producer presents schedule impact. User decides. |
+| Revenue vs. Player Trust | Producer | Economy Designer advises with the ethics framework in [monetization-ethics.md](monetization-ethics.md). Producer decides; the user approves anything that changes pricing or monetization. |
+| Accommodation vs. Design Intent | Technical Director | Accessibility Specialist advises; Creative Director states the design intent. Technical Director decides the implementation, preferring options that preserve intent for everyone else. |
 
 **Rule**: The resolver's decision is final for that conflict. Agents do not relitigate resolved conflicts. If new information emerges that changes the calculus, a new conflict may be raised -- but the original resolution stands until explicitly overturned.
 

@@ -1,202 +1,220 @@
-# Unity 6.x Engine Configuration
+# Unity 6 Engine Configuration (AlterLab GameForge)
 
-This section configures Claude Code for a Unity 6.x project. Append to your project's CLAUDE.md or use standalone.
+Engine section for a Unity 6 project worked on with Claude Code and GameForge. Append it to your
+project's CLAUDE.md (or use it standalone), then fill in the `[BRACKETS]`.
 
 ## Engine Details
 
-- **Engine**: Unity 6 (6000.x)
-- **Primary Language**: C#
-- **Render Pipeline**: URP (or HDRP -- specify yours)
-- **Engine Specialist**: `/game-unity-specialist`
+- **Unity version:** [6000.3.x LTS]. `ProjectSettings/ProjectVersion.txt` is the source of truth.
+  6.3 LTS is supported to Dec 2027, 6.6 is the current Update release, and 6.0 LTS left standard
+  support on 2026-10-16.
+- **Render pipeline:** [URP]. URP for new projects. HDRP gets no new features. Built-in is
+  deprecated from 6.5.
+- **Input:** Input System with project-wide actions. The legacy Input Manager is off.
+- **UI:** [UI Toolkit | UGUI + TextMeshPro]
+- **Scripting backend / targets:** [IL2CPP] / [Windows, macOS, Web]
+- **GameForge skills:** engine questions `/gameforge:game-unity-specialist`; engine-agnostic
+  architecture `/gameforge:game-technical-director`; netcode `/gameforge:game-multiplayer`; CI
+  `/gameforge:game-ci-pipeline`; web release `/gameforge:game-web-publish`; unsure `/gameforge:game-help`.
 
-When asking engine-specific questions, use `/game-unity-specialist`. For architecture questions that are engine-agnostic, use `/game-technical-director`.
+## Required Editor Settings (confirm before the first commit; upgraded projects can differ)
 
-## Project Structure
+- **Version Control mode: Visible Meta Files.** `ProjectSettings/VersionControlSettings.asset`
+  shows `m_Mode: Visible Meta Files`.
+- **Asset Serialization: Force Text.** `ProjectSettings/EditorSettings.asset` shows
+  `m_SerializationMode: 2`. Scenes, prefabs and assets then diff and merge as YAML.
+- **Enter Play Mode without domain reload** (the default for new 6.6 projects). Code must reset
+  static state explicitly.
+
+## Project Layout
 
 ```
-Assets/
-  Scripts/
-    Runtime/              -- Game code (assemblies: Game.Runtime)
-      Components/         -- MonoBehaviour components
-      Systems/            -- Core game systems (combat, inventory, etc.)
-      StateMachines/      -- State machine implementations
-      Data/               -- ScriptableObject definitions
-      UI/                 -- UI scripts (UI Toolkit or UGUI)
-      Utils/              -- Shared utilities
-    Editor/               -- Editor scripts (assembly: Game.Editor)
-    Tests/
-      EditMode/           -- Edit-mode unit tests
-      PlayMode/           -- Play-mode integration tests
-  Prefabs/                -- Reusable prefab assets
-    Characters/
-    Environment/
-    UI/
-    VFX/
-  Scenes/
-    Levels/               -- Gameplay scenes
-    UI/                   -- UI-only scenes (menus, loading)
-    _Boot.unity           -- Bootstrap scene (loaded first)
-  Resources/              -- ONLY for assets that MUST load by name at runtime
-  ScriptableObjects/      -- SO asset instances (data containers)
-    Config/               -- Game configuration data
-    Events/               -- SO event channels
-  Art/
-    Sprites/
-    Textures/
-    Models/
-    Animations/
-    Materials/
-  Audio/
-    Music/
-    SFX/
-  Fonts/
-  Shaders/
-  AddressableAssetsData/  -- Addressables config (if using Addressables)
-Packages/
-  manifest.json           -- Package dependencies
-ProjectSettings/          -- Unity project settings
+Assets/_Project/                 -- our code and content (third-party stays outside)
+  Core/       Game.Core.asmdef       -- pure rules, no scene dependencies
+  Gameplay/   Game.Gameplay.asmdef   -- MonoBehaviours, refs Core
+  UI/         Game.UI.asmdef         -- refs Core, Gameplay
+  Editor/     Game.Editor.asmdef     -- Editor-only tools
+  Tests/EditMode/  Tests/PlayMode/   -- test asmdefs
+  Data/       -- ScriptableObject assets (config, event channels)
+  Art/ Audio/ Prefabs/ Scenes/ Settings/
+Packages/manifest.json           -- package versions (commit it, with packages-lock.json)
+design/  docs/architecture/  production/   -- GameForge docs, ADRs, sprint and session files
 ```
 
-## C# Coding Standards
+## Rules for Claude
 
-### Naming Conventions
+1. **Never hand-edit Unity-owned files.** That means `.meta` files (their GUIDs link every
+   reference), `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `Build*/` and generated `*.csproj` /
+   `*.sln`. GameForge's hook blocks the folders and project files, and asks before `.meta` edits.
+2. **Do not edit scene or prefab YAML structurally.** Use the Editor, Unity's agent plugin or an MCP
+   tool, or list the exact Inspector steps for a human.
+3. **Do not invent package versions.** Add packages through the Package Manager, or with versions
+   confirmed there.
+4. **Read `ProjectSettings/ProjectVersion.txt` before using an API.** Check uncertain APIs on
+   `docs.unity.com/en-us/engine/<6000.x>/` for this version.
+5. **Use current Unity 6 APIs:**
+
+| Do not write | Write |
+|---|---|
+| `FindObjectOfType<T>()` | A serialized reference, or `FindFirstObjectByType<T>()` / `FindAnyObjectByType<T>()` at startup only |
+| `rb.velocity`, `rb.drag` | `rb.linearVelocity`, `rb.linearDamping` |
+| `Input.GetKeyDown(...)` | Input System actions |
+| URP pass `Execute(...)` | `RecordRenderGraph(...)` (Compatibility Mode was removed in 6.4) |
+| `Entities.ForEach`, `IAspect` | `IJobEntity`, `SystemAPI.Query` |
+| `CinemachineVirtualCamera` | `CinemachineCamera` (Cinemachine 3) |
+| `BinaryFormatter` saves | JSON or our own binary format |
+
+## C# Conventions
 
 | Element | Convention | Example |
 |---|---|---|
-| Files | PascalCase.cs | `PlayerController.cs` |
-| Classes | PascalCase | `public class PlayerController : MonoBehaviour` |
-| Interfaces | IPascalCase | `public interface IDamageable` |
-| Public methods | PascalCase | `public void TakeDamage(float amount)` |
-| Private methods | PascalCase | `private void CalculateMovement()` |
-| Public fields | camelCase | `public float moveSpeed;` |
-| Private fields | _camelCase | `private float _currentHealth;` |
-| Properties | PascalCase | `public float Health { get; private set; }` |
-| Constants | PascalCase | `public const float MaxSpeed = 400f;` |
-| Static readonly | PascalCase | `public static readonly Vector3 SpawnOffset = ...;` |
-| Enums | PascalCase name, PascalCase entries | `enum PlayerState { Idle, Running, Jumping }` |
-| Events | PascalCase with Event suffix | `public event Action<float> HealthChangedEvent;` |
-| Serialized fields | _camelCase with [SerializeField] | `[SerializeField] private float _jumpForce = 10f;` |
+| Classes, methods, properties | PascalCase | `public float Health { get; private set; }` |
+| Private / serialized fields | `_camelCase` | `[SerializeField] private float _jumpForce = 10f;` |
+| Interfaces | `IPascalCase` | `IDamageable` |
+| Events | PascalCase | `public event Action<int> HealthChanged;` |
+| Namespaces | Match the assembly | `namespace Game.Gameplay` |
 
-### Access Modifiers Are Mandatory
+- Write access modifiers explicitly. Prefer `[SerializeField] private` over public fields.
+- Tunables live in ScriptableObjects or serialized fields, not literals.
+- Cache components in `Awake`. Subscribe in `OnEnable` and unsubscribe in `OnDisable`.
+- No per-frame allocations: no LINQ or string building in `Update`. Pool spawned objects.
+- Use `Awaitable` + `destroyCancellationToken` for async code, and `async void` only at Unity entry
+  points.
+- No runtime `Find`, no `SendMessage`, and no game content in `Resources/`. Use Addressables.
 
-Always specify access modifiers explicitly. No implicit `private`.
+## Agent Verification Loop (run before saying "done")
 
-```csharp
-// Correct
-private int _health;
-[SerializeField] private float _moveSpeed = 5f;
-public void TakeDamage(float amount) { }
+1. **Compile.** Refresh through Unity's plugin or MCP if the Editor is open, otherwise run the
+   batchmode compile below. Zero `error CS`, and review every `warning CS0618` (obsolete API).
+2. **Read the console and logs** for missing references and serialization errors.
+3. **Run Edit Mode tests,** then the Play Mode smoke tests for the touched scenes.
+4. **Review `git status` and `git diff`:** exactly one new `.meta` per new asset, no changed GUIDs,
+   no `Library/` or `*.csproj` files, and only intended scene and prefab changes.
+5. **Hand off to a human for Play Mode** whenever the change touches feel, camera or UI.
+6. **Update `production/session-state/active.md`** with decisions and next steps.
 
-// Wrong -- implicit access modifier
-int _health;
-float _moveSpeed = 5f;
-void TakeDamage(float amount) { }
-```
+## Commands
 
-### MonoBehaviour Lifecycle
-
-- Use `Awake()` for self-initialization and caching component references.
-- Use `Start()` for initialization that depends on other objects being ready.
-- Use `OnEnable()`/`OnDisable()` for event subscriptions.
-- Never call `GetComponent<T>()` in `Update()`. Cache in `Awake()`.
-- Use `FixedUpdate()` for physics. Use `Update()` for input and rendering logic. Use `LateUpdate()` for camera follow.
-
-```csharp
-private Rigidbody2D _rb;
-private SpriteRenderer _sprite;
-
-private void Awake()
-{
-    _rb = GetComponent<Rigidbody2D>();
-    _sprite = GetComponent<SpriteRenderer>();
-}
-
-private void OnEnable()
-{
-    EventBus.OnPlayerDamaged += HandleDamage;
-}
-
-private void OnDisable()
-{
-    EventBus.OnPlayerDamaged -= HandleDamage;
-}
-```
-
-### ScriptableObject-Driven Architecture
-
-- Gameplay values live in ScriptableObjects, not hardcoded in MonoBehaviours.
-- Use SO event channels for decoupled communication between systems.
-- Use SO variables (FloatVariable, IntVariable) for shared state that multiple systems read.
-
-```csharp
-[CreateAssetMenu(fileName = "WeaponData", menuName = "Game/Weapon Data")]
-public class WeaponData : ScriptableObject
-{
-    public string weaponName;
-    public float baseDamage = 10f;
-    public float attackSpeed = 1f;
-    public float range = 2f;
-    public float knockbackForce = 5f;
-}
-```
-
-### Assembly Definitions
-
-Use Assembly Definitions (`.asmdef`) for any project beyond a prototype. Minimum structure:
-
-- `Game.Runtime.asmdef` -- core game code
-- `Game.Editor.asmdef` -- editor-only code (references Game.Runtime)
-- `Game.Tests.EditMode.asmdef` -- edit-mode tests
-- `Game.Tests.PlayMode.asmdef` -- play-mode tests
-
-This cuts incremental compile times from minutes to seconds.
-
-## Unity-Specific Code Review Criteria
-
-When reviewing Unity code (`/game-code-review`), check for:
-
-- [ ] No `FindObjectOfType`, `GameObject.Find`, or `FindObjectsOfType` at runtime
-- [ ] No assets in the `Resources/` folder (use Addressables for dynamic loading)
-- [ ] All access modifiers explicitly stated
-- [ ] `GetComponent<T>()` calls cached in `Awake()`, never called in `Update()`
-- [ ] ScriptableObjects used for data, not hardcoded values in MonoBehaviours
-- [ ] Events subscribed in `OnEnable()` and unsubscribed in `OnDisable()`
-- [ ] Coroutines properly managed (stopped on disable/destroy, not leaked)
-- [ ] `[SerializeField]` preferred over public fields for Inspector exposure
-- [ ] Assembly definitions present for non-prototype projects
-- [ ] Input handled via the new Input System, not legacy `Input.GetKey`
-- [ ] No string-based method invocation (`SendMessage`, `Invoke` with string)
-
-## Build and Test Commands
+The Editor must be closed for batchmode runs (the project lock blocks them). Set `UNITY_EDITOR` to
+this version's Editor binary. Default Hub paths: Windows
+`C:\Program Files\Unity\Hub\Editor\<ver>\Editor\Unity.exe`, macOS
+`/Applications/Unity/Hub/Editor/<ver>/Unity.app/Contents/MacOS/Unity`, Linux
+`~/Unity/Hub/Editor/<ver>/Editor/Unity`.
 
 ```bash
-# Run edit-mode tests from command line
-unity -batchmode -nographics -projectPath . -runTests -testPlatform EditMode -testResults results.xml
+# Compile check (exits non-zero on compiler errors)
+"$UNITY_EDITOR" -batchmode -nographics -quit -projectPath . -logFile Logs/compile.log
 
-# Run play-mode tests
-unity -batchmode -nographics -projectPath . -runTests -testPlatform PlayMode -testResults results.xml
+# Tests -- never add -quit to -runTests
+"$UNITY_EDITOR" -batchmode -nographics -projectPath . -runTests -testPlatform EditMode \
+  -testResults Logs/editmode.xml -logFile Logs/editmode.log
+"$UNITY_EDITOR" -batchmode -projectPath . -runTests -testPlatform PlayMode \
+  -testResults Logs/playmode.xml -logFile Logs/playmode.log
 
-# Build the project (Windows target)
-unity -batchmode -nographics -projectPath . -executeMethod BuildScript.BuildWindows -quit
-
-# Build the project (Linux target)
-unity -batchmode -nographics -projectPath . -executeMethod BuildScript.BuildLinux -quit
-
-# Note: Replace 'unity' with the full path to your Unity Editor executable
-# Windows: "C:/Program Files/Unity/Hub/Editor/6000.x.xf1/Editor/Unity.exe"
-# macOS: /Applications/Unity/Hub/Editor/6000.x.xf1/Unity.app/Contents/MacOS/Unity
-# Linux: ~/Unity/Hub/Editor/6000.x.xf1/Editor/Unity
+# Build (one target per process; Game.Editor.BuildScript lives in the Editor asmdef)
+"$UNITY_EDITOR" -batchmode -nographics -quit -projectPath . \
+  -executeMethod Game.Editor.BuildScript.BuildWindows -buildTarget StandaloneWindows64 \
+  -logFile Logs/build.log
 ```
 
-## Unity Anti-Patterns to Flag
+**AI integrations:** Unity's Claude Code plugin needs the Unity CLI, `unity pipeline install` in this
+project, and an open Editor. Check the Editor link with `unity status`.
 
-These patterns must be caught during code review or refactored on sight:
+```text
+/plugin marketplace add Unity-Technologies/unity-agent-plugin
+/plugin install unity@unity-agent-plugin
+```
 
-1. **Runtime Find calls**: `FindObjectOfType<Player>()` in gameplay code -- use references or events
-2. **Resources folder abuse**: Assets in `Resources/` load into memory at startup and cannot be individually unloaded
-3. **String method invocation**: `SendMessage("OnDamage")` -- use direct calls, interfaces, or events
-4. **Missing access modifiers**: `int health;` without `private` -- always be explicit
-5. **GetComponent in Update**: Querying components every frame instead of caching
-6. **Coroutine leaks**: Starting coroutines without stopping them on object disable or destroy
-7. **Hardcoded gameplay values**: `transform.position += Vector3.right * 5f` instead of using SO data
-8. **Legacy Input**: `Input.GetKeyDown(KeyCode.Space)` instead of the new Input System
+Keep any MCP server (official Unity MCP via `unity mcp configure`, or CoplayDev/unity-mcp) on
+localhost. Commit before asking an agent for a large change.
+
+## Commit Convention
+
+Write subjects as `type(scope): summary`, imperative and at most 72 characters. GameForge's commit
+hook enforces this once `.gameforge/` exists (`"commit_convention": "conventional"` in
+`.gameforge/project.json`).
+
+| Type | Example |
+|---|---|
+| `feat` | `feat(combat): add parry window to melee attacks` |
+| `fix` | `fix(input): unsubscribe jump action in OnDisable` |
+| `balance` | `balance(economy): raise wave 5 gold from 40 to 55` |
+| `art` / `audio` | `art(env): add forest tileset` / `audio(ui): add confirm SFX` |
+| `design` / `level` | `design(gdd): spec dash mechanic` / `level(w1-3): add secret room` |
+| `ui` / `perf` | `ui(hud): move ammo counter` / `perf(spawner): pool projectiles` |
+| `refactor` / `test` | `refactor(core): extract DamageMath` / `test(inventory): cover full stacks` |
+| `chore` / `docs` | `chore(deps): update Input System` / `docs(adr): record URP choice` |
+
+## .gitignore Essentials
+
+Do **not** ignore `Packages/` (embedded packages live there) or `Assets/StreamingAssets/` (shipped
+content). Keep everything in `production/` except session data.
+
+```gitignore
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Bb]uild/
+/[Bb]uilds/
+/[Rr]ecordings/
+/ServerData/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/aa/
+/[Aa]ssets/[Ss]treaming[Aa]ssets/aa.meta
+.vs/
+.idea/
+*.csproj
+*.sln
+*.user
+*.pdb
+*.apk
+*.aab
+.DS_Store
+Thumbs.db
+production/session-state/
+production/session-logs/
+```
+
+## .gitattributes (Git LFS + Smart Merge)
+
+Run `git lfs install` once per machine. GameForge's hook blocks commits of non-LFS files of 20 MB or
+more (`lfs_threshold_mb`).
+
+```gitattributes
+* text=auto
+*.cs         text diff=csharp
+*.unity      merge=unityyamlmerge eol=lf
+*.prefab     merge=unityyamlmerge eol=lf
+*.asset      merge=unityyamlmerge eol=lf
+*.mat        merge=unityyamlmerge eol=lf
+*.anim       merge=unityyamlmerge eol=lf
+*.controller merge=unityyamlmerge eol=lf
+*.meta       merge=unityyamlmerge eol=lf
+**/LightingData.asset filter=lfs diff=lfs merge=lfs -text
+*.png  filter=lfs diff=lfs merge=lfs -text
+*.jpg  filter=lfs diff=lfs merge=lfs -text
+*.psd  filter=lfs diff=lfs merge=lfs -text
+*.tga  filter=lfs diff=lfs merge=lfs -text
+*.exr  filter=lfs diff=lfs merge=lfs -text
+*.fbx  filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.wav  filter=lfs diff=lfs merge=lfs -text
+*.ogg  filter=lfs diff=lfs merge=lfs -text
+*.mp3  filter=lfs diff=lfs merge=lfs -text
+*.mp4  filter=lfs diff=lfs merge=lfs -text
+*.ttf  filter=lfs diff=lfs merge=lfs -text
+*.otf  filter=lfs diff=lfs merge=lfs -text
+*.dll  filter=lfs diff=lfs merge=lfs -text
+*.so   filter=lfs diff=lfs merge=lfs -text
+*.bank filter=lfs diff=lfs merge=lfs -text
+```
+
+Register UnityYAMLMerge, which ships in the Editor's `Tools` folder (Unity Manual: "Smart merge"),
+once per clone:
+
+```bash
+git config merge.unityyamlmerge.name "UnityYAMLMerge"
+git config merge.unityyamlmerge.driver "'<path-to>/UnityYAMLMerge' merge -p %O %B %A %A"
+```

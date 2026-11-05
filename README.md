@@ -4,40 +4,35 @@
 
 <br>
 
-<a href="skills/"><img src="https://img.shields.io/badge/Skills-34-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="Skills"></a>
-<a href="skills/"><img src="https://img.shields.io/badge/Categories-3-2563EB?style=for-the-badge&logo=databricks&logoColor=white" alt="Categories"></a>
-<a href="https://www.anthropic.com"><img src="https://img.shields.io/badge/Claude-AI%20Powered-F97316?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude AI"></a>
+<a href="skills/"><img src="https://img.shields.io/badge/Skills-41-7C3AED?style=for-the-badge&logo=bookstack&logoColor=white" alt="41 skills"></a>
+<a href="agents/"><img src="https://img.shields.io/badge/Subagents-11-2563EB?style=for-the-badge&logo=databricks&logoColor=white" alt="11 subagents"></a>
+<a href="https://code.claude.com/docs/en/plugins"><img src="https://img.shields.io/badge/Claude%20Code-Plugin-F97316?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code plugin"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="MIT License"></a>
 
 <br>
 
 <a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/stargazers"><img src="https://img.shields.io/github/stars/AlterLab-IEU/AlterLab_GameForge?style=for-the-badge&logo=github&color=EAB308&logoColor=white" alt="Stars"></a>
-<a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/network/members"><img src="https://img.shields.io/github/forks/AlterLab-IEU/AlterLab_GameForge?style=for-the-badge&logo=git&color=6366F1&logoColor=white" alt="Forks"></a>
-<a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/issues"><img src="https://img.shields.io/github/issues/AlterLab-IEU/AlterLab_GameForge?style=for-the-badge&logo=github&color=EF4444&logoColor=white" alt="Issues"></a>
-<a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-22C55E?style=for-the-badge&logo=githubactions&logoColor=white" alt="PRs Welcome"></a>
-<a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/releases"><img src="https://img.shields.io/badge/Release-v2.0.0-8B5CF6?style=for-the-badge&logo=github&logoColor=white" alt="v2.0.0"></a>
+<a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/actions/workflows/validate-skills.yml"><img src="https://img.shields.io/github/actions/workflow/status/AlterLab-IEU/AlterLab_GameForge/validate-skills.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI" alt="CI"></a>
+<a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-22C55E?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome"></a>
+<a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Release-v3.0.0-8B5CF6?style=for-the-badge&logo=github&logoColor=white" alt="v3.0.0"></a>
 <a href="https://github.com/BehiSecc/awesome-claude-skills"><img src="https://awesome.re/badge.svg" alt="Awesome"></a>
 
 <br>
 
-> 📢 **Featured in** [awesome-claude-skills](https://github.com/BehiSecc/awesome-claude-skills) (5.7k ⭐)
+> 📢 **Featured in** [awesome-claude-skills](https://github.com/BehiSecc/awesome-claude-skills)
 
 <br><br>
 
-<h3>🎮 34 production-grade Claude AI skills for indie game development</h3>
+<h3>🎮 A full indie game studio inside Claude Code</h3>
 
-<p><em>From concept to launch — studio agents, dev workflows, engine specialists, and genre packs in one toolkit.</em></p>
-
-<p>
-<b>Studio Agents</b> · <b>Dev Workflows</b> · <b>Engine Specialists</b> · <b>Genre Packs</b> · <b>CI Validation</b> · <b>and more</b>
-</p>
+<p><em>Eleven studio roles, guided workflows from first idea to launch day, and engine specialists for Godot, Unity, Unreal, Three.js and 2D web, built for the way games are made in 2026: with AI agents, verified at every step.</em></p>
 
 <p>
-<a href="skills/"><b>Explore Skills »</b></a> ·
-<a href="#-quick-start">Quick Start</a> ·
-<a href="#%EF%B8%8F-category-overview">Category Overview</a> ·
-<a href="CONTRIBUTING.md">Contributing</a> ·
-<a href="https://github.com/AlterLab-IEU/AlterLab_GameForge/issues">Report Bug</a>
+<a href="#-quick-start"><b>Install »</b></a> ·
+<a href="#-where-do-i-start">Where Do I Start?</a> ·
+<a href="#-skill-catalog">Skill Catalog</a> ·
+<a href="#-building-games-with-ai-agents">Building with AI Agents</a> ·
+<a href="CHANGELOG.md">What's New</a>
 </p>
 
 <br>
@@ -46,11 +41,7 @@
 
 <table><tr><td>
 
-<b>Built by</b> <a href="https://github.com/AlterLab-IEU"><b>AlterLab Creative Technologies Laboratory</b></a>
-
-<br><br>
-
-<em>Not tied to any specific engine — these skills work for Godot, Unity, Unreal, and more.</em>
+<b>Built by</b> <a href="https://github.com/AlterLab-IEU"><b>AlterLab Creative Technologies Laboratory</b></a>, Izmir University of Economics
 
 </td></tr></table>
 
@@ -58,29 +49,28 @@
 
 <br>
 
-<!-- FEATURE HIGHLIGHTS -->
 <div align="center">
 <table>
 <tr>
 <td align="center" width="25%">
-<h3>🎯</h3>
-<h3>Plug & Play</h3>
-<p>Drop a <code>.md</code> skill file into<br>Claude Projects or Claude Code<br>and get instant expertise</p>
+<h3>🎬</h3>
+<h3>A Studio, Not a Chatbot</h3>
+<p>Eleven roles with real decision<br>authority, running inline or as<br>parallel subagents with memory</p>
 </td>
 <td align="center" width="25%">
-<h3>🎮</h3>
-<h3>Studio Team</h3>
-<p>11 autonomous agents form<br>a virtual game studio —<br>from producer to QA lead</p>
-</td>
-<td align="center" width="25%">
-<h3>🔬</h3>
-<h3>Real Frameworks</h3>
-<p>Built on actual game design<br>methods — MDA, Flow Theory,<br>SDT, Bartle's Player Types</p>
+<h3>⚡</h3>
+<h3>Built for AI Agents</h3>
+<p>A disciplined vibe-coding loop:<br>spec, build, verify, commit.<br>Playable tonight, sane on Monday</p>
 </td>
 <td align="center" width="25%">
 <h3>🎯</h3>
-<h3>Engine-Aware</h3>
-<p>Deep specialists for Godot,<br>Unity, and Unreal with<br>platform-specific patterns</p>
+<h3>Five Engines, Current</h3>
+<p>Godot 4.7, Unity 6.3 LTS,<br>Unreal 5.8, Three.js r187,<br>Phaser 4, with agent pitfalls flagged</p>
+</td>
+<td align="center" width="25%">
+<h3>🛡️</h3>
+<h3>Production-Safe</h3>
+<p>Hooks guard engine files and<br>Git LFS; launch skills check AI<br>disclosure and accessibility law</p>
 </td>
 </tr>
 </table>
@@ -95,405 +85,338 @@
 
 <br>
 
-- [🎯 What Is This?](#-what-is-this)
-- [✨ Key Features](#-key-features)
-- [🗂️ Category Overview](#%EF%B8%8F-category-overview)
+- [🆕 What's New in v3.0](#-whats-new-in-v30)
 - [🚀 Quick Start](#-quick-start)
-- [🆕 What's New in v2.0.0](#-whats-new-in-v200)
 - [🧭 Where Do I Start?](#-where-do-i-start)
-- [📚 All 34 Skills](#-all-34-skills)
-- [⚙️ How Skills Work](#%EF%B8%8F-how-skills-work)
-- [💡 Usage Examples](#-usage-examples)
+- [📚 Skill Catalog](#-skill-catalog)
+- [⚡ Building Games with AI Agents](#-building-games-with-ai-agents)
+- [⚙️ How GameForge Works](#%EF%B8%8F-how-gameforge-works)
+- [🎯 Engine Coverage](#-engine-coverage)
 - [🛠️ Setting Up Your Game Project](#%EF%B8%8F-setting-up-your-game-project)
-- [🏗️ Architecture](#%EF%B8%8F-architecture)
 - [📦 Genre Packs](#-genre-packs)
+- [✅ Quality and Validation](#-quality-and-validation)
 - [🗂️ Project Structure](#%EF%B8%8F-project-structure)
-- [🔌 MCP Integrations](#-mcp-integrations)
 - [🤝 Contributing](#-contributing)
-- [📜 License](#-license)
-- [🙏 Credits](#-credits)
 
 </details>
 
 <br>
 
-## 🎯 What Is This?
+## 🆕 What's New in v3.0
 
-A comprehensive suite of **34 production-grade Claude AI skills** for indie game developers — organized into **3 categories** covering the full game development lifecycle from concept to launch.
+v3.0 is a rebuild. GameForge now installs as a real Claude Code plugin, every skill was rewritten
+against a shared spec and current research, and the web and AI-agent paths are first-class.
 
-Each skill transforms Claude into a **domain-specific game dev expert** with real design frameworks, structured output templates, and production-grade workflows.
-
-> [!TIP]
-> **How it works:** Each skill is a structured `.md` prompt file. Drop it into a Claude Project or Claude Code, and Claude instantly becomes your game dev expert — with real industry frameworks, professional output templates, and deep domain knowledge.
-
-<br>
-
-## ✨ Key Features
-
-| | Feature | Description |
+| | Change | Details |
 |:---:|:---|:---|
-| 🎮 | **Studio Agents** | 11 autonomous agents form a virtual game studio — Creative Director, Producer, Designer, QA Lead, and more |
-| 🔄 | **Workflow Skills** | 20 structured dev processes — from brainstorming to launch, sprints to post-mortems |
-| 🎯 | **Engine Specialists** | Deep expertise for Godot 4, Unity 6, and Unreal Engine 5 with platform-specific patterns |
-| 📦 | **Genre Packs** | Roguelike and Narrative genre packs with design patterns, balance frameworks, and reference games |
-| ✅ | **CI Validated** | 486 automated checks via `validate.sh` + GitHub Actions pipeline |
-| 🔄 | **MCP Integrations** | 34 verified MCP servers — engine MCPs, asset pipelines, project management tools |
+| 🔌 | **Installs as a plugin** | Spec-compliant `.claude-plugin/` manifests. The old `claude install github:…` line reinstalled the Claude Code CLI rather than GameForge; see [Quick Start](#-quick-start) |
+| ⚡ | **7 new skills** | `game-vibe-code`, `game-ai-assets`, `game-web-publish`, `game-multiplayer`, `game-help`, and engine specialists for **Three.js / R3F** and **2D web** |
+| 🧠 | **Studio subagents** | The 11 roles run as parallel subagents with project memory; the orchestrator delegates to them for independent reviews |
+| 🔬 | **Every skill upgraded** | Late-2026 engines and tools, an AI-agent section per role, unsourced anecdotes removed, deep material moved to on-demand `references/` |
+| 🛡️ | **Hooks that work** | Rewritten, wired and tested: session briefings, compaction recovery, commit and Git LFS guards, engine-file protection. Silent outside game projects |
+| ✅ | **Real validation** | A plugin-aware validator, 119 hook tests on Linux and macOS, and `claude plugin validate --strict` in CI |
 
-<br>
-
-## 🗂️ Category Overview
-
-| | Category | Skills | Focus Areas |
-|:---:|:---|:---:|:---|
-| 🎬 | **Studio Agents** | **11** | Creative Director, Technical Director, Producer, Game Designer, Narrative Director, Art Director, Audio Director, QA Lead, UX Designer, Economy Designer, Accessibility Specialist |
-| 🔧 | **Workflow Skills** | **20** | Game Start, Brainstorm, Design Review, Code Review, Sprint Plan, Prototype, Playtest, Balance Check, Launch, Team Orchestrator, and 10 more |
-| 🎯 | **Engine Specialists** | **3** | Godot 4 (GDScript/C#), Unity 6 (C#/ECS), Unreal Engine 5 (C++/Blueprint) |
+Full details: [CHANGELOG.md](CHANGELOG.md).
 
 <br>
 
 ## 🚀 Quick Start
 
-### Option 1 — Claude Code CLI *(Recommended)*
+**1. Install** (Claude Code 2.1.275 or later):
+
+```
+/plugin install gameforge --marketplace AlterLab-IEU/AlterLab_GameForge
+```
+
+<details>
+<summary>Two-step install, shell install, or local development</summary>
+
+<br>
+
+```
+/plugin marketplace add AlterLab-IEU/AlterLab_GameForge
+/plugin install gameforge@alterlab-gameforge
+```
 
 ```bash
-# 1. Install GameForge into Claude Code
-claude install github:AlterLab-IEU/AlterLab_GameForge
-
-# 2. Start your first game project
-claude> /game-start
-
-# 3. You now have a GDD skeleton, tech stack recommendation, and milestone plan.
+claude plugin marketplace add AlterLab-IEU/AlterLab_GameForge
+claude plugin install gameforge@alterlab-gameforge
 ```
 
-### Option 2 — Claude Projects
-
-```
-1. Go to claude.ai → Projects → Create Project
-2. Upload SKILL.md files from your category folder into the project's Knowledge section
-3. Start chatting — Claude now has your skills loaded
+```bash
+git clone https://github.com/AlterLab-IEU/AlterLab_GameForge.git
+claude --plugin-dir ./AlterLab_GameForge
 ```
 
-### Option 3 — Pick Individual Skills
+</details>
 
-> Browse the [`skills/`](skills/) folder and download only the ones you need. Every skill is a standalone `.md` file.
+**2. Ask for directions.** In any folder:
+
+```
+/gameforge:game-help
+```
+
+**3. Set up a game project.** In your game's repository:
+
+```
+/gameforge:game-start
+```
+
+This writes `.gameforge/project.json`, copies the right engine starter into `CLAUDE.md`, sets up
+Git LFS, and turns on GameForge's session briefings. From then on, plain language works:
+"design the parry system", "why is my Godot export black on iOS", "plan the next sprint".
+
+> [!TIP]
+> Commit `starters/claude-config/settings.json` as `.claude/settings.json` in your game repo, and
+> teammates who open it in Claude Code are prompted to install GameForge.
 
 <br>
-
----
-
-## 🆕 What's New in v2.0.0
-
-| | Change | Details |
-|:---:|:---|:---|
-| 🔧 | **3 new workflow skills** | Game Jam Mode (48-72h compressed workflows), CI Pipeline (engine-specific CI/CD with Steam/itch.io deployment), GDD Author (guided section-by-section authoring) |
-| 🎯 | **Engine deepening** | Networking, animation, VFX, AI, and material system sections added to all 3 engine specialists |
-| 📦 | **2 genre packs** | Roguelike (888 lines) and Narrative (943 lines) — design patterns, balance frameworks, and ideation prompts grounded in shipped games |
-| ✅ | **CI validation** | 486 automated checks via `validate.sh` + GitHub Actions pipeline |
-| 📊 | **Quality rubric** | 5-dimension scoring system (Trigger/Depth/Consistency/Usefulness/Voice) with 8+ minimum bar |
-| 📖 | **AI-native gamedev guide** | Honest assessment of AI tools for game development — what ships today vs what's hype |
-
-<br>
-
----
 
 ## 🧭 Where Do I Start?
 
-Not sure which skill to use? Pick your situation:
-
-| Your situation | Run this | What happens |
+| Your situation | Run | What you get |
 |:---|:---|:---|
-| "I have nothing — just a vague idea" | `/game-start` | Bootstraps a GDD skeleton, picks your tech stack, builds a milestone plan |
-| "I have a concept and want to explore it" | `/game-brainstorm` | Structured ideation with diverge/converge phases, concept scoring, market validation |
-| "I have code but no docs" | `/game-reverse-document` | Generates design documentation from your existing codebase |
-| "I need to plan my next sprint" | `/game-sprint-plan` | Task breakdown, dependency mapping, risk flags, velocity estimation |
-| "I'm preparing to launch" | `/game-launch` | Store page prep, release checklist, patch cadence, community management plan |
-| "I need my code reviewed" | `/game-code-review` | Architecture review, performance audit, engine best practices |
-| "I want to check my game's balance" | `/game-balance-check` | Statistical validation — Monte Carlo, distribution analysis, EV calculations |
+| "Just an itch of an idea" | `/gameforge:game-brainstorm` | Original concepts, scored, with a core loop each |
+| "I want something playable tonight" | `/gameforge:game-vibe-code` | Spec, scaffold, verified build loop, git checkpoints |
+| "Starting a real project" | `/gameforge:game-start` | Project config, engine starter, LFS, pillars, milestones |
+| "Game jam this weekend" | `/gameforge:game-jam-mode` | Theme analysis, scope lock, hour-by-hour plan |
+| "I have code but no docs" | `/gameforge:game-reverse-document` | Design and architecture docs recovered from code |
+| "Review what the agent just wrote" | `/gameforge:game-code-review` | Severity-ranked findings, outdated APIs flagged |
+| "Planning the next sprint" | `/gameforge:game-sprint-plan` | Tasks with review time budgeted, risks, velocity |
+| "I need art and audio fast" | `/gameforge:game-ai-assets` | Consistent assets, licence checks, provenance log |
+| "Adding online play" | `/gameforge:game-multiplayer` | Topology, sync model and anti-cheat for your engine |
+| "Shipping a browser game" | `/gameforge:game-web-publish` | itch.io and portal builds, size budgets, disclosures |
+| "Preparing a Steam launch" | `/gameforge:game-launch` | Store page, builds, compliance checklist, launch week |
+| "Not sure" | `/gameforge:game-help` | One recommendation based on your project's state |
 
-> For full workflow walkthroughs, see [docs/workflow-examples.md](docs/workflow-examples.md).
-
-<br>
-
----
-
-## 📚 All 34 Skills
-
-### 🎬 Studio Agents — Your Virtual Game Studio Team (11 Skills)
-
-<details>
-<summary><b>Click to expand full studio agents list</b></summary>
+Walkthroughs: [docs/workflow-examples.md](docs/workflow-examples.md) · Lifecycle map:
+[docs/workflow-guide.md](docs/workflow-guide.md)
 
 <br>
 
-| # | Skill | What It Does |
-|:---:|:---|:---|
-| 1 | **Creative Director** | Defines and guards creative vision, design pillars, and tonal identity |
-| 2 | **Technical Director** | Architects engine setup, performance budgets, and tool pipelines |
-| 3 | **Producer** | Manages scope, schedule, milestones, risk, and cross-team coordination |
-| 4 | **Game Designer** | Designs core mechanics, progression systems, economy, and balance tuning |
-| 5 | **Narrative Director** | Crafts story architecture, dialogue systems, lore bibles, and branching narratives |
-| 6 | **Art Director** | Establishes visual style, asset pipelines, UI art direction, and style guides |
-| 7 | **Audio Director** | Designs music direction, SFX libraries, adaptive audio, and mixing strategies |
-| 8 | **QA Lead** | Builds test plans, bug taxonomies, regression suites, and quality gates |
-| 9 | **UX Designer** | Designs onboarding flows, accessibility, HUD, and usability testing |
-| 10 | **Economy Designer** | Designs virtual economies — currency flows, sink/source modeling, monetization ethics |
-| 11 | **Accessibility Specialist** | Drives inclusive design — motor, visual, auditory, cognitive accommodations, EAA compliance |
+## 📚 Skill Catalog
 
-</details>
+Invoke any skill as `/gameforge:<name>`, or just describe what you need.
 
-### 🔧 Workflow Skills — Structured Dev Processes (20 Skills)
+### 🎬 Studio Agents (11)
 
-<details>
-<summary><b>Click to expand full workflow skills list</b></summary>
+Roles you consult. Each also runs as a subagent (`gameforge:<name>`) with project memory.
 
-<br>
+| Skill | Role | Decides |
+|:---|:---|:---|
+| `game-creative-director` | Creative Director | Vision, pillars, tone, AI-use stance, creative conflicts |
+| `game-technical-director` | Technical Director | Engine, architecture, performance budgets, agent/MCP security |
+| `game-producer` | Producer | Scope, schedule, milestones, risk, cross-domain trade-offs |
+| `game-designer` | Game Designer | Mechanics, systems, progression, tuning |
+| `game-economy-designer` | Economy Designer | Currencies, sinks and faucets, pricing, monetization ethics |
+| `game-narrative-director` | Narrative Director | Story, characters, dialogue, lore |
+| `game-art-director` | Art Director | Visual style, art bible, asset pipeline, AI-asset policy |
+| `game-audio-director` | Audio Director | Music, SFX, adaptive audio, mix, voice rights |
+| `game-qa-lead` | QA Lead | Test strategy, automation, bugs, release gates |
+| `game-ux-designer` | UX Designer | Onboarding, HUD, menus, usability |
+| `game-accessibility-specialist` | Accessibility Specialist | Inclusive design, accommodations, EAA compliance |
 
-| # | Skill | What It Does |
-|:---:|:---|:---|
-| 1 | **Game Start** | Bootstraps a new project — GDD skeleton, tech stack, milestone plan |
-| 2 | **Brainstorm** | Structured ideation with diverge/converge, concept scoring, market validation |
-| 3 | **Design Review** | Reviews a GDD for completeness, consistency, and feasibility |
-| 4 | **Code Review** | Reviews game code for architecture, performance, and engine best practices |
-| 5 | **Sprint Plan** | Plans a dev sprint with tasks, dependencies, and risk flags |
-| 6 | **Prototype** | Guides rapid prototyping — scope the core loop, build minimal playable, evaluate |
-| 7 | **Playtest** | Structures playtest sessions — goals, metrics, observer guides, feedback synthesis |
-| 8 | **Balance Check** | Analyzes game balance with Monte Carlo, distribution analysis, EV calculations |
-| 9 | **Launch** | Prepares release and post-launch ops — store pages, patch cadence, community |
-| 10 | **Team Orchestrator** | Coordinates multiple agents with spawn recipes for complex tasks |
-| 11 | **Scope Check** | Evaluates scope against timeline, team size, and budget |
-| 12 | **Retrospective** | Runs GDC-format post-mortems with kill list review |
-| 13 | **Reverse Document** | Generates design docs from existing game code |
-| 14 | **Localization Manager** | Manages translation pipelines, string extraction, cultural adaptation |
-| 15 | **Analytics Setup** | Integrates telemetry, defines KPIs, builds dashboards, privacy-first |
-| 16 | **Post-Mortem** | Structured post-mortem pulling git history, milestone data, lessons learned |
-| 17 | **Market Research** | Competitive landscape, market sizing, audience profiling, positioning strategy |
-| 18 | **Game Jam Mode** | Compressed 48-72 hour workflows — theme interpretation, scope ruthlessness, 6-phase jam pipeline |
-| 19 | **CI Pipeline** | CI/CD for game builds — engine-specific pipelines, Steam/itch.io deployment, GitHub Actions templates |
-| 20 | **GDD Author** | Guided section-by-section GDD authoring — pillar validation, scope tiers, MDA integration |
+### 🔧 Workflows (25)
 
-</details>
+Guided processes with a defined output.
 
-### 🎯 Engine Specialists — Deep Expertise for Your Engine (3 Skills)
-
-<details>
-<summary><b>Click to expand full engine specialists list</b></summary>
-
-<br>
-
-| # | Skill | What It Does |
-|:---:|:---|:---|
-| 1 | **Godot Specialist** | GDScript/C# patterns, scene tree architecture, signal design, Godot 4 best practices |
-| 2 | **Unity Specialist** | C# patterns, ECS vs. MonoBehaviour, asset bundles, Unity-specific optimization |
-| 3 | **Unreal Specialist** | C++/Blueprint patterns, Gameplay Ability System, Niagara, Unreal pipelines |
-
-</details>
-
-<br>
-
----
-
-## ⚙️ How Skills Work
-
-Each `.md` skill file follows a consistent structure:
-
-```markdown
-| name          | description                         |
-|---------------|-------------------------------------|
-| skill-name    | When to activate this skill...      |
-
-# Skill Title
-
-You are **RoleName**, a [role description]...
-
-## Your Identity & Memory
-## Your Core Mission
-## Frameworks & Methods
-## Output Templates
-## Quality Standards
-```
-
-> [!NOTE]
-> **Pro tip:** Combine multiple skills in one Claude Project for a multi-expert team. For example, load **Game Designer** + **Balance Check** + **Economy Designer** for a complete game balance workflow.
-
-<br>
-
-## 💡 Usage Examples
-
-Skills activate automatically based on user intent:
-
-| You say... | Skill activated |
+| Phase | Skills |
 |:---|:---|
-| *"Help me start a new roguelike project"* | `game-start` |
-| *"Design the core combat loop for my action RPG"* | `game-designer` |
-| *"Write a branching dialogue system for my visual novel"* | `game-narrative-director` |
-| *"Review my GDD for scope issues"* | `game-design-review` + `game-scope-check` |
-| *"Set up my Godot 4 project with proper scene architecture"* | `game-godot-specialist` |
-| *"Plan my next two-week sprint"* | `game-sprint-plan` |
-| *"Prepare my Steam store page for launch"* | `game-launch` |
-| *"Run a structured playtest for my prototype"* | `game-playtest` |
-| *"Audit my game's economy balance"* | `game-balance-check` + `game-economy-designer` |
-| *"Generate design docs from my existing codebase"* | `game-reverse-document` |
-| *"Set up analytics and KPIs for my game"* | `game-analytics-setup` |
-| *"Localize my game for the Japanese market"* | `game-localization-manager` |
-| *"Analyze the competitive landscape for cozy farm sims"* | `game-market-research` |
-| *"Run a post-mortem on this milestone"* | `game-postmortem` |
-| *"I'm doing a 48-hour game jam this weekend"* | `game-jam-mode` |
-| *"Set up CI/CD for my Godot project"* | `game-ci-pipeline` |
-| *"Help me write my GDD section by section"* | `game-gdd-author` |
+| **Orientation** | `game-help` |
+| **Ideation** | `game-brainstorm`, `game-market-research` |
+| **Pre-production** | `game-start`, `game-gdd-author`, `game-design-review`, `game-scope-check` |
+| **Building** | `game-prototype`, `game-vibe-code`, `game-jam-mode`, `game-ai-assets`, `game-multiplayer` |
+| **Production** | `game-sprint-plan`, `game-team-orchestrator`, `game-code-review`, `game-reverse-document`, `game-ci-pipeline`, `game-localization-manager`, `game-analytics-setup` |
+| **Tuning and testing** | `game-balance-check`, `game-playtest` |
+| **Release** | `game-launch`, `game-web-publish` |
+| **Reflection** | `game-retrospective`, `game-postmortem` |
 
-> For complete end-to-end walkthroughs, see [docs/workflow-examples.md](docs/workflow-examples.md). For common questions, see [docs/FAQ.md](docs/FAQ.md).
+### 🎯 Engine Specialists (5)
+
+| Skill | Engine | Covers |
+|:---|:---|:---|
+| `game-godot-specialist` | Godot 4.7 / 4.8 | GDScript and C#, scenes and signals, resources, exports incl. web, headless testing |
+| `game-unity-specialist` | Unity 6.3 LTS / 6.6 | C#, URP/HDRP, Addressables, Input System, DOTS, Unity AI and MCP |
+| `game-unreal-specialist` | Unreal Engine 5.8 | C++ and Blueprints, GAS, Enhanced Input, Nanite/Lumen budgets, editor scripting |
+| `game-threejs-specialist` | Three.js r187 / React Three Fiber | WebGL and WebGPU/TSL, Rapier, glTF pipeline, mobile-web performance |
+| `game-web2d-specialist` | Phaser 4, PixiJS 8, Kaplay, Excalibur | Scenes, physics, tilemaps, atlases, portal-ready builds |
 
 <br>
 
----
+## ⚡ Building Games with AI Agents
 
-## 🛠️ Setting Up Your Game Project
+Most new indie and jam games now involve a coding agent somewhere. GameForge treats that as a craft
+with rules, not a slot machine. The rules come from what worked in 2025-2026 jams and from
+published agent guidance, and they are written up in [docs/vibe-coding.md](docs/vibe-coding.md).
 
-GameForge skills work out of the box for general questions. But to get engine-aware, project-specific guidance, copy a **starter config** into your game project.
+```mermaid
+flowchart LR
+    S["📝 One-page spec<br/><i>pass/fail check per feature</i>"] --> B["🔨 Build one feature"]
+    B --> V["🎮 Verify by playing<br/><i>Playwright, state dump, seed</i>"]
+    V -->|fails| B
+    V -->|passes| C["💾 Commit + progress.md"]
+    C --> F["🎚️ Feel pass<br/><i>tuning constants</i>"]
+    F --> B
+    C --> R["🧹 Debt check<br/><i>review, refactor, budgets</i>"]
+    R --> B
 
-```bash
-# Copy the base config into your game project
-cp starters/claude-config/CLAUDE.md /path/to/your-game/CLAUDE.md
-mkdir -p /path/to/your-game/.claude
-cp starters/claude-config/settings.json /path/to/your-game/.claude/settings.json
-
-# Add your engine's config (pick one)
-cat starters/godot/CLAUDE.md >> /path/to/your-game/CLAUDE.md    # Godot
-cat starters/unity/CLAUDE.md >> /path/to/your-game/CLAUDE.md    # Unity
-cat starters/unreal/CLAUDE.md >> /path/to/your-game/CLAUDE.md   # Unreal
+    style S fill:#6366f1,stroke:#4f46e5,color:#fff
+    style B fill:#0d9488,stroke:#0f766e,color:#fff
+    style V fill:#e11d48,stroke:#be123c,color:#fff
+    style C fill:#3b82f6,stroke:#2563eb,color:#fff
+    style F fill:#f59e0b,stroke:#d97706,color:#fff
+    style R fill:#8b5cf6,stroke:#7c3aed,color:#fff
 ```
 
-Fill in the `[BRACKETED PLACEHOLDERS]` with your game's details — project name, genre, one-liner description. Everything else works out of the box.
-
-> Full setup instructions: [starters/README.md](starters/README.md)
+- **Every step ends in a check.** The agent proves a feature works by playing it, not by saying so.
+- **Original games only.** GameForge turns "make a clone of X" into an original design that keeps
+  the mechanic you love. Claude Code declines recreations of existing games, and stores remove them.
+- **Every generated asset is logged.** Disclosures for Steam, itch.io and the EU AI Act are drafted
+  from the log, not reconstructed the night before launch.
+- **Agents get current APIs.** Engine specialists list the deprecated patterns agents still produce
+  (Godot 3 syntax, Three.js `PostProcessing`, Phaser 3 pipelines) next to their replacements.
 
 <br>
 
----
-
-## 🏗️ Architecture
+## ⚙️ How GameForge Works
 
 ```mermaid
 graph TD
-    A["🧭 CLAUDE.md<br/><i>Routing & Config</i>"] --> B["🎬 Agents<br/><b>11 skills</b>"]
-    A --> C["🔧 Workflows<br/><b>20 skills</b>"]
-    A --> D["🎯 Engine Specialists<br/><b>3 skills</b>"]
-    
-    B --> E["📚 Shared Docs<br/><i>15 reference documents</i>"]
-    C --> E
-    D --> E
-    
-    E --> F["⚡ Hooks<br/><b>11</b>"]
-    E --> G["📄 Templates<br/><b>20</b>"]
-    E --> H["🚀 Starters<br/><b>3</b>"]
-    E --> I["🎲 Genre Packs<br/><b>2</b>"]
+    U["👤 You: plain language or /gameforge:skill"] --> S["📚 41 Skills<br/><i>11 agents · 25 workflows · 5 engines</i>"]
+    S -->|"delegates in parallel"| A["🧠 11 Subagents<br/><i>project memory</i>"]
+    S -->|"loads on demand"| R["📖 references/<br/><i>deep material per skill</i>"]
+    S --> D["🗃️ Shared docs and templates<br/><i>theory, engines, AI policy</i>"]
+    H["🛡️ 7 Hooks"] -.->|"briefing, guards, recovery"| U
 
-    style A fill:#6366f1,stroke:#4f46e5,color:#fff
-    style B fill:#3b82f6,stroke:#2563eb,color:#fff
-    style C fill:#0d9488,stroke:#0f766e,color:#fff
-    style D fill:#e11d48,stroke:#be123c,color:#fff
-    style E fill:#8b5cf6,stroke:#7c3aed,color:#fff
-    style F fill:#f59e0b,stroke:#d97706,color:#fff
-    style G fill:#f59e0b,stroke:#d97706,color:#fff
+    style U fill:#6366f1,stroke:#4f46e5,color:#fff
+    style S fill:#3b82f6,stroke:#2563eb,color:#fff
+    style A fill:#0d9488,stroke:#0f766e,color:#fff
+    style R fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    style D fill:#8b5cf6,stroke:#7c3aed,color:#fff
     style H fill:#f59e0b,stroke:#d97706,color:#fff
-    style I fill:#f59e0b,stroke:#d97706,color:#fff
 ```
+
+**Skills load progressively.** Claude always sees each skill's short description, loads the full skill
+only when it is used, and reads a skill's `references/` files only when that part of the work needs
+them. `claude plugin details gameforge` shows the token cost of every component.
+
+**Subagents keep a memory.** `/gameforge:game-team-orchestrator` sends a design review to the
+Creative Director, Game Designer, Technical Director and Producer at once, each in its own context,
+and synthesizes their reports. Each role remembers what it decided in this project.
+
+**Hooks stay out of the way.** Outside a game project they do nothing. Inside one:
+
+| Hook | Does |
+|:---|:---|
+| Session start | Briefs Claude: engine and version, phase, git state, your saved focus, gaps |
+| Pre-compact | Snapshots state, restored automatically after compaction |
+| `git commit` guard | Blocks binaries over 20 MB that Git LFS is not tracking; checks commit messages once you opt in |
+| Engine-file guard | Blocks edits to `.godot/`, Unity `Library/`, Unreal `Intermediate/` and `.uasset`; asks before `.meta` |
+| Subagents, failures, session end | Delegation log, parallelism warning, recovery note after API errors |
+
+Reference and opt-outs: [docs/hooks.md](docs/hooks.md).
+
+<br>
+
+## 🎯 Engine Coverage
+
+| Engine | Versions covered | Agent integration notes |
+|:---|:---|:---|
+| **Godot** | 4.7.2 stable, 4.8 beta | No official MCP server; community servers listed with security notes |
+| **Unity** | 6.3 LTS, 6.6, 7.0 alpha notes | Unity AI, official MCP server and Claude Code plugin |
+| **Unreal Engine** | 5.8, UE6 planning notes | Experimental editor-only MCP plugin; Python editor scripting |
+| **Three.js / R3F** | r187, R3F 9 (10 alpha notes) | WebGL default, WebGPU/TSL opt-in; deprecated-API table for agents |
+| **2D web** | Phaser 4, PixiJS 8, Kaplay, Excalibur | Phaser 3 to 4 migration table for agents |
+
+Comparison and selection guidance: [docs/engine-comparison.md](docs/engine-comparison.md) ·
+Agent and MCP setup: [docs/mcp-integrations.md](docs/mcp-integrations.md)
+
+<br>
+
+## 🛠️ Setting Up Your Game Project
+
+`/gameforge:game-start` does this for you. To do it by hand, copy one starter into your game repo
+as `CLAUDE.md`:
+
+| Starter | For |
+|:---|:---|
+| [`starters/godot/`](starters/godot/CLAUDE.md) | Godot 4 projects |
+| [`starters/unity/`](starters/unity/CLAUDE.md) | Unity 6 projects |
+| [`starters/unreal/`](starters/unreal/CLAUDE.md) | Unreal Engine 5 projects |
+| [`starters/threejs/`](starters/threejs/CLAUDE.md) | Three.js / React Three Fiber with Vite |
+| [`starters/web2d/`](starters/web2d/CLAUDE.md) | Phaser / PixiJS / Kaplay with Vite |
+| [`starters/claude-config/`](starters/claude-config/) | Engine-neutral `CLAUDE.md` and a `settings.json` with safe permissions and the GameForge marketplace |
+
+Details: [starters/README.md](starters/README.md)
 
 <br>
 
 ## 📦 Genre Packs
 
-Genre packs are in-repo reference material that enrich existing skills with genre-specific design patterns, balance frameworks, and ideation prompts. They are not standalone skills — they are consumed by `game-brainstorm`, `game-designer`, `game-balance-check`, and `game-gdd-author` when a genre is specified.
+Reference material that skills load when your project's genre matches: design patterns grounded in
+shipped games, balance templates and ideation prompts.
 
-| Pack | Lines | What It Covers |
-|:---|:---:|:---|
-| **Roguelike** | 888 | Permadeath, run structure, proc-gen, meta-progression, synergy systems, Monte Carlo validation, 6+ reference games |
-| **Narrative** | 943 | Branching architecture, choice design, dialogue systems, consequence modeling, environmental storytelling, 10+ reference games |
+| Pack | Covers |
+|:---|:---|
+| [**Roguelike**](genre-packs/roguelike/) | Run structure, permadeath, procedural generation, meta-progression, synergy systems, Monte Carlo balance validation |
+| [**Narrative**](genre-packs/narrative/) | Branching architecture, choice design, dialogue systems, consequence modeling, environmental storytelling |
 
-> Want to contribute a genre pack? See the [genre pack contribution guide](CONTRIBUTING.md#contributing-a-genre-pack) and [format spec](docs/genre-pack-spec.md).
+Write your own: [docs/genre-pack-spec.md](docs/genre-pack-spec.md)
 
 <br>
 
----
+## ✅ Quality and Validation
+
+Every change runs three gates in CI:
+
+| Gate | Checks |
+|:---|:---|
+| `python3 scripts/validate.py` | Manifests and versions, documented frontmatter only, no unscoped `Bash` pre-approval, fork rules, size caps, every path and cross-skill reference resolves, doc links, counts quoted in docs |
+| `bash tests/hooks.test.sh` | 119 hook tests on Linux and macOS, every engine fixture, with and without `jq` |
+| `claude plugin validate . --strict` | Claude Code's own manifest and component validation |
+
+Content is held to the [skill quality rubric](docs/skill-quality-rubric.md): versions and policies are
+dated and sourced, claims about real games are public record, code is correct for the versions it
+names, and every skill ends in a concrete output template.
+
+<br>
 
 ## 🗂️ Project Structure
 
 ```
 AlterLab_GameForge/
-├── 📁 skills/
-│   ├── 🎬 agents/              # 11 studio agent skills
-│   ├── 🔧 workflows/           # 20 workflow skills
-│   └── 🎯 engine-specialists/  # 3 engine-specific skills
-├── 📁 genre-packs/             # Genre-specific reference material
-│   ├── 🎲 roguelike/           # Permadeath, proc-gen, synergy systems
-│   └── 📖 narrative/           # Branching, dialogue, consequence modeling
-├── 📁 docs/                    # 15 shared knowledge base documents
-├── 📁 hooks/                   # 11 session lifecycle hooks
-├── 📁 templates/               # 20 starter templates for game dev artifacts
-├── 📁 starters/                # Engine-specific project configs
-│   ├── claude-config/          # Base config (all engines)
-│   ├── godot/                  # Godot 4.x conventions
-│   ├── unity/                  # Unity 6.x conventions
-│   └── unreal/                 # Unreal Engine 5.x conventions
-├── 📁 scripts/                 # Validation scripts (validate.sh)
-├── 📁 .github/workflows/       # CI validation pipeline
-├── 📄 CLAUDE.md                # Project-level Claude config & routing
-├── 📄 marketplace.json         # Plugin manifest for Claude Code
-└── 📄 package.json             # Project metadata
+├── .claude-plugin/         # plugin.json, marketplace.json, icon
+├── skills/
+│   ├── agents/             # 11 studio agent skills
+│   ├── workflows/          # 25 workflow skills
+│   └── engine-specialists/ # 5 engine specialists
+├── agents/                 # 11 studio subagents (project memory)
+├── hooks/                  # hooks.json + 7 POSIX sh hooks
+├── docs/                   # 17 shared knowledge-base documents
+├── templates/              # 21 document templates
+├── genre-packs/            # roguelike, narrative
+├── starters/               # per-engine CLAUDE.md + team settings.json
+├── scripts/validate.py     # repository validator
+└── tests/hooks.test.sh     # hook test suite
 ```
 
 <br>
-
-## 🔌 MCP Integrations
-
-GameForge skills integrate with 34 verified MCP servers for game development — engine MCPs (Godot, Unity, Unreal), asset pipelines (Figma, ElevenLabs), project management (GitHub, Notion), and more.
-
-Seven skills have built-in MCP sections: Producer, Code Review, QA Lead, Designer, Art Director, UX Designer, and Audio Director.
-
-> Full catalog and setup guides: [docs/mcp-integrations.md](docs/mcp-integrations.md)
-
-<br>
-
----
 
 ## 🔗 Sister Projects
 
-- [AlterLab-FC-Skills](https://github.com/AlterLab-IEU/AlterLab-FC-Skills) — 72 agentic skills for communication students
-- [AlterLab-Academic-Skills](https://github.com/AlterLab-IEU/AlterLab-Academic-Skills) — 186+ academic research skills across 13 domains
+- [AlterLab-FC-Skills](https://github.com/AlterLab-IEU/AlterLab-FC-Skills): skills for communication students
+- [AlterLab-Academic-Skills](https://github.com/AlterLab-IEU/AlterLab-Academic-Skills): evaluated academic research skills
 
 ## 🤝 Contributing
 
-We welcome contributions! See **[CONTRIBUTING.md](CONTRIBUTING.md)** for guidelines.
-
-**Quick ways to contribute:**
-
-- 🛠️ Improve an existing skill with better frameworks or templates
-- ✨ Create a new skill following the architecture
-- 🐛 Report issues or suggest improvements
-- 📚 Add examples or use cases to documentation
-
-```bash
-git checkout -b improve/game-designer
-# Edit skills/agents/game-designer/SKILL.md
-git commit -m "improve: game-designer -- better economy balance models"
-git push origin improve/game-designer
-```
-
-> Full guide: [CONTRIBUTING.md](CONTRIBUTING.md) | Format reference: [CLAUDE.md](CLAUDE.md)
-
-<br>
+Contributions are welcome: sharper skills, new genre packs, engine updates, bug reports. Read
+[CONTRIBUTING.md](CONTRIBUTING.md), then run the three checks above before opening a pull request.
 
 ## 📜 License
 
-This project is licensed under the **[MIT License](LICENSE)**.
-
-```
-MIT License — Copyright (c) 2026 AlterLab Creative Technologies Laboratory
-```
+[MIT](LICENSE) © 2026 AlterLab Creative Technologies Laboratory
 
 <br>
-
-## 🙏 Credits
 
 <div align="center">
 
@@ -501,13 +424,11 @@ MIT License — Copyright (c) 2026 AlterLab Creative Technologies Laboratory
 
 <br><br>
 
-<b>34 skills · 3 categories · 2 genre packs · 1 prompt away from expert-level game development</b>
+<b>41 skills · 11 subagents · 5 engines · one studio</b>
 
 <br><br>
 
-<hr>
-
-<sub>If you find this project useful, please consider giving it a ⭐</sub>
+<sub>If GameForge helps you ship, consider giving it a ⭐</sub>
 <br>
 <a href="#">⬆ Back to Top</a>
 

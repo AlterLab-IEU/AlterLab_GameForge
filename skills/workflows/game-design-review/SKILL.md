@@ -1,317 +1,343 @@
 ---
-name: "game-design-review"
+name: game-design-review
 description: >
-  Invoke when the user wants feedback on a game design document, GDD review, design
-  evaluation, or consistency check on an existing design. Triggers on: "review my GDD",
-  "design feedback", "evaluate design", "design document review", "GDD critique".
-  Do NOT invoke for brainstorming new ideas (use game-brainstorm) or balance tuning
-  (use game-balance-check). Part of the AlterLab GameForge collection.
-argument-hint: "[path to design document]"
-effort: medium
-context: fork
-allowed-tools: Read, Glob, Grep, Write, AskUserQuestion
-version: 1.3.0
+  Reviews an existing GDD or feature spec with a severity-rated rubric: pillar alignment, MDA and
+  player-psychology fit, consistency, scope, testability for agent-built games, originality, AI
+  disclosure and accessibility hooks, ending in a build-readiness verdict. Use for "review my GDD",
+  "design feedback", "critique this spec". Not for writing a GDD (use game-gdd-author).
+argument-hint: "[path to design document or section]"
+effort: high
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
 ---
 
-# AlterLab GameForge -- Design Document Review Workflow
+# AlterLab GameForge -- Design Document Review
 
-A game design document is a living contract between your ambitions and your execution capacity. A bad GDD is not poorly formatted -- it is one that lets the team build confidently in the wrong direction for weeks before anyone notices. Hollow Knight's design doc worked because Team Cherry kept it tight, falsifiable, and obsessively focused on three pillars. Most GDDs fail because they describe a game without constraining it -- anything goes, so nothing works.
+A game design document is a contract between ambition and execution capacity. A bad GDD is not
+badly formatted; it is one that lets the team build confidently in the wrong direction for weeks
+before anyone notices. Most fail because they describe a game without constraining it: anything
+goes, so nothing coheres.
 
-This is not a checklist review. A checklist confirms sections exist. This review confirms sections are good -- internally consistent, psychologically grounded, scope-honest, and specific enough to guide implementation decisions. Disco Elysium's systems-narrative integration did not happen by accident -- it happened because the design document specified exactly how every skill check connected to every dialogue branch. That level of specificity is what this review demands.
+This is not a checklist review. A checklist confirms sections exist. This review confirms they are
+good: internally consistent, psychologically grounded, scope-honest, and specific enough to drive
+implementation. In 2026 that last test is literal. When a GDD section goes to Claude Code or a
+similar agent, every vague sentence becomes a guess in code, so this review also asks: **could an
+agent build this, and could a test tell whether it built it right?** And because players, stores
+and regulators now care how a game was made, it checks originality, AI-content disclosure and
+accessibility while changes are still cheap.
 
-### Purpose & Triggers
+## When to Use / When Not To
 
-Use this workflow when:
-- A designer says "review my GDD" or "give feedback on my design document"
-- Before starting implementation, to catch problems while they are cheap to fix
-- After significant design changes, to re-validate internal consistency
-- When a playtest reveals problems and you suspect the root cause is in the design
-- When team members disagree about what the game is supposed to be
+Use before implementation starts, as a gate before a section is handed to a coding agent, after
+significant design changes, when a playtest went badly and the cause may be in the design, or when
+the team disagrees about what the game is.
 
-Problems this solves:
-- Mechanics that do not serve any design pillar (orphan features)
-- Target aesthetics that contradict the actual mechanics (MDA misalignment)
-- Scope estimates that ignore reality (optimism masquerading as planning)
-- Design documents that describe a game but do not constrain it (anything goes = nothing works)
-- Systems that interact in unintended ways (emergent conflict)
-- Missing sections that will cause confusion during implementation
+| Instead of this skill... | Use |
+|---|---|
+| Writing or rebuilding GDD sections | `/gameforge:game-gdd-author` |
+| Generating new ideas | `/gameforge:game-brainstorm` |
+| Tuning numbers against play data | `/gameforge:game-balance-check` |
+| Timeline vs capacity in depth | `/gameforge:game-scope-check` |
+| Reviewing code or architecture | `/gameforge:game-code-review` |
+| Full accessibility audit | `/gameforge:game-accessibility-specialist` |
+| Store compliance and disclosure forms at launch | `/gameforge:game-launch` |
 
-### Critical Rules
+## Critical Rules
 
-1. **Read the whole document before commenting.** Context matters. A mechanic that seems
-   orphaned in Section 3 might be justified by the progression system in Section 7. Read
-   everything first, then analyze.
+1. **Read the whole document before commenting.** A mechanic that looks orphaned in §5 may be
+   justified in §11. Read everything, including linked pillars and the systems index, then analyze.
+2. **Severity is explicit.** Critical, Major, Minor or Suggestion on every finding, with a reason.
+   A missing core loop is Critical; a vague art reference is Minor.
+3. **Specific, cited, actionable.** "Combat could be better" is useless. "§5.1 specifies player
+   attacks but no enemy behavior, so difficulty cannot be tuned" is a finding. Name the problem,
+   cite the section, propose a fix.
+4. **Propose, do not prescribe.** The designer owns the vision. Offer directions with reasons; do
+   not rewrite their sections. Route rewrites to `/gameforge:game-gdd-author`.
+5. **Ground it in theory.** Tie findings to `${CLAUDE_PLUGIN_ROOT}/docs/game-design-theory.md`:
+   "this spike violates Flow because §11 has no skill-building ramp before Stage 3" beats "Stage 3
+   is too hard."
+6. **Contradictions beat omissions.** The costliest GDD failures are sections that disagree, not
+   sections that are missing.
+7. **Separate design quality from document quality.** A brilliant design can be badly documented
+   and a polished document can describe a weak game. Say which problem you found.
+8. **Compliance findings are flags, not legal advice.** State the rule and its date, say what it
+   implies for the design, and recommend professional review where real exposure exists.
 
-2. **Severity matters.** Not all findings are equal. A missing core loop definition is
-   Critical. A vague art style reference is Minor. Assign severity explicitly so the
-   designer knows where to spend time.
+## Step 0: Intake
 
-3. **Be specific, not vague.** "The combat system could be better" is useless feedback. "The combat system describes player attacks but never specifies enemy behavior patterns, making it impossible to tune difficulty" is actionable. Name the problem, cite the section, propose the fix.
+1. Locate the document: the argument, else `Glob` for `design/**/*.md`, `docs/design/**`, `*gdd*`.
+   Also read `design/pillars.md`, `design/systems-index.md` and `.gameforge/project.json`
+   (engine, phase, pillars) when present.
+2. Ask **one** AskUserQuestion to set the mode (default in bold):
+   - **Full review** -- all thirteen dimensions.
+   - **Build-readiness gate** -- dimensions 1, 2, 5, 10, 11, 12, 13 on the sections about to be built.
+   - **Focused** -- the user names the concern (scope, pillars, psychology, playtest diagnosis, compliance).
+3. Note the phase. A concept-phase GDD is not penalized for missing §13 numbers; a GDD about to go
+   into production is.
 
-4. **Propose, do not prescribe.** Offer alternative approaches with reasoning, not mandates. The designer owns the vision. Your job is to identify problems and suggest directions -- "Disco Elysium solved this by tying skill checks to dialogue, not combat" is a reference that opens thinking. "Just copy Disco Elysium" is lazy.
+## The Review Rubric
 
-5. **Reference the theory.** When flagging an issue, connect it to established design
-   principles from `docs/game-design-theory.md`. "This violates Flow Theory because the
-   difficulty spike at Stage 3 has no skill-building ramp" is stronger than "Stage 3 is
-   too hard."
+| # | Dimension | Question it answers | Typical worst severity |
+|---|---|---|---|
+| 1 | Section completeness | Is everything needed to build present? | Critical (no core loop) |
+| 2 | Pillar alignment | Does every mechanic serve a pillar? | Critical (no pillars) |
+| 3 | MDA consistency | Do mechanics produce the target aesthetics? | Major |
+| 4 | Player psychology | Are SDT needs and Flow supported? | Major |
+| 5 | Internal consistency | Do sections agree with each other? | Critical |
+| 6 | Scope feasibility | Can this team build it by this date? | Critical |
+| 7 | Edge cases | What happens when players do the unexpected? | Major |
+| 8 | Onboarding | Can a new player learn it unaided? | Major |
+| 9 | Differentiation | Is the hook real and communicable? | Major |
+| 10 | Testability for agent-built games | Could an agent build it and a test verify it? | Critical (for agent-built T1 systems) |
+| 11 | Originality and IP risk | Is it the team's own game, with clean assets? | Critical |
+| 12 | AI content and disclosure | What does the AI use in this design oblige? | Critical (runtime AI without guardrails) |
+| 13 | Accessibility hooks | Is accessibility designed in, not bolted on? | Major (Critical for EAA-scope features) |
 
-6. **Check alignment across the document.** The biggest GDD failures are not missing
-   sections but contradictions between sections. A pillar that says "player freedom" and
-   a level design section that describes linear corridors is a critical contradiction.
+### 1. Section completeness
 
-### Workflow
+Compare against `${CLAUDE_PLUGIN_ROOT}/templates/game-design-document.md` (§1-§13) plus the
+sections `game-gdd-author` appends: Direction, Technical Approach, AI Use & Originality, Scope &
+Milestones. Optional but valuable: narrative, monetization, multiplayer, competitive analysis.
+Record each as Present / Partial / Missing with one line on what is missing.
 
-**Step 1: Document Intake**
+### 2. Pillar alignment
 
-Read the complete design document. Note the structure, length, and overall organization.
-Identify which of the 8 required GDD sections are present:
-
-```
-REQUIRED GDD SECTIONS
--------------------------------------------------
-1. Game Overview (concept, genre, platform, audience)
-2. Core Mechanics (player actions, systems, interactions)
-3. Game Flow / Core Loop (30-sec to full-game timescales)
-4. Level / World Design (spaces, progression through space)
-5. Art Direction (visual style, references, asset requirements)
-6. Audio Design (music, SFX, adaptive audio approach)
-7. UI / UX Design (menus, HUD, accessibility considerations)
-8. Technical Requirements (engine, platforms, performance targets)
-
-OPTIONAL BUT VALUABLE
-- Narrative Design (story, characters, dialogue systems)
-- Monetization Model (if applicable)
-- Multiplayer Design (if applicable)
-- Accessibility Plan
-- Competitive Analysis
--------------------------------------------------
-```
-
-**Step 2: Pillar Alignment Review**
-
-This is the most important dimension. If the game has defined design pillars, every
-mechanic and system must trace back to at least one pillar. If no pillars are defined,
-flag this as a Critical finding.
+No pillars defined is a Critical finding. Otherwise build the matrix for every mechanic and system:
 
 ```
 PILLAR ALIGNMENT MATRIX
--------------------------------------------------
-Mechanic/System        | Pillar 1 | Pillar 2 | Pillar 3 | Orphan?
--------------------------------------------------
-[combat system]        | Yes      | --       | Yes      | No
-[crafting system]      | --       | --       | --       | YES - flag
-[dialogue choices]     | Yes      | Yes      | --       | No
-[inventory management] | --       | --       | --       | YES - flag
--------------------------------------------------
-
-Orphan mechanics are red flags. They either:
-a) Should be cut (they serve no pillar, so they dilute focus)
-b) Reveal a missing pillar (add a pillar that justifies them)
-c) Are described poorly (clarify how they connect to pillars)
+Mechanic / system       | Consequence | Discovery | Rhetoric | Orphan?
+evidence examination    | Yes         | Yes       | --       | No
+witness interrogation   | Yes         | Yes       | Yes      | No
+office decoration       | --          | --        | --       | YES -> cut, add pillar, or clarify
 ```
 
-**Step 3: MDA Consistency Review**
+Also check each pillar is falsifiable (it excludes something) and served by three or more features.
 
-Check whether the described mechanics actually deliver the target aesthetics. This
-requires understanding the MDA Framework as documented in `docs/game-design-theory.md`.
-
-```
-MDA CONSISTENCY CHECK
--------------------------------------------------
-Target Aesthetic | Required Dynamics        | Mechanics That Deliver | Gap?
--------------------------------------------------
-Discovery        | Exploration, revelation  | Fog of war, hidden areas | OK
-Challenge        | Skill testing, escalation| [none described]         | GAP
--------------------------------------------------
-
-Common MDA misalignments:
-- Target "Discovery" but linear level progression (no exploration mechanics)
-- Target "Challenge" but no difficulty scaling or mastery curve
-- Target "Expression" but no player-facing creative tools
-- Target "Fellowship" but single-player-only design
-```
-
-**Step 4: Player Psychology Review**
-
-Evaluate through the lens of Self-Determination Theory and Flow Theory.
-
-SDT Check -- Does the design support the three basic psychological needs?
+### 3. MDA consistency
 
 ```
-SDT ASSESSMENT
--------------------------------------------------
-Need         | Evidence in Design       | Threats in Design     | Rating
--------------------------------------------------
-Autonomy     | [choices described]      | [forced linearity]    | [A/B/C/F]
-Competence   | [skill expression]       | [unfair difficulty]   | [A/B/C/F]
-Relatedness  | [social features]        | [isolation by design] | [A/B/C/F]
--------------------------------------------------
+Target aesthetic | Dynamics it needs       | Mechanics that deliver | Gap?
+Discovery        | exploration, revelation | hidden evidence, witness facts | OK
+Challenge        | escalating skill tests  | [none after case 3]    | GAP (Major)
 ```
+Common misalignments: Discovery with linear progression; Challenge with no mastery curve;
+Expression with no player-facing tools; Fellowship in a single-player design.
 
-Flow Check -- Can the player maintain a flow state?
+### 4. Player psychology
 
 ```
-FLOW ASSESSMENT
--------------------------------------------------
-Flow Element  | Present? | Notes
--------------------------------------------------
-Clear goals   | Y/N      | [does the player always know what to do next?]
-Immediate feedback | Y/N | [does every action produce visible response?]
-Challenge/skill balance | Y/N | [does difficulty scale with player growth?]
-Sense of control | Y/N   | [does the player feel agency?]
-Loss of self-consciousness | Y/N | [can they forget they are playing?]
-Time distortion | Y/N    | [does the design support losing track of time?]
--------------------------------------------------
+SDT          | Evidence in design | Threats in design | Rating (A/B/C/F)
+Autonomy     |                    |                   |
+Competence   |                    |                   |
+Relatedness  |                    |                   |
+
+FLOW         | Present? | Notes
+Clear goals / Immediate feedback / Challenge-skill balance / Sense of control /
+Loss of self-consciousness / Time distortion
+```
+At least one finding in every full review must come from this dimension.
+
+### 5. Internal consistency
+
+Cross-check: pillars vs mechanics; core loop vs progression pacing; tone vs art and audio;
+difficulty vs audience; feature scope vs team; platform vs controls; numbers in §5 vs §6 vs §9;
+acceptance criteria vs rules. Quote both passages for every conflict.
+
+### 6. Scope feasibility
+
+Count systems and content volume (levels, enemies, items, lines of dialogue, assets), compare with
+team, availability and date. Flag hidden complexity: pathfinding, procedural generation, netcode,
+physics-driven gameplay, save systems, localization, runtime AI. When the team builds with coding
+agents, credit them for boilerplate and plumbing only; content, tuning, playtesting, review and
+platform work do not compress the same way. Deep timeline analysis goes to `/gameforge:game-scope-check`.
+
+### 7. Edge cases
+
+Sequence breaks, exhausted "renewable" resources, refused mandatory systems, unintended system
+interactions, extremes (max level, zero resources, simultaneous events), quitting mid-action.
+
+### 8. Onboarding
+
+Is the teaching sequence described? Does complexity ramp with it? Is there a "just play" entry for
+players who skip tutorials? Does it teach through play rather than text walls?
+
+### 9. Differentiation
+
+Name the three closest comparables. For each, what is different at the experience level, not the
+feature level? Is the difference mechanical or cosmetic? Can the hook be shown in a 30-second
+trailer and grasped in the first seconds of play (jam guides commonly aim for about five)?
+
+### 10. Testability for agent-built games
+
+Applies to every system that a coding agent will build or modify. Check:
+
+- [ ] Each T1 system has 3+ acceptance criteria in Given / When / Then form with thresholds.
+- [ ] At least two per T1 system are automatable (unit, simulation or browser test), and each says
+      how it is observed.
+- [ ] Feel and fun criteria are written as playtest checks with observable thresholds, not adjectives.
+- [ ] Every number in the rules is a named tuning knob with default and range, in one data file.
+- [ ] The design specifies state observation for tests: a state snapshot (on the web, a
+      `render_game_to_text()`-style hook), deterministic stepping (`advanceTime(ms)`-style), seeded RNG.
+- [ ] A project check command is named (test run, headless engine run, or Playwright suite).
+- [ ] Each system has an out-of-scope list or build brief, so the agent does not add neighbors.
+- [ ] No rule is defined only by reference to another game ("works like X").
+
+A T1 system that an agent will build with no Auto checks is Critical: nobody can verify it between
+playtests. Missing knobs are Major: every retune becomes another agent session and another diff.
+
+### 11. Originality and IP risk
+
+- [ ] The pitch stands without naming another game; comparisons stay in the overview.
+- [ ] No character names, logos, level layouts, UI trade dress, music or assets taken from
+      existing games; no ripped, exported or decompiled material.
+- [ ] Licensed IP and fan-game status are explicit, with the license or permission named.
+- [ ] Asset sources are named for every content category (made, licensed, generated).
+
+A design that is a renamed recreation of a specific existing game is Critical on two counts: it
+is legal exposure, and as of late October 2026 Claude Code declines to build recreations of
+specific existing games, so an agent-built project stalls. Recommend reframing around the genre
+mechanic the designer loves plus their own twist.
+
+### 12. AI content and disclosure
+
+Read `${CLAUDE_SKILL_DIR}/references/compliance-and-ip.md` before scoring this dimension; it maps
+design features to platform and legal obligations with dates. Check that the design states:
+
+- [ ] Which player-facing content may be AI-generated (art, audio, voice, text, localization,
+      store and marketing assets), with a review owner and a provenance log.
+- [ ] For anything generated at runtime (AI NPCs, generated quests or images): guardrails,
+      player-facing disclosure, a report mechanism, and cost per player-hour, all tiered T1.
+- [ ] A voice plan that covers performer consent if any synthetic or cloned voice is used.
+- [ ] No reliance on tools whose license excludes target regions or whose legal status is
+      unsettled for shipped content.
+
+Runtime AI with no guardrails or disclosure is Critical. Undecided disclosure for shipped AI
+content is Major. Code written with agents is not a disclosure issue on Steam.
+
+### 13. Accessibility hooks
+
+- [ ] Input: full remapping, toggle alternatives to holds, no required simultaneous presses
+      without an alternative, adjustable timing windows.
+- [ ] Visual: color never the only carrier of meaning, scalable text, readable contrast,
+      reduced motion and flash options.
+- [ ] Audio: subtitles with speaker names, visual equivalents for gameplay-critical sounds.
+- [ ] Cognitive: objective reminders, pausable or adjustable timers, difficulty options.
+- [ ] Purchase flows, player chat and console releases noted as European Accessibility Act scope
+      (in force since 2025-06-28; microenterprise service exemption applies to some teams).
+- [ ] At least one acceptance check per T1 accessibility option.
+
+Deep audits go to `/gameforge:game-accessibility-specialist` with
+`${CLAUDE_PLUGIN_ROOT}/templates/accessibility-audit.md`.
+
+## Severity and Readiness
+
+| Severity | Meaning |
+|---|---|
+| **Critical** | Blocks implementation or creates legal or platform exposure. Fix before building. |
+| **Major** | Will cause significant rework or a weaker game if ignored. Fix this milestone. |
+| **Minor** | Clarity or polish. Fix when convenient. |
+| **Suggestion** | Not a problem; an opportunity. |
+
+Readiness verdict (always give one, per reviewed section or for the whole document):
+
+- **Ready to build** -- no Critical, at most two Major, all of them outside dimensions 10-12.
+- **Ready with fixes** -- no Critical; Major findings have agreed owners and dates.
+- **Not ready** -- any Critical finding.
+
+## Working with AI Coding Agents
+
+How the review fits a build that uses Claude Code or similar agents.
+
+- **Gate before every build brief.** Run the build-readiness gate on a section before it goes to
+  `/gameforge:game-vibe-code`. Anthropic's Claude Code guidance recommends a written spec and a
+  check that returns pass or fail; dimension 10 is that check applied to the spec.
+- **Use an agent for the mechanical sweep, then judge yourself.** Delegate: listing every number
+  without a knob, every rule without a check, every term used two ways, every reference to another
+  game. Keep human: severity calls, pillar and fun judgments, anything legal.
+- **Independent reviewer.** A fresh session or subagent that reads only the GDD (not the
+  conversation that produced it) catches assumptions the author's session absorbed. Tell it to
+  check against the spec and skip prose style.
+- **Review the delta, not just the plan.** When agent-built code has drifted from the GDD (extra
+  mechanics, changed numbers), review the GDD against what was built and record which one wins.
+  Agents are good at adding features and poor at noticing when the structure underneath must change.
+- **Provenance check.** If AI-generated assets already exist, confirm they appear in the project's
+  provenance log (kept by `/gameforge:game-ai-assets`); unlogged placeholders are how disclosure
+  goes wrong at launch.
+
+Prompt for the independent sweep:
+```
+Read design/gdd.md and design/pillars.md only. Do not edit anything. List: (1) numbers in rules
+with no tuning knob, (2) T1 systems with fewer than two automatable acceptance checks, (3) terms
+used with two meanings, (4) contradictions between sections, quoting both, (5) any mechanic
+described only by reference to another game. Skip style comments.
 ```
 
-**Step 5: Internal Consistency Review**
+## Output: Design Review Report
 
-Look for contradictions between different sections of the document.
-
-```
-CONSISTENCY CROSS-CHECK
--------------------------------------------------
-Check                        | Status | Finding
--------------------------------------------------
-Pillars vs. mechanics        | OK/CONFLICT | [detail]
-Core loop vs. progression    | OK/CONFLICT | [detail]
-Art style vs. tone          | OK/CONFLICT | [detail]
-Difficulty curve vs. target audience | OK/CONFLICT | [detail]
-Feature scope vs. team capacity | OK/CONFLICT | [detail]
-Platform vs. control scheme  | OK/CONFLICT | [detail]
--------------------------------------------------
-```
-
-**Step 6: Scope Feasibility Review**
-
-Can this game actually be built with the stated resources?
-
-- Count the number of unique systems described
-- Estimate content volume (levels, enemies, items, dialogue)
-- Compare against team size and timeline
-- Flag any system that requires technology the team has not proven they can build
-- Check for "hidden complexity" -- features that sound simple but are engineering nightmares
-  (pathfinding, procedural generation, multiplayer netcode, physics-based gameplay)
-
-**Step 7: Edge Case Coverage**
-
-What happens when players do unexpected things?
-
-- What if the player breaks the intended sequence?
-- What if the player exhausts a resource the design assumes is renewable?
-- What if the player refuses to engage with a system the design treats as mandatory?
-- What if two systems interact in an unintended way?
-- What happens at the extremes (maximum level, zero resources, impossible speed)?
-
-**Step 8: Onboarding Assessment**
-
-Can a new player learn this game without external help?
-
-- Is the tutorial approach described?
-- Does the complexity ramp match the teaching sequence?
-- Are advanced mechanics introduced only after basic ones are mastered?
-- Is there a "just play" entry point for players who skip tutorials?
-- Does the game teach through play or through text walls?
-
-**Step 9: Competitive Differentiation**
-
-Is the unique hook actually unique? Hollow Knight's hook was not "metroidvania" -- that genre was already crowded. Its hook was the atmosphere: melancholy insect civilization, tight combat feel, and a world that rewarded patient exploration. The differentiation was experiential, not categorical.
-
-- Identify the 3 closest comparable games
-- For each comparable, define what makes THIS game different at the experience level, not the feature level
-- Check whether the differentiators are mechanical or cosmetic (cosmetic differentiation is not real differentiation -- "our zombies are blue" is not a hook)
-- Assess whether the unique hook is prominent enough to communicate in a 30-second trailer
-
-### Output Format
-
-The workflow produces a **Design Review Report**:
+Write to `design/reviews/design-review-<YYYY-MM-DD>.md` (ask before writing) and add one line to
+`production/session-state/active.md` under **Decisions** or **Next**. A filled-in example is in
+`${CLAUDE_SKILL_DIR}/references/review-example.md`; read it before your first review in a session.
 
 ```markdown
-# Design Review Report
-**Document:** [GDD title]
-**Version:** [if specified]
-**Reviewer:** GameForge Design Review
-**Date:** [date]
+# Design Review: [GDD title] v[version]
+**Reviewed:** [path] | **Mode:** Full / Build-readiness gate / Focused: [topic]
+**Date:** [date] | **Phase:** [from project.json] | **Reviewer:** GameForge design review
 
-## Executive Summary
-[2-3 sentences: overall assessment, biggest strength, most critical issue]
+## Verdict
+**[Ready to build / Ready with fixes / Not ready]** -- [one sentence why]
+Biggest strength: [one line]. Most critical issue: [one line].
 
-## Section Completeness
-| Section | Present | Completeness | Notes |
-|---------|---------|-------------|-------|
-| Game Overview | Y/N | [%] | |
-| Core Mechanics | Y/N | [%] | |
+## Scorecard
+| # | Dimension | Rating (OK / Concern / Fail / n.a.) | Findings |
+|---|---|---|---|
+| 1 | Completeness | | CRIT-01 |
+| 2 | Pillar alignment | | |
 | ... | | | |
+| 10 | Testability | | MAJ-02 |
+| 11 | Originality & IP | | |
+| 12 | AI content & disclosure | | |
+| 13 | Accessibility hooks | | |
 
 ## Findings
+### Critical
+- **[CRIT-01] [Title]** (§[section], dimension [n]): [what, with a quote or reference]
+  **Why it matters:** [theory, risk or rule]  **Recommendation:** [specific fix]  **Owner:** [role]
+### Major
+- **[MAJ-01] ...**
+### Minor
+- **[MIN-01] ...**
+### Suggestions
+- **[SUG-01] ...**
 
-### Critical (must fix before implementation)
-- **[CRIT-01]** [Title]: [Detailed finding with specific references to the document]
-  **Recommendation:** [specific suggested fix]
-
-### Major (fix soon, will cause significant problems if ignored)
-- **[MAJ-01]** [Title]: [Detailed finding]
-  **Recommendation:** [specific suggested fix]
-
-### Minor (improve when convenient)
-- **[MIN-01]** [Title]: [Detailed finding]
-  **Recommendation:** [specific suggested fix]
-
-### Suggestions (not problems, but opportunities)
-- **[SUG-01]** [Title]: [Idea for improvement]
-
-## Pillar Alignment Matrix
-[From Step 2]
-
-## MDA Consistency Report
-[From Step 3]
+## Matrices
+[Pillar alignment matrix] [MDA consistency] [SDT / Flow]
 
 ## Strengths
-[What the document does well -- always include positives]
+- [What the document does well, with section references]
 
-## Recommended Next Actions
-1. [Priority action]
-2. [Second action]
-3. [Third action]
-
-## Suggested Workflows
-- [ ] [e.g., game-brainstorm to develop underdeveloped areas]
-- [ ] [e.g., game-balance-check for tuning concerns]
+## Next Actions
+1. [Fix CRIT-01 -- owner -- date]
+2. [...]
+**Suggested skills:** /gameforge:game-gdd-author ([sections]), /gameforge:game-scope-check, ...
 ```
 
-### Quality Criteria
+## Quality Criteria
 
-A successful design review meets all of these:
-- Every finding cites specific text or sections from the reviewed document
-- Severity ratings are justified and proportional
-- Pillar alignment is checked for every described mechanic
-- At least one finding relates to player psychology (SDT or Flow)
-- The review identifies strengths, not just problems
-- Recommendations are specific enough to act on immediately
-- The scope assessment is grounded in real-world development effort
-- Internal contradictions are caught and explained clearly
-- The review distinguishes between design quality and document quality
-  (a brilliant design can be poorly documented and vice versa)
+- Every finding cites a section or quote and has a severity and a recommendation.
+- Pillar alignment covers every described mechanic.
+- At least one finding comes from player psychology (SDT or Flow).
+- Dimensions 10-13 are scored in every full review, or marked n.a. with a reason.
+- Compliance findings carry the rule's date and are framed as flags, not legal conclusions.
+- Strengths are listed; the review is not only problems.
+- The verdict follows the readiness rules above.
 
-### Example Use Cases
+## Example Requests
 
-1. **"Review my GDD before we start coding."**
-   Full 9-step review. Emphasize Critical findings that must be resolved before
-   a single line of code is written.
-
-2. **"Our playtest went badly. Is the problem in the design?"**
-   Focus on Steps 3 (MDA consistency), 4 (player psychology), and 7 (edge cases).
-   The playtest feedback points toward which dimensions to scrutinize hardest.
-
-3. **"I think our scope is too big. Can you confirm?"**
-   Focus on Step 6 (scope feasibility). Count systems, estimate content volume,
-   compare against team capacity, and deliver an honest verdict.
-
-4. **"We're arguing about whether to add a crafting system. Help us decide."**
-   Focus on Step 2 (pillar alignment). If crafting serves a pillar, it belongs.
-   If it does not, it is scope creep wearing a feature-shaped disguise.
-
-5. **"I wrote this GDD in one sitting. What did I miss?"**
-   Full review with emphasis on Step 1 (section completeness) and Step 5 (internal
-   consistency). Documents written quickly often have implicit assumptions that need
-   to be made explicit and contradictions that need resolution.
+| Request | Focus |
+|---|---|
+| "Review my GDD before we start coding." | Full review; lead with Criticals and the verdict. |
+| "Is §5.2 ready to hand to Claude Code?" | Build-readiness gate on that section; dimension 10 in depth. |
+| "Our playtest went badly. Is it the design?" | Dimensions 3, 4, 7; use the playtest notes as evidence. |
+| "Is our scope too big?" | Dimension 6; count systems and content, then route to scope-check. |
+| "Should we add crafting?" | Dimension 2; if it serves no pillar it is scope creep in a feature costume. |
+| "We want AI companions that chat with players." | Dimensions 12 and 13; runtime AI obligations, disclosure UX, guardrails. |
