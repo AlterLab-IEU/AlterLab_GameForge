@@ -1,6 +1,6 @@
 # AI-Native Game Development (Late 2026)
 
-What AI tools can and cannot do for an indie team as of **2026-11-05**: which are production-ready, which are experimental, what the licence and rights position is, what you must disclose, and where GameForge skills plug in. Tool versions, licences and store rules change monthly. Before anything ships, re-check it against the numbered source.
+What AI tools can and cannot do for an indie team as of **2026-11-05**: which are production-ready, which are experimental, what the license and rights position is, what you must disclose, and where GameForge skills plug in. Tool versions, licenses and store rules change monthly. Before anything ships, re-check it against the numbered source.
 
 Companion docs: [MCP integrations](mcp-integrations.md) (agent-to-editor wiring and security) and [engine comparison](engine-comparison.md) (engine choice for AI-assisted builds).
 
@@ -21,14 +21,14 @@ Companion docs: [MCP integrations](mcp-integrations.md) (agent-to-editor wiring 
 
 ## Summary Matrix
 
-| Category | Leading options (Nov 2026) | Rating | Rights / licence watch-outs | GameForge skill |
+| Category | Leading options (Nov 2026) | Rating | Rights / license watch-outs | GameForge skill |
 |---|---|---|---|---|
 | Coding agents | Claude Code, GitHub Copilot, Codex, Cursor [1] | Production-ready with a check loop | Steam exempts code assistants from disclosure [40] | `/gameforge:game-vibe-code` |
 | Engine assistants & MCP | Unity AI (beta), Unreal MCP (experimental), community Godot/Blender servers [7][11] | Usable with review | Code-execution tools are arbitrary code execution | engine specialists |
-| 3D generation | Meshy 6, Tripo P1, Rodin Gen-2.5, TRELLIS.2, Hunyuan3D 2.1 [14]–[18] | Props: usable with review. Hero assets: experimental | Hunyuan3D licence excludes EU/UK/South Korea [17] | `/gameforge:game-ai-assets` |
+| 3D generation | Meshy 6, Tripo P1, Rodin Gen-2.5, TRELLIS.2, Hunyuan3D 2.1 [14]–[18] | Props: usable with review. Hero assets: experimental | Hunyuan3D license excludes EU/UK/South Korea [17] | `/gameforge:game-ai-assets` |
 | 2D, pixel art, textures | PixelLab, Retro Diffusion, Scenario, Layer.ai [19] | Usable with review | Check each vendor's commercial terms; "seamless" output often fails to tile | `/gameforge:game-ai-assets` |
 | Animation | Move AI Gen 2, Rokoko Vision 3.0, Cascadeur 2026.x, UE 5.8 MetaHuman Animator [12][20]–[22] | Usable with review | MetaHumans may not be used to train AI | `/gameforge:game-art-director` |
-| SFX | ElevenLabs SFX v2, Stable Audio 3 [23][24] | Production-ready for many uses | Stable Audio open weights need an Enterprise licence above US$1M revenue | `/gameforge:game-audio-director` |
+| SFX | ElevenLabs SFX v2, Stable Audio 3 [23][24] | Production-ready for many uses | Stable Audio open weights need an Enterprise license above US$1M revenue | `/gameforge:game-audio-director` |
 | Music | Eleven Music, Stable Audio 3; Suno/Udio [25][26] | Licensed-data models: usable with review. Suno/Udio: legally unsettled | UMG and Sony still suing Suno | `/gameforge:game-audio-director` |
 | Voice / TTS | ElevenLabs, Inworld TTS, NVIDIA ACE TTS [33][34] | Usable with review | SAG-AFTRA consent and disclosure rules; player backlash [27][28] | `/gameforge:game-audio-director` |
 | World models | Genie 4, Muse/WHAM, Marble [29]–[32] | Experimental | Pitch and mood only | `/gameforge:game-brainstorm` |
@@ -89,16 +89,16 @@ Setup, maturity and security for each server are in [MCP integrations](mcp-integ
 
 ## 3. Asset Generation
 
-Log every generated asset (tool, model version, prompt, date, human edits, licence) in an asset provenance log. GameForge v3.0 adds a `templates/ai-asset-log.md` template for this. Then set studio-level rules in the [AI content policy](../templates/ai-content-policy.md) template. Steam, itch.io and EU disclosures are all generated from that log. Run the pipeline with `/gameforge:game-ai-assets`.
+Log every generated asset (tool, model version, prompt, date, human edits, license) in an asset provenance log. GameForge v3.0 adds a `templates/ai-asset-log.md` template for this. Then set studio-level rules in the [AI content policy](../templates/ai-content-policy.md) template. Steam, itch.io and EU disclosures are all generated from that log. Run the pipeline with `/gameforge:game-ai-assets`.
 
 ### 3D
 
-| Tool | Strength | Licence / rights | Rating |
+| Tool | Strength | License / rights | Rating |
 |---|---|---|---|
 | Meshy 6 (Jan 2026) | Low-poly mode, Remesh retopology, auto-rig [14] | Commercial SaaS; check tier terms | Usable with review (props) |
 | Tripo P1 "Smart Mesh" (Mar 2026) | Topology-focused generation; a reviewer found hero assets still need cleanup [15] | Commercial SaaS | Usable with review |
 | Rodin Gen-2 / 2.5 | Quad-dominant meshes (vendor claim) [16] | Commercial SaaS | Usable with review |
-| Hunyuan3D 2.1 (open weights) | Strong open model | **Licence does not apply in the EU, UK or South Korea, and the restriction covers outputs.** Services above 1M MAU need a separate licence [17]. 3.x reportedly API-only (UNVERIFIED) | Avoid if you sell in the excluded regions |
+| Hunyuan3D 2.1 (open weights) | Strong open model | **License does not apply in the EU, UK or South Korea, and the restriction covers outputs.** Services above 1M MAU need a separate license [17]. 3.x reportedly API-only (UNVERIFIED) | Avoid if you sell in the excluded regions |
 | TRELLIS.2-4B (Microsoft) | Full PBR output | **MIT.** Needs a 24 GB+ GPU; tested on Linux only [18] | Usable with review |
 
 **Reality check.** Auto-retopology and auto-rigging hold up for props and background characters. Hero meshes still need hand-placed edge loops and manual retopology [14][15]. Budget artist time for them.
@@ -126,7 +126,7 @@ No independent texture benchmark exists. Generated "seamless" textures do not al
 | Tool | Notes | Rights | Rating |
 |---|---|---|---|
 | ElevenLabs SFX v2 (Sept 2025) | 30 s clips, seamless loops, 48 kHz [23] | Commercial per plan | Production-ready |
-| Stable Audio 3 (2026-05-20) | Trained on licensed data. Small SFX, Small and Medium are open weights; Large is API-only [24] | Stability AI Community License; **Enterprise licence above US$1M revenue** | Usable with review |
+| Stable Audio 3 (2026-05-20) | Trained on licensed data. Small SFX, Small and Medium are open weights; Large is API-only [24] | Stability AI Community License; **Enterprise license above US$1M revenue** | Usable with review |
 | Eleven Music | Trained on licensed data (Merlin and Kobalt deals); offered for commercial use [25] | Game-specific tier requirements UNVERIFIED | Usable with review |
 | Suno / Udio | UMG settled with Udio (Oct 2025), and Udio then disabled downloads. WMG settled with Suno (2025-11-25). **UMG and Sony are still suing Suno** [26]. | Unsettled | **Legally unsettled. Keep out of shipped games** |
 
@@ -233,7 +233,7 @@ AI tooling widens your attack surface in three places.
 | **itch.io** | Generative-AI disclosure is required and feeds the "no AI" filter, which reached search on 2026-11-03. On the same day itch deleted "a couple terabytes" of bulk AI uploads as spam. | [53] |
 | **PlayStation, Nintendo** | No public AI-specific store rule found (absence of evidence) | — |
 | **Apple App Store** | No AI-specific ban. In Mar 2026 Apple blocked updates to vibe-coding apps under guideline 2.5.2 (executing downloaded code), so in-app game *makers* are at risk. | [56] |
-| **Google Play** | The AI-Generated Content policy covers generative features (no offensive or deceptive output). No labelling mandate found. | [57] |
+| **Google Play** | The AI-Generated Content policy covers generative features (no offensive or deceptive output). No labeling mandate found. | [57] |
 | **US copyright** | Copyright Office Part 2 (2025-01-29): prompts alone are not enough, but human selection, arrangement and modification can be protected. The Supreme Court denied cert in *Thaler* (2026-03-02), so human authorship is still required. | [47][48] |
 | **SAG-AFTRA 2025 IMA** | Consent, specific-use description and usage reports for digital voice replicas | [27] |
 | **European Accessibility Act** (in force 2025-06-28) | Consoles, e-commerce (including in-game purchase flows) and electronic communications are in scope; games themselves are not named. Microenterprises are exempt for services. See `/gameforge:game-accessibility-specialist`. | [46] |
@@ -293,7 +293,7 @@ GameForge's core bet is unchanged: Claude is strongest where it is the intellige
 | Need | Skill | What it does with this doc |
 |---|---|---|
 | Build a game with an agent loop | `/gameforge:game-vibe-code` | Spec, check, and small-diff loop; Playwright and `render_game_to_text` hooks; vibe-debt guardrails |
-| Generate and govern assets | `/gameforge:game-ai-assets` | Tool and licence matrix, provenance log, disclosure text for Steam, itch.io and the EU |
+| Generate and govern assets | `/gameforge:game-ai-assets` | Tool and license matrix, provenance log, disclosure text for Steam, itch.io and the EU |
 | Wire the engine to the agent | `/gameforge:game-godot-specialist`, `/gameforge:game-unity-specialist`, `/gameforge:game-unreal-specialist`, `/gameforge:game-threejs-specialist`, `/gameforge:game-web2d-specialist` | MCP setup, current APIs, engine-specific agent pitfalls |
 | Set the studio's AI stance | `/gameforge:game-creative-director`, [AI content policy](../templates/ai-content-policy.md) | What is allowed, what is disclosed, who signs off |
 | Architecture and MCP security | `/gameforge:game-technical-director` | Localhost-only servers, least privilege, review gates |
@@ -326,7 +326,7 @@ All accessed 2026-11-05. The date in parentheses is the publication or update da
 14. Meshy, "Meshy 6 launch": https://www.meshy.ai/blog/meshy-6-launch (Jan 2026)
 15. Tripo Smart Mesh P1.0 press release: https://finance.yahoo.com/sectors/technology/articles/tripo-ai-launches-smart-mesh-162600191.html (Mar 2026) ; Neural4D review: https://blog.neural4d.com/comparisons/tripo-3-1-model-review/
 16. Runware, Rodin Gen-2: https://runware.ai/docs/models/hyper3d-rodin-gen-2 ; Scenario, Rodin Gen-2.5: https://help.scenario.com/articles/3791851266-rodin-hyper3d-gen-2-5-models-the-essentials
-17. Tencent Hunyuan3D 2.1 licence: https://raw.githubusercontent.com/Tencent-Hunyuan/Hunyuan3D-2.1/main/LICENSE
+17. Tencent Hunyuan3D 2.1 license: https://raw.githubusercontent.com/Tencent-Hunyuan/Hunyuan3D-2.1/main/LICENSE
 18. Microsoft TRELLIS.2-4B model card: https://huggingface.co/microsoft/TRELLIS.2-4B (paper 2025-12-16)
 19. Cinevva, AI pixel-art generators: https://app.cinevva.com/guides/ai-pixel-art-generators ; Scenario, Retro Diffusion: https://help.scenario.com/en/articles/retro-diffusion-models-the-essentials/ ; Scenario textures: https://www.scenario.com/features/generate-textures
 20. Move AI, Gen 2: https://www.move.ai/gen-2

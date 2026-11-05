@@ -40,7 +40,7 @@ coding agents and shipping them on the web are first-class paths.
 - **Template:** `templates/ai-asset-log.md`, the provenance log that disclosures are drafted from.
 - **Starters:** `starters/threejs/` and `starters/web2d/`; `starters/claude-config/settings.json`
   now declares the GameForge marketplace so teammates are prompted to install it.
-- **Tests and CI:** `tests/hooks.test.sh` (111 cases, every engine fixture, with and without `jq`) on
+- **Tests and CI:** `tests/hooks.test.sh` (119 cases, every engine fixture, with and without `jq`) on
   Linux and macOS; `claude plugin validate --strict`; a plugin icon.
 - **`.gameforge/project.json`:** per-project config (engine, phase, pillars, commit convention, LFS
   threshold) created by `game-start` and read by hooks and skills.
@@ -51,6 +51,12 @@ coding agents and shipping them on the web are first-class paths.
   a "Working with AI Coding Agents" section per role, an integrity pass that removed anecdotes about
   named games that are not public record, persona memory claims replaced with file-based continuity,
   and long material moved into on-demand `references/` files (`SKILL.md` capped at 500 lines).
+- **Leaner context, measured with `claude plugin details`:** a skill now costs 8.3k tokens on
+  average when invoked (largest 9.8k), down from 10.8k (largest 16.6k), while carrying far more
+  material in on-demand `references/`. Descriptions were tightened to at most 400 characters, so 41
+  skills plus 11 subagents add about 7.1k tokens to a session, versus 5.8k for v2's 34 skills.
+- **Tool pre-approval hardened:** no skill pre-approves unscoped `Bash` or interpreter wildcards such
+  as `Bash(python3 *)`; the validator rejects both.
 - **Frontmatter:** removed fields Claude Code ignores (`version`, `memory`) and the forced
   `model: opus`, so skills follow the user's model choice. `context: fork` is kept only for
   report-style skills (`game-code-review`, `game-reverse-document`, `game-market-research`), because

@@ -44,7 +44,7 @@ everywhere else (docs, templates, genre packs, README) use ordinary relative lin
 so they refer to skills as `/gameforge:<skill>` and never link to repository files.
 
 **Skill frontmatter.** Only documented fields: `name` (equals the directory), `description`
-(third person, triggers plus a "Not for" boundary, at most 600 characters), `argument-hint`,
+(third person, triggers plus a "Not for" boundary, at most 400 characters), `argument-hint`,
 `allowed-tools`, `effort`, and where needed `context`, `disable-model-invocation`. Do not add
 `version`, `model` or `memory`. `allowed-tools` pre-approves tools, so never list bare `Bash`;
 scope it (`Bash(git diff *)`). `context: fork` runs the skill as a background subagent without the

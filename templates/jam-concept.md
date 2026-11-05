@@ -9,12 +9,13 @@
 | Field | Value |
 |-------|-------|
 | **Game Name** | [Working title — can change at submission] |
-| **Jam** | [Ludum Dare / GMTK / Global Game Jam / other] |
+| **Jam** | [Ludum Dare / GMTK / Global Game Jam / Vibe Jam / other] |
 | **Theme** | [Announced theme] |
 | **Theme Interpretation** | [Your angle — how does the theme connect to your mechanic?] |
 | **Genre** | [Platformer / Puzzle / Action / etc.] |
-| **Engine** | [Godot / Unity / Unreal / other] |
+| **Engine** | [Phaser 4 (2D web) / Three.js (3D web) / Kaplay (beginner 2D web) / Godot / Unity / Unreal / other] |
 | **Platform** | [Web (recommended for jams) / Windows / Mac] |
+| **AI use** | [Jam rule, quoted from the rules page: required / allowed with disclosure / banned] · [What we will use AI for: code / art / audio / text / voice / none] · logged in `AI-USE.md` |
 | **Solo or Team** | [Solo / Team of N] |
 | **Duration** | [48h / 72h] |
 
@@ -56,7 +57,7 @@ What does the player do every 30 seconds?
 - **Visual style:** [Pixel art / Low-poly / Hand-drawn / Minimalist]
 - **Color palette:** [3-5 colors max]
 - **Audio mood:** [Chiptuney / Ambient / Energetic / Silence]
-- **Reference game:** [One game that looks/feels like what you're targeting]
+- **Reference game:** [One game whose look or feel you're aiming near. A reference, not a copy: no assets, names or levels taken from it]
 
 ---
 
@@ -79,4 +80,4 @@ What does the player do every 30 seconds?
 
 ---
 
-*Template from [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) -- use with `/game-jam-mode`*
+*Template from [AlterLab GameForge](https://github.com/AlterLab-IEU/AlterLab_GameForge) -- use with `/gameforge:game-jam-mode`*

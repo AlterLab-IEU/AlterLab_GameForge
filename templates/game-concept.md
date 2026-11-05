@@ -21,7 +21,7 @@
 - **Sub-Genre:** [Roguelite, Metroidvania, Deckbuilder, etc.]
 - **Target Platform(s):** [PC / Console / Mobile / VR / Web]
 - **Input Method(s):** [Keyboard+Mouse / Gamepad / Touch / Motion]
-- **Engine:** [Godot 4 / Unity / Unreal Engine 5]
+- **Engine:** [Godot 4.7 / Unity 6.3 LTS or 6.6 / Unreal Engine 5.8 / Web: Three.js (3D), Phaser 4 or PixiJS 8 (2D), Kaplay (beginner 2D)]
 
 ---
 
@@ -159,6 +159,31 @@
 | [Game/Film 1] | [Specific mechanic, aesthetic, or feeling to emulate] |
 | [Game/Film 2] | [Specific mechanic, aesthetic, or feeling to emulate] |
 | [Game/Film 3] | [Specific mechanic, aesthetic, or feeling to avoid] |
+
+---
+
+## Originality
+
+GameForge helps with original games, genre games, and games built from your own designs and assets.
+It does not help recreate a specific existing game, even renamed or called "original" (Claude Code
+itself declines such requests since late October 2026). Genre conventions are shared; a particular
+game's levels, characters, names, art, audio, text and code are not.
+
+| Reference game | What we take (mechanic, structure, feel) | How far we move from it |
+|----------------|------------------------------------------|-------------------------|
+| [Title] | [e.g., "Run-based structure and between-run upgrades"] | [e.g., "Turn-based, a single shared map, no combat"] |
+| [Title] | [What we take] | [Distance] |
+
+**Identity elements that are ours:**
+1. **Core twist:** [The mechanic or combination none of the references has]
+2. **World and characters:** [Setting, cast and names, all original]
+3. **Look and sound:** [Art direction and audio identity, from our own or licensed assets]
+4. **Name and branding:** [Checked against existing titles and trademarks]
+
+**Distance check:**
+- [ ] A player describing the game would not say "it's [reference] with a new skin"
+- [ ] No assets, code, levels, names or text taken from a reference game, including ripped or extracted files
+- [ ] AI prompts never name the reference games, their characters or living artists
 
 ---
 

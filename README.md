@@ -114,7 +114,7 @@ against a shared spec and current research, and the web and AI-agent paths are f
 | 🧠 | **Studio subagents** | The 11 roles run as parallel subagents with project memory; the orchestrator delegates to them for independent reviews |
 | 🔬 | **Every skill upgraded** | Late-2026 engines and tools, an AI-agent section per role, unsourced anecdotes removed, deep material moved to on-demand `references/` |
 | 🛡️ | **Hooks that work** | Rewritten, wired and tested: session briefings, compaction recovery, commit and Git LFS guards, engine-file protection. Silent outside game projects |
-| ✅ | **Real validation** | A plugin-aware validator, 111 hook tests on Linux and macOS, and `claude plugin validate --strict` in CI |
+| ✅ | **Real validation** | A plugin-aware validator, 119 hook tests on Linux and macOS, and `claude plugin validate --strict` in CI |
 
 Full details: [CHANGELOG.md](CHANGELOG.md).
 
@@ -372,7 +372,7 @@ Every change runs three gates in CI:
 | Gate | Checks |
 |:---|:---|
 | `python3 scripts/validate.py` | Manifests and versions, documented frontmatter only, no unscoped `Bash` pre-approval, fork rules, size caps, every path and cross-skill reference resolves, doc links, counts quoted in docs |
-| `bash tests/hooks.test.sh` | 111 hook tests on Linux and macOS, every engine fixture, with and without `jq` |
+| `bash tests/hooks.test.sh` | 119 hook tests on Linux and macOS, every engine fixture, with and without `jq` |
 | `claude plugin validate . --strict` | Claude Code's own manifest and component validation |
 
 Content is held to the [skill quality rubric](docs/skill-quality-rubric.md): versions and policies are

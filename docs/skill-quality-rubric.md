@@ -17,7 +17,7 @@ The 5-dimension quality scoring system used to evaluate every GameForge skill an
 | Check | Rule |
 |---|---|
 | Frontmatter | Only documented Claude Code skill fields; `name` matches the directory; no `version`, `model` or `memory` |
-| Description | Third person, triggers plus a "Not for" boundary, at most 600 characters (it is loaded in every session) |
+| Description | Third person, triggers plus a "Not for" boundary, at most 400 characters (it is loaded in every session) |
 | Tool pre-approval | `allowed-tools` never pre-approves unscoped `Bash`; use patterns such as `Bash(git diff *)` |
 | Forked context | `context: fork` only for report-style skills, never combined with `AskUserQuestion` (subagents cannot ask) |
 | Size | `SKILL.md` at least 200 lines (agents, engine specialists) or 150 (workflows), at most 550 (target 500); deep material lives in `references/` |

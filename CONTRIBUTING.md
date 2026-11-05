@@ -97,7 +97,7 @@ Two layers: an automated gate that must pass, and the [5-dimension rubric](docs/
   (hard cap 550). Long code samples, catalogs and per-engine variants go in `references/*.md` inside
   the skill directory, each linked from `SKILL.md` with an instruction saying when to read it.
 - Frontmatter uses only documented Claude Code fields. Required: `name` (equals the directory),
-  `description` (at most 600 characters), `argument-hint`, `allowed-tools`. Usual: `effort` (`max`
+  `description` (at most 400 characters), `argument-hint`, `allowed-tools`. Usual: `effort` (`max`
   for the three directors, `high` for leads, specialists and heavy workflows, `medium` otherwise).
   Not allowed: `version`, `model`, `memory`.
 - `allowed-tools` pre-approves tools while the skill runs, so never list bare `Bash`; scope it, for
@@ -127,7 +127,7 @@ Two layers: an automated gate that must pass, and the [5-dimension rubric](docs/
 name: game-example
 description: >
   What the skill does, when to use it, its strongest trigger phrases, and one
-  "Not for X (use game-y)" boundary. Third person, at most 600 characters.
+  "Not for X (use game-y)" boundary. Third person, at most 400 characters.
 argument-hint: "[what to pass]"
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(git diff *)
 effort: high

@@ -205,18 +205,18 @@ Game feel is the tactile, kinesthetic sensation of interacting with a game's sys
 
 **Practical Takeaway**: Game feel is not a post-production polish pass. It is a core design pillar. Prototype feel early. If the basic interaction is not satisfying with placeholder art, no amount of polish will save it.
 
-### Oil Framework (Lars Doucet)
+### Oil (Lars Doucet, 2016)
 
-Doucet's Oil Framework is the complement to "juice" (the additive polish that makes interactions feel good). While juice adds pleasure, **oil removes pain.** Oil is the systematic elimination of friction that stands between the player's intent and the game's response.
+In "Oil it or Spoil it!" (Game Developer featured blog, 2016-08-10), Lars Doucet names the complement to "juice" (the additive polish that makes interactions feel good): "Juice adds pleasure, Oil removes pain." Juice amplifies what the player gets back from an input; oil reduces the friction and effort of making the input, and is mostly noticed when it is missing. Doucet's examples include contextual action buttons and showing enemy HP.
 
-**The 5 Categories of Oil**:
+**Five categories of oil** (GameForge's working breakdown for audits, not Doucet's):
 1. **Contextual Action Reduction**: Reduce the number of inputs required to perform common actions. If the player always opens a door before walking through it, open the door automatically when they walk toward it. Eliminate redundant confirmations for routine actions.
 2. **UI Streamlining**: Minimize navigational depth. If reaching a commonly-used feature requires 4 menu clicks, redesign until it requires 1. Flatten menu hierarchies. Provide shortcuts for power users. Make the most common action the default.
-3. **Intelligent System Behavior**: The game should anticipate player intent and act accordingly. Auto-sort inventory by relevance. Pre-select the most likely option in dialogues. Remember player preferences across sessions. Smart defaults that match what 80% of players would choose.
+3. **Intelligent System Behavior**: The game should anticipate player intent and act accordingly. Auto-sort inventory by relevance. Pre-select the most likely option in dialogues. Remember player preferences across sessions. Smart defaults that match what most players would choose.
 4. **Distinct Action Separation**: Ensure that different actions feel different and never conflict. If "attack" and "interact" are on the same button, context-sensitive logic must never misfire. Actions that should be separate must have separate inputs.
 5. **Information Visibility**: Display information the player needs at the moment they need it, without requiring them to seek it out. Tooltip timing, stat comparison on hover, contextual help that appears precisely when relevant.
 
-**The Oil Principle**: A game can be maximally juiced and still frustrating if basic interactions are needlessly friction-heavy. Apply oil before juice. Remove pain before adding pleasure.
+**GameForge's rule of thumb**: A game can be maximally juiced and still frustrating if basic interactions are needlessly friction-heavy. Apply oil before juice. Remove pain before adding pleasure.
 
 ### Juice Audit Warning
 
@@ -306,7 +306,7 @@ All AI-generated content must pass through five sequential gates before it ships
 
 **Gate 1 -- AI Generation**: Content is generated using approved tools (see Tool Recommendations below). The generator must use the project's established art direction, style guides, and design corpus as input. Batch generation without style constraints produces incoherent output.
 
-**Gate 2 -- Automated QA**: Automated checks validate structural integrity. For visual assets: resolution, format, color profile, naming convention, file size limits. For audio: sample rate, loudness normalization (LUFS targets), format compliance. For narrative: profanity filters, length constraints, structural validation (dialogue trees parse correctly). For 3D assets: poly count limits, UV validation, material slot verification. Automated QA catches ~60% of issues without human time.
+**Gate 2 -- Automated QA**: Automated checks validate structural integrity. For visual assets: resolution, format, color profile, naming convention, file size limits. For audio: sample rate, loudness normalization (LUFS targets), format compliance. For narrative: profanity filters, length constraints, structural validation (dialogue trees parse correctly). For 3D assets: poly count limits, UV validation, material slot verification. Automated QA catches format and budget errors cheaply, before any human review time is spent.
 
 **Gate 3 -- Domain Expert Review**: One domain expert reviews every piece of AI content before it enters production. The art director reviews visual content. The narrative director reviews dialogue and lore. The audio director reviews music and SFX. The game designer reviews mechanical suggestions. This is the critical gate -- automated QA catches format errors, but only a human catches tone, coherence, cultural sensitivity, and brand alignment issues.
 
@@ -316,14 +316,17 @@ All AI-generated content must pass through five sequential gates before it ships
 
 ### Tool Recommendations by Category
 
-| Category | Recommended Tools | Use Case |
-|---|---|---|
-| **Visual** | Scenario, Midjourney, Stable Diffusion (SDXL/SD3) | Concept art, texture drafts, mood boards, style exploration |
-| **Audio** | Suno, ElevenLabs, AIVA | Music prototyping, placeholder voice, adaptive score drafts |
-| **3D** | Meshy, Rodin (Microsoft), Tripo | Mesh generation from concepts, rapid 3D prototyping |
-| **Narrative** | Inworld AI, Convai | NPC personality authoring, conversational AI, dynamic dialogue |
+Tools worth evaluating as of November 2026. Vendor capability claims are the vendors'; read each tool's current terms before use.
 
-**Tool Selection Criteria**: Prefer tools that (1) allow commercial use of outputs, (2) provide provenance information about training data, (3) offer fine-tuning or style-locking capabilities, and (4) have clear IP ownership terms. Evaluate new tools quarterly as the landscape evolves rapidly.
+| Category | Tools to evaluate | Use Case | Licensing and quality notes |
+|---|---|---|---|
+| **2D and textures** | Scenario (style training, tileable PBR maps), Layer.ai, PixelLab and Retro Diffusion (pixel art) | Concept art, texture drafts, sprites, mood boards | "Seamless" textures do not always tile; check the edges |
+| **3D** | Meshy 6, Tripo, Rodin Gen-2 (Hyper3D/Deemos), TRELLIS.2 (Microsoft, MIT licence, runs locally), Hunyuan3D 2.1 (Tencent, open weights) | Props and background meshes | Hunyuan3D 2.1's licence does not cover the EU, UK or South Korea, outputs included. Hero meshes still need manual retopology |
+| **Audio** | ElevenLabs SFX v2, Stable Audio 3 (licensed training data; Small and Medium are open weights under the Stability AI Community License, Enterprise licence above US$1M revenue), Eleven Music (licensed training data, offered for commercial use) | SFX, ambience, music drafts | Do not ship Suno or Udio output: UMG and Sony's suit against Suno is unresolved, so treat it as dev-only placeholder at most |
+| **Voice** | Licensed TTS and voice tools | Placeholder or shipped voice | Clone a real performer's voice only with written consent (SAG-AFTRA 2025 IMA, below) |
+| **Live NPCs** | NVIDIA ACE (on-device small language model with speech in and out), Inworld (runtime and TTS), Convai | Conversational NPCs, dynamic dialogue | EU AI Act Art. 50 disclosure; Steam live-generated guardrails; harden against prompt injection |
+
+**Tool Selection Criteria**: Prefer tools that (1) allow commercial use of outputs in every territory you ship to, (2) provide provenance information about training data, (3) offer fine-tuning or style-locking capabilities, and (4) have clear IP ownership terms. Record each tool's terms with the date you read them in the project's provenance log (`design/ai-asset-log.md`, from the [AI asset log template](../templates/ai-asset-log.md)). Re-check terms quarterly; they change.
 
 ### The Design Corpus Approach
 
@@ -337,7 +340,7 @@ Do not generate AI content from generic prompts. Build a **design corpus** first
 
 ### Gameslop Awareness
 
-The term "gameslop" refers to low-quality games produced by flooding AI-generated content into storefronts without quality gates. By 2025, over 7,000 low-quality AI-generated games appeared on Steam, prompting platform-level countermeasures and player backlash. The GameForge pipeline exists specifically to prevent this.
+The term "gameslop" refers to low-quality games produced by flooding AI-generated content into storefronts without quality gates. By late 2026 the effect was visible on open storefronts: new itch.io pages per day doubled over two months without any rise in downloads or purchases, and on 2026-11-03 itch.io deleted terabytes of AI uploads and extended its "no AI" filter to search; Steam build reviews stretched to as many as 12 business days and Valve added pre-review checks from 2026-11-04 (reporting by Aftermath, VGC and Engadget, November 2026). In the GDC 2026 State of the Industry survey, 52% of respondents said generative AI is harming the industry. The GameForge pipeline exists specifically to keep your game out of that pile.
 
 **Warning Signs of Gameslop Production**:
 - AI content ships without passing through all 5 quality gates
@@ -346,25 +349,31 @@ The term "gameslop" refers to low-quality games produced by flooding AI-generate
 - AI-generated content is treated as final rather than as a draft
 - Studio shipping velocity increases but playtest scores decrease
 
-**The Standard**: If your game cannot pass the "could a knowledgeable player tell this was AI-generated?" test, the content quality is insufficient. AI-generated content in a shipped game should be indistinguishable from hand-authored content at the same quality tier.
+**The Standard**: If your game cannot pass the "could a knowledgeable player tell this was AI-generated?" test, the content quality is insufficient. AI-assisted content in a shipped game should meet the same bar as hand-authored content at the same quality tier, and it is still disclosed: meeting the bar is never a reason to hide where content came from.
 
 ### Legal and Ethical Framework
 
 **Copyright and IP Guidance**:
 - **Purely AI-generated content** (no meaningful human creative judgment in selection, arrangement, or modification) is generally **not copyrightable** under current US Copyright Office guidance. This means competitors can freely copy your unmodified AI output.
-- **AI-assisted content** (where a human exercises creative judgment in prompting, selecting, arranging, and modifying AI output) **is copyrightable**. The human's creative contribution is what receives protection.
-- **Practical implication**: Always apply meaningful human modification to AI output before it ships. This serves both quality (Gate 3) and legal protection.
+- **AI-assisted content** (where a human exercises creative judgment in selecting, arranging, and modifying AI output) **can be protected to the extent of the human contribution**. Prompts alone are not enough (US Copyright Office, Copyright and AI Part 2, 2025-01-29). The Supreme Court declined to hear *Thaler* on 2026-03-02, so human authorship remains required.
+- **Practical implication**: Always apply meaningful human modification to AI output before it ships, and record it in the provenance log. This serves both quality (Gate 3) and legal protection.
 
-**SAG-AFTRA Interactive Media Agreement** (ratified July 2025):
-- Voice actors and motion capture performers must give **informed consent** before their likeness, voice, or performance is used to train AI models.
-- Games using AI-generated performances based on union talent must provide **clear disclosure** in credits.
-- Studios must provide **usage reports** detailing how AI-generated content derived from performer data was used in the final product.
+**SAG-AFTRA Interactive Media Agreement** (ratified 2025-07-09):
+- Creating or using a **digital replica** of a performer's voice or likeness requires **informed consent and disclosure**, with a reasonably specific description of each intended use.
+- Performers receive **usage reports** on how their digital replicas were used, and can suspend consent during a strike.
 - This applies to any project employing SAG-AFTRA talent. Even if your project uses non-union performers, follow these standards as ethical baseline practice.
 
-**EU AI Act Compliance Considerations**:
-- Games using AI-generated content may need to disclose this to end users, depending on how the content is classified under the EU AI Act's risk tiers.
-- AI systems that interact with players in real-time (conversational NPCs, adaptive difficulty) may be classified as limited-risk and require transparency measures.
+**EU AI Act, Article 50** (transparency obligations, applicable since 2026-08-02):
+- AI systems that interact with players, including conversational NPCs, must tell players they are dealing with an AI unless that is obvious from context.
+- Runtime generative systems need machine-readable marking of their output (grace period to 2026-12-02 only for systems already on the market).
+- Deepfake-style content in evidently artistic or fictional works needs a disclosure that does not hamper the work. Fines reach EUR 15 million or 3% of worldwide turnover. This is our reading, not legal advice.
 - Maintain documentation of all AI tools used in production, their training data provenance (to the extent known), and the human review process applied to their output. This documentation supports compliance and due diligence.
+
+**Platform disclosure** (details in the [AI content policy template](../templates/ai-content-policy.md)):
+- **Steam** (rules rewritten 2026-01-16): disclose AI content that ships and is consumed by players, including artwork, sound, narrative, localization and marketing assets. Live-generated content also needs a description of its guardrails. Efficiency tools such as code assistants are exempt.
+- **Microsoft Store policy 11.16**: live generative AI must be disclosed in metadata and Partner Center, kept within Store policy, and given a player reporting path.
+- **itch.io**: a generative-AI disclosure on the project page, which feeds its "no AI" filter.
+- Draft every disclosure from the provenance log, not from memory. `/gameforge:game-ai-assets` runs the pipeline.
 
 ### Pipeline Integration Summary
 

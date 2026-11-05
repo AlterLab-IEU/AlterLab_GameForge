@@ -7,7 +7,7 @@ and covered by [`tests/hooks.test.sh`](../tests/hooks.test.sh).
 ## Design rules
 
 1. **Silent outside game projects.** Every hook first detects an engine (Godot, Unity, Unreal,
-   Three.js / R3F, Babylon.js, PlayCanvas, Phaser, PixiJS, Kaplay, Excalibur, Bevy, GameMaker,
+   Three.js / R3F, Babylon.js, PlayCanvas, Phaser, PixiJS, Kaplay (and legacy Kaboom), Excalibur, LittleJS, Bevy, GameMaker,
    Defold, LOVE) or a GameForge marker. In any other repository they exit immediately with no output.
 2. **No files without opt-in.** Hooks that write state (`pre-compact`, `session-end`,
    `subagent-track`, `stop-failure`) only run once `production/session-state/` or `.gameforge/` exists,

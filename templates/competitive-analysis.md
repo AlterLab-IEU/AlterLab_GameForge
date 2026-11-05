@@ -43,7 +43,7 @@ Answer these honestly. If the genre is oversaturated, say so.
 - **Barrier to entry**: [How hard is it to ship a "good enough" game in this genre?]
 - **Trend lifespan**: [Is this genre trending up from a catalyst, or has the wave already peaked?]
 
-**Reference**: Vampire Survivors (2022) identified that "casual bullet hell" had massive demand but zero supply -- the entire genre gap was invisible until Luca Galante filled it. Balatro (2024) found that "poker roguelike" was an oxymoron nobody had tried, combining two audiences that had never overlapped. Identify the gap before you fill it.
+**Note**: Gaps are rarely "zero supply". Breakout hits usually combine mechanics or audiences that already existed in smaller games, often ones their developers credit as inspiration. Look for small games with devoted audiences and thin competition, not for an empty market. Identify the gap before you fill it.
 
 ---
 
@@ -216,13 +216,13 @@ What do indirect competitors do well that your direct competitors do not? These 
 
 Complete this sentence: **"[Project name] is the only [genre] game that [unique differentiator]."**
 
-If you cannot complete this sentence convincingly, your game has a positioning problem. Every successful indie game can complete this sentence:
+If you cannot complete this sentence convincingly, your game has a positioning problem. Illustrative examples (Ember Drift is a fictional project; the other two show the shape of the claim):
 
-- "Hollow Knight is the only Metroidvania that delivers AAA production quality at an indie price point with 40+ hours of content."
-- "Celeste is the only precision platformer that treats its narrative about mental health with the same care as its mechanical design."
-- "Hades is the only roguelike where dying is the primary narrative progression mechanic."
-- "Balatro is the only roguelike that uses poker as its core mechanical language."
-- "Vampire Survivors is the only bullet hell game that removes the need for aiming."
+- "Ember Drift is the only deck-builder where your deck is also the map you travel across."
+- "[Project] is the only cozy management game where the shop closes for good if you neglect it."
+- "[Project] is the only co-op puzzle game where the two players never see the same screen."
+
+Before using an "only" claim on a store page, search the store and your genre tags for counterexamples. If one exists, narrow the claim until it is true.
 
 ### 6.2 Differentiation Breakdown
 

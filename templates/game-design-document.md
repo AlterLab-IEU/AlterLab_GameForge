@@ -13,9 +13,9 @@
 [2-3 paragraph summary of the game. What is it? Who is it for? What makes it worth building?]
 
 - **Genre:** [Primary genre / secondary genre]
-- **Platform(s):** [PC, Console, Mobile, VR]
+- **Platform(s):** [PC, Console, Mobile, Web, VR]
 - **Target Audience:** [Age range, player profile, comparable game audiences]
-- **Engine:** [Godot 4 / Unity / Unreal Engine 5]
+- **Engine:** [Godot 4.7 / Unity 6.3 LTS or 6.6 / Unreal Engine 5.8 / Web: Three.js, Phaser 4, PixiJS 8]
 - **Team Size:** [Number of contributors]
 - **Target Release:** [Quarter and year]
 
@@ -31,7 +31,7 @@ List 3-5 non-negotiable design principles that guide every decision in this proj
 | 2 | [Name] | [Statement] |
 | 3 | [Name] | [Statement] |
 
-Reference `game-pillars.md` for detailed pillar development, including how to test features against pillars and examples from published games.
+See the [game pillars template](game-pillars.md) for detailed pillar development, including how to test features against pillars and examples from published games.
 
 ---
 

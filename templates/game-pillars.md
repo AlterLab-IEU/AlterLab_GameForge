@@ -5,6 +5,10 @@
 - **Date**: [date]
 - **Version**: [revision number]
 
+> Save as `design/pillars.md`. Copy the short pillar names into the `"pillars"` array of
+> `.gameforge/project.json` so every GameForge skill and subagent sees them (the Creative Director
+> keeps the two in sync).
+
 ## What Are Design Pillars?
 Design pillars are 3-5 non-negotiable principles that guide every design decision. Good pillars are:
 - **Falsifiable**: You can point to a feature and say "this violates pillar X"
@@ -32,8 +36,12 @@ Design pillars are 3-5 non-negotiable principles that guide every design decisio
 - **What this excludes**: [What we will NOT do because of this pillar]
 - **Test**: [How to verify a feature aligns with this pillar]
 
-## Examples from Published Games
-| Game | Pillars |
+## Illustrative Examples
+These are our readings of published games, written to show the format. They are not the studios'
+internal pillar lists. Only "multiplicative gameplay" is the developers' own term (Nintendo's GDC
+2017 talk on Breath of the Wild).
+
+| Game | Pillars (our reading) |
 |------|---------|
 | Breath of the Wild | Multiplicative gameplay, Physics-driven interactions, Player agency |
 | Borderlands 2 | Guns (variety), Loot (reward), Humor (tone) |
@@ -42,7 +50,7 @@ Design pillars are 3-5 non-negotiable principles that guide every design decisio
 
 ## How to Use Pillars
 1. Post them visibly where the team works
-2. Reference them in every design review (`/game-design-review`)
+2. Reference them in every design review (`/gameforge:game-design-review`)
 3. When debating a feature, ask: "Which pillar does this serve?"
 4. If a feature doesn't serve any pillar, cut it
 5. Review and update pillars only at major milestones, not mid-sprint

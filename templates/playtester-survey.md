@@ -14,17 +14,34 @@
 This is a three-part instrument: pre-play demographics, during-play observation, and post-play feedback. The facilitator fills in Part 2 during the session. The playtester fills in Parts 1 and 3.
 
 **Facilitator responsibilities:**
+- Complete the consent step below before anything is recorded
 - Print or share Part 1 before the session starts
 - Observe silently during play -- do not help, hint, or explain unless the tester is stuck for more than 2 minutes on something that is not the subject of the test
 - Timestamp observations in Part 2
 - Hand off Part 3 immediately after the tester puts down the controller -- do not let them "think about it later"
 
 **Sample size guidance:**
-- 5 testers reveal ~85% of usability issues (Nielsen, 2000)
-- 8-12 testers provide reliable quantitative signal on Likert scales
-- 20+ testers required for statistically significant NPS data
+- In Nielsen's model, about 5 testers from one user group find roughly 85% of usability problems (Nielsen, "Why You Only Need to Test with 5 Users", 2000). Run several small rounds rather than one large one.
+- 8-12 testers before reading much into Likert averages (rule of thumb)
+- 20+ testers before treating NPS as more than an anecdote (rule of thumb; NPS swings widely in small samples)
 
-**Reference**: Nintendo's internal playtest methodology isolates testers behind one-way mirrors with zero facilitator intervention. Larian Studios ran over 1,000 community feedback sessions during Baldur's Gate 3 early access, structured around specific hypothesis testing per patch.
+---
+
+## Consent and Privacy (Before Part 1)
+
+Complete this before the session starts and before any recording begins. Keep signed forms apart from session data; everywhere else, testers are known only by an ID (P01, P02). The full consent form, data-handling rules and EU/UK notes are in `/gameforge:game-playtest`. This is practical guidance, not legal advice.
+
+| Item | What to tell the tester | Done |
+|------|-------------------------|------|
+| Purpose | What is being tested and why; "we are testing the game, not you"; they can stop at any time | [ ] |
+| What is recorded | Separate opt-ins: screen and game audio / voice / webcam / gameplay telemetry (list the events). Declining one does not exclude them | [ ] |
+| Who sees it | Named people or roles; never published. If notes or recordings go to an outside or AI service, name it here, or do not send them | [ ] |
+| Retention | Raw recordings deleted by [date]; pseudonymized notes kept for [the life of the project] | [ ] |
+| Withdrawal | One email to [address] with their tester ID removes their recordings and data within [14] days | [ ] |
+| Confidentiality | The build is unreleased: no sharing, streaming or screenshots [until date] | [ ] |
+| Minors | Default to adult testers. Anyone under 18 needs written guardian consent in addition to their own agreement, with the guardian present or reachable. Under 13 in the US: COPPA applies to online data collection; if in doubt, take notes only and record nothing | [ ] |
+
+**Tester ID:** [P__] | **Consent form signed:** [ ] Yes | **Opt-ins:** [ ] Screen [ ] Voice [ ] Webcam [ ] Telemetry | **Guardian consent (if under 18):** [ ] Attached
 
 ---
 
@@ -34,8 +51,8 @@ This is a three-part instrument: pre-play demographics, during-play observation,
 
 | Field | Response |
 |-------|----------|
-| Age range | [ ] Under 18 / [ ] 18-24 / [ ] 25-34 / [ ] 35-44 / [ ] 45+ |
-| Gaming platform(s) | [ ] PC / [ ] PlayStation / [ ] Xbox / [ ] Nintendo Switch / [ ] Mobile / [ ] VR |
+| Age range | [ ] Under 18 (guardian consent required) / [ ] 18-24 / [ ] 25-34 / [ ] 35-44 / [ ] 45+ |
+| Gaming platform(s) | [ ] PC / [ ] PlayStation / [ ] Xbox / [ ] Nintendo Switch or Switch 2 / [ ] Mobile / [ ] Web browser / [ ] VR |
 | Hours per week gaming | [ ] 0-5 / [ ] 5-10 / [ ] 10-20 / [ ] 20+ |
 | Preferred input method | [ ] Keyboard + Mouse / [ ] Controller / [ ] Touch / [ ] No preference |
 
@@ -241,7 +258,7 @@ Answer in your own words. There are no wrong answers.
 - Scores 7-8 = Passives
 - Scores 9-10 = Promoters
 - NPS = (% Promoters) - (% Detractors)
-- Target: NPS > 30 for indie games, NPS > 50 for high-confidence launch readiness
+- Targets (GameForge rule of thumb, not an industry benchmark): NPS > 30 is encouraging for an indie game; compare against your own earlier rounds rather than external numbers
 
 ### 3.6 Purchase Intent
 

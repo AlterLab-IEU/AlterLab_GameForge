@@ -1,6 +1,6 @@
 # MCP Integrations for Game Development
 
-Model Context Protocol (MCP) servers give a coding agent tools beyond your files and shell. With them it can read the Unity console, spawn actors in Unreal, run a Godot project, drive Blender, or click through a web build. This doc covers the servers that matter for indie game development as of **2026-11-05**: who maintains each one, how mature it is, how to install it (only where the command is verified), what it can do, and what it can break.
+Model Context Protocol (MCP) servers give a coding agent tools beyond your files and shell [14]. With them it can read the Unity console, spawn actors in Unreal, run a Godot project, drive Blender, or click through a web build. This doc covers the servers that matter for indie game development as of **2026-11-05**: who maintains each one, how mature it is, how to install it (only where the command is verified), what it can do, and what it can break.
 
 For when to use AI at all, see [AI-native game development](ai-native-gamedev.md). For engine choice, see [engine comparison](engine-comparison.md).
 
@@ -30,7 +30,7 @@ For when to use AI at all, see [AI-native game development](ai-native-gamedev.md
 | **Blender** | None confirmed | ahujasid/mcp-for-blender (MIT, ~33k stars) [10] | Community, popular | Socket on `localhost:9876`, **no auth, no encryption** [10] |
 | **PlayCanvas** | PlayCanvas Editor MCP server [11] | — | New, actively developed | `127.0.0.1:52000` [11] |
 | **Web builds (any engine)** | Playwright MCP (Microsoft) [12] | — | Mature | Local browser |
-| **Figma** | Remote server `https://mcp.figma.com/mcp` [13] | — | Official; write-to-canvas in beta | OAuth |
+| **Figma** | Remote server `https://mcp.figma.com/mcp` [13] | — | Official; write-to-canvas in beta | Hosted; Figma account sign-in |
 | **Aseprite / Tiled / LDtk** | None | pixel-mcp, aseprite-mcp, tiled-ai; no LDtk server found [15][16] | Early, single maintainers | Local |
 | **Cascadeur** | Simple MCP server in 2026.2 [17] | — | New | — |
 | **ElevenLabs** | Hosted server `https://api.elevenlabs.io/v1/mcp` [18] | — | Official; local server deprecated | OAuth; uses credits |
@@ -57,14 +57,7 @@ claude mcp get godot
 claude mcp remove godot
 ```
 
-**Scopes**
-- `local` is the default and applies to you in this project.
-- `project` writes the project's `.mcp.json` and is shared through git.
-- `user` applies across all your projects.
-
-**Other notes**
-- Inside a session, `/mcp` shows server status and handles authentication.
-- The SSE transport is deprecated; prefer HTTP where a server offers it [19].
+**Scopes:** `local` (the default: you, in this project), `project` (writes `.mcp.json`, shared through git) and `user` (all your projects). Inside a session, `/mcp` shows server status and handles authentication. The SSE transport is deprecated; prefer HTTP where a server offers it [19].
 
 A project-scoped `.mcp.json` looks like this. An entry without `type` is read as stdio:
 
@@ -112,7 +105,7 @@ A project-scoped `.mcp.json` looks like this. An entry without `type` is read as
 - **What it adds:** Unity skills under `/unity:`. Unity's Claude Code page says the plugin itself ships skills that drive the editor through Unity CLI commands, not through MCP [2].
 
 **CoplayDev/unity-mcp ("MCP for Unity")** [4]
-- **Basics:** MIT licence, about 15.7k stars, v10.3.0 (2026-10-04). Supports Unity 2021.3 LTS through 6.x and needs Python 3.10+ with `uv`.
+- **Basics:** MIT license, about 15.7k stars, v10.3.0 (2026-10-04). Supports Unity 2021.3 LTS through 6.x and needs Python 3.10+ with `uv`.
 - **Install:**
   - UPM git URL: `https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main`
   - OpenUPM: `openupm add com.coplaydev.unity-mcp`
@@ -193,9 +186,8 @@ The ecosystem is fragmented, with many forks. Check commit activity and read the
   - Keep `BLENDER_HOST=localhost`.
   - Turn on safe mode (`BLENDER_MCP_SAFE_MODE=1`), which checks scripts before they run.
   - Set `DISABLE_TELEMETRY=true` to turn off all telemetry; content collection is opt-in.
-- **Licensing:** `generate_3d` inherits each provider's licence. Hunyuan3D's licence excludes the EU, UK and South Korea. See [AI-native game development](ai-native-gamedev.md#3d).
-
-An official Blender server is **UNVERIFIED**.
+- **Licensing:** `generate_3d` inherits each provider's license. Hunyuan3D's license excludes the EU, UK and South Korea. See [AI-native game development](ai-native-gamedev.md#3d).
+- **Official server:** none confirmed; a Blender-run MCP server is **UNVERIFIED**.
 
 ---
 
@@ -208,7 +200,7 @@ An official Blender server is **UNVERIFIED**.
 - **Tools:** 130 tools in 15 categories, including entities, scripts, assets, scenes, builds, store, runtime and VCS. Only one agent should own the Editor port at a time.
 
 **Three.js, Babylon.js, Phaser, PixiJS**
-- No official MCP servers were found for these. Use their `llms.txt` files (below) and a browser loop.
+- No official MCP servers were found for these; three.js's own `llms.txt` says the same [21]. Use their `llms.txt` files (below) and a browser loop.
 - Phaser's `llms.txt` tells agents to start with **Phaser AE**, a separate PolyForm Shield-licensed product. Phaser 4 remains the MIT open-source framework [21].
 
 **Playwright MCP** (Microsoft; Apache-2.0; about 39.2k stars) [12]
@@ -262,6 +254,7 @@ An `llms.txt` file gives an agent current, curated docs instead of stale trainin
 | Babylon.js | Yes | — |
 | PlayCanvas | Yes | Also agent skills: `npx skills add playcanvas/skills` |
 | Phaser | Yes | Steers agents to Phaser AE (see above) |
+| PixiJS | Yes: `pixijs.com/llms.txt` | — |
 | Needle Engine | Yes | — |
 | Figma | Yes | — |
 | Claude Code docs | Yes: `code.claude.com/docs/llms.txt` | — |
@@ -344,9 +337,9 @@ All accessed 2026-11-05. The date in parentheses is the publication or update da
 19. Anthropic, Claude Code MCP docs: https://code.claude.com/docs/en/mcp
 20. Digital Production, Unreal Engine 5.7: https://digitalproduction.com/2025/11/12/unreal-engine-5-7-foliage-pcg-and-in-editor-ai/ (2025-11-12)
 21. Direct `llms.txt` checks (2026-11-05):
-    - Returned 200: https://docs.unity.com/llms.txt , https://defold.com/llms.txt , https://developers.figma.com/llms.txt , https://threejs.org/llms.txt , https://phaser.io/llms.txt , https://doc.babylonjs.com/llms.txt , https://engine.needle.tools/docs/llms.txt
+    - Returned 200: https://docs.unity.com/llms.txt , https://defold.com/llms.txt , https://developers.figma.com/llms.txt , https://threejs.org/llms.txt , https://phaser.io/llms.txt , https://pixijs.com/llms.txt , https://doc.babylonjs.com/llms.txt , https://engine.needle.tools/docs/llms.txt , https://code.claude.com/docs/llms.txt
     - Returned 404: https://docs.godotengine.org/llms.txt , https://bevy.org/llms.txt , https://docs.blender.org/llms.txt
-    - Returned 403: https://dev.epicgames.com/llms.txt
+    - Returned 403: https://dev.epicgames.com/llms.txt , https://manual.gamemaker.io/llms.txt
 22. Godot contribution policy: https://godotengine.org/article/contribution-policy-2026/ (2026-06-30) ; The Register: https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344 (2026-07-01)
 23. R3F, Threlte and TresJS `llms.txt`: https://r3f.docs.pmnd.rs/llms.txt , https://threlte.xyz/llms.txt , https://docs.tresjs.org/llms.txt
 24. Anthropic, Claude Code permissions: https://code.claude.com/docs/en/permissions

@@ -136,6 +136,34 @@ when they finish. Keep it short:
 **Blocked on:** final SFX for dash (audio)
 ```
 
+### Where skills write
+
+Canonical locations for the documents GameForge skills create. Skills read these paths first and
+create them only when the user asks for the deliverable.
+
+| Path | Written by | Contents |
+|---|---|---|
+| `design/concept.md`, `design/vision.md`, `design/pillars.md` | brainstorm, creative director | Concept, vision, pillars (pillar names mirrored in `project.json`) |
+| `design/gdd.md` or `design/gdd/` | `game-gdd-author` | Game design document |
+| `design/systems-index.md` | game designer, GDD author | Every system, owner, status, dependencies |
+| `design/decisions/creative-log.md` | creative director | Creative decision records |
+| `design/vibe-spec.md` | `game-vibe-code` | One-page spec for an agent-built game |
+| `design/art-bible.md`, `design/sound-bible.md` | art and audio directors | Style authorities |
+| `design/ai-content-policy.md` | creative and technical directors | AI-use stance and rules |
+| `design/ai-asset-log.md` | `game-ai-assets`, everyone who generates assets | Provenance log; source of all AI disclosures |
+| `design/balance/`, `design/economy/` | balance check, economy designer | Tuning data, changelogs, economy models |
+| `design/ux/`, `design/accessibility/` | UX designer, accessibility specialist | Flows, audits, accommodation matrix |
+| `design/narrative/` | narrative director | Scripts, characters, lore |
+| `design/prototypes/` | `game-prototype` | Prototype questions and reports |
+| `docs/architecture/` | technical director, reverse-document, multiplayer | Architecture overviews, `adr-NNN-<slug>.md`, performance budgets |
+| `production/reviews/` | `game-code-review` | `code-review-YYYY-MM-DD-<slug>.md` reports |
+| `production/sprints/` | `game-sprint-plan`, retrospective | `sprint-NN.md`, `sprint-NN-retro.md`, `velocity.md` |
+| `production/milestones/` | producer, retrospective, postmortem | Milestone reviews, gates, post-mortems |
+| `production/releases/` | `game-launch`, `game-web-publish` | Release checklists, build reports, AI disclosure drafts |
+| `production/risk-register.md`, `production/cut-list.md`, `production/calendar.md` | producer, scope check | Risks, cut lists, external dates |
+| `tests/` | QA lead, vibe-code, multiplayer, playtest | Test plans, gates, playtest reports, end-to-end checks |
+| `tools/` | balance check, economy designer, vibe-code | Simulators and check scripts |
+
 ## How GameForge Hooks Adapt
 
 Hooks detect the engine from its project file (`project.godot`,

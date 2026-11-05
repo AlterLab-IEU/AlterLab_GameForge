@@ -18,7 +18,7 @@ This audit covers four disability categories, platform-specific requirements, le
 2. **Beta**: Audit the build against all planned items. Mark items as "Implemented," "Partial," or "Missing."
 3. **Pre-release**: Final verification. All "Planned" items must be "Implemented" or have documented justification for deferral.
 
-**Reference**: The Last of Us Part II (Naughty Dog, 2020) shipped with over 60 accessibility features spanning all four categories and remains the platinum standard for AAA accessibility. Celeste (Matt Makes Games, 2018) proved that a 3-person indie team can ship meaningful accessibility through its Assist Mode. Forza Horizon 5 (Playground Games, 2021) demonstrated accessible open-world design with sign language support, screen reader integration, and one-touch driving.
+**Reference points** (publicly documented): The Last of Us Part II (Naughty Dog, 2020) shipped with more than 60 accessibility settings, grouped into vision, hearing and motor presets (Naughty Dog, PlayStation Blog, June 2020). Celeste (2018) shows how much one well-designed Assist Mode (game speed, invincibility, extra stamina and dashes) can do for a small team's game. Forza Horizon 5 (Playground Games) added picture-in-picture ASL and BSL interpreters to its cutscenes in a March 2022 update (announced on Xbox Wire, November 2021).
 
 **Core principle**: Accessibility is not charity. It is design quality. Every accommodation listed below improves the experience for players with and without disabilities. Subtitles benefit noisy environments. Colorblind modes help in bright sunlight. Remappable controls let everyone find their comfort.
 
@@ -58,14 +58,14 @@ Accommodations for players with limited mobility, dexterity, or fine motor contr
 | [ ] Lock-on targeting system | [Status] | High | Alternative to manual aiming |
 | [ ] Auto-target nearest enemy option | [Status] | Medium | Reduces aiming requirement entirely |
 | [ ] Adjustable combat timing windows | [Status] | Medium | Parry/dodge windows can be widened |
-| [ ] One-button combo / simplified combat mode | [Status] | Medium | Celeste's Assist Mode approach |
+| [ ] One-button combo / simplified combat mode | [Status] | Medium | Keep the fantasy, drop the execution demand |
 
 ### 1.4 Navigation Assists
 
 | Item | Status | Priority | Notes |
 |------|--------|----------|-------|
 | [ ] Skip platforming / traversal challenge option | [Status] | Medium | Content accessibility -- do not gatekeep story behind motor skill |
-| [ ] Auto-platforming / assisted navigation mode | [Status] | Medium | Forza Horizon 5's one-touch driving model |
+| [ ] Auto-platforming / assisted navigation mode | [Status] | Medium | Comparable to steering and braking assists in racing games |
 | [ ] Adjustable movement speed | [Status] | Medium | |
 | [ ] Path guidance / breadcrumb system | [Status] | Low | Assists with navigation without removing challenge |
 
@@ -79,12 +79,14 @@ Accommodations for players who are blind, have low vision, or have color vision 
 
 | Item | Status | Priority | Notes |
 |------|--------|----------|-------|
-| [ ] Protanopia filter/mode (red-green, ~1% of males) | [Status] | **Critical** | Most common color vision deficiency |
-| [ ] Deuteranopia filter/mode (red-green, ~5% of males) | [Status] | **Critical** | Second most common |
-| [ ] Tritanopia filter/mode (blue-yellow, ~0.01%) | [Status] | High | Less common but still necessary |
+| [ ] Protanopia filter/mode (red-green, ~1% of males; the milder protanomaly is another ~1%) | [Status] | **Critical** | Reds read as dark: test red warnings and health bars |
+| [ ] Deuteranopia filter/mode (red-green, ~1% of males; the milder deuteranomaly is ~5%) | [Status] | **Critical** | Deutan types are the most common color vision deficiency overall |
+| [ ] Tritanopia filter/mode (blue-yellow; tritan types are rare, on the order of 1 in 30,000-50,000 people) | [Status] | High | Rare but still necessary |
 | [ ] Color is never the sole information channel | [Status] | **Critical** | Always pair color with shape, pattern, text, or position |
 | [ ] Customizable UI colors (enemy/ally/neutral indicators) | [Status] | High | Let players define their own color scheme |
 | [ ] Colorblind-safe default palette used throughout | [Status] | High | Design for colorblind players from the start, not as a filter |
+
+Prevalence figures are for inherited color vision deficiency in men of Northern European descent (about 8% in total), per Colour Blind Awareness (colourblindawareness.org).
 
 ### 2.2 Low Vision Support
 
@@ -95,7 +97,7 @@ Accommodations for players who are blind, have low vision, or have color vision 
 | [ ] High-contrast mode (UI and gameplay elements) | [Status] | High | Distinct outlines, reduced visual noise |
 | [ ] High-contrast subtitle background | [Status] | **Critical** | White text on dark background with opacity control |
 | [ ] Adjustable screen magnification | [Status] | Medium | Useful for detailed UI interaction |
-| [ ] Large, clear fonts (sans-serif, minimum 28px at 1080p base) | [Status] | High | Avoid decorative fonts for gameplay-critical text |
+| [ ] Default text at or above XAG 101 minimums (26 px on console and 18 px on PC at 1080p, measured as body height), with a sans-serif option | [Status] | High | Avoid decorative fonts for gameplay-critical text |
 | [ ] Item/interactable highlighting (glow, outline, ping) | [Status] | High | Helps low-vision players find interactive elements |
 | [ ] Minimap with adjustable size and zoom | [Status] | Medium | |
 
@@ -181,9 +183,9 @@ Accommodations for players with cognitive disabilities, learning differences, AD
 |------|--------|----------|-------|
 | [ ] Content warnings for potentially triggering material (flashing lights, gore, spiders, body horror) | [Status] | High | |
 | [ ] Photosensitivity mode (reduce or eliminate flashing/strobing effects) | [Status] | **Critical** | Epilepsy is a medical risk, not a preference |
-| [ ] Arachnophobia mode / phobia-sensitive alternatives | [Status] | Medium | Grounded (Obsidian) proved this is both possible and appreciated |
+| [ ] Arachnophobia mode / phobia-sensitive alternatives | [Status] | Medium | Grounded (Obsidian, 2020) ships an arachnophobia setting that changes how its spiders look |
 | [ ] Motion sickness reduction options (reduced camera shake, FOV slider, motion blur toggle) | [Status] | High | |
-| [ ] FOV slider (for 3D games) | [Status] | High | 60-120 range minimum |
+| [ ] FOV slider (for 3D games) | [Status] | High | 60-120 range minimum (rule of thumb) |
 | [ ] Screen shake intensity slider (including off) | [Status] | High | |
 
 ### 4.4 Reading and Comprehension
@@ -202,17 +204,17 @@ Accommodations for players with cognitive disabilities, learning differences, AD
 
 ### 5.1 Xbox Accessibility Guidelines (XAGs)
 
-Microsoft's XAGs are the most comprehensive platform-specific accessibility standard. Meeting them is required for Xbox certification and strongly recommended for all platforms.
+Microsoft's Xbox Accessibility Guidelines (version 3.2, June 2023) are best-practice guidance, not Xbox certification requirements: Microsoft states they are not intended as a checklist for any compliance or legal requirement. They are the most detailed platform-holder guidance available and worth meeting on every platform. Certification requirements live in each platform's partner documentation.
 
-| XAG Category | Requirement | Status | Notes |
+| XAG Category | Guideline | Status | Notes |
 |-------------|-------------|--------|-------|
-| Text display | Minimum 28px at 1080p, scalable to 200% | [Status] | |
-| Contrast ratio | 4.5:1 minimum for UI text | [Status] | |
+| Text display (XAG 101) | Default text at least 26 px on console and 18 px on PC/VR at 1080p (52 px and 36 px at 4K), scalable to 200% | [Status] | Measured as body height: ascender to descender |
+| Contrast (XAG 102) | 4.5:1 for standard text and important visuals, 3:1 for large text, 7:1 in a high-contrast mode | [Status] | |
 | Color independence | No information conveyed by color alone | [Status] | |
-| Screen narration | All UI elements navigable by screen reader | [Status] | Required for Xbox cert |
+| Screen narration | All UI elements navigable by screen reader | [Status] | Use the platform's narrator APIs where available |
 | Input | Full remapping, toggle/hold options, copilot support | [Status] | Xbox Copilot allows two controllers on one profile |
 | Difficulty | Multiple options that do not gatekeep content | [Status] | |
-| Photosensitivity | No flashing above 3 Hz without warning/option to disable | [Status] | |
+| Photosensitivity (XAG 118) | No flashes more than about three per second over about 20% or more of the screen (including saturated-red flashes), and no high-contrast striped patterns | [Status] | Remove triggers; a warning screen is not a substitute |
 | Audio | Independent volume channels, visual sound indicators | [Status] | |
 | Subtitles | Available, resizable, speaker-identified, backgrounded | [Status] | |
 
@@ -232,7 +234,7 @@ Microsoft's XAGs are the most comprehensive platform-specific accessibility stan
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
-| Handheld mode text legibility (720p, 6.2" screen) | [Status] | Text must be readable on the small handheld screen |
+| Handheld mode text legibility (Switch: 720p on a 6.2-7" screen; Switch 2: 1080p, 7.9") | [Status] | Text must be readable on the small handheld screen |
 | Joy-Con single-handed play support | [Status] | If applicable to your input scheme |
 | Touch input alternatives (handheld mode) | [Status] | |
 | Pro Controller and adaptive controller support | [Status] | |
@@ -266,7 +268,15 @@ Microsoft's XAGs are the most comprehensive platform-specific accessibility stan
 
 ### 6.1 European Accessibility Act (EAA)
 
-Effective June 2025, the EAA requires products and services sold in the EU to meet accessibility standards. Games sold through digital storefronts are potentially in scope.
+In force since **2025-06-28**. Games are not named as a category, but these parts of a game business are in scope:
+
+- **Consumer computing hardware, including consoles** (obligations fall on the hardware maker).
+- **E-commerce services**, which covers storefronts and **in-game purchase flows** sold to EU consumers (store screens, currency purchases, checkout, receipts).
+- **Electronic communications services**: the basis for arguments that in-game text and voice chat are covered. This reading is contested; get advice if chat is central to your game.
+- **Microenterprise exemption:** businesses with fewer than 10 staff and an annual turnover or balance sheet of at most EUR 2 million are exempt for **services** (not for products).
+- **Standard:** EN 301 549 V4.1.1, the first version written for the EAA, was published by ETSI, CEN and CENELEC on 2026-09-02. It gives a presumption of conformity only once it is cited in the Official Journal of the EU, which had not happened as of early November 2026. Check the Official Journal before relying on it; until then, auditing against WCAG 2.1 AA (the basis of V3.2.1) is the practical baseline for menus, store and chat UI.
+
+This is practitioner guidance, not legal advice.
 
 | Requirement | Status | Notes |
 |-------------|--------|-------|
@@ -274,6 +284,8 @@ Effective June 2025, the EAA requires products and services sold in the EU to me
 | Operable: UI navigable by all users | [Status] | Keyboard/controller navigation, no timing-dependent-only interaction |
 | Understandable: information and UI operation is understandable | [Status] | Clear language, consistent navigation, error prevention |
 | Robust: content interpretable by assistive technologies | [Status] | Screen reader compatibility, semantic UI structure |
+| Purchase flow accessible end to end (store, currency purchase, confirmation) | [Status] | E-commerce scope; skip if the game sells nothing in-game |
+| Accessibility information published for in-scope services | [Status] | How the service meets the requirements, in plain language |
 
 **Risk assessment**: [Low / Medium / High -- based on distribution channels and EU audience size]
 
@@ -286,24 +298,23 @@ US law requiring advanced communications services (including in-game text and vo
 | Text chat accessible via screen reader | [If game has text chat] | [Status] | |
 | Voice chat accessible via text-to-speech / speech-to-text | [If game has voice chat] | [Status] | |
 | UI for communication features accessible | [If game has social features] | [Status] | |
-| Waiver on file (if applicable) | [If claiming undue burden] | [Status] | FCC allows waivers for small developers |
+| Waiver on file (if applicable) | [If claiming undue burden] | [Status] | FCC rules provide waivers and an achievability defense; confirm with counsel before relying on either |
 
-### 6.3 Age Rating Implications
+### 6.3 Store Labels and Warnings
 
-| Rating Body | Accessibility Considerations | Status |
+| Item | Consideration | Status |
 |-------------|----------------------------|--------|
-| ESRB | Photosensitivity warning on packaging if applicable | [Status] |
-| PEGI | Flashing content advisory requirements | [Status] |
-| IARC | Accessibility information in questionnaire responses | [Status] |
-| ESA AGI | Accessible Games Initiative tag selection (24 standardized tags) | [Status] |
+| Photosensitive seizure warning | Shown before play and in store text; it supplements, never replaces, removing triggers (XAG 118) | [Status] |
+| ESA Accessible Games Initiative | Select from the 24 standardized accessibility tags (launched March 2025) where storefronts display them | [Status] |
+| Storefront accessibility fields | Fill in each store's accessibility-feature declarations where offered | [Status] |
 
 ### 6.4 Regional Requirements Summary
 
 | Region | Key Regulation | Deadline | Impact | Action |
 |--------|---------------|----------|--------|--------|
-| EU | European Accessibility Act | June 2025 (in effect) | Products/services must meet accessibility standards | Audit against EAA requirements |
+| EU | European Accessibility Act | 2025-06-28 (in force) | Consoles, e-commerce incl. in-game purchase flows, electronic communications; microenterprise exemption for services | Audit store, purchase and chat UI (Section 6.1) |
 | US | CVAA (Section 255/716) | In effect | Communication features must be accessible | Audit chat/voice systems |
-| US (state) | Various state-level bills | Varies | Some states pursuing game-specific accessibility law | Monitor legislative landscape |
+| US (state) | Various state laws | Varies | General disability and consumer-protection laws may apply | Monitor legislative landscape |
 | UK | Equality Act 2010 | In effect | Reasonable adjustments for disabled users | Risk assessment for UK distribution |
 | Canada | Accessible Canada Act | Phased (2025-2040) | Federal accessibility standards | Monitor regulations |
 | Australia | Disability Discrimination Act | In effect | Complaint-based enforcement | Risk assessment |
@@ -318,9 +329,9 @@ Rate each accommodation category by player impact and implementation effort.
 
 | Accommodation | Player Impact | Effort | Priority Tier | Notes |
 |--------------|--------------|--------|--------------|-------|
-| Subtitles (with customization) | Very High | Low | **Tier 1: Ship with** | Affects ~15% of population with hearing loss |
+| Subtitles (with customization) | Very High | Low | **Tier 1: Ship with** | About 15% of US adults report some trouble hearing (NIDCD) |
 | Remappable controls | Very High | Medium | **Tier 1: Ship with** | Affects all motor-impaired players |
-| Colorblind modes | High | Low-Medium | **Tier 1: Ship with** | Affects ~8% of males |
+| Colorblind modes | High | Low-Medium | **Tier 1: Ship with** | About 8% of males of Northern European descent |
 | Independent volume controls | High | Low | **Tier 1: Ship with** | Basic audio design |
 | Toggle vs. hold options | High | Low | **Tier 1: Ship with** | Trivial to implement, large impact |
 | Photosensitivity mode | Very High (medical) | Medium | **Tier 1: Ship with** | Seizure risk = must-ship |
@@ -331,11 +342,11 @@ Rate each accommodation category by player impact and implementation effort.
 | Auto-aim / aim assist | Medium-High | Medium | **Tier 2: Target** | Genre-dependent importance |
 | Closed captions (sound descriptions) | Medium-High | Medium | **Tier 2: Target** | Beyond subtitles -- sound identification |
 | One-handed play mode | Medium | High | **Tier 2: Target** | Affects specific population |
-| Game speed adjustment | Medium | Low-Medium | **Tier 2: Target** | Celeste proved the value |
+| Game speed adjustment | Medium | Low-Medium | **Tier 2: Target** | Part of Celeste's Assist Mode |
 | Dyslexia-friendly font | Medium | Low | **Tier 3: Stretch** | Easy to add, moderate impact |
 | Audio description for cutscenes | Medium | High | **Tier 3: Stretch** | Requires narration recording |
 | Full blind accessibility | Medium | Very High | **Tier 3: Stretch** | Aspirational for most genres |
-| Sign language cutscene interpretation | Low-Medium | Very High | **Tier 3: Stretch** | Forza Horizon 5 pioneered this |
+| Sign language cutscene interpretation | Low-Medium | Very High | **Tier 3: Stretch** | Forza Horizon 5 added ASL/BSL interpreters in 2022 |
 
 ### 7.2 Tier Definitions
 

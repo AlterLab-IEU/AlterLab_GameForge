@@ -16,18 +16,29 @@
 | [Name] | [Role, e.g., Artist] | [X / total days] | |
 | **Total** | | **[Sum] person-days** | |
 
+**Vibe-debt paydown:** [X h] reserved this sprint (10-15% of capacity as a rule of thumb; use the
+high end after an agent-led sprint) for unreviewed agent merges, oversized files, gameplay literals
+that belong in tuning files, and missing tests around agent-written logic. Plan it with
+`/gameforge:game-sprint-plan`.
+
 ---
 
 ## Task List
 
-| # | Task | Owner | Estimate | Dependency | Priority | Status |
-|---|------|-------|----------|------------|----------|--------|
-| 1 | [Task description] | [Name] | [Hours/Points] | None | Must | [ ] Not Started |
-| 2 | [Task description] | [Name] | [Hours/Points] | Task 1 | Must | [ ] Not Started |
-| 3 | [Task description] | [Name] | [Hours/Points] | None | Should | [ ] Not Started |
-| 4 | [Task description] | [Name] | [Hours/Points] | Task 2 | Should | [ ] Not Started |
-| 5 | [Task description] | [Name] | [Hours/Points] | None | Could | [ ] Not Started |
-| 6 | [Task description] | [Name] | [Hours/Points] | None | Could | [ ] Not Started |
+| # | Task | Mode | Owner | Build h | Verify h | Dependency | Priority | Done when | Status |
+|---|------|------|-------|---------|----------|------------|----------|-----------|--------|
+| 1 | [Task description] | [H / A / AL] | [Name] | [h] | [h] | None | Must | [Check that passes, e.g. "AC-002-2 green in `npm run check`"] | [ ] Not Started |
+| 2 | [Task description] | [Mode] | [Name] | [h] | [h] | Task 1 | Must | [Check] | [ ] Not Started |
+| 3 | [Task description] | [Mode] | [Name] | [h] | [h] | None | Should | [Check] | [ ] Not Started |
+| 4 | [Task description] | [Mode] | [Name] | [h] | [h] | Task 2 | Should | [Check] | [ ] Not Started |
+| 5 | [Task description] | [Mode] | [Name] | [h] | [h] | None | Could | [Check] | [ ] Not Started |
+| 6 | [Vibe-debt paydown item] | [Mode] | [Name] | [h] | [h] | None | Debt slot | [e.g. "tests green, no file over 300 lines"] | [ ] Not Started |
+
+**Mode:** H = by hand; A = agent-assisted (a human drives, the agent drafts); AL = agent-led (the
+agent implements from the task card, a human verifies).
+**Verify h** is human time: run the check, read the diff, play the change. Rules of thumb until you
+have three sprints of your own data: A about 30-50% of build time, AL at least equal to build time.
+**Done when** names something a person can run or watch, never "works" or "done".
 
 **Status values:** Not Started / In Progress / In Review / Done / Blocked / Cut
 
@@ -73,6 +84,7 @@ A task is "Done" when ALL of the following are true:
 - [ ] Unit tests written and passing (where applicable)
 - [ ] No known regressions in existing features
 - [ ] Code reviewed by at least one other team member
+- [ ] Agent-written changes: diff read and change played by a human; verify hours logged
 - [ ] Assets are final quality (not placeholder) OR placeholder is clearly marked
 - [ ] Performance within budget (frame rate, memory, load time)
 - [ ] Documented in code comments and/or design docs
@@ -109,3 +121,5 @@ A task is "Done" when ALL of the following are true:
 - **Planned:** [X points/hours]
 - **Completed:** [Y points/hours]
 - **Carry-over:** [Z points/hours]
+- **Verify hours (planned / actual):** [X / Y]
+- **Vibe-debt slot used:** [X of Y h, items closed]
