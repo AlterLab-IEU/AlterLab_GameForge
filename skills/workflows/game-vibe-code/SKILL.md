@@ -1,12 +1,10 @@
 ---
 name: game-vibe-code
 description: >
-  Runs a disciplined AI-agent build loop that takes an idea to a playable, verified, shippable
-  game with Claude Code: one-page spec and short CLAUDE.md, scaffold, playable in the first hour,
-  one feature per iteration with a pass/fail check, Playwright screenshot verification, commit
-  checkpoints and a progress.md handoff. Use for "vibe code a game", "build a game with Claude",
-  "Vibe Jam", "make a browser game fast", or an agent-built game that got hard to change. Not for
-  throwaway mechanic tests (use game-prototype).
+  Runs an AI-agent build loop from idea to a playable, verified, shippable game: one-page spec,
+  playable in the first hour, one feature per iteration with a pass/fail check, Playwright
+  screenshots, commits and a progress.md handoff. Use for "vibe code a game", "build a game with
+  Claude", "make a browser game fast". Not for throwaway mechanic tests (use game-prototype).
 argument-hint: "[game idea, or 'continue' to resume from progress.md]"
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(npm create *), Bash(npm install *), Bash(npm run *), Bash(npx playwright *), Bash(git add *), Bash(git commit *), Bash(git status *), Bash(git diff *), Bash(git log *), Bash(godot --headless *)
 effort: high
@@ -153,8 +151,8 @@ layout, entry files with test hooks, per-stack `CLAUDE.md`, and the outdated pat
    `design/vibe-spec.md`." This is Anthropic's own recommended pattern.
 2. **Critique before building.** Simon Willison's prompt for Battle Drones: "First research and
    then critique this design. Only build after we have agreed..." Fix the spec, not the code.
-3. **Scope to the hook.** One idea a player understands in about five seconds; five to ten minutes
-   of play. That was the shape of the 2026 Vibe Jam winners.
+3. **Scope to the hook.** Vendor jam guides advise one idea a player understands in about five
+   seconds; the 2026 Vibe Jam Gold winner offered about five to ten minutes of play.
 4. **Write a short `CLAUDE.md`.** Commands first (dev, verify, build), then rules Claude cannot
    infer, then gotchas. Template below.
 5. **Start the build in a fresh session** (`/clear`), so it begins from the written definition of
@@ -167,7 +165,8 @@ Hour-one checklist. Each line is pass/fail:
 - [ ] Project scaffolded with pinned versions; `npm run dev` (or Godot run) shows the game.
 - [ ] Player as a primitive; the core verb works from input.
 - [ ] A fail state and a restart (R key) that needs no page reload.
-- [ ] Test hooks: `window.render_game_to_text()` and `window.advanceTime(ms)`; `?seed=` is honored.
+- [ ] Test hooks `window.render_game_to_text()` and `window.advanceTime(ms)` in dev and test builds
+      only (release builds compile them out); `?seed=` is honored.
 - [ ] `npm run verify` passes: builds, loads, no console errors, smoke screenshot opened and described.
 - [ ] `progress.md` exists with the `Original prompt:` line at the top.
 - [ ] First commit.
@@ -214,9 +213,11 @@ the first new console error before anything else; reset state between scenarios;
 chains. After two failed corrections, `/clear` and write a better prompt rather than a third
 correction (Anthropic's guidance).
 
-Read `${CLAUDE_SKILL_DIR}/references/verification-harness.md` before writing the first check. It
-has the copy-paste Playwright script, the hook pattern for Three.js, Phaser and Godot, the debug
-overlay, and the seeded RNG.
+Read `${CLAUDE_SKILL_DIR}/references/verification-harness.md` before writing the first check: the
+copy-paste Playwright script (tested end to end on the pinned versions), the scenario format, and
+how to read results. Read `${CLAUDE_SKILL_DIR}/references/game-test-hooks.md` when wiring the game
+itself: test hooks, fixed-step loop, seeded RNG, debug overlay, tuning panel, and the Godot
+headless variant.
 
 ## Step 5: The Feel Pass
 
@@ -261,7 +262,7 @@ thumb).
 | Trigger | Control |
 |---|---|
 | A source file passes ~400 lines (rule of thumb) | Split by responsibility before adding the next feature |
-| Every 5 iterations, and before a jam's halfway point | Refactor checkpoint: "explain this file" review, dead-code deletion, module map refresh |
+| Every 5 iterations, and before a jam's halfway point | Refactor checkpoint: `npm run debt`, "explain this file" review, dead-code deletion, module map refresh |
 | Any new dependency | License and size check before install |
 | Anything goes online | Security review (below) before the first deploy |
 | Before shipping | Performance budget on a mid-range Android phone; bundle budget for the target portal |
@@ -284,8 +285,9 @@ since <tag> against design/vibe-spec.md; report gaps that affect correctness and
 
 **Security for anything online:** the server owns scores, state, matchmaking and purchases; the
 client sends inputs. No API keys in the bundle (anything in a `VITE_*` variable ships to players).
-Audit `window` globals; the fly.pieter.com flight sim ran on page globals and players overrode its
-collision code. Rate-limit every endpoint. Route netcode to `game-multiplayer`.
+Audit `window` globals: the fly.pieter.com flight sim ran on page globals, its creator's own
+published mod overrides the collision function, and a player reported someone hitting everyone at
+once. Rate-limit every endpoint. Route netcode to `game-multiplayer`.
 
 Read `${CLAUDE_SKILL_DIR}/references/vibe-debt-controls.md` at each refactor checkpoint and before
 anything goes online: review prompts, the bundle-budget and license scripts, the security
@@ -310,9 +312,10 @@ before entering any jam or targeting any portal; it has the full dated checklist
 | itch.io | Generative-AI disclosure on the project page feeds the "no AI" filter, which reaches search since 3 Nov 2026; bulk AI uploads are banned as spam | Answer the form accurately; check its current wording on whether code assistance counts. |
 | EU AI Act Art. 50 | Applies since 2 Aug 2026; machine-readable marking for generative systems already on the market by 2 Dec 2026 | AI NPCs must say they are AI unless obvious; runtime generators need marking. Not legal advice. |
 
-Log AI use as you go (`progress.md` "AI use" plus the iteration log) so disclosure is a copy job,
-not archaeology. Set the project's stance with `${CLAUDE_PLUGIN_ROOT}/templates/ai-content-policy.md`.
-Generated assets go through `game-ai-assets`. Details and the full platform matrix are in
+Log AI use as you go so disclosure is a copy job, not archaeology: code in the iteration log and
+`progress.md` "AI use"; assets in `design/ai-asset-log.md`, created from
+`${CLAUDE_PLUGIN_ROOT}/templates/ai-asset-log.md`. Set the project's stance with
+`${CLAUDE_PLUGIN_ROOT}/templates/ai-content-policy.md`. Generated assets go through `game-ai-assets`. Details and the full platform matrix are in
 `${CLAUDE_SKILL_DIR}/references/originality-and-disclosure.md`.
 
 ## Working with AI Coding Agents
@@ -370,7 +373,7 @@ Date: <YYYY-MM-DD> · Owner: <name> · Target: web 3D | web 2D | desktop · Dead
 
 ## Stack and assets
 - <Vite 8.3 + three 0.187.0 (WebGLRenderer) · Playwright 1.64.1 · Node 22>
-- Assets: <primitives until feature 5, then own pixel art; SFX made in jsfxr; log in docs/asset-log.md>
+- Assets: <primitives until feature 5, then own pixel art; SFX made in jsfxr; AI and third-party assets logged in design/ai-asset-log.md>
 
 ## Online?
 - <No.> / <Yes: the server owns scores, state, purchases; see game-multiplayer>
@@ -383,10 +386,10 @@ Date: <YYYY-MM-DD> · Owner: <name> · Target: web 3D | web 2D | desktop · Dead
 
 ```markdown
 # Commands
-- Dev: npm run dev   (/?debug=1 overlay, /?tune=1 tuning panel)
-- Check after every change: npm run verify   (build + Playwright scenarios; exit 0 = pass)
+- Dev: npm run dev   (debug overlay toggles with the backquote key; tuning panel on screen)
+- Check after every change: npm run verify   (test build + Playwright scenarios; exit 0 = pass)
 - One scenario: npm run verify -- <name>
-- Ship checks: npm run budget && npm run licenses
+- Checkpoint and ship checks: npm run debt && npm run budget && npm run licenses
 
 # Rules
 - Read progress.md first; update it and docs/iteration-log.md after each green check.
@@ -397,7 +400,8 @@ Date: <YYYY-MM-DD> · Owner: <name> · Target: web 3D | web 2D | desktop · Dead
 - No secrets in client code; every VITE_* value ships to players.
 
 # Gotchas
-- verify tests the production build, so a type error fails it before a browser opens.
+- verify typechecks and builds first, so a type error fails it before a browser opens.
+- verify uses a test build (hooks compiled in). Upload only `npm run build` output.
 ```
 
 ### `progress.md` (the handoff file)
@@ -409,7 +413,7 @@ Original prompt: <the user's first request, verbatim; never edit this line>
 Updated <YYYY-MM-DD HH:MM> by session "<name>"
 
 ## Run it
-- Dev: npm run dev -> http://localhost:5173/?debug=1
+- Dev: npm run dev -> http://localhost:5173/
 - Check: npm run verify (screenshots in tests/e2e/out/)
 
 ## State

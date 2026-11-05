@@ -46,9 +46,10 @@ npm install -D @types/three@0.187.0 playwright@1.64.1
 npx playwright install chromium
 ```
 
-Delete the template's demo files (`src/counter.ts`, `src/assets/`, the demo markup in
-`src/main.ts`), keep `index.html` with its `<div id="app"></div>`, then add the scripts and config
-below.
+Delete the template's demo files (`src/counter.ts`, `src/assets/`, everything in `src/main.ts`),
+keep `index.html` with its `<div id="app"></div>`, and replace `src/style.css` with
+`html, body { margin: 0; height: 100%; overflow: hidden; background: #000; }` (import it from
+`main.ts`). Then add the scripts and config below.
 
 ## Scaffold: 2D web (Phaser 4)
 
@@ -58,6 +59,9 @@ npm install phaser@4.2.1 lil-gui@0.21.0
 npm install -D playwright@1.64.1
 npx playwright install chromium
 ```
+
+Do the same template cleanup as for Three.js; Phaser's `parent: 'app'` mounts into the template's
+`<div id="app"></div>`.
 
 ## `package.json` scripts (both web stacks)
 
@@ -69,17 +73,24 @@ build doubles as a typecheck.
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:test": "tsc && vite build --mode test",
     "preview": "vite preview",
-    "verify": "npm run build && node tests/e2e/verify.mjs",
+    "verify": "npm run build:test && node tests/e2e/verify.mjs",
+    "debt": "node tests/structure.mjs",
     "budget": "node tests/budget.mjs",
     "licenses": "node tests/licenses.mjs"
   }
 }
 ```
 
+Create `.env.test` containing the single line `VITE_TEST_HOOKS=1`. `npm run verify` builds in test
+mode, so the test hooks, debug overlay and tuning panel are compiled in; `npm run build` makes the
+release bundle without them. Upload only release builds, and run `npm run build` before
+`npm run budget` so the budget measures what players download.
+
 `npm run verify -- dash` appends `dash` to the script, so the harness runs only matching
-scenarios. `verify.mjs` lives in the verification reference; `budget.mjs` and `licenses.mjs` live
-in the vibe-debt reference.
+scenarios. `verify.mjs` lives in the verification reference; `structure.mjs`, `budget.mjs` and
+`licenses.mjs` live in the vibe-debt reference.
 
 ## `vite.config.ts`
 
@@ -99,7 +110,8 @@ export default defineConfig({
 ├── progress.md               # handoff file; first line "Original prompt: ..."
 ├── design/vibe-spec.md       # one-page spec
 ├── docs/iteration-log.md     # append-only log; doubles as the AI-use record
-├── docs/asset-log.md         # source + license + AI tool per shipped asset
+├── design/ai-asset-log.md    # provenance for every shipped asset (GameForge template)
+├── .env.test                 # VITE_TEST_HOOKS=1 (test builds only)
 ├── index.html
 ├── public/                   # static assets copied as-is (public/lazy/ = loaded after start)
 ├── src/
@@ -113,6 +125,7 @@ export default defineConfig({
 └── tests/
     ├── e2e/verify.mjs
     ├── e2e/scenarios/*.json
+    ├── structure.mjs
     ├── budget.mjs
     └── licenses.mjs
 ```
@@ -121,7 +134,7 @@ Add `tests/e2e/out/` to `.gitignore`; screenshots are evidence for the session, 
 
 ## Entry file: Three.js (`src/main.ts`)
 
-Uses the core modules from `verification-harness.md`. The rules live in `src/game/world.ts`, so the
+Uses the core modules from `game-test-hooks.md`. The rules live in `src/game/world.ts`, so the
 renderer only reads state.
 
 ```ts
@@ -129,8 +142,9 @@ import * as THREE from 'three';
 import { createLoop } from './core/loop';
 import { createInput } from './core/input';
 import { mulberry32 } from './core/rng';
-import { installTestHooks, params, SEED, TEST_MODE } from './core/testHooks';
+import { DEBUG_BUILD, installTestHooks, params, SEED, TEST_MODE } from './core/testHooks';
 import { createDebugOverlay } from './core/debugOverlay';
+import { maybeInstallTuningPanel } from './core/tuningPanel';
 import { createWorld, snapshot, stepWorld, type InputState } from './game/world';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -169,9 +183,10 @@ const readInput = (): InputState => {
   };
 };
 
-const overlay = import.meta.env.DEV || params.has('debug')
+const overlay = import.meta.env.DEV || (DEBUG_BUILD && params.has('debug'))
   ? createDebugOverlay(() => JSON.stringify(snapshot(world), null, 1))
   : null;
+maybeInstallTuningPanel(import.meta.env.DEV || (DEBUG_BUILD && params.has('tune')));
 
 function render(): void {
   player.position.set(world.player.x, 0.5, world.player.z);
@@ -201,7 +216,7 @@ export interface InputState { left: boolean; right: boolean; up: boolean; down: 
 export interface Vec2 { x: number; z: number }
 export interface World { mode: 'playing' | 'lost'; time: number; score: number; player: Vec2; hazards: Vec2[] }
 
-const spawn = (rng: Rng): Vec2 => ({ x: (rng() - 0.5) * 16, z: -10 - rng() * 20 });
+const spawn = (rng: Rng): Vec2 => ({ x: (rng() - 0.5) * 16, z: -20 - rng() * 20 });
 
 export function createWorld(rng: Rng): World {
   return { mode: 'playing', time: 0, score: 0, player: { x: 0, z: 0 }, hazards: Array.from({ length: 5 }, () => spawn(rng)) };

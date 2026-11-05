@@ -1,7 +1,7 @@
 # Self-Hosting, Headers and PWA
 
 Facts dated 2026-11-05. Sources: Cloudflare Pages limits page, Godot 4.7 web export docs (host
-compression notes), Vite build guide, npm registry data in the web-stack research brief
+compression notes), Vite build guide, npm registry metadata queried 2026-11-05
 (`vite-plugin-pwa` 2.0.0, 2026-10-03, supports Vite 8). Host config syntax beyond what is cited is
 standard, long-stable configuration; still test every header after deploy.
 

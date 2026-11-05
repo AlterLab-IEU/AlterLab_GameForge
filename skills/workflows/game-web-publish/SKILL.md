@@ -1,12 +1,10 @@
 ---
 name: game-web-publish
 description: >
-  Ships a browser game: hardens the production build (Vite, size budgets, compression, cache and
-  COOP/COEP headers), then publishes to itch.io with butler, portals (Poki, CrazyGames, YouTube
-  Playables, Newgrounds), Discord Activities, Reddit and Telegram, self-hosting, PWA, and
-  Electron/Tauri/Capacitor wrappers, with AI-disclosure answers per platform. Use for "publish my
-  web game", "upload to itch", "Poki or CrazyGames SDK", "build too big", "SharedArrayBuffer".
-  Not for store pages and launch operations on Steam, consoles or app stores (use game-launch).
+  Ships a browser game: hardens the build (size budgets, compression, COOP/COEP headers) and
+  publishes to itch.io, Poki, CrazyGames, YouTube Playables, Discord Activities, PWA or desktop
+  wrappers, with per-platform AI disclosure. Use for "publish my web game", "upload to itch", "Poki
+  SDK", "build too big". Not for Steam, console or app-store launches (use game-launch).
 argument-hint: "[target: itch|poki|crazygames|playables|newgrounds|discord|reddit|telegram|self-host|pwa|desktop|mobile]"
 allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Bash(npm run *), Bash(npx vite *), Bash(butler *), Bash(du *), Bash(ls *)
 effort: high
@@ -44,7 +42,7 @@ target, each with a release checklist and a build report the team can sign off.
    single `platform` interface selected at build time. Never fork the game per portal.
 4. **Static first, backend optional.** A static build keeps working for years; a build that needs
    your server dies when the server does. In the Vibe Jam link-rot analysis, backend-dependent
-   entries went offline fastest (secondary source, see the web-stack brief behind this skill).
+   entries went offline fastest (a secondary analysis of 2025 and 2026 entries).
 5. **Threads are opt-in, not default.** SharedArrayBuffer requires cross-origin isolation
    (COOP/COEP). Ship single-threaded unless profiling proves you need threads, because most
    portals and embeds cannot give you those headers.
@@ -102,8 +100,8 @@ Platform contracts at a glance (dated; the references hold the detail and source
 | Platform | Size limits | Must integrate | Money | Backend allowed |
 |---|---|---|---|---|
 | itch.io | ≤1,000 files, ≤500 MB extracted, ≤200 MB per file, path ≤240 chars | Nothing; relative paths | Paid / PWYW / donations | Yes (HTTPS only) |
-| CrazyGames | Initial ≤50 MB; **≤20 MB for mobile homepage**; total ≤250 MB; ≤1,500 files | SDK v3 `gameplayStart`; ads only via SDK | Ad share; IAP invite-only (brief) | External hosting allowed, gameplay within 20 s |
-| Poki | No numeric cap stated; players leave after ~10 s of loading | `PokiSDK.init`, `gameLoadingFinished`, `gameplayStart/Stop`, `commercialBreak` | Revenue share (50/50 on Poki-sourced traffic per brief) | **No**: external requests blocked by default |
+| CrazyGames | Initial ≤50 MB; **≤20 MB for mobile homepage**; total ≤250 MB; ≤1,500 files | SDK v3 `gameplayStart`; ads only via SDK | Ad share; IAP invite-only (secondary sources) | External hosting allowed, gameplay within 20 s |
+| Poki | No numeric cap stated; players leave after ~10 s of loading | `PokiSDK.init`, `gameLoadingFinished`, `gameplayStart/Stop`, `commercialBreak` | Revenue share (50/50 on Poki-sourced traffic, secondary sources) | **No**: external requests blocked by default |
 | YouTube Playables | Initial <30 MiB (SHOULD <15); total <250 MiB; per file <30 MiB; ≤8,000 files; saves <3 MiB; JS heap ≤512 MB | `ytgame` SDK: `firstFrameReady` then `gameReady` | Program-based | Check current Integration rules |
 | Discord Activity | Iframe via Discord proxy | `@discord/embedded-app-sdk`, OAuth token exchange on your server | SKUs + entitlements; fee UNVERIFIED | Your server, WebSockets only through the proxy |
 | Reddit (Devvit Web) | UNVERIFIED this pass | Devvit app + webview | Developer Funds (post-July-2026 terms UNVERIFIED) | Devvit server runtime |
@@ -143,7 +141,7 @@ the Vite 8 config, engine export settings, header files and runtime snippets.
 - Serve `.wasm`, `.pck`, `.data`, `.js` compressed. itch.io's CDN gzips common types itself and
   treats files ending in `.br` as Brotli; Cloudflare, Netlify and Vercel compress automatically.
 - Unity WebGL: pick Brotli or Gzip, and enable Decompression Fallback when the host cannot send
-  `Content-Encoding` (portals and itch.io often fall in this category).
+  `Content-Encoding` for those files (some portals and static hosts; test the uploaded build).
 - Hashed assets: `Cache-Control: public, max-age=31536000, immutable`. `index.html` and any
   unhashed loader: `Cache-Control: no-cache`. Otherwise players get a stale loader pointing at
   deleted chunks after an update.
@@ -203,7 +201,7 @@ Keep it minimal and lawful; route KPI design to `/gameforge:game-analytics-setup
   `level_complete`, `session_end` with duration, plus uncaught errors with build version.
 - **Never** collect personal data a platform already handles (Discord user IDs, Telegram users)
   without stating it in a privacy notice; Discord and Telegram both hand you user identities.
-- Children: portals such as CrazyGames require PEGI 12 suitability (per brief); design data
+- Children: portals such as CrazyGames expect PEGI 12 suitability (secondary sources); design data
   collection as if minors play.
 
 ### Step 5: AI Disclosure Per Platform
