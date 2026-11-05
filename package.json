@@ -1,8 +1,8 @@
 {
   "name": "alterlab-gameforge",
   "private": true,
-  "version": "2.0.0",
-  "description": "34 production-grade Claude AI skills for indie game development — agents, workflows, engine specialists, genre packs",
+  "version": "3.0.0",
+  "description": "A full indie game studio for Claude Code: studio agents, workflows from idea to launch, engine specialists for Godot, Unity, Unreal, Three.js and 2D web, plus vibe-coding and AI-asset workflows",
   "author": "Cem Ipek <cem.ipek@ieu.edu.tr>",
   "license": "MIT",
   "repository": {
@@ -10,24 +10,32 @@
     "url": "https://github.com/AlterLab-IEU/AlterLab_GameForge.git"
   },
   "keywords": [
+    "alterlab",
     "claude-ai",
-    "skills",
-    "game-development",
-    "indie-games",
-    "godot",
-    "unity",
-    "unreal-engine",
-    "game-design",
+    "claude-code",
+    "claude-code-plugin",
     "creative-direction",
     "game-audio",
-    "narrative-design",
     "game-balance",
+    "game-design",
+    "game-development",
+    "game-jam",
+    "godot",
+    "indie-games",
+    "narrative-design",
+    "phaser",
     "prototyping",
-    "alterlab",
-    "claude-code"
+    "skills",
+    "threejs",
+    "unity",
+    "unreal-engine",
+    "vibe-coding",
+    "webgpu"
   ],
   "scripts": {
-    "validate": "bash scripts/validate.sh",
-    "validate:verbose": "bash scripts/validate.sh --verbose"
+    "validate": "python3 scripts/validate.py",
+    "validate:verbose": "python3 scripts/validate.py --verbose",
+    "test:hooks": "bash tests/hooks.test.sh",
+    "test": "python3 scripts/validate.py && bash tests/hooks.test.sh && claude plugin validate . --strict"
   }
 }
