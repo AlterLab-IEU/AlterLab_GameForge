@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # GameForge hook test suite.
 # Runs every hook under POSIX sh against fixture projects and checks its output.
-# Each case runs twice: once with jq/python3 available, once with the sed-only fallback.
+# Each case runs three times, once per JSON parser in lib/common.sh: whatever the caller's
+# PATH offers (usually jq), python3 without jq, and the sed-only fallback.
 #
 # Usage: bash tests/hooks.test.sh [-v]
 
@@ -13,34 +14,73 @@ PASS=0; FAIL=0
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/gameforge-hooks.XXXXXX")
 trap 'rm -rf "$WORK"' EXIT
 
-# A PATH without jq or python3, to exercise the sed fallback in lib/common.sh.
-FALLBACK_BIN="$WORK/fallback-bin"
-mkdir -p "$FALLBACK_BIN"
-for tool in sh dash bash cat sed awk grep tr head tail wc date ls mkdir mv rm find dirname basename git printf env sort cut uniq touch; do
-  p=$(command -v "$tool" 2>/dev/null) && ln -sf "$p" "$FALLBACK_BIN/$tool"
-done
+# make_bin <dir> <tool...>: a PATH directory holding only the named tools.
+# Each entry is a two-line script that execs the real binary, not a symlink: Git for Windows
+# turns `ln -s` into a copy, and a copied sh.exe or git.exe cannot load the DLLs that sit
+# next to the original, so every hook run from that PATH would silently print nothing.
+SH_PATH=$(command -v sh)
+make_bin() {
+  local dir=$1 tool p; shift
+  mkdir -p "$dir"
+  for tool in "$@"; do
+    p=$(command -v "$tool" 2>/dev/null) || continue
+    case "$p" in /*) ;; *) continue ;; esac   # shell builtins such as printf have no path
+    printf '#!%s\nexec '\''%s'\'' "$@"\n' "$SH_PATH" "$p" > "$dir/$tool"
+    chmod +x "$dir/$tool"
+  done
+}
+CORE_TOOLS="sh dash bash cat sed awk grep tr head tail wc date ls mkdir mv rm find dirname basename git env sort cut uniq touch"
+# shellcheck disable=SC2086
+make_bin "$WORK/fallback-bin" $CORE_TOOLS           # no jq, no python3: the sed fallback
+# shellcheck disable=SC2086
+make_bin "$WORK/python-bin" $CORE_TOOLS python3     # no jq: the python3 parser
 
 ok()   { PASS=$((PASS + 1)); [ -n "$VERBOSE" ] && echo "  ok   $1"; return 0; }
 bad()  { FAIL=$((FAIL + 1)); echo "  FAIL $1"; [ -n "${2:-}" ] && printf '       %s\n' "$2"; return 0; }
 
 # run_hook <mode> <hook> <dir> <json>  -> stdout of the hook
+# Modes: full (the caller's PATH, usually jq), python (python3, no jq), fallback (neither).
 run_hook() {
   local mode=$1 hook=$2 dir=$3 json=$4
-  if [ "$mode" = fallback ]; then
-    (cd "$dir" && printf '%s' "$json" | env -i HOME="$HOME" PATH="$FALLBACK_BIN" CLAUDE_PLUGIN_ROOT="$REPO" CLAUDE_PROJECT_DIR="$dir" ${EXTRA_ENV:-} sh "$HOOKS/$hook" 2>&1)
-  else
+  if [ "$mode" = full ]; then
     (cd "$dir" && printf '%s' "$json" | env CLAUDE_PLUGIN_ROOT="$REPO" CLAUDE_PROJECT_DIR="$dir" ${EXTRA_ENV:-} sh "$HOOKS/$hook" 2>&1)
+  else
+    (cd "$dir" && printf '%s' "$json" | env -i HOME="$HOME" PATH="$WORK/$mode-bin" CLAUDE_PLUGIN_ROOT="$REPO" CLAUDE_PROJECT_DIR="$dir" ${EXTRA_ENV:-} sh "$HOOKS/$hook" 2>&1)
   fi
 }
 
+# Data reaches python3 on stdin, never argv: on Windows, MSYS rewrites POSIX-looking
+# arguments for native programs (/tmp/x becomes C:/Users/.../Temp/x), so a path passed
+# as an argument no longer matches CLAUDE_PROJECT_DIR. Bytes in and out, so neither the
+# console code page nor CRLF translation can touch the data.
+py_json_get() {   # py_json_get <key> <key>... < json  -> value at that path, or nothing
+  python3 -c '
+import json, sys
+d = json.load(sys.stdin.buffer)
+for k in sys.argv[1:]:
+    d = d[k]
+sys.stdout.buffer.write(str(d).encode("utf-8"))
+' "$@" 2>/dev/null
+}
 expect_empty()    { [ -z "$2" ] && ok "$1" || bad "$1" "expected no output, got: $(printf '%s' "$2" | head -c 300)"; }
 expect_contains() { case "$2" in *"$3"*) ok "$1" ;; *) bad "$1" "expected to contain [$3], got: $(printf '%s' "$2" | head -c 400)" ;; esac; }
-expect_json()     { printf '%s' "$2" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && ok "$1" || bad "$1" "invalid JSON: $(printf '%s' "$2" | head -c 300)"; }
+expect_json()     { printf '%s' "$2" | python3 -c 'import json,sys; json.load(sys.stdin.buffer)' 2>/dev/null && ok "$1" || bad "$1" "invalid JSON: $(printf '%s' "$2" | head -c 300)"; }
 expect_decision() {
   local got
-  got=$(printf '%s' "$2" | python3 -c 'import json,sys; print(json.load(sys.stdin)["hookSpecificOutput"]["permissionDecision"])' 2>/dev/null)
+  got=$(printf '%s' "$2" | py_json_get hookSpecificOutput permissionDecision)
   [ "$got" = "$3" ] && ok "$1" || bad "$1" "expected decision $3, got [${got:-none}] from: $(printf '%s' "$2" | head -c 300)"
 }
+# Tool events as Claude Code sends them: raw UTF-8 JSON (no \u escapes) on stdin.
+tool_ev() {   # tool_ev <Tool> <field> <value> <extra tool_input fields as JSON>
+  printf '%s' "$3" | python3 -c '
+import json, sys
+ev = {"tool_name": sys.argv[1], "tool_input": {sys.argv[2]: sys.stdin.buffer.read().decode("utf-8")}}
+ev["tool_input"].update(json.loads(sys.argv[3]))
+sys.stdout.buffer.write(json.dumps(ev, ensure_ascii=False).encode("utf-8"))
+' "$1" "$2" "$4"
+}
+bash_ev() { tool_ev Bash command "$1" '{}'; }
+file_ev() { tool_ev Edit file_path "$1" '{"old_string":"a","new_string":"b"}'; }
 
 new_dir() { local d="$WORK/$1-$RANDOM$RANDOM"; mkdir -p "$d"; printf '%s' "$d"; }
 git_init() { git -C "$1" init -q && git -C "$1" config user.email t@t && git -C "$1" config user.name t && git -C "$1" commit -q --allow-empty -m "chore: init"; }
@@ -63,7 +103,7 @@ fixture() {
   printf '%s' "$d"
 }
 
-for MODE in full fallback; do
+for MODE in full python fallback; do
   echo "[$MODE parser]"
   EXTRA_ENV=""
 
@@ -100,7 +140,6 @@ for MODE in full fallback; do
 
   # --- validate-commit -------------------------------------------------------------
   d=$(fixture godot); git_init "$d"; mkdir -p "$d/.gameforge"
-  bash_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
   expect_empty    "validate-commit: ignores non-commit commands" "$(run_hook $MODE validate-commit.sh "$d" "$(bash_ev 'ls -la')")"
   out=$(run_hook $MODE validate-commit.sh "$d" "$(bash_ev 'git commit -m "added stuff"')")
   expect_json     "validate-commit: deny output is valid JSON" "$out"
@@ -127,7 +166,6 @@ for MODE in full fallback; do
   expect_empty    "validate-commit: silent in non-game repo" "$(run_hook $MODE validate-commit.sh "$d3" "$(bash_ev 'git commit -m "whatever"')")"
 
   # --- protect-generated -------------------------------------------------------------
-  file_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":"Edit","tool_input":{"file_path":sys.argv[1],"old_string":"a","new_string":"b"}}))' "$1"; }
   d=$(fixture godot)
   expect_decision "protect-generated: denies .godot/ cache" "$(run_hook $MODE protect-generated.sh "$d" "$(file_ev "$d/.godot/editor/state.cfg")")" deny
   expect_decision "protect-generated: denies Godot .uid" "$(run_hook $MODE protect-generated.sh "$d" "$(file_ev "$d/player.gd.uid")")" deny
@@ -174,13 +212,15 @@ for MODE in full fallback; do
   d=$(fixture empty)
   run_hook $MODE pre-compact.sh "$d" '{"trigger":"auto"}' >/dev/null; run_hook $MODE session-end.sh "$d" '{}' >/dev/null; run_hook $MODE stop-failure.sh "$d" '{}' >/dev/null
   [ -z "$(ls -A "$d")" ] && ok "state hooks: create nothing in non-opted-in dir" || bad "state hooks: create nothing in non-opted-in dir" "$(ls -A "$d")"
+
 done
 
 # --- hooks.json wiring -------------------------------------------------------------
 python3 - "$REPO" <<'PY' && ok "hooks.json: valid and every command points at an existing script" || bad "hooks.json wiring"
 import json, os, re, sys
 repo = sys.argv[1]
-cfg = json.load(open(os.path.join(repo, "hooks", "hooks.json")))
+with open(os.path.join(repo, "hooks", "hooks.json"), encoding="utf-8") as fh:
+    cfg = json.load(fh)
 for event, groups in cfg["hooks"].items():
     for g in groups:
         for h in g["hooks"]:
