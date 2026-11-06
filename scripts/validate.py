@@ -83,7 +83,7 @@ def section(title: str) -> None:
 
 
 def rel(p: Path) -> str:
-    return str(p.relative_to(ROOT))
+    return p.relative_to(ROOT).as_posix()
 
 
 def parse_frontmatter(text: str) -> tuple[dict, str] | None:
@@ -159,7 +159,7 @@ plugin_json = ROOT / ".claude-plugin" / "plugin.json"
 market_json = ROOT / ".claude-plugin" / "marketplace.json"
 versions = {}
 try:
-    pj = json.loads(plugin_json.read_text())
+    pj = json.loads(plugin_json.read_text(encoding="utf-8"))
     ok("plugin.json is valid JSON")
     versions["plugin.json"] = pj.get("version")
     if pj.get("name") != "gameforge":
@@ -174,7 +174,7 @@ try:
 except Exception as e:  # noqa: BLE001
     err(f"plugin.json: {e}")
 try:
-    mj = json.loads(market_json.read_text())
+    mj = json.loads(market_json.read_text(encoding="utf-8"))
     ok("marketplace.json is valid JSON")
     for k in ("name", "owner", "plugins"):
         (ok if k in mj else err)(f"marketplace.json has '{k}'")
@@ -184,14 +184,14 @@ try:
 except Exception as e:  # noqa: BLE001
     err(f"marketplace.json: {e}")
 try:
-    versions["package.json"] = json.loads((ROOT / "package.json").read_text()).get("version")
+    versions["package.json"] = json.loads((ROOT / "package.json").read_text(encoding="utf-8")).get("version")
 except Exception as e:  # noqa: BLE001
     err(f"package.json: {e}")
 if len(set(versions.values())) == 1:
     ok(f"versions agree: {versions}")
     v = next(iter(versions.values()))
     changelog = ROOT / "CHANGELOG.md"
-    if changelog.exists() and f"[{v}]" not in changelog.read_text():
+    if changelog.exists() and f"[{v}]" not in changelog.read_text(encoding="utf-8"):
         err(f"CHANGELOG.md has no entry for [{v}]")
 else:
     err(f"version mismatch: {versions}")
@@ -203,7 +203,7 @@ section("Skills")
 known_names = set(skills) | set(agents)
 for name, f in skills.items():
     cat = f.parent.parent.name
-    text = f.read_text()
+    text = f.read_text(encoding="utf-8")
     parsed = parse_frontmatter(text)
     if not parsed:
         err(f"{name}: missing or malformed frontmatter")
@@ -259,7 +259,7 @@ for name, f in skills.items():
     for ref in sorted((f.parent / "references").glob("*.md")) if (f.parent / "references").is_dir() else []:
         r = f"references/{ref.name}"
         (ok if r in linked else err)(f"{name}: {r} {'is linked' if r in linked else 'is never linked from SKILL.md'}")
-        rl = ref.read_text().count("\n") + 1
+        rl = ref.read_text(encoding="utf-8").count("\n") + 1
         if rl > 450:
             warn(f"{name}: {r} has {rl} lines; split it")
     mentioned = set(re.findall(r"/gameforge:([a-z0-9-]+)", body)) | set(re.findall(r"`(game-[a-z0-9-]+)`", body))
@@ -274,7 +274,7 @@ for name, f in skills.items():
 # ---------------------------------------------------------------- agents
 section("Plugin subagents")
 for name, f in agents.items():
-    parsed = parse_frontmatter(f.read_text())
+    parsed = parse_frontmatter(f.read_text(encoding="utf-8"))
     if not parsed:
         err(f"agents/{f.name}: missing frontmatter")
         continue
@@ -295,7 +295,7 @@ for name, f in agents.items():
 # ---------------------------------------------------------------- hooks
 section("Hooks")
 try:
-    hj = json.loads((ROOT / "hooks" / "hooks.json").read_text())
+    hj = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
     wired = set()
     for event, groups in hj.get("hooks", {}).items():
         for g in groups:
@@ -308,7 +308,7 @@ try:
                 (ok if (ROOT / "hooks" / m.group(1)).exists() else err)(f"hooks.json {event} -> {m.group(1)}")
     for s in hook_scripts:
         (ok if s.name in wired else err)(f"hook script {s.name} {'is wired' if s.name in wired else 'is not wired in hooks.json'}")
-        if s.read_text().startswith("#!/usr/bin/env bash"):
+        if s.read_text(encoding="utf-8").startswith("#!/usr/bin/env bash"):
             err(f"hook script {s.name} requires bash; hooks must be POSIX sh")
 except Exception as e:  # noqa: BLE001
     err(f"hooks/hooks.json: {e}")
@@ -316,9 +316,9 @@ except Exception as e:  # noqa: BLE001
 # ---------------------------------------------------------------- docs links & counts
 section("Docs links")
 md_files = [p for p in ROOT.rglob("*.md") if ".git" not in p.parts and "node_modules" not in p.parts
-            and not str(p.relative_to(ROOT)).startswith("skills/")]
+            and p.relative_to(ROOT).parts[0] != "skills"]
 for p in md_files:
-    text = p.read_text()
+    text = p.read_text(encoding="utf-8")
     prose = re.sub(r"```.*?```", "", text, flags=re.S)       # fenced code blocks
     prose = re.sub(r"`[^`\n]*`", "", prose)                    # inline code spans
     for m in re.finditer(r"\]\(([^)#\s]+)(?:#[^)]*)?\)", prose):
@@ -354,7 +354,7 @@ count_targets = [ROOT / f for f in COUNT_FILES] + docs
 for p in count_targets:
     if not p.exists():
         continue
-    for i, line in enumerate(p.read_text().splitlines(), 1):
+    for i, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
         if "count-ok" in line:
             continue
         for pat, kind in patterns:
@@ -367,14 +367,14 @@ ok(f"counts: {total} skills {cats}, {real}")
 
 # ---------------------------------------------------------------- templates / genre packs
 section("Templates and genre packs")
-corpus = "\n".join(f.read_text() for f in skill_files) + "\n".join(d.read_text() for d in docs)
+corpus = "\n".join(f.read_text(encoding="utf-8") for f in skill_files) + "\n".join(d.read_text(encoding="utf-8") for d in docs)
 for t in templates:
     (ok if t.name in corpus else warn)(f"templates/{t.name} {'referenced' if t.name in corpus else 'is not referenced by any skill or doc'}")
 for gp in genre_packs:
     for req in ("README.md", "PATTERNS.md"):
         (ok if (gp / req).exists() else err)(f"genre-packs/{gp.name}/{req}")
     pat = gp / "PATTERNS.md"
-    if pat.exists() and pat.read_text().count("\n") < 100:
+    if pat.exists() and pat.read_text(encoding="utf-8").count("\n") < 100:
         err(f"genre-packs/{gp.name}/PATTERNS.md is under 100 lines")
 
 # ---------------------------------------------------------------- summary
