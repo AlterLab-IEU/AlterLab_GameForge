@@ -1,0 +1,4 @@
+# Hooks and the hook test suite run under POSIX sh, and dash rejects CRLF line endings.
+# Keep shell scripts LF in every checkout, whatever core.autocrlf says (Git for Windows
+# defaults it to true).
+*.sh text eol=lf
