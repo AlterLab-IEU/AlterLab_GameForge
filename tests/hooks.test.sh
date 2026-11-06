@@ -213,6 +213,17 @@ for MODE in full python fallback; do
   run_hook $MODE pre-compact.sh "$d" '{"trigger":"auto"}' >/dev/null; run_hook $MODE session-end.sh "$d" '{}' >/dev/null; run_hook $MODE stop-failure.sh "$d" '{}' >/dev/null
   [ -z "$(ls -A "$d")" ] && ok "state hooks: create nothing in non-opted-in dir" || bad "state hooks: create nothing in non-opted-in dir" "$(ls -A "$d")"
 
+  # --- non-ASCII input under a non-UTF-8 code page --------------------------------------
+  # Python before 3.15 decodes pipes with the Windows ANSI code page (cp1254 on Turkish
+  # systems), where the second UTF-8 byte of Ş and Ğ is undefined. Guard hooks must still
+  # see the path or command instead of failing open.
+  EXTRA_ENV="PYTHONIOENCODING=cp1254"
+  d=$(fixture godot)
+  expect_decision "utf-8: protect-generated denies a non-ASCII .uid under cp1254" "$(run_hook $MODE protect-generated.sh "$d" "$(file_ev "$d/Şimşek.gd.uid")")" deny
+  d=$(fixture godot); git_init "$d"; mkdir -p "$d/.gameforge"
+  expect_decision "utf-8: validate-commit denies a Turkish non-conventional subject" "$(run_hook $MODE validate-commit.sh "$d" "$(bash_ev 'git commit -m "Şimşek yeteneği eklendi"')")" deny
+  expect_empty    "utf-8: validate-commit allows a Turkish conventional subject" "$(run_hook $MODE validate-commit.sh "$d" "$(bash_ev 'git commit -m "feat(oyuncu): Şimşek yeteneği eklendi"')")"
+  EXTRA_ENV=""
 done
 
 # --- hooks.json wiring -------------------------------------------------------------

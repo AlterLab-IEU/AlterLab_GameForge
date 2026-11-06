@@ -36,16 +36,18 @@ gf_json_get() {
     return 0
   fi
   if command -v python3 >/dev/null 2>&1; then
+    # Bytes in, UTF-8 bytes out: Windows Python before 3.15 decodes pipes with the ANSI
+    # code page, which mangles or rejects UTF-8 paths and messages.
     printf '%s' "$_gf_json" | python3 -c '
 import json, sys
 try:
-    d = json.load(sys.stdin)
+    d = json.load(sys.stdin.buffer)
 except Exception:
     sys.exit(0)
 for k in sys.argv[1].lstrip(".").split("."):
     d = d.get(k) if isinstance(d, dict) else None
 if d is not None:
-    sys.stdout.write(d if isinstance(d, str) else json.dumps(d))
+    sys.stdout.buffer.write((d if isinstance(d, str) else json.dumps(d)).encode("utf-8", "replace"))
 ' "$_gf_path" 2>/dev/null
     return 0
   fi
