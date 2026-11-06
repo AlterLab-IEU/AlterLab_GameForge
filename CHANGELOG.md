@@ -2,6 +2,24 @@
 
 All notable changes to AlterLab GameForge. Versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- **Hooks on non-UTF-8 Windows.** The `python3` JSON parser in `hooks/lib/common.sh` now reads and
+  writes UTF-8 bytes. Python before 3.15 decodes pipes with the Windows ANSI code page, so on a
+  Turkish (cp1254) system a path or commit message containing `Ş` or `Ğ` made the parser print
+  nothing, and `protect-generated` and `validate-commit` silently allowed the edit or commit.
+- **Validator on Windows.** `scripts/validate.py` reads every file as UTF-8 instead of the locale
+  encoding, so it no longer needs `PYTHONUTF8=1` on Windows. CI enforces this with `EncodingWarning`.
+- **Line endings.** A new `.gitattributes` keeps `*.sh` LF on checkouts with `core.autocrlf=true`, so
+  the hooks parse under `dash`.
+- **Hook test suite on Windows.** The parser-isolation PATH uses small exec scripts instead of
+  symlinks, which Git for Windows copies, leaving `sh.exe` and `git.exe` without their DLLs. Test
+  events reach `python3` on stdin, because MSYS rewrites `/tmp/...` arguments for native programs.
+  The suite now runs every case under the `jq`, `python3` and `sed` parsers (183 tests), and CI runs
+  the suite and the validator on Windows.
+
 ## [3.0.0] - 2026-11
 
 A rebuild. GameForge now installs as a spec-compliant Claude Code plugin, every skill was rewritten

@@ -90,5 +90,10 @@ Add `production/session-state/` and `production/session-logs/` to your game's `.
 bash tests/hooks.test.sh -v
 ```
 
-The suite builds fixture projects for each engine and runs every hook twice: with `jq`/`python3`
-available and with only the POSIX fallback parser, to prove the plugin works on minimal machines.
+The suite builds fixture projects for each engine and runs every hook three times, once per JSON
+parser: `jq`, `python3` without `jq`, and the POSIX `sed` fallback with neither, to prove the plugin
+works on minimal machines. CI runs it on Linux, macOS and Windows (Git Bash).
+
+On Windows, the repository's `.gitattributes` keeps `*.sh` files LF even with `core.autocrlf=true`.
+A clone made before that file existed still has CRLF hooks; refresh it once with
+`git rm -r --cached -q . && git reset --hard` (this discards uncommitted changes).
